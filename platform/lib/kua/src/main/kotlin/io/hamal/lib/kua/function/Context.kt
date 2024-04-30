@@ -2,7 +2,6 @@ package io.hamal.lib.kua.function
 
 import io.hamal.lib.kua.*
 import io.hamal.lib.kua.type.*
-import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.value.*
 import kotlin.reflect.KClass
 
@@ -25,8 +24,8 @@ class FunctionContext(
     override fun decimalGet(idx: ValueNumber): ValueDecimal = state.decimalGet(idx)
     override fun decimalPush(value: ValueDecimal): StackTop = state.decimalPush(value)
 
-    override fun errorGet(idx: ValueNumber): KuaError = state.errorGet(idx)
-    override fun errorPush(error: KuaError): StackTop = state.errorPush(error)
+    override fun errorGet(idx: ValueNumber): ValueError = state.errorGet(idx)
+    override fun errorPush(error: ValueError): StackTop = state.errorPush(error)
 
     override fun functionPush(value: KuaFunction<*, *, *, *>) = state.functionPush(value)
 

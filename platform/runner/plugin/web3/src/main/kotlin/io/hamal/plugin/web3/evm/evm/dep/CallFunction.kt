@@ -4,15 +4,15 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.value.ValueError
 import io.hamal.lib.value.ValueString
 
-class CallFunction : Function1In2Out<KuaTable, KuaError, ValueString>(
+class CallFunction : Function1In2Out<KuaTable, ValueError, ValueString>(
     FunctionInput1Schema(KuaTable::class),
-    FunctionOutput2Schema(KuaError::class, ValueString::class)
+    FunctionOutput2Schema(ValueError::class, ValueString::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<KuaError?, ValueString?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<ValueError?, ValueString?> {
 
 //        val b = EthHttpBatchService(
 ////            HttpTemplateImpl((config.value["host"] as StringType).value)

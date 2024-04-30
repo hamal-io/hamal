@@ -6,17 +6,17 @@ import io.hamal.lib.kua.function.Function1In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
-import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.sdk.api.ApiRequested
+import io.hamal.lib.value.ValueError
 import io.hamal.lib.value.ValueString
 
 class AwaitFunction(
     private val httpTemplate: HttpTemplate
-) : Function1In1Out<ValueString, KuaError>(
+) : Function1In1Out<ValueString, ValueError>(
     FunctionInput1Schema(ValueString::class),
-    FunctionOutput1Schema(KuaError::class)
+    FunctionOutput1Schema(ValueError::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: ValueString): KuaError? {
+    override fun invoke(ctx: FunctionContext, arg1: ValueString): ValueError? {
         while (true) {
             httpTemplate.get("/v1/requests/{request_id}")
                 .path("request_id", arg1.stringValue)
@@ -40,11 +40,11 @@ class AwaitFunction(
 
 class AwaitCompletedFunction(
     private val httpTemplate: HttpTemplate
-) : Function1In1Out<ValueString, KuaError>(
+) : Function1In1Out<ValueString, ValueError>(
     FunctionInput1Schema(ValueString::class),
-    FunctionOutput1Schema(KuaError::class)
+    FunctionOutput1Schema(ValueError::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: ValueString): KuaError? {
+    override fun invoke(ctx: FunctionContext, arg1: ValueString): ValueError? {
         while (true) {
             httpTemplate.get("/v1/requests/{request_id}")
                 .path("request_id", arg1.stringValue)
@@ -56,7 +56,7 @@ class AwaitCompletedFunction(
                         }
 
                         RequestStatus.Failed -> {
-                            return KuaError("expected $arg1 to complete but failed")
+                            return ValueError("expected $arg1 to complete but failed")
                         }
 
                         else -> {
@@ -70,11 +70,11 @@ class AwaitCompletedFunction(
 
 class AwaitFailedFunction(
     private val httpTemplate: HttpTemplate
-) : Function1In1Out<ValueString, KuaError>(
+) : Function1In1Out<ValueString, ValueError>(
     FunctionInput1Schema(ValueString::class),
-    FunctionOutput1Schema(KuaError::class)
+    FunctionOutput1Schema(ValueError::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: ValueString): KuaError? {
+    override fun invoke(ctx: FunctionContext, arg1: ValueString): ValueError? {
         while (true) {
             httpTemplate.get("/v1/requests/{request_id}")
                 .path("request_id", arg1.stringValue)
@@ -82,7 +82,7 @@ class AwaitFailedFunction(
                 .let {
                     when (it.requestStatus) {
                         RequestStatus.Completed -> {
-                            return KuaError("expected $arg1 to fail but completed")
+                            return ValueError("expected $arg1 to fail but completed")
                         }
 
                         RequestStatus.Failed -> {

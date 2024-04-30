@@ -2,7 +2,7 @@ package io.hamal.lib.kua.state
 
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.errorGet
-import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.value.ValueError
 import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -13,23 +13,23 @@ internal class ErrorGetTest : StateBaseTest() {
 
     @TestFactory
     fun `Get value on stack without popping the value`() = runTest { testInstance ->
-        testInstance.errorPush(KuaError("Some Error Message"))
-        assertThat(testInstance.errorGet(1), equalTo(KuaError("Some Error Message")))
+        testInstance.errorPush(ValueError("Some Error Message"))
+        assertThat(testInstance.errorGet(1), equalTo(ValueError("Some Error Message")))
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
 
-        testInstance.errorPush(KuaError("Another Error Message"))
-        assertThat(testInstance.errorGet(2), equalTo(KuaError("Another Error Message")))
+        testInstance.errorPush(ValueError("Another Error Message"))
+        assertThat(testInstance.errorGet(2), equalTo(ValueError("Another Error Message")))
         assertThat(testInstance.topGet(), equalTo(StackTop(2)))
     }
 
     @TestFactory
     fun `Get value with negative index without popping the value`() = runTest { testInstance ->
-        testInstance.errorPush(KuaError("Some Error Message"))
-        assertThat(testInstance.errorGet(-1), equalTo(KuaError("Some Error Message")))
+        testInstance.errorPush(ValueError("Some Error Message"))
+        assertThat(testInstance.errorGet(-1), equalTo(ValueError("Some Error Message")))
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
 
-        testInstance.errorPush(KuaError("Another Error Message"))
-        assertThat(testInstance.errorGet(-1), equalTo(KuaError("Another Error Message")))
+        testInstance.errorPush(ValueError("Another Error Message"))
+        assertThat(testInstance.errorGet(-1), equalTo(ValueError("Another Error Message")))
         assertThat(testInstance.topGet(), equalTo(StackTop(2)))
     }
 

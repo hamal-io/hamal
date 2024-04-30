@@ -1,11 +1,7 @@
 package io.hamal.lib.kua.function
 
-import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaTable
-import io.hamal.lib.value.Value
-import io.hamal.lib.value.ValueNil
-import io.hamal.lib.value.ValueNumber
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.value.*
 import kotlin.reflect.KClass
 
 sealed interface FunctionOutputSchema<OUTPUT : FunctionOutput<*, *>> {
@@ -43,6 +39,6 @@ fun <VALUE : Value> FunctionContext.push(value: VALUE) = when (value) {
     is ValueNumber -> numberPush(value)
     is ValueString -> stringPush(value)
     is KuaTable -> tablePush(value)
-    is KuaError -> errorPush(value)
+    is ValueError -> errorPush(value)
     else -> throw NotImplementedError("${value::class.simpleName} not implemented yet")
 }

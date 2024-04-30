@@ -3,8 +3,9 @@ package io.hamal.lib.kua.state
 import io.hamal.lib.kua.*
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.type.*
-import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaFunction
+import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.type.getNumber
 import io.hamal.lib.value.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -42,16 +43,16 @@ internal class ReferencePushTest : StateBaseTest() {
 
     @TestFactory
     fun `Pushes reference value of error`() = runTest { testInstance ->
-        testInstance.errorPush(KuaError("Some Error Message"))
+        testInstance.errorPush(ValueError("Some Error Message"))
 
         val reference = testInstance.referenceAcquire()
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
 
-        testInstance.referencePush(reference).also { type -> assertThat(type, equalTo(KuaError::class)) }
+        testInstance.referencePush(reference).also { type -> assertThat(type, equalTo(ValueError::class)) }
 
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
-        assertThat(testInstance.type(1), equalTo(KuaError::class))
-        assertThat(testInstance.errorGet(1), equalTo(KuaError("Some Error Message")))
+        assertThat(testInstance.type(1), equalTo(ValueError::class))
+        assertThat(testInstance.errorGet(1), equalTo(ValueError("Some Error Message")))
     }
 
 

@@ -5,6 +5,7 @@ import io.hamal.lib.kua.function.Function0In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.value.ValueCode
+import io.hamal.lib.value.ValueError
 import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 import org.junit.jupiter.api.Test
@@ -15,8 +16,9 @@ internal class KuaTableTest {
     fun `Table as function result`() {
         sandbox.use { sandbox ->
             sandbox.registerGlobalFunction("func",
-                object : Function0In2Out<KuaError, KuaTable>(FunctionOutput2Schema(KuaError::class, KuaTable::class)) {
-                    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
+                object :
+                    Function0In2Out<ValueError, KuaTable>(FunctionOutput2Schema(ValueError::class, KuaTable::class)) {
+                    override fun invoke(ctx: FunctionContext): Pair<ValueError?, KuaTable?> {
                         return null to ctx.tableCreate(ValueString("id") to ValueString("A"))
                     }
                 }
@@ -37,8 +39,9 @@ internal class KuaTableTest {
     fun `Table (array)  as function result`() {
         sandbox.use { sandbox ->
             sandbox.registerGlobalFunction("func",
-                object : Function0In2Out<KuaError, KuaTable>(FunctionOutput2Schema(KuaError::class, KuaTable::class)) {
-                    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
+                object :
+                    Function0In2Out<ValueError, KuaTable>(FunctionOutput2Schema(ValueError::class, KuaTable::class)) {
+                    override fun invoke(ctx: FunctionContext): Pair<ValueError?, KuaTable?> {
                         return null to ctx.tableCreate(listOf(ValueString("A")))
                     }
                 }
@@ -60,8 +63,9 @@ internal class KuaTableTest {
     fun `Nested table as function result`() {
         sandbox.use { sandbox ->
             sandbox.registerGlobalFunction("func",
-                object : Function0In2Out<KuaError, KuaTable>(FunctionOutput2Schema(KuaError::class, KuaTable::class)) {
-                    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
+                object :
+                    Function0In2Out<ValueError, KuaTable>(FunctionOutput2Schema(ValueError::class, KuaTable::class)) {
+                    override fun invoke(ctx: FunctionContext): Pair<ValueError?, KuaTable?> {
                         return null to sandbox.tableCreate(
                             ValueString("id") to ValueString("A"),
                             ValueString("level_one") to sandbox.tableCreate(ValueString("answer") to ValueNumber(42))
@@ -87,8 +91,9 @@ internal class KuaTableTest {
     fun `Nested table (array) as function result`() {
         sandbox.use { sandbox ->
             sandbox.registerGlobalFunction("func",
-                object : Function0In2Out<KuaError, KuaTable>(FunctionOutput2Schema(KuaError::class, KuaTable::class)) {
-                    override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
+                object :
+                    Function0In2Out<ValueError, KuaTable>(FunctionOutput2Schema(ValueError::class, KuaTable::class)) {
+                    override fun invoke(ctx: FunctionContext): Pair<ValueError?, KuaTable?> {
                         return null to ctx.tableCreate(
                             listOf(
                                 ValueString("A"),

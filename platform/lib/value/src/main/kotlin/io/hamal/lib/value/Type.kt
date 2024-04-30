@@ -60,6 +60,7 @@ data class Property(
                 is TypeDate -> ValueDate(value as LocalDate)
                 is TypeDateTime -> TODO()
                 is TypeDecimal -> ValueDecimal(value as Decimal)
+                is TypeError -> TODO()
                 is TypeList -> {
                     if (value is Iterable<*>) {
                         ValueList(field.type, value.map { mapTypeToValue(field.valueType!!, it) })

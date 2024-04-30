@@ -1,7 +1,8 @@
 package io.hamal.lib.kua
 
-import io.hamal.lib.kua.type.*
-import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaFunction
+import io.hamal.lib.kua.type.KuaReference
+import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.value.*
 import java.math.BigDecimal
 import kotlin.reflect.KClass
@@ -26,8 +27,8 @@ interface State {
     fun decimalPush(value: ValueDecimal): StackTop
     fun decimalGet(idx: ValueNumber): ValueDecimal
 
-    fun errorPush(error: KuaError): StackTop
-    fun errorGet(idx: ValueNumber): KuaError
+    fun errorPush(error: ValueError): StackTop
+    fun errorGet(idx: ValueNumber): ValueError
 
     fun functionPush(value: KuaFunction<*, *, *, *>): StackTop
 
@@ -79,7 +80,7 @@ open class StateImpl(val native: Native = Native()) : State {
         return when (val type = type(idx)) {
             ValueBoolean::class -> booleanGet(idx)
             ValueDecimal::class -> decimalGet(idx)
-            KuaError::class -> errorGet(idx)
+            ValueError::class -> errorGet(idx)
             ValueNil::class -> ValueNil
             ValueNumber::class -> numberGet(idx)
             ValueString::class -> stringGet(idx)
@@ -92,7 +93,7 @@ open class StateImpl(val native: Native = Native()) : State {
         return when (value) {
             is ValueBoolean -> booleanPush(value)
             is ValueDecimal -> decimalPush(value)
-            is KuaError -> errorPush(value)
+            is ValueError -> errorPush(value)
             is KuaFunction<*, *, *, *> -> functionPush(value)
             is ValueNil -> nilPush()
             is ValueNumber -> numberPush(value)
@@ -130,8 +131,8 @@ open class StateImpl(val native: Native = Native()) : State {
 
     override fun decimalGet(idx: ValueNumber): ValueDecimal = ValueDecimal(BigDecimal(native.decimalGet(idx.intValue)))
 
-    override fun errorPush(error: KuaError) = StackTop(native.errorPush(error.value))
-    override fun errorGet(idx: ValueNumber): KuaError = KuaError(native.errorGet(idx.intValue))
+    override fun errorPush(error: ValueError) = StackTop(native.errorPush(error.stringValue))
+    override fun errorGet(idx: ValueNumber): ValueError = ValueError(native.errorGet(idx.intValue))
 
     override fun functionPush(value: KuaFunction<*, *, *, *>) = StackTop(native.functionPush(value))
 
@@ -257,7 +258,7 @@ private fun luaToType(value: Int) = when (value) {
     4 -> ValueString::class
     5 -> KuaTable::class
     6 -> KuaFunction::class
-    10 -> KuaError::class
+    10 -> ValueError::class
     11 -> ValueDecimal::class
     else -> TODO("$value not implemented yet")
 }

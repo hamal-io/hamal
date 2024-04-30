@@ -7,7 +7,7 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.function.Function0In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput1Schema
-import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.value.ValueError
 import io.hamal.lib.value.ValueString
 import io.hamal.runner.connector.UnitOfWork
 import io.hamal.runner.run.AbstractExecuteTest
@@ -127,11 +127,11 @@ internal class FailTest : AbstractExecuteTest() {
         runner.run(unitOfWork("context.fail({reason = 'undisclosed', answer = 42})"))
     }
 
-    private class FunctionReturnsError : Function0In1Out<KuaError>(
-        FunctionOutput1Schema(KuaError::class)
+    private class FunctionReturnsError : Function0In1Out<ValueError>(
+        FunctionOutput1Schema(ValueError::class)
     ) {
-        override fun invoke(ctx: FunctionContext): KuaError {
-            return KuaError("Sometimes an error can be a good thing")
+        override fun invoke(ctx: FunctionContext): ValueError {
+            return ValueError("Sometimes an error can be a good thing")
         }
     }
 

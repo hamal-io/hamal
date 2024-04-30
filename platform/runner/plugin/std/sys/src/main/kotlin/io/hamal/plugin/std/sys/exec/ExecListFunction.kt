@@ -7,21 +7,21 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.tableCreate
-import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.kua.type.findTable
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiExecService
+import io.hamal.lib.value.ValueError
 import io.hamal.lib.value.ValueNil
 import io.hamal.lib.value.ValueString
 
 class ExecListFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<KuaTable, KuaError, KuaTable>(
+) : Function1In2Out<KuaTable, ValueError, KuaTable>(
     FunctionInput1Schema(KuaTable::class),
-    FunctionOutput2Schema(KuaError::class, KuaTable::class)
+    FunctionOutput2Schema(ValueError::class, KuaTable::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<KuaError?, KuaTable?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<ValueError?, KuaTable?> {
         return try {
             val execs = sdk.exec.list(
                 ApiExecService.ExecQuery(
@@ -47,7 +47,7 @@ class ExecListFunction(
                 }
             )
         } catch (t: Throwable) {
-            KuaError(t.message!!) to null
+            ValueError(t.message!!) to null
         }
     }
 }

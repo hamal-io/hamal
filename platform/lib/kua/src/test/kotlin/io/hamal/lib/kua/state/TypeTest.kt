@@ -4,7 +4,6 @@ import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type
-import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaFunction
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.value.*
@@ -32,9 +31,9 @@ internal class TypeTest : StateBaseTest() {
 
     @TestFactory
     fun `Error`() = runTest { testInstance ->
-        testInstance.errorPush(KuaError("Some Error Message"))
+        testInstance.errorPush(ValueError("Some Error Message"))
         testInstance.type(1).also { result ->
-            assertThat(result, equalTo(KuaError::class))
+            assertThat(result, equalTo(ValueError::class))
         }
     }
 

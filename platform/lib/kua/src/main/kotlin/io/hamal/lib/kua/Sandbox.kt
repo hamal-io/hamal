@@ -6,8 +6,9 @@ import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.extension.RunnerExtensionFactory
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
-import io.hamal.lib.kua.type.*
-import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaFunction
+import io.hamal.lib.kua.type.KuaReference
+import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.nodes.generator.GeneratorRegistry
 import io.hamal.lib.value.*
 
@@ -39,8 +40,8 @@ class Sandbox(
     override fun decimalGet(idx: ValueNumber): ValueDecimal = state.decimalGet(idx)
     override fun decimalPush(value: ValueDecimal): StackTop = state.decimalPush(value)
 
-    override fun errorGet(idx: ValueNumber): KuaError = state.errorGet(idx)
-    override fun errorPush(error: KuaError): StackTop = state.errorPush(error)
+    override fun errorGet(idx: ValueNumber): ValueError = state.errorGet(idx)
+    override fun errorPush(error: ValueError): StackTop = state.errorPush(error)
 
     override fun functionPush(value: KuaFunction<*, *, *, *>) = state.functionPush(value)
 

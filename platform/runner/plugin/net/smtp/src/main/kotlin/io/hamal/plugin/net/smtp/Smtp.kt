@@ -6,15 +6,16 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.value.ValueBoolean
+import io.hamal.lib.value.ValueError
 
 class SmtpSendFunction(
     private val sender: Sender
-) : Function1In1Out<KuaTable, KuaError>(
+) : Function1In1Out<KuaTable, ValueError>(
     FunctionInput1Schema(KuaTable::class),
-    FunctionOutput1Schema(KuaError::class)
+    FunctionOutput1Schema(ValueError::class)
 ) {
 
-    override fun invoke(ctx: FunctionContext, arg1: KuaTable): KuaError? {
+    override fun invoke(ctx: FunctionContext, arg1: KuaTable): ValueError? {
 
         sender.send(
             SenderConfig(

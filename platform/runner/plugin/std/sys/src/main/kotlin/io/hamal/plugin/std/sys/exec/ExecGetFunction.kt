@@ -5,19 +5,19 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.sdk.ApiSdk
+import io.hamal.lib.value.ValueError
 import io.hamal.lib.value.ValueNil
 import io.hamal.lib.value.ValueString
 
 class ExecGetFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<ValueString, KuaError, KuaTable>(
+) : Function1In2Out<ValueString, ValueError, KuaTable>(
     FunctionInput1Schema(ValueString::class),
-    FunctionOutput2Schema(KuaError::class, KuaTable::class)
+    FunctionOutput2Schema(ValueError::class, KuaTable::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: ValueString): Pair<KuaError?, KuaTable?> {
+    override fun invoke(ctx: FunctionContext, arg1: ValueString): Pair<ValueError?, KuaTable?> {
         return try {
             val exec = sdk.exec.get(ExecId(arg1.stringValue))
             null to ctx.tableCreate(
@@ -29,7 +29,7 @@ class ExecGetFunction(
                 )
             )
         } catch (t: Throwable) {
-            KuaError(t.message!!) to null
+            ValueError(t.message!!) to null
         }
     }
 }

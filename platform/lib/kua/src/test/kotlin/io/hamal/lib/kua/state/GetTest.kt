@@ -2,7 +2,6 @@ package io.hamal.lib.kua.state
 
 import io.hamal.lib.kua.get
 import io.hamal.lib.kua.tableCreate
-import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.value.*
 import org.hamcrest.MatcherAssert.assertThat
@@ -29,9 +28,9 @@ internal class GetTest : StateBaseTest() {
 
     @TestFactory
     fun `Error`() = runTest { testInstance ->
-        testInstance.errorPush(KuaError("Some Error Message"))
+        testInstance.errorPush(ValueError("Some Error Message"))
         testInstance.get(1).also { value ->
-            assertThat(value, equalTo(KuaError("Some Error Message")))
+            assertThat(value, equalTo(ValueError("Some Error Message")))
         }
     }
 

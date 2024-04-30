@@ -7,19 +7,23 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.type.getNumber
+import io.hamal.lib.kua.type.getString
+import io.hamal.lib.kua.type.type
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiFuncDeployRequest
+import io.hamal.lib.value.ValueError
 import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 
 class FuncDeployFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<KuaTable, KuaError, KuaTable>(
+) : Function1In2Out<KuaTable, ValueError, KuaTable>(
     FunctionInput1Schema(KuaTable::class),
-    FunctionOutput2Schema(KuaError::class, KuaTable::class)
+    FunctionOutput2Schema(ValueError::class, KuaTable::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<KuaError?, KuaTable?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<ValueError?, KuaTable?> {
         return try {
 
             val funcId = FuncId(arg1.getString("id").stringValue)
@@ -48,7 +52,7 @@ class FuncDeployFunction(
                 "id" to ValueString(res.id.value.value.toString(16)),
             )
         } catch (t: Throwable) {
-            KuaError(t.message!!) to null
+            ValueError(t.message!!) to null
         }
     }
 }

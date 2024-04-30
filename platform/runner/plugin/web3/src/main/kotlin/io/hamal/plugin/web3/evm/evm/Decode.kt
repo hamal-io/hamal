@@ -4,19 +4,19 @@ import io.hamal.lib.kua.function.Function2In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.value.Value
+import io.hamal.lib.value.ValueError
 import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 import io.hamal.lib.web3.evm.abi.EvmTypeDecoder
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.util.ByteWindow
 
-object EvmDecodeParameterFunction : Function2In2Out<ValueString, ValueString, KuaError, Value>(
+object EvmDecodeParameterFunction : Function2In2Out<ValueString, ValueString, ValueError, Value>(
     FunctionInput2Schema(ValueString::class, ValueString::class),
-    FunctionOutput2Schema(KuaError::class, Value::class)
+    FunctionOutput2Schema(ValueError::class, Value::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: ValueString, arg2: ValueString): Pair<KuaError?, Value?> {
+    override fun invoke(ctx: FunctionContext, arg1: ValueString, arg2: ValueString): Pair<ValueError?, Value?> {
 //        EthTypeDecoder.Uint256.decode(arg1.value.)
 
         if (arg1.stringValue == "string") {

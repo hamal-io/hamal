@@ -13,11 +13,11 @@ import io.hamal.lib.kua.type.*
 import io.hamal.lib.value.*
 
 
-class HttpExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
+class HttpExecuteFunction : Function1In2Out<KuaTable, ValueError, KuaTable>(
     FunctionInput1Schema(KuaTable::class),
-    FunctionOutput2Schema(KuaError::class, KuaTable::class)
+    FunctionOutput2Schema(ValueError::class, KuaTable::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<KuaError?, KuaTable?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<ValueError?, KuaTable?> {
         val results = mutableListOf<KuaReference>()
 
         ctx.nilPush()
@@ -58,7 +58,7 @@ class HttpExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
                             is ValueTrue -> "true"
                             is ValueCode -> value.stringValue
                             is ValueDecimal -> value.toString()
-                            is KuaError -> value.value
+                            is ValueError -> value.stringValue
                             is ValueNil -> ""
                             is ValueNumber -> value.doubleValue.toString()
                             is KuaTable -> TODO()

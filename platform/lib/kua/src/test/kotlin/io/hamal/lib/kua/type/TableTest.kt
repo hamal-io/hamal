@@ -23,7 +23,7 @@ internal class KuaTableTest {
             ValueTrue to { assertThat(testInstance.getBoolean(1), equalTo(ValueTrue)) },
             ValueFalse to { assertThat(testInstance.getBoolean(1), equalTo(ValueFalse)) },
             ValueDecimal(42.24) to { assertThat(testInstance.getDecimal(1), equalTo(ValueDecimal(42.24))) },
-            KuaError("Some Error") to { assertThat(testInstance.getError(1), equalTo(KuaError("Some Error"))) },
+            ValueError("Some Error") to { assertThat(testInstance.getError(1), equalTo(ValueError("Some Error"))) },
             ValueNumber(231123) to { assertThat(testInstance.getNumber(1), equalTo(ValueNumber(231123))) },
             ValueString("Hamal Rocks") to { assertThat(testInstance.getString(1), equalTo(ValueString("Hamal Rocks"))) }
         ).map { (value, verify) ->
@@ -213,18 +213,18 @@ internal class KuaTableTest {
     @Test
     fun `findError`() {
         val testInstance = state.tableCreate(
-            ValueString("key") to KuaError("Some expected Error")
+            ValueString("key") to ValueError("Some expected Error")
         )
 
         testInstance.findError(ValueString("key")).also { result ->
-            assertThat(result, equalTo(KuaError("Some expected Error")))
+            assertThat(result, equalTo(ValueError("Some expected Error")))
         }
     }
 
     @Test
     fun `findError - but value not found`() {
         val testInstance = state.tableCreate(
-            ValueString("key") to KuaError("Some expected Error")
+            ValueString("key") to ValueError("Some expected Error")
         )
 
         assertThat(testInstance.findError(ValueString("anotherKey")), nullValue())
@@ -234,18 +234,18 @@ internal class KuaTableTest {
     @Test
     fun `getError`() {
         val testInstance = state.tableCreate(
-            ValueString("key") to KuaError("Some expected Error")
+            ValueString("key") to ValueError("Some expected Error")
         )
 
         testInstance.getError(ValueString("key")).also { result ->
-            assertThat(result, equalTo(KuaError("Some expected Error")))
+            assertThat(result, equalTo(ValueError("Some expected Error")))
         }
     }
 
     @Test
     fun `getError - but value not found`() {
         val testInstance = state.tableCreate(
-            ValueString("key") to KuaError("Some expected Error")
+            ValueString("key") to ValueError("Some expected Error")
         )
 
         assertThrows<NoSuchElementException> {
@@ -442,7 +442,7 @@ internal class KuaTableTest {
             ValueFalse,
             ValueDecimal("123"),
             ValueNumber(42.24),
-            KuaError("Some Error Message"),
+            ValueError("Some Error Message"),
             ValueString("Hamal Rocks"),
         ).map { value ->
             dynamicTest(value.toString()) {

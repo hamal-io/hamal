@@ -6,10 +6,7 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.*
-import io.hamal.lib.value.ValueCode
-import io.hamal.lib.value.Value
-import io.hamal.lib.value.ValueNumber
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.value.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -69,11 +66,11 @@ internal class KuaErrorTest {
         }
     }
 
-    private class FunctionReturnsError : Function0In1Out<KuaError>(
-        FunctionOutput1Schema(KuaError::class)
+    private class FunctionReturnsError : Function0In1Out<ValueError>(
+        FunctionOutput1Schema(ValueError::class)
     ) {
-        override fun invoke(ctx: FunctionContext): KuaError {
-            return KuaError("Sometimes an error can be a good thing")
+        override fun invoke(ctx: FunctionContext): ValueError {
+            return ValueError("Sometimes an error can be a good thing")
         }
     }
 

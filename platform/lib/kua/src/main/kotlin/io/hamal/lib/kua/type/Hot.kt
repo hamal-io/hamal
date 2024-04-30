@@ -53,7 +53,7 @@ fun Value.toHotNode(): HotNode<*> {
         is ValueTrue -> HotBoolean(true)
         is ValueCode -> HotString(stringValue)
         is ValueDecimal -> HotString(value.toString())
-        is KuaError -> toHotObject()
+        is ValueError -> toHotObject()
         is KuaFunction<*, *, *, *> -> TODO()
         is ValueNil -> HotNull
         is ValueNumber -> HotNumber(doubleValue)
@@ -71,7 +71,7 @@ fun Value.toHotNode(): HotNode<*> {
     }
 }
 
-fun KuaError.toHotObject(): HotObject = HotObject.builder().set("message", value).build()
+fun ValueError.toHotObject(): HotObject = HotObject.builder().set("message", stringValue).build()
 
 fun KuaTable.isArray(): Boolean {
     return state.checkpoint {

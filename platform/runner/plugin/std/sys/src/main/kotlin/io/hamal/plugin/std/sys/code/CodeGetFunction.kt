@@ -6,25 +6,25 @@ import io.hamal.lib.kua.function.Function2In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.value.ValueCode
-import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.sdk.ApiSdk
+import io.hamal.lib.value.ValueCode
+import io.hamal.lib.value.ValueError
 import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 
 
 class CodeGetFunction(
     private val sdk: ApiSdk
-) : Function2In2Out<ValueString, ValueNumber, KuaError, KuaTable>(
+) : Function2In2Out<ValueString, ValueNumber, ValueError, KuaTable>(
     FunctionInput2Schema(ValueString::class, ValueNumber::class),
-    FunctionOutput2Schema(KuaError::class, KuaTable::class)
+    FunctionOutput2Schema(ValueError::class, KuaTable::class)
 ) {
     override fun invoke(
         ctx: FunctionContext,
         arg1: ValueString,
         arg2: ValueNumber
-    ): Pair<KuaError?, KuaTable?> {
+    ): Pair<ValueError?, KuaTable?> {
         return try {
             val response = if (arg2 == ValueNumber(-1)) {
                 sdk.code.get(CodeId(arg1.stringValue))
@@ -42,7 +42,7 @@ class CodeGetFunction(
                     )
                 }
         } catch (t: Throwable) {
-            KuaError(t.message!!) to null
+            ValueError(t.message!!) to null
         }
     }
 }

@@ -6,6 +6,7 @@ import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.registerGlobalFunction
 import io.hamal.lib.value.ValueCode
+import io.hamal.lib.value.ValueError
 import io.hamal.lib.value.ValueNumber
 import org.junit.jupiter.api.Test
 
@@ -92,13 +93,13 @@ internal class ValueNilTest {
     @Test
     fun `Both results are nil`() {
         val func =
-            object : Function0In2Out<KuaError, KuaTable>(
+            object : Function0In2Out<ValueError, KuaTable>(
                 FunctionOutput2Schema(
-                    KuaError::class,
+                    ValueError::class,
                     KuaTable::class
                 )
             ) {
-                override fun invoke(ctx: FunctionContext): Pair<KuaError?, KuaTable?> {
+                override fun invoke(ctx: FunctionContext): Pair<ValueError?, KuaTable?> {
                     return null to null
                 }
             }
