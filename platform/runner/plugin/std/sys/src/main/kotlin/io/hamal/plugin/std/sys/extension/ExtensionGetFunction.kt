@@ -7,9 +7,9 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.KuaCode
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.sdk.ApiSdk
+import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 
 class ExtensionGetFunction(
@@ -27,7 +27,7 @@ class ExtensionGetFunction(
                 "name" to ValueString(ext.name.value),
                 "code" to ctx.tableCreate(
                     "id" to ValueString(ext.code.id.value.value.toString(16)),
-                    "version" to KuaNumber(ext.code.version.value),
+                    "version" to ValueNumber(ext.code.version.value),
                     "value" to KuaCode(ext.code.value.value)
                 )
             )

@@ -1,8 +1,8 @@
 import io.hamal.lib.kua.*
-import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.kua.type.KuaTableIterator
 import io.hamal.lib.kua.type.getNumber
 import io.hamal.lib.kua.type.set
+import io.hamal.lib.value.ValueNumber
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -14,7 +14,7 @@ internal class KuaTableEntryIteratorTest {
     fun `Empty table`() {
         state.tableCreate(0, 0)
         val testInstance = KuaTableIterator(
-            index = KuaNumber(1),
+            index = ValueNumber(1),
             state = state,
             keyExtractor = { state, index -> state.stringGet(index) },
             valueExtractor = { state, index -> state.stringGet(index) }
@@ -29,10 +29,10 @@ internal class KuaTableEntryIteratorTest {
 
     @Test
     fun `Table with single element`() {
-        state.tableCreate(listOf(KuaNumber(21)))
+        state.tableCreate(listOf(ValueNumber(21)))
 
         val testInstance = KuaTableIterator(
-            index = KuaNumber(1),
+            index = ValueNumber(1),
             state = state,
             keyExtractor = { state, index -> state.numberGet(index) },
             valueExtractor = { state, index -> state.numberGet(index) }
@@ -40,8 +40,8 @@ internal class KuaTableEntryIteratorTest {
         assertThat(testInstance.hasNext(), equalTo(true))
 
         val entry = testInstance.next()
-        assertThat(entry.key, equalTo(KuaNumber(1)))
-        assertThat(entry.value, equalTo(KuaNumber(21)))
+        assertThat(entry.key, equalTo(ValueNumber(1)))
+        assertThat(entry.value, equalTo(ValueNumber(21)))
 
         assertThat(testInstance.hasNext(), equalTo(false))
 
@@ -56,7 +56,7 @@ internal class KuaTableEntryIteratorTest {
     fun `Array table with multiple elements`() {
         val table = state.tableCreate(0, 0)
         repeat(10) { idx ->
-            table.append(KuaNumber(idx))
+            table.append(ValueNumber(idx))
         }
 
         val testInstance = KuaTableIterator(
@@ -70,8 +70,8 @@ internal class KuaTableEntryIteratorTest {
             assertThat(testInstance.hasNext(), equalTo(true))
 
             val entry = testInstance.next()
-            assertThat(entry.key, equalTo(KuaNumber(idx + 1)))
-            assertThat(entry.value, equalTo(KuaNumber(idx)))
+            assertThat(entry.key, equalTo(ValueNumber(idx + 1)))
+            assertThat(entry.value, equalTo(ValueNumber(idx)))
         }
 
         assertThat(testInstance.hasNext(), equalTo(false))
@@ -86,14 +86,14 @@ internal class KuaTableEntryIteratorTest {
         state.tableCreate(0, 0).also { table ->
             repeat(10) { idx ->
                 table.append(state.tableCreate().also { inner ->
-                    inner["value"] = KuaNumber(idx)
+                    inner["value"] = ValueNumber(idx)
                 })
             }
 
         }
 
         val testInstance = KuaTableIterator(
-            index = KuaNumber(1),
+            index = ValueNumber(1),
             state = state,
             keyExtractor = { state, index -> state.numberGet(index) },
             valueExtractor = { state, index ->
@@ -107,11 +107,11 @@ internal class KuaTableEntryIteratorTest {
         repeat(10) { idx ->
             assertThat(testInstance.hasNext(), equalTo(true))
             val entry = testInstance.next()
-            assertThat(entry.key, equalTo(KuaNumber(idx + 1)))
+            assertThat(entry.key, equalTo(ValueNumber(idx + 1)))
 
             state.referencePush(entry.value)
             state.tableGet(-1).also { table ->
-                assertThat(table.getNumber("value"), equalTo(KuaNumber(idx)))
+                assertThat(table.getNumber("value"), equalTo(ValueNumber(idx)))
                 state.topPop(2)
             }
         }

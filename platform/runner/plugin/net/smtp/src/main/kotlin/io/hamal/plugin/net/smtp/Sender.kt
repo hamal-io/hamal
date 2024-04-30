@@ -1,14 +1,14 @@
 package io.hamal.plugin.net.smtp
 
-import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.value.ValueBoolean
+import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 import org.springframework.mail.javamail.JavaMailSenderImpl
 import org.springframework.mail.javamail.MimeMessageHelper
 
 data class SenderConfig(
     val host: ValueString,
-    val port: KuaNumber,
+    val port: ValueNumber,
     val username: ValueString?,
     val password: ValueString?,
     val defaultEncoding: ValueString,
@@ -17,9 +17,9 @@ data class SenderConfig(
     val testConnection: ValueBoolean,
     val auth: ValueBoolean,
     val enableStarttls: ValueBoolean,
-    val connectionTimeout: KuaNumber,
-    val timeout: KuaNumber,
-    val writeTimeout: KuaNumber
+    val connectionTimeout: ValueNumber,
+    val timeout: ValueNumber,
+    val writeTimeout: ValueNumber
 )
 
 data class Message(
@@ -28,7 +28,7 @@ data class Message(
     val subject: ValueString,
     val content: ValueString,
     val contentType: ValueString,
-    val priority: KuaNumber
+    val priority: ValueNumber
 )
 
 interface Sender {

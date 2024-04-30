@@ -3,12 +3,8 @@ package io.hamal.lib.kua.state
 import io.hamal.lib.kua.get
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.kua.type.KuaTable
-import io.hamal.lib.value.ValueDecimal
-import io.hamal.lib.value.ValueNil
-import io.hamal.lib.value.ValueString
-import io.hamal.lib.value.ValueTrue
+import io.hamal.lib.value.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
@@ -49,9 +45,9 @@ internal class GetTest : StateBaseTest() {
 
     @TestFactory
     fun `Number`() = runTest { testInstance ->
-        testInstance.numberPush(KuaNumber(231123))
+        testInstance.numberPush(ValueNumber(231123))
         testInstance.get(1).also { value ->
-            assertThat(value, equalTo(KuaNumber(231123)))
+            assertThat(value, equalTo(ValueNumber(231123)))
         }
     }
 
@@ -68,7 +64,7 @@ internal class GetTest : StateBaseTest() {
         testInstance.tableCreate(0, 0)
         testInstance.get(1).also { value ->
             require(value is KuaTable)
-            assertThat(value.index, equalTo(KuaNumber(1)))
+            assertThat(value.index, equalTo(ValueNumber(1)))
         }
     }
 }

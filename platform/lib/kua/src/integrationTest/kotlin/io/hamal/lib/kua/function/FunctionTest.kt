@@ -7,7 +7,7 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.type.KuaCode
-import io.hamal.lib.kua.type.KuaNumber
+import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.instanceOf
@@ -208,12 +208,12 @@ internal class FunctionTest {
     @Test
     fun `Tests Function1In2Out`() {
         val captor = Captor2()
-        val transform = object : Function1In2Out<ValueString, ValueString, KuaNumber>(
+        val transform = object : Function1In2Out<ValueString, ValueString, ValueNumber>(
             FunctionInput1Schema(ValueString::class),
-            FunctionOutput2Schema(ValueString::class, KuaNumber::class)
+            FunctionOutput2Schema(ValueString::class, ValueNumber::class)
         ) {
-            override fun invoke(ctx: FunctionContext, arg1: ValueString): Pair<ValueString, KuaNumber> {
-                return ValueString(arg1.stringValue.uppercase()) to KuaNumber(arg1.stringValue.length)
+            override fun invoke(ctx: FunctionContext, arg1: ValueString): Pair<ValueString, ValueNumber> {
+                return ValueString(arg1.stringValue.uppercase()) to ValueNumber(arg1.stringValue.length)
             }
         }
 
@@ -253,15 +253,15 @@ internal class FunctionTest {
     @Test
     fun `Tests Function2In2Out`() {
         val captor = Captor2()
-        val transform = object : Function2In2Out<ValueString, KuaNumber, ValueString, KuaNumber>(
-            FunctionInput2Schema(ValueString::class, KuaNumber::class),
-            FunctionOutput2Schema(ValueString::class, KuaNumber::class)
+        val transform = object : Function2In2Out<ValueString, ValueNumber, ValueString, ValueNumber>(
+            FunctionInput2Schema(ValueString::class, ValueNumber::class),
+            FunctionOutput2Schema(ValueString::class, ValueNumber::class)
         ) {
             override fun invoke(
                 ctx: FunctionContext,
                 arg1: ValueString,
-                arg2: KuaNumber
-            ): Pair<ValueString, KuaNumber> {
+                arg2: ValueNumber
+            ): Pair<ValueString, ValueNumber> {
                 return ValueString(arg1.stringValue.reversed()) to (arg2 * -1)
             }
         }
@@ -302,9 +302,9 @@ internal class FunctionTest {
     fun `Tests Function0In2Out and Function2In0Out`() {
         val captor = Captor2()
         val emitter = object :
-            Function0In2Out<ValueString, KuaNumber>(FunctionOutput2Schema(ValueString::class, KuaNumber::class)) {
-            override fun invoke(ctx: FunctionContext): Pair<ValueString, KuaNumber> {
-                return ValueString("answer") to KuaNumber(42)
+            Function0In2Out<ValueString, ValueNumber>(FunctionOutput2Schema(ValueString::class, ValueNumber::class)) {
+            override fun invoke(ctx: FunctionContext): Pair<ValueString, ValueNumber> {
+                return ValueString("answer") to ValueNumber(42)
             }
         }
 
@@ -348,10 +348,10 @@ internal class FunctionTest {
         var result: String? = null
     }
 
-    private class Captor2 : Function2In0Out<ValueString, KuaNumber>(
-        FunctionInput2Schema(ValueString::class, KuaNumber::class)
+    private class Captor2 : Function2In0Out<ValueString, ValueNumber>(
+        FunctionInput2Schema(ValueString::class, ValueNumber::class)
     ) {
-        override fun invoke(ctx: FunctionContext, arg1: ValueString, arg2: KuaNumber) {
+        override fun invoke(ctx: FunctionContext, arg1: ValueString, arg2: ValueNumber) {
             result = "${arg1.stringValue}=${arg2.doubleValue}"
         }
 

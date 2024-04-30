@@ -4,10 +4,7 @@ import io.hamal.lib.kua.*
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.*
-import io.hamal.lib.value.Value
-import io.hamal.lib.value.ValueNil
-import io.hamal.lib.value.ValueString
-import io.hamal.lib.value.ValueTrue
+import io.hamal.lib.value.*
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
@@ -44,7 +41,7 @@ internal class ValueTest {
             )
         )
 
-        assertThat(captor.result, equalTo(KuaNumber(23)))
+        assertThat(captor.result, equalTo(ValueNumber(23)))
     }
 
     @Test

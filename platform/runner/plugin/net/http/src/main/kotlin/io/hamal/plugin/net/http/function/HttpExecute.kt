@@ -60,7 +60,7 @@ class HttpExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
                             is ValueDecimal -> value.toString()
                             is KuaError -> value.value
                             is ValueNil -> ""
-                            is KuaNumber -> value.doubleValue.toString()
+                            is ValueNumber -> value.doubleValue.toString()
                             is KuaTable -> TODO()
                             is KuaFunction<*, *, *, *> -> TODO()
                             else -> TODO()
@@ -90,10 +90,10 @@ private fun HttpResponse.toMap(ctx: FunctionContext): KuaReference {
 
     ctx.tableCreate().also { response ->
         ctx.checkpoint {
-            response["status_code"] = KuaNumber(statusCode.value)
+            response["status_code"] = ValueNumber(statusCode.value)
             response["content_type"] = headers.find("content-type")?.let { type -> ValueString(type) } ?: ValueNil
             response["content_length"] = headers.find("content-length")
-                ?.let { length -> KuaNumber(length.toInt()) }
+                ?.let { length -> ValueNumber(length.toInt()) }
                 ?: ValueNil
             response["headers"] = headers(ctx)
             response["content"] = content(ctx)

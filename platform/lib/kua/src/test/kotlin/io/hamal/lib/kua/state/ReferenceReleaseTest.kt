@@ -3,7 +3,7 @@ package io.hamal.lib.kua.state
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.numberGet
 import io.hamal.lib.kua.type
-import io.hamal.lib.kua.type.KuaNumber
+import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -22,8 +22,8 @@ internal class ReferenceReleaseTest : StateBaseTest() {
 
         testInstance.referencePush(reference)
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
-        assertThat(testInstance.type(1), equalTo(KuaNumber::class))
-        assertThat(testInstance.numberGet(1), equalTo(KuaNumber(0.0)))
+        assertThat(testInstance.type(1), equalTo(ValueNumber::class))
+        assertThat(testInstance.numberGet(1), equalTo(ValueNumber(0.0)))
     }
 
 }

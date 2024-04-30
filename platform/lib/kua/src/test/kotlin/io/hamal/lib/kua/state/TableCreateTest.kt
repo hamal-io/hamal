@@ -1,8 +1,8 @@
 package io.hamal.lib.kua.state
 
 import io.hamal.lib.kua.*
-import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -13,7 +13,7 @@ internal class TableCreateTest : StateBaseTest() {
     @TestFactory
     fun `Creates an empty table on empty stack`() = runTest { testInstance ->
         val result = testInstance.tableCreate(1, 2)
-        assertThat(result.index, equalTo(KuaNumber(1)))
+        assertThat(result.index, equalTo(ValueNumber(1)))
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
         assertThat(testInstance.type(1), equalTo(KuaTable::class))
     }
@@ -22,12 +22,12 @@ internal class TableCreateTest : StateBaseTest() {
     fun `Creates array like table`() = runTest { testInstance ->
         val result = testInstance.tableCreate(
             listOf(
-                KuaNumber(1),
-                KuaNumber(2),
-                KuaNumber(3)
+                ValueNumber(1),
+                ValueNumber(2),
+                ValueNumber(3)
             )
         )
-        assertThat(result.index, equalTo(KuaNumber(1)))
+        assertThat(result.index, equalTo(ValueNumber(1)))
         assertThat(testInstance.tableLength(1), equalTo(TableLength(3)))
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
         assertThat(testInstance.type(1), equalTo(KuaTable::class))
@@ -40,7 +40,7 @@ internal class TableCreateTest : StateBaseTest() {
             ValueString("key-2") to ValueString("value-2"),
             ValueString("key-3") to ValueString("value-3"),
         )
-        assertThat(result.index, equalTo(KuaNumber(1)))
+        assertThat(result.index, equalTo(ValueNumber(1)))
         assertThat(testInstance.tableLength(1), equalTo(TableLength(3)))
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
         assertThat(testInstance.type(1), equalTo(KuaTable::class))

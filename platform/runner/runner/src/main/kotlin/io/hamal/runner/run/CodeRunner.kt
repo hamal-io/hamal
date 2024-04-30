@@ -9,11 +9,15 @@ import io.hamal.lib.kua.AssertionError
 import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.ExtensionError
 import io.hamal.lib.kua.tableCreate
-import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.type.KuaCode
+import io.hamal.lib.kua.type.KuaFunction
+import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.type.toHotObject
 import io.hamal.lib.nodes.NodesGraph
 import io.hamal.lib.nodes.compiler.Compiler
 import io.hamal.lib.nodes.json
 import io.hamal.lib.value.ValueNil
+import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
@@ -61,7 +65,7 @@ class CodeRunnerImpl(
                             when (val value = entry.value) {
                                 is ValueNil -> {}
                                 is ValueString -> internalTable[entry.key] = value
-                                is KuaNumber -> internalTable[entry.key] = value
+                                is ValueNumber -> internalTable[entry.key] = value
                                 is KuaFunction<*, *, *, *> -> internalTable[entry.key] = value
                                 is KuaTable -> internalTable[entry.key] = value
                                 else -> TODO()

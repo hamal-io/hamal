@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.state
 
 import io.hamal.lib.kua.*
-import io.hamal.lib.kua.type.KuaNumber
+import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -12,7 +12,7 @@ internal class TableRawGetIdxTest : StateBaseTest() {
     @TestFactory
     fun `Gets value from table`() = runTest { testInstance ->
         testInstance.tableCreate(0, 1)
-        testInstance.numberPush(KuaNumber(5.0))
+        testInstance.numberPush(ValueNumber(5.0))
         testInstance.stringPush(ValueString("value"))
         testInstance.tableRawSet(1)
 

@@ -1,10 +1,10 @@
 package io.hamal.lib.kua.function
 
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.value.Value
 import io.hamal.lib.value.ValueNil
+import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 import kotlin.reflect.KClass
 
@@ -40,7 +40,7 @@ data class FunctionOutput2Schema<ARG_1 : Value, ARG_2 : Value>(
 
 fun <VALUE : Value> FunctionContext.push(value: VALUE) = when (value) {
     is ValueNil -> nilPush()
-    is KuaNumber -> numberPush(value)
+    is ValueNumber -> numberPush(value)
     is ValueString -> stringPush(value)
     is KuaTable -> tablePush(value)
     is KuaError -> errorPush(value)

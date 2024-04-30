@@ -4,12 +4,8 @@ import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.topPop
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.kua.type.KuaTable
-import io.hamal.lib.value.ValueDecimal
-import io.hamal.lib.value.ValueFalse
-import io.hamal.lib.value.ValueNil
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.value.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.isA
@@ -64,7 +60,7 @@ internal class GlobalGetTableTest : StateBaseTest() {
 
     @TestFactory
     fun `Tries to load global number as table`() = runTest { testInstance ->
-        testInstance.globalSet(ValueString("answer"), KuaNumber(42.0))
+        testInstance.globalSet(ValueString("answer"), ValueNumber(42.0))
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
 
         assertThrows<IllegalStateException> { testInstance.globalGetTable(ValueString("answer")) }

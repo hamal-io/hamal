@@ -10,6 +10,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiFuncDeployRequest
+import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 
 class FuncDeployFunction(
@@ -27,7 +28,7 @@ class FuncDeployFunction(
             } else {
                 null
             }
-            val version = if (arg1.type("version") == KuaNumber::class) {
+            val version = if (arg1.type("version") == ValueNumber::class) {
                 CodeVersion(arg1.getNumber("version").intValue)
             } else {
                 null

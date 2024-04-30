@@ -24,7 +24,7 @@ internal class KuaTableTest {
             ValueFalse to { assertThat(testInstance.getBoolean(1), equalTo(ValueFalse)) },
             ValueDecimal(42.24) to { assertThat(testInstance.getDecimal(1), equalTo(ValueDecimal(42.24))) },
             KuaError("Some Error") to { assertThat(testInstance.getError(1), equalTo(KuaError("Some Error"))) },
-            KuaNumber(231123) to { assertThat(testInstance.getNumber(1), equalTo(KuaNumber(231123))) },
+            ValueNumber(231123) to { assertThat(testInstance.getNumber(1), equalTo(ValueNumber(231123))) },
             ValueString("Hamal Rocks") to { assertThat(testInstance.getString(1), equalTo(ValueString("Hamal Rocks"))) }
         ).map { (value, verify) ->
             dynamicTest(value.toString()) {
@@ -149,7 +149,7 @@ internal class KuaTableTest {
     @Test
     fun `getBoolean - but different value`() {
         val testInstance = state.tableCreate(
-            ValueString("key") to KuaNumber(23)
+            ValueString("key") to ValueNumber(23)
         )
 
         assertThrows<IllegalStateException> {
@@ -267,18 +267,18 @@ internal class KuaTableTest {
     @Test
     fun `findNumber`() {
         val testInstance = state.tableCreate(
-            ValueString("key") to KuaNumber(24.42)
+            ValueString("key") to ValueNumber(24.42)
         )
 
         testInstance.findNumber(ValueString("key")).also { result ->
-            assertThat(result, equalTo(KuaNumber(24.42)))
+            assertThat(result, equalTo(ValueNumber(24.42)))
         }
     }
 
     @Test
     fun `findNumber - but value not found`() {
         val testInstance = state.tableCreate(
-            ValueString("key") to KuaNumber(24.42)
+            ValueString("key") to ValueNumber(24.42)
         )
 
         assertThat(testInstance.findNumber(ValueString("anotherKey")), nullValue())
@@ -287,18 +287,18 @@ internal class KuaTableTest {
     @Test
     fun `getNumber`() {
         val testInstance = state.tableCreate(
-            ValueString("key") to KuaNumber(24.42)
+            ValueString("key") to ValueNumber(24.42)
         )
 
         testInstance.getNumber(ValueString("key")).also { result ->
-            assertThat(result, equalTo(KuaNumber(24.42)))
+            assertThat(result, equalTo(ValueNumber(24.42)))
         }
     }
 
     @Test
     fun `getNumber - but value not found`() {
         val testInstance = state.tableCreate(
-            ValueString("key") to KuaNumber(24.42)
+            ValueString("key") to ValueNumber(24.42)
         )
 
         assertThrows<NoSuchElementException> {
@@ -361,7 +361,7 @@ internal class KuaTableTest {
     @Test
     fun `getString - but different value`() {
         val testInstance = state.tableCreate(
-            ValueString("key") to KuaNumber(404)
+            ValueString("key") to ValueNumber(404)
         )
 
         assertThrows<IllegalStateException> {
@@ -373,13 +373,13 @@ internal class KuaTableTest {
     fun `findTable`() {
         val testInstance = state.tableCreate(
             ValueString("key") to state.tableCreate(
-                ValueString("answer") to KuaNumber(42)
+                ValueString("answer") to ValueNumber(42)
             )
         )
 
         testInstance.findTable(ValueString("key")).also { result ->
             assertThat(result?.length, equalTo(TableLength(1)))
-            assertThat(result?.getNumber("answer"), equalTo(KuaNumber(42)))
+            assertThat(result?.getNumber("answer"), equalTo(ValueNumber(42)))
         }
     }
 
@@ -387,7 +387,7 @@ internal class KuaTableTest {
     fun `findTable - but value not found`() {
         val testInstance = state.tableCreate(
             ValueString("key") to state.tableCreate(
-                ValueString("answer") to KuaNumber(42)
+                ValueString("answer") to ValueNumber(42)
             )
         )
 
@@ -399,13 +399,13 @@ internal class KuaTableTest {
     fun `getTable`() {
         val testInstance = state.tableCreate(
             ValueString("key") to state.tableCreate(
-                ValueString("answer") to KuaNumber(42)
+                ValueString("answer") to ValueNumber(42)
             )
         )
 
         testInstance.getTable(ValueString("key")).also { result ->
             assertThat(result.length, equalTo(TableLength(1)))
-            assertThat(result.getNumber("answer"), equalTo(KuaNumber(42)))
+            assertThat(result.getNumber("answer"), equalTo(ValueNumber(42)))
         }
     }
 
@@ -413,7 +413,7 @@ internal class KuaTableTest {
     fun `getTable - but value not found`() {
         val testInstance = state.tableCreate(
             ValueString("key") to state.tableCreate(
-                ValueString("answer") to KuaNumber(42)
+                ValueString("answer") to ValueNumber(42)
             )
         )
 
@@ -441,7 +441,7 @@ internal class KuaTableTest {
             ValueTrue,
             ValueFalse,
             ValueDecimal("123"),
-            KuaNumber(42.24),
+            ValueNumber(42.24),
             KuaError("Some Error Message"),
             ValueString("Hamal Rocks"),
         ).map { value ->
@@ -542,7 +542,7 @@ internal class KuaTableTest {
     fun `unset`() {
         val testInstance = state.tableCreate()
 
-        testInstance["key"] = KuaNumber(42)
+        testInstance["key"] = ValueNumber(42)
 
         testInstance.unset("key").also { tableLength -> assertThat(tableLength, equalTo(TableLength(0))) }
         testInstance.get(ValueString("key")).also { result ->
@@ -561,10 +561,10 @@ internal class KuaTableTest {
     fun `unset - but key does not exists`() {
         val testInstance = state.tableCreate()
 
-        testInstance["key"] = KuaNumber(42)
+        testInstance["key"] = ValueNumber(42)
 
         testInstance.unset("anotherKey").also { tableLength -> assertThat(tableLength, equalTo(TableLength(1))) }
-        testInstance.get(ValueString("key")).also { result -> assertThat(result, equalTo(KuaNumber(42))) }
+        testInstance.get(ValueString("key")).also { result -> assertThat(result, equalTo(ValueNumber(42))) }
 
         state.topPop(2)
     }

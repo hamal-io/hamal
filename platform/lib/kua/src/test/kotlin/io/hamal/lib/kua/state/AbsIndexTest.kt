@@ -1,8 +1,8 @@
 package io.hamal.lib.kua.state
 
 import io.hamal.lib.kua.absIndex
-import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.value.ValueDecimal
+import io.hamal.lib.value.ValueNumber
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
@@ -17,7 +17,7 @@ internal class AbsIndexTest : StateBaseTest() {
         testInstance.decimalPush(ValueDecimal(4.0))
 
         val result = testInstance.absIndex(3)
-        assertThat(result, equalTo(KuaNumber(3)))
+        assertThat(result, equalTo(ValueNumber(3)))
     }
 
     @TestFactory
@@ -28,6 +28,6 @@ internal class AbsIndexTest : StateBaseTest() {
         testInstance.decimalPush(ValueDecimal(4.0))
 
         val result = testInstance.absIndex(-2)
-        assertThat(result, equalTo(KuaNumber(3)))
+        assertThat(result, equalTo(ValueNumber(3)))
     }
 }

@@ -2,7 +2,7 @@ package io.hamal.lib.kua.state
 
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.stringGet
-import io.hamal.lib.kua.type.KuaNumber
+import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -35,7 +35,7 @@ internal class StringGetTest : StateBaseTest() {
 
     @TestFactory
     fun `Not a boolean`() = runTest { testInstance ->
-        testInstance.numberPush(KuaNumber(42))
+        testInstance.numberPush(ValueNumber(42))
         assertThrows<IllegalStateException> {
             testInstance.stringGet(1)
         }.also { exception ->

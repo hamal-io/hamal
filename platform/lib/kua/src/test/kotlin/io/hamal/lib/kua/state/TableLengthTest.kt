@@ -1,8 +1,8 @@
 package io.hamal.lib.kua.state
 
 import io.hamal.lib.kua.*
-import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -21,15 +21,15 @@ internal class TableLengthTest : StateBaseTest() {
     fun `Length of table with appended values`() = runTest { testInstance ->
         testInstance.tableCreate(0, 1)
 
-        testInstance.numberPush(KuaNumber(1.0))
+        testInstance.numberPush(ValueNumber(1.0))
         testInstance.tableAppend(1)
         assertThat(testInstance.tableLength(1), equalTo(TableLength(1)))
 
-        testInstance.numberPush(KuaNumber(2.0))
+        testInstance.numberPush(ValueNumber(2.0))
         testInstance.tableAppend(1)
         assertThat(testInstance.tableLength(1), equalTo(TableLength(2)))
 
-        testInstance.numberPush(KuaNumber(3.0))
+        testInstance.numberPush(ValueNumber(3.0))
         testInstance.tableAppend(1)
         assertThat(testInstance.tableLength(1), equalTo(TableLength(3)))
     }

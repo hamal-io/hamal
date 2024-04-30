@@ -7,9 +7,9 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.KuaCode
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.sdk.ApiSdk
+import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 
 class FuncGetFunction(
@@ -31,12 +31,12 @@ class FuncGetFunction(
                         "name" to ValueString(func.name.value),
                         "code" to ctx.tableCreate(
                             "id" to ValueString(func.code.id.value.value.toString(16)),
-                            "version" to KuaNumber(func.code.version.value),
+                            "version" to ValueNumber(func.code.version.value),
                             "value" to KuaCode(func.code.value.value)
                         ),
                         "deployment" to ctx.tableCreate(
                             "id" to ValueString(func.deployment.id.value.value.toString(16)),
-                            "version" to KuaNumber(func.deployment.version.value),
+                            "version" to ValueNumber(func.deployment.version.value),
                             "value" to KuaCode(func.deployment.value.value),
                             "message" to ValueString(func.deployment.message.value)
                         ),

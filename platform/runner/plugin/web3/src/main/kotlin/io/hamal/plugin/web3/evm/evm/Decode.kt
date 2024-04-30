@@ -5,8 +5,8 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.value.Value
+import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 import io.hamal.lib.web3.evm.abi.EvmTypeDecoder
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
@@ -34,9 +34,9 @@ object EvmDecodeParameterFunction : Function2In2Out<ValueString, ValueString, Ku
         if (arg1.stringValue == "uint256") {
             return null to
                     //FIXME must be decimal value
-                    KuaNumber(
+                    ValueNumber(
                         EvmTypeDecoder.Uint256.decode(
-                            ByteWindow.Companion.of(
+                            ByteWindow.of(
                                 EvmPrefixedHexString(arg2.stringValue)
                             )
                         ).value.toDouble()

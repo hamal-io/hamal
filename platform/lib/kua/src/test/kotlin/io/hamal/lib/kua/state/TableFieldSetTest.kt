@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.state
 
 import io.hamal.lib.kua.*
-import io.hamal.lib.kua.type.KuaNumber
+import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -29,13 +29,13 @@ internal class TableFieldSetTest : StateBaseTest() {
             assertThat(table, equalTo(TableLength(1)))
         }
 
-        testInstance.numberPush(KuaNumber(42.0))
+        testInstance.numberPush(ValueNumber(42.0))
         testInstance.tableFieldSet(1, ValueString("key")).also { table ->
             assertThat(table, equalTo(TableLength(1)))
         }
 
         testInstance.tableFieldGet(1, ValueString("key"))
-        assertThat(testInstance.numberGet(-1), equalTo(KuaNumber(42.0)))
+        assertThat(testInstance.numberGet(-1), equalTo(ValueNumber(42.0)))
         assertThat(testInstance.tableLength(1), equalTo(TableLength(1)))
     }
 
@@ -48,7 +48,7 @@ internal class TableFieldSetTest : StateBaseTest() {
         }
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
 
-        testInstance.numberPush(KuaNumber(42.0))
+        testInstance.numberPush(ValueNumber(42.0))
         testInstance.tableFieldSet(1, ValueString("key-2")).also { table ->
             assertThat(table, equalTo(TableLength(2)))
         }

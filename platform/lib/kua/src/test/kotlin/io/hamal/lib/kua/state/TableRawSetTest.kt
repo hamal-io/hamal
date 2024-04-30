@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.state
 
 import io.hamal.lib.kua.*
-import io.hamal.lib.kua.type.KuaNumber
+import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -34,14 +34,14 @@ internal class TableRawSetTest : StateBaseTest() {
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
 
         testInstance.stringPush(ValueString("key"))
-        testInstance.numberPush(KuaNumber(42.0))
+        testInstance.numberPush(ValueNumber(42.0))
         testInstance.tableRawSet(1).also { table ->
             assertThat(table, equalTo(TableLength(1)))
         }
 
 
         testInstance.tableFieldGet(1, ValueString("key"))
-        assertThat(testInstance.numberGet(-1), equalTo(KuaNumber(42.0)))
+        assertThat(testInstance.numberGet(-1), equalTo(ValueNumber(42.0)))
         assertThat(testInstance.tableLength(1), equalTo(TableLength(1)))
     }
 
@@ -56,7 +56,7 @@ internal class TableRawSetTest : StateBaseTest() {
         }
 
         testInstance.stringPush(ValueString("different"))
-        testInstance.numberPush(KuaNumber(42.0))
+        testInstance.numberPush(ValueNumber(42.0))
         testInstance.tableRawSet(1).also { table ->
             assertThat(table, equalTo(TableLength(2)))
         }
@@ -65,7 +65,7 @@ internal class TableRawSetTest : StateBaseTest() {
         assertThat(testInstance.stringGet(-1), equalTo(ValueString("value")))
 
         testInstance.tableFieldGet(1, ValueString("different"))
-        assertThat(testInstance.numberGet(-1), equalTo(KuaNumber(42.0)))
+        assertThat(testInstance.numberGet(-1), equalTo(ValueNumber(42.0)))
 
         assertThat(testInstance.tableLength(1), equalTo(TableLength(2)))
     }

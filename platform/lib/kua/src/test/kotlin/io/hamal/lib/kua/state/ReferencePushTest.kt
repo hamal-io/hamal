@@ -89,16 +89,16 @@ internal class ReferencePushTest : StateBaseTest() {
 
     @TestFactory
     fun `Pushes reference value of number`() = runTest { testInstance ->
-        testInstance.numberPush(KuaNumber(23.11))
+        testInstance.numberPush(ValueNumber(23.11))
 
         val reference = testInstance.referenceAcquire()
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
 
-        testInstance.referencePush(reference).also { type -> assertThat(type, equalTo(KuaNumber::class)) }
+        testInstance.referencePush(reference).also { type -> assertThat(type, equalTo(ValueNumber::class)) }
 
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
-        assertThat(testInstance.type(1), equalTo(KuaNumber::class))
-        assertThat(testInstance.numberGet(1), equalTo(KuaNumber(23.11)))
+        assertThat(testInstance.type(1), equalTo(ValueNumber::class))
+        assertThat(testInstance.numberGet(1), equalTo(ValueNumber(23.11)))
     }
 
     @TestFactory
@@ -118,7 +118,7 @@ internal class ReferencePushTest : StateBaseTest() {
 
     @TestFactory
     fun `Pushes reference value of table`() = runTest { testInstance ->
-        testInstance.tableCreate(ValueString("answer") to KuaNumber(42.0))
+        testInstance.tableCreate(ValueString("answer") to ValueNumber(42.0))
 
         val reference = testInstance.referenceAcquire()
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
@@ -129,7 +129,7 @@ internal class ReferencePushTest : StateBaseTest() {
         assertThat(testInstance.type(1), equalTo(KuaTable::class))
 
         KuaTable(1, testInstance).getNumber("answer").also { result ->
-            assertThat(result, equalTo(KuaNumber(42.0)))
+            assertThat(result, equalTo(ValueNumber(42.0)))
         }
     }
 

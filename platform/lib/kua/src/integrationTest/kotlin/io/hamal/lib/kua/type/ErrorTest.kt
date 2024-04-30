@@ -7,6 +7,7 @@ import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.*
 import io.hamal.lib.value.Value
+import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -62,7 +63,7 @@ internal class KuaErrorTest {
         FunctionInput1Schema(KuaTable::class)
     ) {
         override fun invoke(ctx: FunctionContext, arg1: KuaTable) {
-            assertThat(arg1.getNumber("__type_id"), equalTo(KuaNumber(10)))
+            assertThat(arg1.getNumber("__type_id"), equalTo(ValueNumber(10)))
             assertThat(arg1.getString("__typename"), equalTo(ValueString("error")))
         }
     }

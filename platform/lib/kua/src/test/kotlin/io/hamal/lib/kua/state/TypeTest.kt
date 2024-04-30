@@ -6,7 +6,6 @@ import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaFunction
-import io.hamal.lib.kua.type.KuaNumber
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.value.*
 import org.hamcrest.MatcherAssert.assertThat
@@ -57,9 +56,9 @@ internal class TypeTest : StateBaseTest() {
 
     @TestFactory
     fun `Number`() = runTest { testInstance ->
-        testInstance.numberPush(KuaNumber(231123))
+        testInstance.numberPush(ValueNumber(231123))
         testInstance.type(1).also { result ->
-            assertThat(result, equalTo(KuaNumber::class))
+            assertThat(result, equalTo(ValueNumber::class))
         }
     }
 

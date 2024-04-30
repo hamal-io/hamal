@@ -5,6 +5,7 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.registerGlobalFunction
+import io.hamal.lib.value.ValueNumber
 import org.junit.jupiter.api.Test
 
 internal class ValueNilTest {
@@ -13,8 +14,8 @@ internal class ValueNilTest {
     fun `Single result it nil`() {
         sandbox.use { sandbox ->
             sandbox.registerGlobalFunction("func",
-                object : Function0In1Out<KuaNumber>(FunctionOutput1Schema(KuaNumber::class)) {
-                    override fun invoke(ctx: FunctionContext): KuaNumber? {
+                object : Function0In1Out<ValueNumber>(FunctionOutput1Schema(ValueNumber::class)) {
+                    override fun invoke(ctx: FunctionContext): ValueNumber? {
                         return null
                     }
                 }
