@@ -6,8 +6,8 @@ import io.hamal.lib.common.hot.HotString
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.control.ControlInvoke
 import io.hamal.lib.value.type.TypeBoolean
-import io.hamal.lib.value.value.ValueFalse
-import io.hamal.lib.value.value.ValueTrue
+import io.hamal.lib.value.ValueFalse
+import io.hamal.lib.value.ValueTrue
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat

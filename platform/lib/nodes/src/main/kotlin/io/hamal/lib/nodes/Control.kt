@@ -3,9 +3,9 @@ package io.hamal.lib.nodes
 import io.hamal.lib.nodes.control.ControlIdentifier
 import io.hamal.lib.nodes.control.ControlInput
 import io.hamal.lib.nodes.control.ControlType
-import io.hamal.lib.value.value.ValueBoolean
-import io.hamal.lib.value.value.ValueNumber
-import io.hamal.lib.value.value.ValueString
+import io.hamal.lib.value.ValueBoolean
+import io.hamal.lib.value.ValueNumber
+import io.hamal.lib.value.ValueString
 
 data class ControlCheckbox(
     override val identifier: ControlIdentifier,

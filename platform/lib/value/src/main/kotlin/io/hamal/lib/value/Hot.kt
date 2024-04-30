@@ -11,10 +11,6 @@ import io.hamal.lib.value.type.TypeBoolean
 import io.hamal.lib.value.type.TypeIdentifier
 import io.hamal.lib.value.type.TypeNumber
 import io.hamal.lib.value.type.TypeString
-import io.hamal.lib.value.value.ValueBoolean
-import io.hamal.lib.value.value.ValueFalse
-import io.hamal.lib.value.value.ValueString
-import io.hamal.lib.value.value.ValueTrue
 import java.lang.reflect.Type
 
 object TypesystemHotModule : HotModule() {

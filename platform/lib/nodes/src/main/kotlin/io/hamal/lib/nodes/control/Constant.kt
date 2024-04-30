@@ -1,9 +1,9 @@
 package io.hamal.lib.nodes.control
 
 import io.hamal.lib.nodes.NodeId
-import io.hamal.lib.value.value.ValueBoolean
-import io.hamal.lib.value.value.ValueDecimal
-import io.hamal.lib.value.value.ValueString
+import io.hamal.lib.value.ValueBoolean
+import io.hamal.lib.value.ValueDecimal
+import io.hamal.lib.value.ValueString
 
 sealed interface ControlConstant : Control
 

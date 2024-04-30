@@ -9,10 +9,10 @@ import io.hamal.lib.nodes.control.ControlInit
 import io.hamal.lib.value.type.TypeBoolean
 import io.hamal.lib.value.type.TypeNumber
 import io.hamal.lib.value.type.TypeString
-import io.hamal.lib.value.value.ValueFalse
-import io.hamal.lib.value.value.ValueNumber
-import io.hamal.lib.value.value.ValueString
-import io.hamal.lib.value.value.ValueTrue
+import io.hamal.lib.value.ValueFalse
+import io.hamal.lib.value.ValueNumber
+import io.hamal.lib.value.ValueString
+import io.hamal.lib.value.ValueTrue
 import io.hamal.runner.test.TestFailConnector
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.equalTo

@@ -3,7 +3,7 @@ package io.hamal.lib.nodes.compiler
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.compiler.ComputationGraph.Companion.ComputationGraph
 import io.hamal.lib.value.type.TypeString
-import io.hamal.lib.value.value.ValueString
+import io.hamal.lib.value.ValueString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test

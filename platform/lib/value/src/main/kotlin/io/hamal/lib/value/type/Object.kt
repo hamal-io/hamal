@@ -3,7 +3,7 @@ package io.hamal.lib.value.type
 import io.hamal.lib.value.Field
 import io.hamal.lib.value.FieldIdentifier
 import io.hamal.lib.value.Property.Companion.Property
-import io.hamal.lib.value.value.ValueObject
+import io.hamal.lib.value.ValueObject
 
 // FIXME objects are equal if they have the same fields
 data class TypeObject(override val identifier: TypeIdentifier, val fields: Set<Field>) : Type() {

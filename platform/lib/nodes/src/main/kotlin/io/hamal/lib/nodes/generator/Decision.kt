@@ -6,7 +6,7 @@ import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.value.type.Type
 import io.hamal.lib.value.type.TypeBoolean
-import io.hamal.lib.value.value.ValueTrue
+import io.hamal.lib.value.ValueTrue
 
 sealed interface GeneratorDecision : Generator {
     override val type: NodeType get() = NodeType("Decision")

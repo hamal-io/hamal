@@ -1,8 +1,5 @@
-package io.hamal.lib.value.value
+package io.hamal.lib.value
 
-import io.hamal.lib.value.Field
-import io.hamal.lib.value.FieldIdentifier
-import io.hamal.lib.value.Property
 import io.hamal.lib.value.type.TypeObject
 
 data class ValueObject(

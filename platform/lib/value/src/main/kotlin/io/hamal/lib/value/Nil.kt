@@ -1,4 +1,4 @@
-package io.hamal.lib.value.value
+package io.hamal.lib.value
 
 import io.hamal.lib.value.type.TypeNil
 
