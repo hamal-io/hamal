@@ -66,6 +66,7 @@ fun KuaType.toHotNode(): HotNode<*> {
         }
 
         is KuaReference -> TODO()
+        else -> TODO()
     }
 }
 

@@ -12,8 +12,6 @@ value class KuaDecimal(
     val value: Decimal,
 ) : KuaType, Comparable<KuaDecimal> {
 
-    override val type: KuaType.Type get() = KuaType.Type.Decimal
-
     private val delegate get() = value.value
 
     companion object {

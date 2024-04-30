@@ -1,7 +1,5 @@
 package io.hamal.lib.kua.type
 
-import io.hamal.lib.kua.type.KuaType.Type.Number
-
 @JvmInline
 value class KuaNumber(private val value: Double) : KuaType {
     constructor(value: Int) : this(value.toDouble())
@@ -13,8 +11,6 @@ value class KuaNumber(private val value: Double) : KuaType {
 
     operator fun times(value: Int) = KuaNumber(this.value * value)
     operator fun times(value: Double) = KuaNumber(this.value * value)
-
-    override val type: KuaType.Type get() = Number
 
     override fun toString(): String = value.toString()
 

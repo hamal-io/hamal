@@ -26,6 +26,4 @@ abstract class KuaFunction<
             output.size
         }
     }
-
-    override val type: KuaType.Type = KuaType.Type.Function
 }

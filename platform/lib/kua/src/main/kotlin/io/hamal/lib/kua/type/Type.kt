@@ -2,21 +2,7 @@ package io.hamal.lib.kua.type
 
 import kotlin.reflect.KClass
 
-sealed interface KuaType {
-    enum class Type {
-        Boolean,
-        Code,
-        Decimal,
-        Error,
-        Function,
-        Table,
-        Nil,
-        Number,
-        String,
-        Reference
-    }
-
-    val type: Type
+interface KuaType {
 }
 
 fun KClass<out KuaType>.checkExpectedType(expected: KClass<out KuaType>) {

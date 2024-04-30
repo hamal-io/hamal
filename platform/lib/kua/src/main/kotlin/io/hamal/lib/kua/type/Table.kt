@@ -9,8 +9,7 @@ class KuaTable(
 ) : KuaType {
 
     constructor(index: Int, state: State) : this(KuaNumber(index), state)
-
-    override val type: KuaType.Type = KuaType.Type.Table
+    
     val length get() : TableLength = state.tableLength(index)
 
     fun append(value: KuaType): TableLength {
