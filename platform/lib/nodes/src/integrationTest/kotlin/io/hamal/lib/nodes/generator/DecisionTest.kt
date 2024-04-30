@@ -5,7 +5,7 @@ import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.hot.HotString
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.control.ControlInvoke
-import io.hamal.lib.value.type.TypeBoolean
+import io.hamal.lib.value.TypeBoolean
 import io.hamal.lib.value.ValueFalse
 import io.hamal.lib.value.ValueTrue
 import org.hamcrest.CoreMatchers.equalTo

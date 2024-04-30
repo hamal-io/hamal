@@ -1,6 +1,5 @@
-package io.hamal.lib.value.value
+package io.hamal.lib.value
 
-import io.hamal.lib.value.ValueDecimal
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo

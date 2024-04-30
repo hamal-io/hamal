@@ -2,7 +2,7 @@ package io.hamal.lib.nodes
 
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.value.type.Type
+import io.hamal.lib.value.Type
 
 class PortId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: Int) : this(SnowflakeId(value.toLong()))

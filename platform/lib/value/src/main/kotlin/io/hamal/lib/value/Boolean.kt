@@ -1,6 +1,13 @@
 package io.hamal.lib.value
 
-import io.hamal.lib.value.type.TypeBoolean
+data object TypeBoolean : Type() {
+    override val identifier = TypeIdentifier("Boolean")
+}
+
+data object TypeListBoolean : TypeList() {
+    override val identifier = TypeIdentifier("List_Boolean")
+    override val valueType = TypeBoolean
+}
 
 fun valueOf(value: Boolean) = if (value) ValueTrue else ValueFalse
 

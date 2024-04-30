@@ -1,7 +1,15 @@
 package io.hamal.lib.value
 
-import io.hamal.lib.value.type.TypeDate
 import java.time.LocalDate
+
+data object TypeDate : Type() {
+    override val identifier = TypeIdentifier("Date")
+}
+
+data object TypeListDate : TypeList() {
+    override val identifier = TypeIdentifier("List_Date")
+    override val valueType = TypeNumber
+}
 
 @JvmInline
 value class ValueDate(private val value: LocalDate) : Value {

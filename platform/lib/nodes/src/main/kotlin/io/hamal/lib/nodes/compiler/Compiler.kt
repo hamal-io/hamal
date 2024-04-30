@@ -7,7 +7,7 @@ import io.hamal.lib.nodes.control.ControlInvoke
 import io.hamal.lib.nodes.control.ControlType
 import io.hamal.lib.nodes.generator.Generator
 import io.hamal.lib.nodes.generator.GeneratorRegistry
-import io.hamal.lib.value.type.Type
+import io.hamal.lib.value.Type
 
 class Compiler(
     private val generatorRegistry: GeneratorRegistry

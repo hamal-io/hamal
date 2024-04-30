@@ -1,4 +1,4 @@
-package io.hamal.lib.value.type
+package io.hamal.lib.value
 
 data object TypeDateTime : Type() {
     override val identifier = TypeIdentifier("Date_Time")

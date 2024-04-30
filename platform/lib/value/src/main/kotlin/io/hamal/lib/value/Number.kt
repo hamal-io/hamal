@@ -1,7 +1,13 @@
 package io.hamal.lib.value
 
-import io.hamal.lib.value.type.TypeNumber
+data object TypeNumber : Type() {
+    override val identifier = TypeIdentifier("Number")
+}
 
+data object TypeListNumber : TypeList() {
+    override val identifier = TypeIdentifier("List_Number")
+    override val valueType = TypeNumber
+}
 
 @JvmInline
 value class ValueNumber(private val value: Double) : Value {

@@ -4,8 +4,8 @@ import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.control.ControlExtensionTextArea
 import io.hamal.lib.nodes.generator.Generator
-import io.hamal.lib.value.type.Type
-import io.hamal.lib.value.type.TypeString
+import io.hamal.lib.value.Type
+import io.hamal.lib.value.TypeString
 import io.hamal.lib.value.ValueString
 
 val SendMessageNode = NodeExtension(

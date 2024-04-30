@@ -7,19 +7,15 @@ import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.HotModule
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.serialization.ValueObjectStringAdapter
-import io.hamal.lib.value.type.TypeBoolean
-import io.hamal.lib.value.type.TypeIdentifier
-import io.hamal.lib.value.type.TypeNumber
-import io.hamal.lib.value.type.TypeString
 import java.lang.reflect.Type
 
 object TypesystemHotModule : HotModule() {
     init {
         this[FieldIdentifier::class] = ValueObjectStringAdapter(::FieldIdentifier)
 
-        this[io.hamal.lib.value.type.Type::class] = object : JsonAdapter<io.hamal.lib.value.type.Type> {
+        this[io.hamal.lib.value.Type::class] = object : JsonAdapter<io.hamal.lib.value.Type> {
             override fun serialize(
-                src: io.hamal.lib.value.type.Type,
+                src: io.hamal.lib.value.Type,
                 typeOfSrc: Type,
                 context: JsonSerializationContext
             ): JsonElement {
@@ -30,7 +26,7 @@ object TypesystemHotModule : HotModule() {
                 json: JsonElement,
                 typeOfT: Type,
                 context: JsonDeserializationContext
-            ): io.hamal.lib.value.type.Type {
+            ): io.hamal.lib.value.Type {
                 return when (TypeIdentifier(json.asString)) {
                     TypeBoolean.identifier -> TypeBoolean
                     TypeNumber.identifier -> TypeNumber

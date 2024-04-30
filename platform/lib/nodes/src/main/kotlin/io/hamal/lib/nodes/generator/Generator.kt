@@ -3,7 +3,7 @@ package io.hamal.lib.nodes.generator
 import io.hamal.lib.nodes.Node
 import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.control.Control
-import io.hamal.lib.value.type.Type
+import io.hamal.lib.value.Type
 
 
 interface Generator {

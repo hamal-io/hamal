@@ -2,7 +2,7 @@ package io.hamal.lib.nodes.control
 
 import io.hamal.lib.common.hot.HotString
 import io.hamal.lib.nodes.*
-import io.hamal.lib.value.type.TypeString
+import io.hamal.lib.value.TypeString
 import io.hamal.lib.value.ValueString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
