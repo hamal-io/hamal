@@ -11,6 +11,7 @@ import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.nodes.generator.GeneratorRegistry
 import io.hamal.lib.value.Value
 import io.hamal.lib.value.ValueBoolean
+import io.hamal.lib.value.ValueDecimal
 
 // FIXME super dirty temporary hack
 val sandboxContextLocal = ThreadLocal<SandboxContext>()
@@ -37,8 +38,8 @@ class Sandbox(
     override fun codeLoad(code: KuaCode) = state.codeLoad(code)
     override fun <T : Any> checkpoint(action: (State) -> T) = state.checkpoint(action)
 
-    override fun decimalGet(idx: KuaNumber): KuaDecimal = state.decimalGet(idx)
-    override fun decimalPush(value: KuaDecimal): StackTop = state.decimalPush(value)
+    override fun decimalGet(idx: KuaNumber): ValueDecimal = state.decimalGet(idx)
+    override fun decimalPush(value: ValueDecimal): StackTop = state.decimalPush(value)
 
     override fun errorGet(idx: KuaNumber): KuaError = state.errorGet(idx)
     override fun errorPush(error: KuaError): StackTop = state.errorPush(error)

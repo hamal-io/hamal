@@ -6,6 +6,7 @@ import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.value.ValueBoolean
+import io.hamal.lib.value.ValueDecimal
 import io.hamal.lib.value.ValueNil
 import io.hamal.lib.value.ValueTrue
 import org.hamcrest.MatcherAssert.assertThat
@@ -24,9 +25,9 @@ internal class TypeTest : StateBaseTest() {
 
     @TestFactory
     fun `Decimal`() = runTest { testInstance ->
-        testInstance.decimalPush(KuaDecimal(231123))
+        testInstance.decimalPush(ValueDecimal(231123))
         testInstance.type(1).also { result ->
-            assertThat(result, equalTo(KuaDecimal::class))
+            assertThat(result, equalTo(ValueDecimal::class))
         }
     }
 

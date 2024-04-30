@@ -4,6 +4,7 @@ import io.hamal.lib.kua.*
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
+import io.hamal.lib.value.ValueDecimal
 import io.hamal.lib.value.ValueFalse
 import io.hamal.lib.value.ValueNil
 import io.hamal.lib.value.ValueTrue
@@ -24,7 +25,7 @@ internal class KuaTableTest {
         return listOf(
             ValueTrue to { assertThat(testInstance.getBoolean(1), equalTo(ValueTrue)) },
             ValueFalse to { assertThat(testInstance.getBoolean(1), equalTo(ValueFalse)) },
-            KuaDecimal(42.24) to { assertThat(testInstance.getDecimal(1), equalTo(KuaDecimal(42.24))) },
+            ValueDecimal(42.24) to { assertThat(testInstance.getDecimal(1), equalTo(ValueDecimal(42.24))) },
             KuaError("Some Error") to { assertThat(testInstance.getError(1), equalTo(KuaError("Some Error"))) },
             KuaNumber(231123) to { assertThat(testInstance.getNumber(1), equalTo(KuaNumber(231123))) },
             KuaString("Hamal Rocks") to { assertThat(testInstance.getString(1), equalTo(KuaString("Hamal Rocks"))) }
@@ -162,18 +163,18 @@ internal class KuaTableTest {
     @Test
     fun `findDecimal`() {
         val testInstance = state.tableCreate(
-            KuaString("key") to KuaDecimal(24.42)
+            KuaString("key") to ValueDecimal(24.42)
         )
 
         testInstance.findDecimal(KuaString("key")).also { result ->
-            assertThat(result, equalTo(KuaDecimal(24.42)))
+            assertThat(result, equalTo(ValueDecimal(24.42)))
         }
     }
 
     @Test
     fun `findDecimal - but value not found`() {
         val testInstance = state.tableCreate(
-            KuaString("key") to KuaDecimal(24.42)
+            KuaString("key") to ValueDecimal(24.42)
         )
 
         assertThat(testInstance.findDecimal(KuaString("anotherKey")), nullValue())
@@ -182,18 +183,18 @@ internal class KuaTableTest {
     @Test
     fun `getDecimal`() {
         val testInstance = state.tableCreate(
-            KuaString("key") to KuaDecimal(24.42)
+            KuaString("key") to ValueDecimal(24.42)
         )
 
         testInstance.getDecimal(KuaString("key")).also { result ->
-            assertThat(result, equalTo(KuaDecimal(24.42)))
+            assertThat(result, equalTo(ValueDecimal(24.42)))
         }
     }
 
     @Test
     fun `getDecimal - but value not found`() {
         val testInstance = state.tableCreate(
-            KuaString("key") to KuaDecimal(24.42)
+            KuaString("key") to ValueDecimal(24.42)
         )
 
         assertThrows<NoSuchElementException> {
@@ -442,7 +443,7 @@ internal class KuaTableTest {
         return listOf(
             ValueTrue,
             ValueFalse,
-            KuaDecimal("123"),
+            ValueDecimal("123"),
             KuaNumber(42.24),
             KuaError("Some Error Message"),
             KuaString("Hamal Rocks"),

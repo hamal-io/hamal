@@ -3,8 +3,11 @@ package io.hamal.lib.kua.state
 import io.hamal.lib.kua.*
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.type.*
 import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaNumber
+import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.value.ValueDecimal
 import io.hamal.lib.value.ValueNil
 import io.hamal.lib.value.ValueTrue
 import org.hamcrest.MatcherAssert.assertThat
@@ -21,8 +24,8 @@ internal class SetTest : StateBaseTest() {
 
     @TestFactory
     fun `Decimal`() = runTest { testInstance ->
-        testInstance.push(KuaDecimal(231123))
-        assertThat(testInstance.decimalGet(1), equalTo(KuaDecimal(231123)))
+        testInstance.push(ValueDecimal(231123))
+        assertThat(testInstance.decimalGet(1), equalTo(ValueDecimal(231123)))
     }
 
     @TestFactory

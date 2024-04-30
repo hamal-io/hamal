@@ -10,6 +10,7 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.topPop
 import io.hamal.lib.kua.type.*
+import io.hamal.lib.value.ValueDecimal
 import io.hamal.lib.value.ValueFalse
 import io.hamal.lib.value.ValueNil
 import io.hamal.lib.value.ValueTrue
@@ -59,7 +60,7 @@ class HttpExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
                             is ValueFalse -> "false"
                             is ValueTrue -> "true"
                             is KuaCode -> value.stringValue
-                            is KuaDecimal -> value.toString()
+                            is ValueDecimal -> value.toString()
                             is KuaError -> value.value
                             is ValueNil -> ""
                             is KuaNumber -> value.doubleValue.toString()

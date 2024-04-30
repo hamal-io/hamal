@@ -3,7 +3,11 @@ package io.hamal.lib.kua.state
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.topPop
-import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.type.KuaError
+import io.hamal.lib.kua.type.KuaNumber
+import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.value.ValueDecimal
 import io.hamal.lib.value.ValueFalse
 import io.hamal.lib.value.ValueNil
 import org.hamcrest.MatcherAssert.assertThat
@@ -26,11 +30,11 @@ internal class GlobalGetTest : StateBaseTest() {
 
     @TestFactory
     fun `Gets global decimal onto stack`() = runTest { testInstance ->
-        testInstance.globalSet(KuaString("answer"), KuaDecimal(12.23))
+        testInstance.globalSet(KuaString("answer"), ValueDecimal(12.23))
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
 
         testInstance.globalGet(KuaString("answer")).also { result ->
-            assertThat(result, equalTo(KuaDecimal(12.23)))
+            assertThat(result, equalTo(ValueDecimal(12.23)))
         }
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
     }

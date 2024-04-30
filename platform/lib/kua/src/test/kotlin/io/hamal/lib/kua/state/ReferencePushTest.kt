@@ -6,6 +6,7 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.type.*
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.value.ValueBoolean
+import io.hamal.lib.value.ValueDecimal
 import io.hamal.lib.value.ValueNil
 import io.hamal.lib.value.ValueTrue
 import org.hamcrest.MatcherAssert.assertThat
@@ -30,16 +31,16 @@ internal class ReferencePushTest : StateBaseTest() {
 
     @TestFactory
     fun `Pushes reference value of decimal`() = runTest { testInstance ->
-        testInstance.decimalPush(KuaDecimal(12.21))
+        testInstance.decimalPush(ValueDecimal(12.21))
 
         val reference = testInstance.referenceAcquire()
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
 
-        testInstance.referencePush(reference).also { type -> assertThat(type, equalTo(KuaDecimal::class)) }
+        testInstance.referencePush(reference).also { type -> assertThat(type, equalTo(ValueDecimal::class)) }
 
         assertThat(testInstance.topGet(), equalTo(StackTop(1)))
-        assertThat(testInstance.type(1), equalTo(KuaDecimal::class))
-        assertThat(testInstance.decimalGet(1), equalTo(KuaDecimal(12.21)))
+        assertThat(testInstance.type(1), equalTo(ValueDecimal::class))
+        assertThat(testInstance.decimalGet(1), equalTo(ValueDecimal(12.21)))
     }
 
     @TestFactory

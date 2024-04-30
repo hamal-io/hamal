@@ -3,10 +3,7 @@ package io.hamal.lib.kua.type
 import io.hamal.lib.common.hot.*
 import io.hamal.lib.common.util.StringUtils
 import io.hamal.lib.kua.*
-import io.hamal.lib.value.Value
-import io.hamal.lib.value.ValueFalse
-import io.hamal.lib.value.ValueNil
-import io.hamal.lib.value.ValueTrue
+import io.hamal.lib.value.*
 
 //FIXME replace toKua with this
 fun HotNode<*>?.toKua(state: State): Value {
@@ -55,7 +52,7 @@ fun Value.toHotNode(): HotNode<*> {
         is ValueFalse -> HotBoolean(false)
         is ValueTrue -> HotBoolean(true)
         is KuaCode -> HotString(stringValue)
-        is KuaDecimal -> HotString(value.toString())
+        is ValueDecimal -> HotString(value.toString())
         is KuaError -> toHotObject()
         is KuaFunction<*, *, *, *> -> TODO()
         is ValueNil -> HotNull

@@ -20,7 +20,7 @@ class KuaTable(
                 state.tableAppend(index)
             }
 
-            is KuaDecimal -> {
+            is ValueDecimal -> {
                 state.decimalPush(value)
                 state.tableAppend(index)
             }
@@ -88,9 +88,9 @@ class KuaTable(
         return state.booleanGet(-1)
     }
 
-    fun getDecimal(idx: KuaNumber): KuaDecimal {
+    fun getDecimal(idx: KuaNumber): ValueDecimal {
         val type = state.tableRawGetIdx(index, idx)
-        type.checkExpectedType(KuaDecimal::class)
+        type.checkExpectedType(ValueDecimal::class)
         return state.decimalGet(-1)
     }
 
@@ -134,7 +134,7 @@ class KuaTable(
                 state.tableRawSet(index)
             }
 
-            is KuaDecimal -> {
+            is ValueDecimal -> {
                 state.stringPush(key)
                 state.decimalPush(value)
                 state.tableRawSet(index)
@@ -201,17 +201,17 @@ class KuaTable(
         return findBoolean(key) ?: throw NoSuchElementException("$key not found")
     }
 
-    fun findDecimal(key: KuaString): KuaDecimal? {
+    fun findDecimal(key: KuaString): ValueDecimal? {
         if (isNull(key)) {
             return null
         }
         state.stringPush(key)
         val type = state.tableRawGet(index)
-        type.checkExpectedType(KuaDecimal::class)
+        type.checkExpectedType(ValueDecimal::class)
         return state.decimalGet(-1).also { state.topPop(1) }
     }
 
-    fun getDecimal(key: KuaString): KuaDecimal {
+    fun getDecimal(key: KuaString): ValueDecimal {
         return findDecimal(key) ?: throw NoSuchElementException("$key not found")
     }
 
