@@ -1,6 +1,6 @@
-package io.hamal.lib.typesystem.value
+package io.hamal.lib.value.value
 
-import io.hamal.lib.typesystem.type.TypeTime
+import io.hamal.lib.value.type.TypeTime
 import java.time.LocalTime
 
 @JvmInline

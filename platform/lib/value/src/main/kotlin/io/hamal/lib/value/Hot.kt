@@ -1,4 +1,4 @@
-package io.hamal.lib.typesystem
+package io.hamal.lib.value
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
@@ -7,26 +7,34 @@ import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.HotModule
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.serialization.ValueObjectStringAdapter
-import io.hamal.lib.typesystem.type.TypeBoolean
-import io.hamal.lib.typesystem.type.TypeIdentifier
-import io.hamal.lib.typesystem.type.TypeNumber
-import io.hamal.lib.typesystem.type.TypeString
-import io.hamal.lib.typesystem.value.ValueBoolean
-import io.hamal.lib.typesystem.value.ValueFalse
-import io.hamal.lib.typesystem.value.ValueString
-import io.hamal.lib.typesystem.value.ValueTrue
+import io.hamal.lib.value.type.TypeBoolean
+import io.hamal.lib.value.type.TypeIdentifier
+import io.hamal.lib.value.type.TypeNumber
+import io.hamal.lib.value.type.TypeString
+import io.hamal.lib.value.value.ValueBoolean
+import io.hamal.lib.value.value.ValueFalse
+import io.hamal.lib.value.value.ValueString
+import io.hamal.lib.value.value.ValueTrue
 import java.lang.reflect.Type
 
 object TypesystemHotModule : HotModule() {
     init {
         this[FieldIdentifier::class] = ValueObjectStringAdapter(::FieldIdentifier)
 
-        this[io.hamal.lib.typesystem.type.Type::class] = object : JsonAdapter<io.hamal.lib.typesystem.type.Type> {
-            override fun serialize(src: io.hamal.lib.typesystem.type.Type, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+        this[io.hamal.lib.value.type.Type::class] = object : JsonAdapter<io.hamal.lib.value.type.Type> {
+            override fun serialize(
+                src: io.hamal.lib.value.type.Type,
+                typeOfSrc: Type,
+                context: JsonSerializationContext
+            ): JsonElement {
                 return JsonPrimitive(src.identifier.value)
             }
 
-            override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): io.hamal.lib.typesystem.type.Type {
+            override fun deserialize(
+                json: JsonElement,
+                typeOfT: Type,
+                context: JsonDeserializationContext
+            ): io.hamal.lib.value.type.Type {
                 return when (TypeIdentifier(json.asString)) {
                     TypeBoolean.identifier -> TypeBoolean
                     TypeNumber.identifier -> TypeNumber

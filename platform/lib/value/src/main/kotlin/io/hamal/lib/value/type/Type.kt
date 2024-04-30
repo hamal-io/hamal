@@ -1,8 +1,8 @@
-package io.hamal.lib.typesystem.type
+package io.hamal.lib.value.type
 
 import io.hamal.lib.common.domain.ValueObjectString
-import io.hamal.lib.typesystem.Property
-import io.hamal.lib.typesystem.value.ValueList
+import io.hamal.lib.value.Property
+import io.hamal.lib.value.value.ValueList
 
 class TypeIdentifier(override val value: String) : ValueObjectString()
 

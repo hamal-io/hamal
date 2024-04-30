@@ -1,9 +1,9 @@
-package io.hamal.lib.typesystem.value
+package io.hamal.lib.value.value
 
-import io.hamal.lib.typesystem.Field
-import io.hamal.lib.typesystem.FieldIdentifier
-import io.hamal.lib.typesystem.Property
-import io.hamal.lib.typesystem.type.TypeObject
+import io.hamal.lib.value.Field
+import io.hamal.lib.value.FieldIdentifier
+import io.hamal.lib.value.Property
+import io.hamal.lib.value.type.TypeObject
 
 data class ValueObject(
     override val type: TypeObject,

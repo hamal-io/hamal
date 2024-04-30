@@ -5,9 +5,9 @@ import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.hot.HotString
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.control.ControlInvoke
-import io.hamal.lib.typesystem.type.TypeBoolean
-import io.hamal.lib.typesystem.value.ValueFalse
-import io.hamal.lib.typesystem.value.ValueTrue
+import io.hamal.lib.value.type.TypeBoolean
+import io.hamal.lib.value.value.ValueFalse
+import io.hamal.lib.value.value.ValueTrue
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -29,10 +29,30 @@ internal class DecisionTest : AbstractIntegrationTest() {
                                 portOutput(22, TypeBoolean)
                             )
                         ),
-                        node(3, "Test_Capture", listOf(portOutput(23, TypeBoolean)), HotObject.builder().set("capture_fn", HotString("captureOne")).build()),
-                        node(4, "Test_Invoked", listOf(), HotObject.builder().set("invoke_fn", HotString("invokeOne")).build()),
-                        node(5, "Test_Capture", listOf(portOutput(25, TypeBoolean)), HotObject.builder().set("capture_fn", HotString("captureTwo")).build()),
-                        node(6, "Test_Invoked", listOf(), HotObject.builder().set("invoke_fn", HotString("invokeTwo")).build())
+                        node(
+                            3,
+                            "Test_Capture",
+                            listOf(portOutput(23, TypeBoolean)),
+                            HotObject.builder().set("capture_fn", HotString("captureOne")).build()
+                        ),
+                        node(
+                            4,
+                            "Test_Invoked",
+                            listOf(),
+                            HotObject.builder().set("invoke_fn", HotString("invokeOne")).build()
+                        ),
+                        node(
+                            5,
+                            "Test_Capture",
+                            listOf(portOutput(25, TypeBoolean)),
+                            HotObject.builder().set("capture_fn", HotString("captureTwo")).build()
+                        ),
+                        node(
+                            6,
+                            "Test_Invoked",
+                            listOf(),
+                            HotObject.builder().set("invoke_fn", HotString("invokeTwo")).build()
+                        )
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 30),
@@ -72,10 +92,30 @@ internal class DecisionTest : AbstractIntegrationTest() {
                                 portOutput(22, TypeBoolean)
                             )
                         ),
-                        node(3, "Test_Capture", listOf(portOutput(23, TypeBoolean)), HotObject.builder().set("capture_fn", HotString("captureOne")).build()),
-                        node(4, "Test_Invoked", listOf(), HotObject.builder().set("invoke_fn", HotString("invokeOne")).build()),
-                        node(5, "Test_Capture", listOf(portOutput(25, TypeBoolean)), HotObject.builder().set("capture_fn", HotString("captureTwo")).build()),
-                        node(6, "Test_Invoked", listOf(), HotObject.builder().set("invoke_fn", HotString("invokeTwo")).build())
+                        node(
+                            3,
+                            "Test_Capture",
+                            listOf(portOutput(23, TypeBoolean)),
+                            HotObject.builder().set("capture_fn", HotString("captureOne")).build()
+                        ),
+                        node(
+                            4,
+                            "Test_Invoked",
+                            listOf(),
+                            HotObject.builder().set("invoke_fn", HotString("invokeOne")).build()
+                        ),
+                        node(
+                            5,
+                            "Test_Capture",
+                            listOf(portOutput(25, TypeBoolean)),
+                            HotObject.builder().set("capture_fn", HotString("captureTwo")).build()
+                        ),
+                        node(
+                            6,
+                            "Test_Invoked",
+                            listOf(),
+                            HotObject.builder().set("invoke_fn", HotString("invokeTwo")).build()
+                        )
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 30),

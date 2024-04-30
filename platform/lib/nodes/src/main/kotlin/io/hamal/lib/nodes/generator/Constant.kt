@@ -5,9 +5,9 @@ import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.control.ControlConstantDecimal
 import io.hamal.lib.nodes.control.ControlConstantString
-import io.hamal.lib.typesystem.type.Type
-import io.hamal.lib.typesystem.type.TypeDecimal
-import io.hamal.lib.typesystem.type.TypeString
+import io.hamal.lib.value.type.Type
+import io.hamal.lib.value.type.TypeDecimal
+import io.hamal.lib.value.type.TypeString
 
 sealed interface GeneratorConstant : Generator {
     override val type: NodeType get() = NodeType("Constant")

@@ -5,7 +5,7 @@ import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.type.*
-import io.hamal.lib.typesystem.value.*
+import io.hamal.lib.value.value.*
 
 class InvokeFunction : Function0In0Out() {
     override fun invoke(ctx: FunctionContext) {

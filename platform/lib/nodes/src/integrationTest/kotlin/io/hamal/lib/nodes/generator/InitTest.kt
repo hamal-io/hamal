@@ -6,13 +6,13 @@ import io.hamal.lib.common.hot.HotNumber
 import io.hamal.lib.common.hot.HotString
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.control.ControlInit
-import io.hamal.lib.typesystem.type.TypeBoolean
-import io.hamal.lib.typesystem.type.TypeNumber
-import io.hamal.lib.typesystem.type.TypeString
-import io.hamal.lib.typesystem.value.ValueFalse
-import io.hamal.lib.typesystem.value.ValueNumber
-import io.hamal.lib.typesystem.value.ValueString
-import io.hamal.lib.typesystem.value.ValueTrue
+import io.hamal.lib.value.type.TypeBoolean
+import io.hamal.lib.value.type.TypeNumber
+import io.hamal.lib.value.type.TypeString
+import io.hamal.lib.value.value.ValueFalse
+import io.hamal.lib.value.value.ValueNumber
+import io.hamal.lib.value.value.ValueString
+import io.hamal.lib.value.value.ValueTrue
 import io.hamal.runner.test.TestFailConnector
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.equalTo
@@ -37,7 +37,12 @@ internal class InitTest : AbstractIntegrationTest() {
                     ),
                     controls = listOf(
                         ControlInit(nextControlIdentifier(), NodeId(1)),
-                        ControlTextArea(nextControlIdentifier(), NodeId(2), portInput(21, TypeString), ValueString("default string"))
+                        ControlTextArea(
+                            nextControlIdentifier(),
+                            NodeId(2),
+                            portInput(21, TypeString),
+                            ValueString("default string")
+                        )
                     )
                 )
             )
@@ -84,7 +89,12 @@ internal class InitTest : AbstractIntegrationTest() {
                         connection(100, 1, 20, 2, 21)
                     ),
                     controls = listOf(
-                        ControlTextArea(nextControlIdentifier(), NodeId(2), portInput(21, TypeString), ValueString("default string"))
+                        ControlTextArea(
+                            nextControlIdentifier(),
+                            NodeId(2),
+                            portInput(21, TypeString),
+                            ValueString("default string")
+                        )
                     )
                 )
             )
@@ -107,7 +117,14 @@ internal class InitTest : AbstractIntegrationTest() {
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
                     ),
-                    controls = listOf(ControlNumberInput(nextControlIdentifier(), NodeId(2), portInput(21, TypeNumber), ValueNumber(0.213)))
+                    controls = listOf(
+                        ControlNumberInput(
+                            nextControlIdentifier(),
+                            NodeId(2),
+                            portInput(21, TypeNumber),
+                            ValueNumber(0.213)
+                        )
+                    )
                 )
             )
         )
@@ -135,7 +152,12 @@ internal class InitTest : AbstractIntegrationTest() {
                     ),
                     controls = listOf(
                         ControlInit(nextControlIdentifier(), NodeId(1), selector = "WILL_NOT_FIND_ANYTHING"),
-                        ControlTextArea(nextControlIdentifier(), NodeId(2), portInput(21, TypeString), ValueString("default string"))
+                        ControlTextArea(
+                            nextControlIdentifier(),
+                            NodeId(2),
+                            portInput(21, TypeString),
+                            ValueString("default string")
+                        )
                     )
                 )
             )
@@ -164,7 +186,12 @@ internal class InitTest : AbstractIntegrationTest() {
                     ),
                     controls = listOf(
                         ControlInit(nextControlIdentifier(), NodeId(1)),
-                        ControlTextArea(nextControlIdentifier(), NodeId(2), portInput(21, TypeString), ValueString("default string"))
+                        ControlTextArea(
+                            nextControlIdentifier(),
+                            NodeId(2),
+                            portInput(21, TypeString),
+                            ValueString("default string")
+                        )
                     )
                 )
             )

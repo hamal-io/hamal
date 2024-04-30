@@ -2,8 +2,8 @@ package io.hamal.lib.nodes.compiler
 
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.compiler.ComputationGraph.Companion.ComputationGraph
-import io.hamal.lib.typesystem.type.TypeString
-import io.hamal.lib.typesystem.value.ValueString
+import io.hamal.lib.value.type.TypeString
+import io.hamal.lib.value.value.ValueString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
@@ -28,7 +28,12 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
                     connection(100, 1, 20, 2, 21)
                 ),
                 controls = listOf(
-                    ControlTextArea(nextControlIdentifier(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default string"))
+                    ControlTextArea(
+                        nextControlIdentifier(),
+                        NodeId(2),
+                        PortInput(PortId(21), TypeString),
+                        ValueString("default string")
+                    )
                 )
             )
         )
@@ -58,8 +63,18 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
                     connection(101, 1, 20, 3, 22),
                 ),
                 controls = listOf(
-                    ControlTextArea(nextControlIdentifier(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default")),
-                    ControlTextArea(nextControlIdentifier(), NodeId(3), PortInput(PortId(22), TypeString), ValueString("default"))
+                    ControlTextArea(
+                        nextControlIdentifier(),
+                        NodeId(2),
+                        PortInput(PortId(21), TypeString),
+                        ValueString("default")
+                    ),
+                    ControlTextArea(
+                        nextControlIdentifier(),
+                        NodeId(3),
+                        PortInput(PortId(22), TypeString),
+                        ValueString("default")
+                    )
                 )
             )
         )
@@ -89,8 +104,18 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
                     connection(101, 2, 21, 3, 22),
                 ),
                 controls = listOf(
-                    ControlTextArea(nextControlIdentifier(), NodeId(2), PortInput(PortId(21), TypeString), ValueString("default")),
-                    ControlTextArea(nextControlIdentifier(), NodeId(3), PortInput(PortId(22), TypeString), ValueString("default"))
+                    ControlTextArea(
+                        nextControlIdentifier(),
+                        NodeId(2),
+                        PortInput(PortId(21), TypeString),
+                        ValueString("default")
+                    ),
+                    ControlTextArea(
+                        nextControlIdentifier(),
+                        NodeId(3),
+                        PortInput(PortId(22), TypeString),
+                        ValueString("default")
+                    )
                 )
             )
         )

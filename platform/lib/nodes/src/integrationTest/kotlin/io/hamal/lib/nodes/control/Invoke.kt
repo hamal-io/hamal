@@ -2,8 +2,8 @@ package io.hamal.lib.nodes.control
 
 import io.hamal.lib.common.hot.HotString
 import io.hamal.lib.nodes.*
-import io.hamal.lib.typesystem.type.TypeString
-import io.hamal.lib.typesystem.value.ValueString
+import io.hamal.lib.value.type.TypeString
+import io.hamal.lib.value.value.ValueString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
@@ -27,7 +27,12 @@ internal object ControlInvokeTest : AbstractIntegrationTest() {
                     controls = listOf(
                         ControlInit(nextControlIdentifier(), NodeId(1)),
                         ControlInvoke(nextControlIdentifier(), NodeId(2), portInput(21, TypeString)),
-                        ControlTextArea(nextControlIdentifier(), NodeId(2), portInput(22, TypeString), ValueString("default capture string")),
+                        ControlTextArea(
+                            nextControlIdentifier(),
+                            NodeId(2),
+                            portInput(22, TypeString),
+                            ValueString("default capture string")
+                        ),
                     )
                 )
             )

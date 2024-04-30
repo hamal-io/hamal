@@ -7,7 +7,7 @@ import io.hamal.lib.nodes.control.ControlInvoke
 import io.hamal.lib.nodes.control.ControlType
 import io.hamal.lib.nodes.generator.Generator
 import io.hamal.lib.nodes.generator.GeneratorRegistry
-import io.hamal.lib.typesystem.type.Type
+import io.hamal.lib.value.type.Type
 
 class Compiler(
     private val generatorRegistry: GeneratorRegistry
@@ -55,14 +55,16 @@ class Compiler(
             code.append(builder.toString())
 
             node.outputs.mapIndexed { index, portOutput ->
-                outputPortMapping[portOutput.id] = "n_${node.id.value.value.toString(16)}_${index + 1}" to generator.outputTypes[index]
+                outputPortMapping[portOutput.id] =
+                    "n_${node.id.value.value.toString(16)}_${index + 1}" to generator.outputTypes[index]
             }
         }
 
         code.append("\n")
         code.append("\n")
 
-        val initNode = nodes.find { it.type == NodeType("Init") } ?: throw IllegalArgumentException("No INIT node found")
+        val initNode =
+            nodes.find { it.type == NodeType("Init") } ?: throw IllegalArgumentException("No INIT node found")
         val computationGraph = ComputationGraph(graph)
         val orderedNodeIds = breadthFirstSearch(computationGraph, initNode.id)
 
@@ -147,7 +149,8 @@ class Compiler(
 
                         code.append("if p_1 ~= nil then \n")
 
-                        val fnResult = inputNode.outputs.map { portOutput -> outputPortMapping[portOutput.id]!!.first }.joinToString(", ")
+                        val fnResult = inputNode.outputs.map { portOutput -> outputPortMapping[portOutput.id]!!.first }
+                            .joinToString(", ")
                         if (inputNode.outputs.size > 0) {
                             code.append(fnResult)
                             code.append(" = ")

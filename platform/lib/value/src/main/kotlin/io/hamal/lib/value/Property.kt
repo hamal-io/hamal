@@ -1,8 +1,8 @@
-package io.hamal.lib.typesystem
+package io.hamal.lib.value
 
 import io.hamal.lib.common.Decimal
-import io.hamal.lib.typesystem.type.*
-import io.hamal.lib.typesystem.value.*
+import io.hamal.lib.value.type.*
+import io.hamal.lib.value.value.*
 import java.time.LocalDate
 import java.time.LocalTime
 

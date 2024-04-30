@@ -1,6 +1,6 @@
-package io.hamal.lib.typesystem.value
+package io.hamal.lib.value.value
 
-import io.hamal.lib.typesystem.type.TypeString
+import io.hamal.lib.value.type.TypeString
 
 @JvmInline
 value class ValueString(private val value: String) : Value {

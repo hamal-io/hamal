@@ -1,8 +1,8 @@
-package io.hamal.lib.typesystem.value
+package io.hamal.lib.value.value
 
 import io.hamal.lib.common.Decimal
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.typesystem.type.TypeDecimal
+import io.hamal.lib.value.type.TypeDecimal
 import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode

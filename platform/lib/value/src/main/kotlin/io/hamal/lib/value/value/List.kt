@@ -1,6 +1,6 @@
-package io.hamal.lib.typesystem.value
+package io.hamal.lib.value.value
 
-import io.hamal.lib.typesystem.type.Type
+import io.hamal.lib.value.type.Type
 
 data class ValueList(
     override val type: Type,

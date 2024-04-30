@@ -1,6 +1,6 @@
-package io.hamal.lib.typesystem.value
+package io.hamal.lib.value.value
 
-import io.hamal.lib.typesystem.type.TypeBoolean
+import io.hamal.lib.value.type.TypeBoolean
 
 fun valueOf(value: Boolean) = if (value) ValueTrue else ValueFalse
 

@@ -1,4 +1,4 @@
-package io.hamal.lib.typesystem.type
+package io.hamal.lib.value.type
 
 data object TypeBoolean : Type() {
     override val identifier = TypeIdentifier("Boolean")

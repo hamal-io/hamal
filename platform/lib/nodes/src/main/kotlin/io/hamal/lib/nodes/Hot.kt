@@ -11,7 +11,7 @@ import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.control.ControlExtension
 import io.hamal.lib.nodes.control.ControlIdentifier
 import io.hamal.lib.nodes.control.ControlType
-import io.hamal.lib.typesystem.TypesystemHotModule
+import io.hamal.lib.value.TypesystemHotModule
 
 
 object NodesHotModule : HotModule() {

@@ -1,6 +1,6 @@
-package io.hamal.lib.typesystem.value
+package io.hamal.lib.value.value
 
-import io.hamal.lib.typesystem.type.TypeNil
+import io.hamal.lib.value.type.TypeNil
 
 object ValueNil : Value {
     override val type get() = TypeNil

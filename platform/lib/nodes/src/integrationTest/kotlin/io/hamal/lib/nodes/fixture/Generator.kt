@@ -4,8 +4,8 @@ import io.hamal.lib.common.hot.HotString
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.generator.Generator
-import io.hamal.lib.typesystem.type.*
-import io.hamal.lib.typesystem.value.ValueString
+import io.hamal.lib.value.type.*
+import io.hamal.lib.value.value.ValueString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
@@ -55,7 +55,7 @@ interface GeneratorCapture : Generator {
 sealed interface GeneratorInvoked : Generator {
     override val type: NodeType get() = NodeType("Test_Invoked")
 
-    data object Empty: GeneratorInvoked {
+    data object Empty : GeneratorInvoked {
         override val inputTypes: List<Type> get() = listOf()
         override val outputTypes: List<Type> get() = listOf()
 
@@ -115,7 +115,14 @@ internal class TestInvokedTest : AbstractIntegrationTest() {
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
                     ),
-                    controls = listOf(ControlTextArea(nextControlIdentifier(), NodeId(2), portInput(21, TypeString), ValueString("default")))
+                    controls = listOf(
+                        ControlTextArea(
+                            nextControlIdentifier(),
+                            NodeId(2),
+                            portInput(21, TypeString),
+                            ValueString("default")
+                        )
+                    )
                 )
             )
         )
@@ -139,8 +146,18 @@ internal class TestInvokedTest : AbstractIntegrationTest() {
                         connection(100, 1, 20, 3, 22),
                     ),
                     controls = listOf(
-                        ControlTextArea(nextControlIdentifier(), NodeId(2), portInput(21, TypeString), ValueString("default")),
-                        ControlTextArea(nextControlIdentifier(), NodeId(3), portInput(22, TypeString), ValueString("default"))
+                        ControlTextArea(
+                            nextControlIdentifier(),
+                            NodeId(2),
+                            portInput(21, TypeString),
+                            ValueString("default")
+                        ),
+                        ControlTextArea(
+                            nextControlIdentifier(),
+                            NodeId(3),
+                            portInput(22, TypeString),
+                            ValueString("default")
+                        )
                     )
 
                 )

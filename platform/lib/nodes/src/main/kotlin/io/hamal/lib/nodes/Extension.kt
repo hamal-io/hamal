@@ -1,7 +1,7 @@
 package io.hamal.lib.nodes
 
 import io.hamal.lib.nodes.control.ControlExtension
-import io.hamal.lib.typesystem.type.Type
+import io.hamal.lib.value.type.Type
 
 
 data class PortInputExtension(
