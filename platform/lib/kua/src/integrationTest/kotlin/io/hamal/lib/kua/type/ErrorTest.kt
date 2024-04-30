@@ -6,6 +6,7 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.*
+import io.hamal.lib.value.ValueCode
 import io.hamal.lib.value.Value
 import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
@@ -22,7 +23,7 @@ internal class KuaErrorTest {
         sandbox.register(
             RunnerPlugin(
                 name = ValueString("test"),
-                factoryCode = KuaCode(
+                factoryCode = ValueCode(
                     """
                     function plugin_create(internal)
                         local export = { 
@@ -43,7 +44,7 @@ internal class KuaErrorTest {
         )
 
         sandbox.codeLoad(
-            KuaCode(
+            ValueCode(
                 """
             test = require_plugin('test')
             local err = test.error()

@@ -1,7 +1,13 @@
-package io.hamal.lib.kua.type
+package io.hamal.lib.value
+
+data object TypeCode : Type() {
+    override val identifier = TypeIdentifier("Code")
+}
 
 
 @JvmInline
-value class KuaCode(private val value: String) : KuaType {
+value class ValueCode(private val value: String) : Value {
+    override val type get() = TypeCode
+    override fun toString(): String = value
     val stringValue: String get() = value
 }

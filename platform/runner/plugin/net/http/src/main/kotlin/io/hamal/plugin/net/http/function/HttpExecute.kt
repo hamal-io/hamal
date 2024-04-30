@@ -56,7 +56,7 @@ class HttpExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
                             is ValueString -> value.stringValue
                             is ValueFalse -> "false"
                             is ValueTrue -> "true"
-                            is KuaCode -> value.stringValue
+                            is ValueCode -> value.stringValue
                             is ValueDecimal -> value.toString()
                             is KuaError -> value.value
                             is ValueNil -> ""

@@ -17,7 +17,7 @@ internal class ValueTest {
         sandbox.register(plugin(captor))
 
         sandbox.codeLoad(
-            KuaCode(
+            ValueCode(
                 """
             test = require_plugin('test')
             test.captor(test.pass_through(true))
@@ -33,7 +33,7 @@ internal class ValueTest {
         sandbox.register(plugin(captor))
 
         sandbox.codeLoad(
-            KuaCode(
+            ValueCode(
                 """
             test = require_plugin('test')
             test.captor(test.pass_through(23))
@@ -50,7 +50,7 @@ internal class ValueTest {
         sandbox.register(plugin(captor))
 
         sandbox.codeLoad(
-            KuaCode(
+            ValueCode(
                 """
             test = require_plugin('test')
             test.captor(test.pass_through('hamal.io'))
@@ -71,7 +71,7 @@ internal class ValueTest {
         sandbox.register(plugin(captor))
 
         sandbox.codeLoad(
-            KuaCode(
+            ValueCode(
                 """
             test = require_plugin('test')
             test.captor(test.pass_through(test_map))
@@ -107,7 +107,7 @@ internal class ValueTest {
     private fun plugin(captor: KuaFunction<*, *, *, *>) =
         RunnerPlugin(
             name = ValueString("test"),
-            factoryCode = KuaCode(
+            factoryCode = ValueCode(
                 """
                     function plugin_create(internal)
                         local export = { 

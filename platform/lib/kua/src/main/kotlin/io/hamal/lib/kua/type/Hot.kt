@@ -51,7 +51,7 @@ fun Value.toHotNode(): HotNode<*> {
     return when (this) {
         is ValueFalse -> HotBoolean(false)
         is ValueTrue -> HotBoolean(true)
-        is KuaCode -> HotString(stringValue)
+        is ValueCode -> HotString(stringValue)
         is ValueDecimal -> HotString(value.toString())
         is KuaError -> toHotObject()
         is KuaFunction<*, *, *, *> -> TODO()

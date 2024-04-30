@@ -1,7 +1,7 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.kua.NativeLoader.Preference.BuildDir
-import io.hamal.lib.kua.type.KuaCode
+import io.hamal.lib.value.ValueCode
 import io.hamal.lib.kua.type.KuaFunction
 import io.hamal.lib.value.ValueString
 
@@ -14,7 +14,7 @@ fun main() {
     NativeLoader.load(BuildDir)
     Sandbox(SandboxContextNop).use { sb ->
         sb.codeLoad(
-            KuaCode(
+            ValueCode(
                 """
                 local x = 512
                 local y = __decimal__.new(1024)

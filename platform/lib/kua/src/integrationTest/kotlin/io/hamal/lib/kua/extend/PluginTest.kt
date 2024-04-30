@@ -7,7 +7,7 @@ import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.type.KuaCode
+import io.hamal.lib.value.ValueCode
 import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -18,7 +18,7 @@ internal class PluginTest {
     @Test
     fun `Invokes function of test plugin`() {
         sandbox.codeLoad(
-            KuaCode(
+            ValueCode(
                 """
             local test = require_plugin('test')
             for x=1,10 do
@@ -33,7 +33,7 @@ internal class PluginTest {
     @Test
     fun `Able to access fields of plugin`() {
         sandbox.codeLoad(
-            KuaCode(
+            ValueCode(
                 """
             local test = require_plugin('test')
             assert( test.some_number == 42 )
@@ -49,7 +49,7 @@ internal class PluginTest {
             sb.register(
                 RunnerPlugin(
                     name = ValueString("test"),
-                    factoryCode = KuaCode(
+                    factoryCode = ValueCode(
                         """
                             function plugin_create(internal)
                                 local export = {

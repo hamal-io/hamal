@@ -21,7 +21,7 @@ interface State {
     fun booleanPush(value: ValueBoolean): StackTop
     fun booleanGet(idx: ValueNumber): ValueBoolean
 
-    fun codeLoad(code: KuaCode)
+    fun codeLoad(code: ValueCode)
 
     fun decimalPush(value: ValueDecimal): StackTop
     fun decimalGet(idx: ValueNumber): ValueDecimal
@@ -119,7 +119,7 @@ open class StateImpl(val native: Native = Native()) : State {
         }
     }
 
-    override fun codeLoad(code: KuaCode) {
+    override fun codeLoad(code: ValueCode) {
         native.stringLoad(code.stringValue)
         native.functionCall(0, 0)
     }

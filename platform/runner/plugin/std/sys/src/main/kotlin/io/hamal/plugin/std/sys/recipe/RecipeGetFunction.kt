@@ -5,7 +5,7 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.KuaCode
+import io.hamal.lib.value.ValueCode
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.sdk.ApiSdk
@@ -24,7 +24,7 @@ class RecipeGetFunction(
                     ctx.tableCreate(
                         "id" to ValueString(recipe.id.value.value.toString(16)),
                         "name" to ValueString(recipe.name.value),
-                        "value" to KuaCode(recipe.value.value)
+                        "value" to ValueCode(recipe.value.value)
                     )
                 }
         } catch (t: Throwable) {

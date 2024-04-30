@@ -5,7 +5,7 @@ import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.type.KuaCode
+import io.hamal.lib.value.ValueCode
 import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -18,7 +18,7 @@ class AssertTest {
     @Test
     fun `Assertion passes`() {
         sandbox.codeLoad(
-            KuaCode(
+            ValueCode(
                 """
             assert(1 == 1)
         """.trimIndent()
@@ -30,7 +30,7 @@ class AssertTest {
     fun `Assertion fails`() {
         val error = assertThrows<AssertionError> {
             sandbox.codeLoad(
-                KuaCode(
+                ValueCode(
                     """
                 local provide_answer = function() return 24 end
                 
@@ -46,7 +46,7 @@ class AssertTest {
     fun `Assertion failure interrupts script execution`() {
         assertThrows<AssertionError> {
             sandbox.codeLoad(
-                KuaCode(
+                ValueCode(
                     """
                 assert(true == false)
                 require('test').call()
@@ -60,7 +60,7 @@ class AssertTest {
     fun `Throws an error if error happen within assert - length of nil`() {
         val error = assertThrows<ScriptError> {
             sandbox.codeLoad(
-                KuaCode(
+                ValueCode(
                     """
                 local value = nil
                 assert(#value == 0)
@@ -86,7 +86,7 @@ class AssertTest {
             it.register(
                 RunnerPlugin(
                     ValueString("test"),
-                    factoryCode = KuaCode(
+                    factoryCode = ValueCode(
                         """
                             function plugin_create(internal)
                                 local export = {

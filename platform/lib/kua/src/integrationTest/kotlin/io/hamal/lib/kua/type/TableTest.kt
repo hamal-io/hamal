@@ -4,6 +4,7 @@ import io.hamal.lib.kua.*
 import io.hamal.lib.kua.function.Function0In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
+import io.hamal.lib.value.ValueCode
 import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 import org.junit.jupiter.api.Test
@@ -21,7 +22,7 @@ internal class KuaTableTest {
                 }
             )
             sandbox.codeLoad(
-                KuaCode(
+                ValueCode(
                     """
                 local err, table = func()
                 assert(err == nil)
@@ -44,7 +45,7 @@ internal class KuaTableTest {
             )
 
             sandbox.codeLoad(
-                KuaCode(
+                ValueCode(
                     """
                 local err, table = func()
                 assert(err == nil)
@@ -70,7 +71,7 @@ internal class KuaTableTest {
             )
 
             sandbox.codeLoad(
-                KuaCode(
+                ValueCode(
                     """
                 local err, table = func()
                 assert(err == nil)
@@ -99,7 +100,7 @@ internal class KuaTableTest {
             )
 
             sandbox.codeLoad(
-                KuaCode(
+                ValueCode(
                     """
                 local err, table = func()
                 assert(err == nil)

@@ -20,7 +20,7 @@ class FunctionContext(
     override fun booleanPush(value: ValueBoolean) = state.booleanPush(value)
 
     override fun <T : Any> checkpoint(action: (State) -> T) = state.checkpoint(action)
-    override fun codeLoad(code: KuaCode) = state.codeLoad(code)
+    override fun codeLoad(code: ValueCode) = state.codeLoad(code)
 
     override fun decimalGet(idx: ValueNumber): ValueDecimal = state.decimalGet(idx)
     override fun decimalPush(value: ValueDecimal): StackTop = state.decimalPush(value)

@@ -6,7 +6,7 @@ import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
-import io.hamal.lib.kua.type.KuaCode
+import io.hamal.lib.value.ValueCode
 import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 import org.hamcrest.CoreMatchers.equalTo
@@ -35,7 +35,7 @@ internal class FunctionTest {
         sandbox.register(
             RunnerPlugin(
                 name = ValueString("test"),
-                factoryCode = KuaCode(
+                factoryCode = ValueCode(
                     """
                     function plugin_create(internal)
                         local export = { 
@@ -55,7 +55,7 @@ internal class FunctionTest {
 
         val exception = assertThrows<ExtensionError> {
             sandbox.codeLoad(
-                KuaCode(
+                ValueCode(
                     """
                 test = require_plugin('test')
                 test.throw_exception()
@@ -87,7 +87,7 @@ internal class FunctionTest {
         sandbox.register(
             RunnerPlugin(
                 name = ValueString("test"),
-                factoryCode = KuaCode(
+                factoryCode = ValueCode(
                     """
                     function plugin_create(internal)
                         local export = { 
@@ -107,7 +107,7 @@ internal class FunctionTest {
 
         val error = assertThrows<Error> {
             sandbox.codeLoad(
-                KuaCode(
+                ValueCode(
                     """
                 test = require_plugin('test')
                 test.throw_error()
@@ -132,7 +132,7 @@ internal class FunctionTest {
         sandbox.register(
             RunnerPlugin(
                 name = ValueString("test"),
-                factoryCode = KuaCode(
+                factoryCode = ValueCode(
                     """
                     function plugin_create(internal)
                         local export = { 
@@ -151,7 +151,7 @@ internal class FunctionTest {
         )
 
         sandbox.codeLoad(
-            KuaCode(
+            ValueCode(
                 """
             test = require_plugin('test')
             test.capture(test.emit())
@@ -176,7 +176,7 @@ internal class FunctionTest {
         sandbox.register(
             RunnerPlugin(
                 name = ValueString("test"),
-                factoryCode = KuaCode(
+                factoryCode = ValueCode(
                     """
                     function plugin_create(internal)
                         local export = { 
@@ -195,7 +195,7 @@ internal class FunctionTest {
         )
 
         sandbox.codeLoad(
-            KuaCode(
+            ValueCode(
                 """
             test = require_plugin('test')
             test.capture(test.transform('some message'))
@@ -220,7 +220,7 @@ internal class FunctionTest {
         sandbox.register(
             RunnerPlugin(
                 name = ValueString("test"),
-                factoryCode = KuaCode(
+                factoryCode = ValueCode(
                     """
                     function plugin_create(internal)
                         local export = { 
@@ -239,7 +239,7 @@ internal class FunctionTest {
         )
 
         sandbox.codeLoad(
-            KuaCode(
+            ValueCode(
                 """
             test = require_plugin('test')
             local x,y = test.transform('hamal')
@@ -269,7 +269,7 @@ internal class FunctionTest {
         sandbox.register(
             RunnerPlugin(
                 name = ValueString("test"),
-                factoryCode = KuaCode(
+                factoryCode = ValueCode(
                     """
                     function plugin_create(internal)
                         local export = { 
@@ -288,7 +288,7 @@ internal class FunctionTest {
         )
 
         sandbox.codeLoad(
-            KuaCode(
+            ValueCode(
                 """
             test = require_plugin('test')
             test.capture(test.transform('lazy', 42))
@@ -311,7 +311,7 @@ internal class FunctionTest {
         sandbox.register(
             RunnerPlugin(
                 name = ValueString("test"),
-                factoryCode = KuaCode(
+                factoryCode = ValueCode(
                     """
                     function plugin_create(internal)
                         local export = { 
@@ -330,7 +330,7 @@ internal class FunctionTest {
         )
 
         sandbox.codeLoad(
-            KuaCode(
+            ValueCode(
                 """
             test = require_plugin('test')
             test.capture(test.emit())

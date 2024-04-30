@@ -6,7 +6,7 @@ import io.hamal.lib.kua.function.Function2In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.KuaCode
+import io.hamal.lib.value.ValueCode
 import io.hamal.lib.kua.type.KuaError
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.sdk.ApiSdk
@@ -36,7 +36,7 @@ class CodeGetFunction(
                 .let { code ->
                     ctx.tableCreate(
                         "id" to ValueString(code.id.value.value.toString(16)),
-                        "code" to KuaCode(code.value.value),
+                        "code" to ValueCode(code.value.value),
                         "version" to ValueNumber(code.version.value)
                         // FIXME-53 deployed_version ????
                     )

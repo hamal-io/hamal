@@ -128,7 +128,7 @@ class KuaTable(
 
             }
 
-            is KuaCode -> {
+            is ValueCode -> {
                 state.stringPush(key)
                 state.stringPush(ValueString(value.stringValue))
                 state.tableRawSet(index)

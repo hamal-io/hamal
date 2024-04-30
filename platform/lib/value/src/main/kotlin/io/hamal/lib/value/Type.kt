@@ -56,6 +56,7 @@ data class Property(
             return if (value == null) ValueNil
             else when (field.type) {
                 is TypeBoolean -> valueOf(value as Boolean)
+                is TypeCode -> TODO()
                 is TypeDate -> ValueDate(value as LocalDate)
                 is TypeDateTime -> TODO()
                 is TypeDecimal -> ValueDecimal(value as Decimal)

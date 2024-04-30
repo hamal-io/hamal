@@ -5,7 +5,7 @@ import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.type.KuaCode
+import io.hamal.lib.value.ValueCode
 import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -18,7 +18,7 @@ internal class RegisterExtensionTest : BaseSandboxTest() {
         testInstance.register(
             RunnerExtension(
                 name = ValueString("some_plugin"),
-                factoryCode = KuaCode(
+                factoryCode = ValueCode(
                     """
                     function extension_create()
                         local export = { 
@@ -32,7 +32,7 @@ internal class RegisterExtensionTest : BaseSandboxTest() {
         )
 
         testInstance.codeLoad(
-            KuaCode(
+            ValueCode(
                 """
                 some_plugin = require('some_plugin')
                 some_plugin.magic()
@@ -58,7 +58,7 @@ internal class RegisterPluginTest : BaseSandboxTest() {
         testInstance.register(
             RunnerPlugin(
                 name = ValueString("some_plugin"),
-                factoryCode = KuaCode(
+                factoryCode = ValueCode(
                     """
                     function plugin_create(internal)
                         local export = { 
@@ -73,7 +73,7 @@ internal class RegisterPluginTest : BaseSandboxTest() {
         )
 
         testInstance.codeLoad(
-            KuaCode(
+            ValueCode(
                 """
                 some_plugin = require_plugin('some_plugin')
                 some_plugin.magic()

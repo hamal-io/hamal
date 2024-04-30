@@ -6,7 +6,7 @@ import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
-import io.hamal.lib.kua.type.KuaCode
+import io.hamal.lib.value.ValueCode
 import io.hamal.lib.kua.type.KuaType
 import io.hamal.lib.value.ValueString
 import io.hamal.runner.config.EnvFactory
@@ -27,7 +27,7 @@ internal abstract class AbstractExecuteTest {
                     it.register(
                         RunnerPlugin(
                             name = ValueString("test"),
-                            factoryCode = KuaCode(
+                            factoryCode = ValueCode(
                                 """
                             function plugin_create(internal)
                                 local export = {

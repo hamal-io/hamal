@@ -9,13 +9,13 @@ import io.hamal.lib.kua.AssertionError
 import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.ExtensionError
 import io.hamal.lib.kua.tableCreate
-import io.hamal.lib.kua.type.KuaCode
 import io.hamal.lib.kua.type.KuaFunction
 import io.hamal.lib.kua.type.KuaTable
 import io.hamal.lib.kua.type.toHotObject
 import io.hamal.lib.nodes.NodesGraph
 import io.hamal.lib.nodes.compiler.Compiler
 import io.hamal.lib.nodes.json
+import io.hamal.lib.value.ValueCode
 import io.hamal.lib.value.ValueNil
 import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
@@ -74,20 +74,20 @@ class CodeRunnerImpl(
                         sandbox.globalSet(ValueString("_internal"), internalTable)
                         sandbox.codeLoad(contextExtension.factoryCode)
 //
-                        sandbox.codeLoad(KuaCode("${contextExtension.name} = plugin_create(_internal)"))
+                        sandbox.codeLoad(ValueCode("${contextExtension.name} = plugin_create(_internal)"))
                         sandbox.globalUnset(ValueString("_internal"))
 
                         when (unitOfWork.codeType) {
                             CodeType.None -> TODO()
                             CodeType.Lua54 -> {
-                                sandbox.codeLoad(KuaCode(unitOfWork.code.value))
+                                sandbox.codeLoad(ValueCode(unitOfWork.code.value))
                             }
 
                             CodeType.Nodes -> {
                                 // FIXME load graph from code
                                 val graph = json.deserialize(NodesGraph::class, unitOfWork.code.value)
                                 val compiledCode = Compiler(sandbox.generatorRegistry).compile(graph)
-                                sandbox.codeLoad(KuaCode(compiledCode))
+                                sandbox.codeLoad(ValueCode(compiledCode))
                             }
                         }
 

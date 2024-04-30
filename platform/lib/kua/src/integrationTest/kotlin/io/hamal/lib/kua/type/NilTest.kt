@@ -5,6 +5,7 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.function.*
 import io.hamal.lib.kua.registerGlobalFunction
+import io.hamal.lib.value.ValueCode
 import io.hamal.lib.value.ValueNumber
 import org.junit.jupiter.api.Test
 
@@ -22,7 +23,7 @@ internal class ValueNilTest {
             )
 
             sandbox.codeLoad(
-                KuaCode(
+                ValueCode(
                     """
                 local result = func()
                 assert(result == nil)
@@ -49,7 +50,7 @@ internal class ValueNilTest {
             )
 
             sandbox.codeLoad(
-                KuaCode(
+                ValueCode(
                     """
                 local x, y = func()
                 assert(x == nil)
@@ -77,7 +78,7 @@ internal class ValueNilTest {
                 })
 
             sandbox.codeLoad(
-                KuaCode(
+                ValueCode(
                     """
                 local x, y = func()
                 assert(#x == 0)
@@ -105,7 +106,7 @@ internal class ValueNilTest {
         sandbox.use { sandbox ->
             sandbox.registerGlobalFunction("func", func)
             sandbox.codeLoad(
-                KuaCode(
+                ValueCode(
                     """
                 local x, y = func()
                 assert(x == nil)
