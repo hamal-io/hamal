@@ -20,4 +20,6 @@ value class ValueInstant(private val value: Instant) : ValueComparable<ValueInst
     val instantValue: Instant get() = value
 }
 
-abstract class ValueVariableInstant : ValueVariable.ComparableImpl<ValueInstant>()
+abstract class ValueVariableInstant : ValueVariable.ComparableImpl<ValueInstant>() {
+    val instantValue: Instant get() = value.instantValue
+}

@@ -1,14 +1,10 @@
 package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.domain.ValueObjectHotObject
-import io.hamal.lib.common.domain.ValueObjectInstant
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.common.value.ValueSnowflakeId
-import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.common.value.ValueVariableSnowflakeId
-import io.hamal.lib.common.value.ValueVariableString
+import io.hamal.lib.common.value.*
 import java.time.Instant
 
 class FuncId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
@@ -35,9 +31,10 @@ class DeployMessage(override val value: ValueString) : ValueVariableString() {
     }
 }
 
-class DeployedAt(override val value: Instant) : ValueObjectInstant() {
+class DeployedAt(override val value: ValueInstant) : ValueVariableInstant() {
     companion object {
         @JvmStatic
         fun now(): DeployedAt = DeployedAt(TimeUtils.now())
+        fun DeployedAt(value: Instant) = DeployedAt(ValueInstant(value))
     }
 }

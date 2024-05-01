@@ -25,6 +25,7 @@ import io.hamal.lib.domain.vo.DeployMessage.Companion.DeployMessage
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecLogId.Companion.ExecLogId
 import io.hamal.lib.domain.vo.ExecLogMessage.Companion.ExecLogMessage
+import io.hamal.lib.domain.vo.ExpiresAt.Companion.ExpiresAt
 import io.hamal.lib.domain.vo.ExtensionId.Companion.ExtensionId
 import io.hamal.lib.domain.vo.ExtensionName.Companion.ExtensionName
 import io.hamal.lib.domain.vo.FuncId.Companion.FuncId

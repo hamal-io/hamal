@@ -1,10 +1,11 @@
 package io.hamal.repository.record
 
-import io.hamal.lib.common.domain.*
+import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.DomainObject
+import io.hamal.lib.common.domain.UpdatedAt
+import io.hamal.lib.common.domain.ValueObjectInt
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.common.value.ValueVariableSnowflakeId
-import io.hamal.lib.common.value.ValueVariableString
+import io.hamal.lib.common.value.*
 import io.hamal.repository.record.RecordClass.Companion.RecordClass
 import java.time.Instant
 
@@ -22,10 +23,11 @@ class RecordSequence(override val value: Int) : ValueObjectInt() {
     fun next() = RecordSequence(value + 1)
 }
 
-class RecordedAt(override val value: Instant) : ValueObjectInstant() {
+class RecordedAt(override val value: ValueInstant) : ValueVariableInstant() {
     companion object {
         @JvmStatic
         fun now(): RecordedAt = RecordedAt(TimeUtils.now())
+        fun RecordedAt(value: Instant) = RecordedAt(ValueInstant(value))
     }
 
     fun toUpdatedAt() = UpdatedAt(value)

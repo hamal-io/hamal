@@ -8,6 +8,7 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecLogId.Companion.ExecLogId
 import io.hamal.lib.domain.vo.ExecLogMessage.Companion.ExecLogMessage
+import io.hamal.lib.domain.vo.ExecLogTimestamp.Companion.ExecLogTimestamp
 import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.repository.api.ExecLogCmdRepository.AppendCmd
 import io.hamal.repository.api.ExecLogQueryRepository.ExecLogQuery

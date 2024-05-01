@@ -8,6 +8,7 @@ import io.hamal.lib.sqlite.NamedPreparedStatementDelegate
 import io.hamal.lib.sqlite.NamedPreparedStatementResultSetDelegate
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.record.*
+import io.hamal.repository.record.RecordedAt.Companion.RecordedAt
 import kotlin.reflect.KClass
 
 

@@ -11,6 +11,7 @@ import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
+import io.hamal.lib.domain.vo.ExpiresAt.Companion.ExpiresAt
 import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.lib.domain.vo.PasswordSalt.Companion.PasswordSalt
 import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId

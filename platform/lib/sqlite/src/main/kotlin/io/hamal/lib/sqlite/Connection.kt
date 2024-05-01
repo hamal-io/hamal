@@ -4,6 +4,8 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.logger
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueInstant
+import io.hamal.lib.common.value.ValueVariableInstant
 import io.hamal.lib.common.value.ValueVariableSnowflakeId
 import io.hamal.lib.common.value.ValueVariableString
 import io.hamal.lib.sqlite.DefaultNamedPreparedStatement.Companion.prepare
@@ -79,6 +81,20 @@ class NamedPreparedStatementDelegate(
         param: String, value: Instant
     ): NamedPreparedStatementDelegate {
         delegate[param] = value
+        return this
+    }
+
+    operator fun set(
+        param: String, value: ValueInstant
+    ): NamedPreparedStatementDelegate {
+        delegate[param] = value.instantValue
+        return this
+    }
+
+    operator fun set(
+        param: String, value: ValueVariableInstant
+    ): NamedPreparedStatementDelegate {
+        delegate[param] = value.instantValue
         return this
     }
 

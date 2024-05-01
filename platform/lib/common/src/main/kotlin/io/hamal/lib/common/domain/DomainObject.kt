@@ -1,8 +1,11 @@
 package io.hamal.lib.common.domain
 
+import io.hamal.lib.common.domain.CreatedAt.Companion.CreatedAt
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.common.value.ValueInstant
 import io.hamal.lib.common.value.ValueSnowflakeId
+import io.hamal.lib.common.value.ValueVariableInstant
 import io.hamal.lib.common.value.ValueVariableSnowflakeId
 import java.time.Instant
 
@@ -22,16 +25,18 @@ data class CmdId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeI
     }
 }
 
-class CreatedAt(override val value: Instant) : ValueObjectInstant() {
+class CreatedAt(override val value: ValueInstant) : ValueVariableInstant() {
     companion object {
         @JvmStatic
         fun now(): CreatedAt = CreatedAt(TimeUtils.now())
+        fun CreatedAt(value: Instant) = CreatedAt(ValueInstant(value))
     }
 }
 
-class UpdatedAt(override val value: Instant) : ValueObjectInstant() {
+class UpdatedAt(override val value: ValueInstant) : ValueVariableInstant() {
     companion object {
         @JvmStatic
         fun now(): UpdatedAt = UpdatedAt(TimeUtils.now())
+        fun UpdatedAt(value: Instant) = UpdatedAt(ValueInstant(value))
     }
 }

@@ -1,12 +1,8 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.ValueObjectInstant
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.common.value.ValueSnowflakeId
-import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.common.value.ValueVariableSnowflakeId
-import io.hamal.lib.common.value.ValueVariableString
+import io.hamal.lib.common.value.*
 import java.time.Instant
 
 
@@ -24,9 +20,10 @@ class ExecLogMessage(override val value: ValueString) : ValueVariableString() {
     }
 }
 
-class ExecLogTimestamp(override val value: Instant) : ValueObjectInstant() {
+class ExecLogTimestamp(override val value: ValueInstant) : ValueVariableInstant() {
     companion object {
         @JvmStatic
         fun now(): ExecLogTimestamp = ExecLogTimestamp(TimeUtils.now())
+        fun ExecLogTimestamp(value: Instant) = ExecLogTimestamp(ValueInstant(value))
     }
 }

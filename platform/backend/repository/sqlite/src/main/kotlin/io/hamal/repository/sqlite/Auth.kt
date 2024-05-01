@@ -6,6 +6,7 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
 import io.hamal.lib.domain.vo.Email.Companion.Email
 import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
+import io.hamal.lib.domain.vo.ExpiresAt.Companion.ExpiresAt
 import io.hamal.lib.domain.vo.PasswordHash.Companion.PasswordHash
 import io.hamal.lib.domain.vo.Web3Address.Companion.Web3Address
 import io.hamal.lib.sqlite.Connection
@@ -101,7 +102,7 @@ class AuthSqliteRepository(
                         set("id", cmd.authId)
                         set("entityId", cmd.accountId)
                         set("token", cmd.token)
-                        set("expiresAt", cmd.expiresAt.value)
+                        set("expiresAt", cmd.expiresAt)
                     }
                     map(NamedResultSet::toAuth)
                 }!!

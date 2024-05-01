@@ -12,6 +12,7 @@ import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.DeployMessage.Companion.DeployMessage
 import io.hamal.lib.domain.vo.DeployedAt
+import io.hamal.lib.domain.vo.DeployedAt.Companion.DeployedAt
 import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName

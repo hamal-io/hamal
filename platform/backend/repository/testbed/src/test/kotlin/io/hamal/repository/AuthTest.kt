@@ -13,6 +13,7 @@ import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
 import io.hamal.lib.domain.vo.Email.Companion.Email
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
+import io.hamal.lib.domain.vo.ExpiresAt.Companion.ExpiresAt
 import io.hamal.lib.domain.vo.PasswordHash.Companion.PasswordHash
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.AuthCmdRepository.*

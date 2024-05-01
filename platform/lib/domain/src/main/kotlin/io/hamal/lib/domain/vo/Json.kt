@@ -35,6 +35,9 @@ object ValueVariableJsonModule : HotModule() {
         this[ExecToken::class] = JsonAdapters.String(::ExecToken)
         this[ExecLogId::class] = JsonAdapters.SnowflakeId(::ExecLogId)
         this[ExecLogMessage::class] = JsonAdapters.String(::ExecLogMessage)
+        this[ExecLogTimestamp::class] = JsonAdapters.Instant(::ExecLogTimestamp)
+
+        this[ExpiresAt::class] = JsonAdapters.Instant(::ExpiresAt)
 
         this[ExtensionId::class] = JsonAdapters.SnowflakeId(::ExtensionId)
         this[ExtensionName::class] = JsonAdapters.String(::ExtensionName)
@@ -49,6 +52,7 @@ object ValueVariableJsonModule : HotModule() {
         this[FuncId::class] = JsonAdapters.SnowflakeId(::FuncId)
         this[FuncName::class] = JsonAdapters.String(::FuncName)
 
+        this[DeployedAt::class] = JsonAdapters.Instant(::DeployedAt)
         this[DeployMessage::class] = JsonAdapters.String(::DeployMessage)
 
         this[RequestId::class] = JsonAdapters.SnowflakeId(::RequestId)
@@ -112,10 +116,8 @@ object ValueObjectJsonModule : HotModule() {
         this[ExecState::class] = ValueObjectHotObjectAdapter(::ExecState)
         this[ExecToken::class] = JsonAdapters.String(::ExecToken)
 
-        this[ExecLogTimestamp::class] = ValueObjectInstantAdapter(::ExecLogTimestamp)
         this[ExecLogMessage::class] = JsonAdapters.String(::ExecLogMessage)
 
-        this[ExpiresAt::class] = ValueObjectInstantAdapter(::ExpiresAt)
 
 
         this[ExtensionName::class] = JsonAdapters.String(::ExtensionName)
@@ -131,7 +133,6 @@ object ValueObjectJsonModule : HotModule() {
 
         this[FuncInputs::class] = ValueObjectHotObjectAdapter(::FuncInputs)
         this[DeployMessage::class] = JsonAdapters.String(::DeployMessage)
-        this[DeployedAt::class] = ValueObjectInstantAdapter(::DeployedAt)
 
 
         this[WorkspaceName::class] = JsonAdapters.String(::WorkspaceName)

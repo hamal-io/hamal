@@ -2,16 +2,12 @@ package io.hamal.lib.common.serialization
 
 import com.google.gson.*
 import io.hamal.lib.common.domain.ValueObjectHotObject
-import io.hamal.lib.common.domain.ValueObjectInstant
 import io.hamal.lib.common.domain.ValueObjectInt
 import io.hamal.lib.common.domain.ValueObjectLong
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.common.value.ValueSnowflakeId
-import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.common.value.ValueVariableSnowflakeId
-import io.hamal.lib.common.value.ValueVariableString
+import io.hamal.lib.common.value.*
 import java.lang.reflect.Type
 import java.time.Instant
 import java.time.ZoneOffset
@@ -55,6 +51,19 @@ internal object InstantAdapter : JsonAdapter<Instant> {
 
 
 object JsonAdapters {
+
+    class Instant<TYPE : ValueVariableInstant>(
+        val ctor: (ValueInstant) -> TYPE
+    ) : JsonAdapter<TYPE> {
+
+        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {
+            return ctor(ValueInstant(context.deserialize(json, java.time.Instant::class.java)))
+        }
+
+        override fun serialize(src: TYPE, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+            return context.serialize(src.value.instantValue, java.time.Instant::class.java)
+        }
+    }
 
     class SnowflakeId<TYPE : ValueVariableSnowflakeId>(
         val ctor: (ValueSnowflakeId) -> TYPE
@@ -112,18 +121,6 @@ class ValueObjectLongAdapter<TYPE : ValueObjectLong>(
     }
 }
 
-class ValueObjectInstantAdapter<TYPE : ValueObjectInstant>(
-    val ctor: (Instant) -> TYPE
-) : JsonAdapter<TYPE> {
-
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {
-        return ctor(context.deserialize(json, Instant::class.java))
-    }
-
-    override fun serialize(src: TYPE, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-        return context.serialize(src.value, Instant::class.java)
-    }
-}
 
 class ValueObjectHotObjectAdapter<TYPE : ValueObjectHotObject>(
     val ctor: (HotObject) -> TYPE

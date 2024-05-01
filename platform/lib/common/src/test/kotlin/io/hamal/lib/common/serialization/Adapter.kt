@@ -3,16 +3,12 @@ package io.hamal.lib.common.serialization
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.hamal.lib.common.domain.ValueObjectHotObject
-import io.hamal.lib.common.domain.ValueObjectInstant
 import io.hamal.lib.common.domain.ValueObjectInt
 import io.hamal.lib.common.domain.ValueObjectLong
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.common.value.ValueSnowflakeId
-import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.common.value.ValueVariableSnowflakeId
-import io.hamal.lib.common.value.ValueVariableString
+import io.hamal.lib.common.value.*
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
@@ -172,29 +168,28 @@ internal object ValueObjectULongAdapterTest {
     ) : ValueObjectLong()
 }
 
-internal object ValueObjectInstantAdapterTest {
+internal object ValueVariableInstantAdapterTest {
 
     @Test
     fun serialize() {
-        val result = testDelegate.toJson(TestInstantValueObject(Instant.ofEpochMilli(112233445000)))
+        val result = testDelegate.toJson(TestValueVariableInstant(ValueInstant(Instant.ofEpochMilli(112233445000))))
         assertThat(result, equalTo("\"1973-07-22T23:57:25Z\""))
     }
 
     @Test
     fun deserialize() {
-        val expected = TestInstantValueObject(Instant.ofEpochMilli(112233445000))
-        val result = testDelegate.fromJson("\"1973-07-22T23:57:25Z\"", TestInstantValueObject::class.java)
+        val expected = TestValueVariableInstant(ValueInstant(Instant.ofEpochMilli(112233445000)))
+        val result = testDelegate.fromJson("\"1973-07-22T23:57:25Z\"", TestValueVariableInstant::class.java)
         assertThat(result, equalTo(expected))
     }
 
     private val testDelegate: Gson =
-        GsonBuilder().registerTypeAdapter(Instant::class.java, InstantAdapter).registerTypeAdapter(
-            TestInstantValueObject::class.java, ValueObjectInstantAdapter(::TestInstantValueObject)
-        ).create()
+        GsonBuilder()
+            .registerTypeAdapter(Instant::class.java, InstantAdapter)
+            .registerTypeAdapter(TestValueVariableInstant::class.java, JsonAdapters.Instant(::TestValueVariableInstant))
+            .create()
 
-    private class TestInstantValueObject(
-        override val value: Instant
-    ) : ValueObjectInstant()
+    private class TestValueVariableInstant(override val value: ValueInstant) : ValueVariableInstant()
 }
 
 

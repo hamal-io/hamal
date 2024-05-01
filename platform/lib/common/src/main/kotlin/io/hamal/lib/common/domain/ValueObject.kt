@@ -1,7 +1,6 @@
 package io.hamal.lib.common.domain
 
 import io.hamal.lib.common.hot.HotObject
-import java.time.Instant
 
 
 interface ValueObject<VALUE_TYPE : Any> {
@@ -35,7 +34,5 @@ interface ValueObject<VALUE_TYPE : Any> {
 abstract class ValueObjectInt : ValueObject.ComparableImpl<Int>()
 
 abstract class ValueObjectLong : ValueObject.ComparableImpl<Long>()
-
-abstract class ValueObjectInstant : ValueObject.ComparableImpl<Instant>()
 
 abstract class ValueObjectHotObject : ValueObject.BaseImpl<HotObject>()

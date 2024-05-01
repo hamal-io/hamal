@@ -1,7 +1,6 @@
 package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.domain.ValueObjectHotObject
-import io.hamal.lib.common.domain.ValueObjectInstant
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils
@@ -59,30 +58,34 @@ class ExecResult(override val value: HotObject = HotObject.empty) : ValueObjectH
 
 class ExecState(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
 
-class ExecScheduledAt(override val value: Instant) : ValueObjectInstant() {
+class ExecScheduledAt(override val value: ValueInstant) : ValueVariableInstant() {
     companion object {
         @JvmStatic
         fun now(): ExecScheduledAt = ExecScheduledAt(TimeUtils.now())
+        fun ExecScheduledAt(value: Instant) = ExecScheduledAt(ValueInstant(value))
     }
 }
 
-class ExecQueuedAt(override val value: Instant) : ValueObjectInstant() {
+class ExecQueuedAt(override val value: ValueInstant) : ValueVariableInstant() {
     companion object {
         @JvmStatic
         fun now(): ExecQueuedAt = ExecQueuedAt(TimeUtils.now())
+        fun ExecQueuedAt(value: Instant) = ExecQueuedAt(ValueInstant(value))
     }
 }
 
-class ExecCompletedAt(override val value: Instant) : ValueObjectInstant() {
+class ExecCompletedAt(override val value: ValueInstant) : ValueVariableInstant() {
     companion object {
         @JvmStatic
         fun now(): ExecCompletedAt = ExecCompletedAt(TimeUtils.now())
+        fun ExecCompletedAt(value: Instant) = ExecCompletedAt(ValueInstant(value))
     }
 }
 
-class ExecFailedAt(override val value: Instant) : ValueObjectInstant() {
+class ExecFailedAt(override val value: ValueInstant) : ValueVariableInstant() {
     companion object {
         @JvmStatic
         fun now(): ExecFailedAt = ExecFailedAt(TimeUtils.now())
+        fun ExecFailedAt(value: Instant) = ExecFailedAt(ValueInstant(value))
     }
 }

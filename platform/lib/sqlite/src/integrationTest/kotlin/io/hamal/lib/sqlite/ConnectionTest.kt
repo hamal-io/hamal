@@ -2,6 +2,7 @@ package io.hamal.lib.sqlite
 
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueInstant
 import io.hamal.lib.common.value.ValueSnowflakeId
 import io.hamal.lib.common.value.ValueVariableSnowflakeId
 import org.hamcrest.CoreMatchers.*
@@ -90,7 +91,7 @@ class ConnectionImplTest {
         @Test
         fun `With named parameter of type instant`() {
             testInstance.execute("INSERT INTO instant_table(value) VALUES(:some_value)") {
-                set("some_value", Instant.ofEpochMilli(12345678))
+                set("some_value", ValueInstant(Instant.ofEpochMilli(12345678)))
             }
             verifyIsOne("SELECT COUNT(*) FROM instant_table WHERE value = 12345678")
         }
@@ -237,7 +238,7 @@ class ConnectionImplTest {
         @Test
         fun `With named parameter of type instant`() {
             val result = testInstance.executeUpdate("INSERT INTO instant_table(value) VALUES(:some_value)") {
-                set("some_value", Instant.ofEpochMilli(12345678))
+                set("some_value", ValueInstant(Instant.ofEpochMilli(12345678)))
             }
             assertThat(result, equalTo(1))
             verifyIsOne("SELECT COUNT(*) FROM instant_table WHERE value = 12345678")

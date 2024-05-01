@@ -1,8 +1,8 @@
 package io.hamal.repository.sqlite.log
 
 import io.hamal.lib.common.domain.Count
-import io.hamal.lib.common.domain.CreatedAt
-import io.hamal.lib.common.domain.UpdatedAt
+import io.hamal.lib.common.domain.CreatedAt.Companion.CreatedAt
+import io.hamal.lib.common.domain.UpdatedAt.Companion.UpdatedAt
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.lib.sqlite.Connection
