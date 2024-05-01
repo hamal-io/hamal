@@ -3,15 +3,25 @@ package io.hamal.lib.nodes.control
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.serialization.JsonAdapter
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueVariableString
 import io.hamal.lib.nodes.*
+import io.hamal.lib.nodes.control.ControlType.Companion.ControlType
 
 // FIXME drop distinguishing between constant and input -- same thing and having a port connector is optional
 // FIXME boolean as checkbox
-class ControlIdentifier(override val value: String) : ValueObjectString()
+class ControlIdentifier(override val value: ValueString) : ValueVariableString() {
+    companion object {
+        fun ControlIdentifier(value: String) = ControlIdentifier(ValueString(value))
+    }
+}
 
-class ControlType(override val value: String) : ValueObjectString()
+class ControlType(override val value: ValueString) : ValueVariableString() {
+    companion object {
+        fun ControlType(value: String) = ControlType(ValueString(value))
+    }
+}
 
 // FIXME becomes sealed after migration
 interface Control {

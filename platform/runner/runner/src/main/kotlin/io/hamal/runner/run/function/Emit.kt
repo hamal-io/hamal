@@ -18,7 +18,7 @@ internal class EmitFunction(
 ) {
 
     override fun invoke(ctx: FunctionContext, arg1: KuaTable) {
-        val topic = TopicName(arg1.getString("topic").stringValue)
+        val topic = TopicName(arg1.getString("topic"))
         executionCtx.emit(EventToSubmit(topic, EventPayload(arg1.toHotObject())))
     }
 }

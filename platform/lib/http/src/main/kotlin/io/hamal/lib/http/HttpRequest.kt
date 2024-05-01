@@ -3,6 +3,7 @@ package io.hamal.lib.http
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueVariableString
 import io.hamal.lib.http.HttpRequest.HttpMethod.*
 import kotlin.reflect.KClass
 
@@ -22,6 +23,7 @@ interface HttpRequest {
     fun parameter(key: String, value: Number): HttpRequest
     fun parameter(key: String, value: SnowflakeId): HttpRequest
     fun parameter(key: String, value: ValueObjectId): HttpRequest
+    fun parameter(key: String, value: ValueVariableString): HttpRequest
     fun parameter(key: String, value: Limit): HttpRequest
     fun parameter(key: String, value: List<ValueObjectId>): HttpRequest
     fun parameter(key: String, value: Boolean): HttpRequest
@@ -125,6 +127,11 @@ class HttpRequestImpl(
 
     override fun parameter(key: String, value: ValueObjectId): HttpRequest {
         parameters.add(HttpParameter(key, value.value.value.toString(16)))
+        return this
+    }
+
+    override fun parameter(key: String, value: ValueVariableString): HttpRequest {
+        parameters.add(HttpParameter(key, value.stringValue))
         return this
     }
 

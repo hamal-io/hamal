@@ -4,7 +4,9 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
 import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import org.springframework.core.convert.converter.Converter
 import kotlin.reflect.KClass
 
@@ -16,6 +18,7 @@ object LimitConverter : Converter<String, Limit> {
 object CodeVersionConverter : Converter<String, CodeVersion> {
     override fun convert(source: String) = CodeVersion(source.toInt())
 }
+
 object CorrelationIdConverter : Converter<String, CorrelationId> {
     override fun convert(source: String) = CorrelationId(source)
 }

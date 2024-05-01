@@ -95,13 +95,6 @@ class NamedPreparedStatementDelegate(
     }
 
     operator fun set(
-        param: String, value: ValueObjectString
-    ): NamedPreparedStatementDelegate {
-        delegate[param] = value
-        return this
-    }
-
-    operator fun set(
         param: String, value: ValueVariableString
     ): NamedPreparedStatementDelegate {
         delegate[param] = value

@@ -6,7 +6,9 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
 import io.hamal.lib.domain.vo.ExecStatus.Started
+import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound

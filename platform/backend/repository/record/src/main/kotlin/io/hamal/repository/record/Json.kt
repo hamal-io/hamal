@@ -6,8 +6,8 @@ import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.hot.HotObjectModule
 import io.hamal.lib.common.serialization.HotModule
 import io.hamal.lib.common.serialization.JsonAdapter
+import io.hamal.lib.common.serialization.JsonAdapters
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
-import io.hamal.lib.common.serialization.ValueObjectStringAdapter
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ValueObjectJsonModule
 import io.hamal.lib.domain.vo.ValueVariableJsonModule
@@ -29,7 +29,7 @@ import kotlin.reflect.KClass
 
 object RecordJsonModule : HotModule() {
     init {
-        this[RecordClass::class] = ValueObjectStringAdapter(::RecordClass)
+        this[RecordClass::class] = JsonAdapters.String(::RecordClass)
         this[AccountRecord::class] = AccountRecord.Adapter
         this[RecipeRecord::class] = RecipeRecord.Adapter
         this[CodeRecord::class] = CodeRecord.Adapter

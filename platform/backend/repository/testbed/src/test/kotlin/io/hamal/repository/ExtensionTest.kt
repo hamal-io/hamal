@@ -4,6 +4,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.ExtensionName.Companion.ExtensionName
 import io.hamal.repository.api.ExtensionCmdRepository.CreateCmd
 import io.hamal.repository.api.ExtensionCmdRepository.UpdateCmd
 import io.hamal.repository.api.ExtensionCode

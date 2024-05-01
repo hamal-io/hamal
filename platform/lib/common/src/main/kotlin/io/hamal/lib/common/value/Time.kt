@@ -1,5 +1,6 @@
 package io.hamal.lib.common.value
 
+import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 import java.time.LocalTime
 
 data object TypeTime : Type() {

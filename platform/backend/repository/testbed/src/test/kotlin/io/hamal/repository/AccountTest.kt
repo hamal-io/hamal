@@ -7,6 +7,7 @@ import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.lib.domain.vo.AccountType.User
 import io.hamal.lib.domain.vo.PasswordSalt
+import io.hamal.lib.domain.vo.PasswordSalt.Companion.PasswordSalt
 import io.hamal.repository.api.AccountCmdRepository.CreateCmd
 import io.hamal.repository.api.AccountQueryRepository.AccountQuery
 import io.hamal.repository.api.AccountRepository

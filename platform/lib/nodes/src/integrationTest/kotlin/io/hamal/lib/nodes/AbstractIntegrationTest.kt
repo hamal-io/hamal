@@ -4,32 +4,36 @@ import io.hamal.extension.std.decimal.ExtensionDecimalFactory
 import io.hamal.lib.common.hot.HotNode
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.Type
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
+import io.hamal.lib.nodes.ConnectionLabel.Companion.ConnectionLabel
+import io.hamal.lib.nodes.NodeTitle.Companion.NodeTitle
+import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.control.ControlIdentifier
+import io.hamal.lib.nodes.control.ControlIdentifier.Companion.ControlIdentifier
 import io.hamal.lib.nodes.fixture.CaptureFunction
 import io.hamal.lib.nodes.fixture.GeneratorCapture
 import io.hamal.lib.nodes.fixture.GeneratorInvoked
 import io.hamal.lib.nodes.fixture.InvokeFunction
 import io.hamal.lib.nodes.generator.GeneratorRegistry
 import io.hamal.lib.nodes.generator.defaultGeneratorRegistry
-import io.hamal.lib.common.value.Type
-import io.hamal.lib.common.value.ValueCode
-import io.hamal.lib.common.value.ValueString
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
 import io.hamal.runner.connector.UnitOfWork
 import io.hamal.runner.run.CodeRunnerImpl
 import io.hamal.runner.test.TestConnector
-
 
 internal abstract class AbstractIntegrationTest {
 
@@ -156,7 +160,7 @@ internal abstract class AbstractIntegrationTest {
                 .build()
         ),
         state = State(),
-        code = CodeValue(json.serialize(graph)),
+        code = ValueCode(json.serialize(graph)),
         codeType = CodeType.Nodes,
         correlation = null
     )

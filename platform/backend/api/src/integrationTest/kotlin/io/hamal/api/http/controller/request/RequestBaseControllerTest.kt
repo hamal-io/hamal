@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.request
 
 import io.hamal.api.http.controller.BaseControllerTest
-import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.HttpSuccessResponse
@@ -22,7 +22,7 @@ internal sealed class RequestBaseControllerTest : BaseControllerTest() {
         return listResponse.result(ApiRequestList::class)
     }
 
-    fun adhoc(code: CodeValue = CodeValue("")): ApiExecInvokeRequested {
+    fun adhoc(code: ValueCode = ValueCode("")): ApiExecInvokeRequested {
         return httpTemplate.post("/v1/namespaces/{namespaceId}/adhoc")
             .path("namespaceId", testNamespace.id)
             .body(

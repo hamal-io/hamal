@@ -1,9 +1,14 @@
 package io.hamal.bridge.http.controller.queue
 
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
+import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecStatus.Queued
 import io.hamal.lib.domain.vo.ExecStatus.Started
+import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
+import io.hamal.lib.domain.vo.FuncId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -21,7 +26,7 @@ internal class QueuePollControllerTest : BaseQueueControllerTest() {
         createExec(
             execId = generateDomainId(::ExecId),
             status = Queued,
-            code = CodeValue("40 + 2")
+            code = ValueCode("40 + 2")
         )
         with(dequeue()) {
             assertThat(work, hasSize(1))
@@ -32,7 +37,7 @@ internal class QueuePollControllerTest : BaseQueueControllerTest() {
                 assertThat(workspaceId, equalTo(testWorkspace.id))
                 assertThat(inputs, equalTo(ExecInputs()))
                 assertThat(correlation, nullValue())
-                assertThat(code, equalTo(CodeValue("40 + 2")))
+                assertThat(code, equalTo(ValueCode("40 + 2")))
 
                 verifyExecStarted(id)
             }
@@ -48,7 +53,7 @@ internal class QueuePollControllerTest : BaseQueueControllerTest() {
                 funcId = FuncId(123),
                 id = CorrelationId("_some_chosen_correlation_@")
             ),
-            code = CodeValue("40 + 2")
+            code = ValueCode("40 + 2")
         )
         with(dequeue()) {
             assertThat(work, hasSize(1))
@@ -66,7 +71,7 @@ internal class QueuePollControllerTest : BaseQueueControllerTest() {
                         )
                     )
                 )
-                assertThat(code, equalTo(CodeValue("40 + 2")))
+                assertThat(code, equalTo(ValueCode("40 + 2")))
 
                 verifyExecStarted(id)
             }

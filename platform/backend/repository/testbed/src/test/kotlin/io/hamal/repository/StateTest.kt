@@ -5,7 +5,7 @@ import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain.vo.CorrelationId
+import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.repository.api.StateCmdRepository
 import io.hamal.repository.api.StateRepository

@@ -2,8 +2,8 @@ package io.hamal.api.http.auth
 
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateCmdId
-import io.hamal.lib.domain.vo.AuthToken
-import io.hamal.lib.domain.vo.ExecToken
+import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
+import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
 import io.hamal.repository.api.AuthRepository
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest

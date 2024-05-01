@@ -1,9 +1,9 @@
 package io.hamal.repository.record.code
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.CodeId
-import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordAdapter
@@ -28,14 +28,14 @@ sealed class CodeRecord(
         override val entityId: CodeId,
         override val cmdId: CmdId,
         val workspaceId: WorkspaceId,
-        val value: CodeValue,
+        val value: ValueCode,
         val type: CodeType
     ) : CodeRecord()
 
     data class Updated(
         override val entityId: CodeId,
         override val cmdId: CmdId,
-        val value: CodeValue
+        val value: ValueCode
     ) : CodeRecord()
 }
 

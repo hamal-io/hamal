@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.topic
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.request.TriggerCreateRequested
 import io.hamal.lib.domain.vo.TopicEventPayload
-import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.body

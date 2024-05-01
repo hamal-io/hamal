@@ -1,6 +1,8 @@
 package io.hamal.plugin.std.sys.recipe
 
-import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.RecipeInputs
 import io.hamal.lib.domain.vo.RecipeName
 import io.hamal.lib.kua.function.Function1In2Out
@@ -11,8 +13,6 @@ import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.kua.value.getString
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiRecipeCreateRequest
-import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueString
 
 class RecipeCreateFunction(
     private val sdk: ApiSdk
@@ -24,9 +24,9 @@ class RecipeCreateFunction(
         return try {
             val res = sdk.recipe.create(
                 ApiRecipeCreateRequest(
-                    name = RecipeName(arg1.getString("name").stringValue),
+                    name = RecipeName(arg1.getString("name")),
                     inputs = RecipeInputs(),
-                    value = CodeValue(arg1.getString("value").stringValue)
+                    value = ValueCode(arg1.getString("value").stringValue)
                 )
             )
 

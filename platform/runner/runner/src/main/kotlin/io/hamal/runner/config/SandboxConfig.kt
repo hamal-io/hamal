@@ -8,7 +8,7 @@ import io.hamal.extension.telegram.ExtensionTelegramFactory
 import io.hamal.extension.web3.arbitrum.ExtensionWeb3ArbitrumFactory
 import io.hamal.extension.web3.eth.ExtensionWeb3EthFactory
 import io.hamal.extension.web3.nyanbot.ExtensionWeb3NyanbotFactory
-import io.hamal.lib.domain.vo.AuthToken
+import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
 import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.lib.kua.NativeLoader

@@ -2,9 +2,16 @@ package io.hamal.repository.record
 
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueVariableString
+import io.hamal.repository.record.RecordClass.Companion.RecordClass
 import java.time.Instant
 
-class RecordClass(override val value: String) : ValueObjectString()
+class RecordClass(override val value: ValueString) : ValueVariableString() {
+    companion object {
+        fun RecordClass(value: String) = RecordClass(ValueString(value))
+    }
+}
 
 class RecordSequence(override val value: Int) : ValueObjectInt() {
     companion object {

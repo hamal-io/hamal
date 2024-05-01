@@ -1,11 +1,12 @@
 package io.hamal.api.http.controller.trigger
 
 import io.hamal.api.http.controller.BaseControllerTest
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
+import io.hamal.lib.domain.vo.TriggerDuration.Companion.TriggerDuration
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.HttpSuccessResponse
@@ -23,7 +24,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
                 ApiFuncCreateRequest(
                     name = name,
                     inputs = FuncInputs(),
-                    code = CodeValue(""),
+                    code = ValueCode(""),
                     codeType = CodeType.Lua54
                 )
             )

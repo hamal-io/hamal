@@ -1,9 +1,11 @@
 package io.hamal.plugin.std.sys.extension
 
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.ExtensionId
-import io.hamal.lib.domain.vo.ExtensionName
+import io.hamal.lib.domain.vo.ExtensionName.Companion.ExtensionName
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -13,8 +15,6 @@ import io.hamal.lib.kua.value.findString
 import io.hamal.lib.kua.value.getString
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiExtensionUpdateRequest
-import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueString
 
 class ExtensionUpdateFunction(
     private val sdk: ApiSdk
@@ -28,7 +28,7 @@ class ExtensionUpdateFunction(
                 ExtensionId(SnowflakeId(arg1.getString("id").stringValue)),
                 ApiExtensionUpdateRequest(
                     name = arg1.findString("name")?.let { ExtensionName(it.stringValue) },
-                    code = arg1.findString("code")?.let { CodeValue(it.stringValue) }
+                    code = arg1.findString("code")?.let { ValueCode(it.stringValue) }
                 )
             )
 

@@ -8,6 +8,9 @@ import io.hamal.lib.domain._enum.TriggerStatus.Active
 import io.hamal.lib.domain._enum.TriggerStatus.Inactive
 import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CronPattern.Companion.CronPattern
+import io.hamal.lib.domain.vo.TriggerDuration.Companion.TriggerDuration
+import io.hamal.lib.domain.vo.TriggerName.Companion.TriggerName
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerCmdRepository.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery

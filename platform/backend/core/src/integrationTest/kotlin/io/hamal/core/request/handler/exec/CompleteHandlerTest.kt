@@ -8,6 +8,7 @@ import io.hamal.lib.domain.request.ExecCompleteRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecStatus.Completed
 import io.hamal.lib.domain.vo.ExecStatus.Started
+import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import io.hamal.repository.api.Exec
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import org.hamcrest.MatcherAssert.assertThat

@@ -1,10 +1,10 @@
 package io.hamal.api.http.controller.recipe
 
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.vo.RecipeDescription
 import io.hamal.lib.domain.vo.RecipeInputs
-import io.hamal.lib.domain.vo.RecipeName
+import io.hamal.lib.domain.vo.RecipeName.Companion.RecipeName
 import io.hamal.lib.sdk.api.ApiRecipeCreateRequest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -18,7 +18,7 @@ internal class RecipeCreateControllerTest : RecipeBaseControllerTest() {
             ApiRecipeCreateRequest(
                 name = RecipeName("TestRecipe"),
                 inputs = RecipeInputs(HotObject.builder().set("hamal", "rocks").build()),
-                value = CodeValue("13 + 37")
+                value = ValueCode("13 + 37")
             )
         )
 
@@ -27,7 +27,7 @@ internal class RecipeCreateControllerTest : RecipeBaseControllerTest() {
         with(recipeQueryRepository.get(res.id)) {
             assertThat(inputs, equalTo(RecipeInputs(HotObject.builder().set("hamal", "rocks").build())))
             assertThat(name, equalTo(RecipeName("TestRecipe")))
-            assertThat(value, equalTo(CodeValue("13 + 37")))
+            assertThat(value, equalTo(ValueCode("13 + 37")))
             assertThat(description, equalTo(RecipeDescription.empty))
         }
     }

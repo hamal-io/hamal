@@ -1,10 +1,12 @@
 package io.hamal.plugin.std.log
 
 import io.hamal.lib.common.logger
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain._enum.ExecLogLevel
 import io.hamal.lib.domain._enum.ExecLogLevel.*
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecLogMessage
+import io.hamal.lib.domain.vo.ExecLogMessage.Companion.ExecLogMessage
 import io.hamal.lib.domain.vo.ExecLogTimestamp
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
@@ -15,8 +17,6 @@ import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.lib.sdk.api.ApiExecLogAppendRequest
 import io.hamal.lib.sdk.api.ApiExecLogService
-import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueString
 
 
 val log = logger(LogFunction::class)
@@ -46,11 +46,11 @@ class LogFunction(
         val message = ExecLogMessage(arg2.stringValue)
 
         when (level) {
-            Trace -> log.trace(message.value)
-            Debug -> log.debug(message.value)
-            Info -> log.info(message.value)
-            Warn -> log.warn(message.value)
-            Error -> log.error(message.value)
+            Trace -> log.trace(message.stringValue)
+            Debug -> log.debug(message.stringValue)
+            Info -> log.info(message.stringValue)
+            Warn -> log.warn(message.stringValue)
+            Error -> log.error(message.stringValue)
         }
 
         execLogService.append(

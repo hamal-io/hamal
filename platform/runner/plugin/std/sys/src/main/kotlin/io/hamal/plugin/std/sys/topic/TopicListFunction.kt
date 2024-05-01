@@ -1,5 +1,7 @@
 package io.hamal.plugin.std.sys.topic
 
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -10,8 +12,6 @@ import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.kua.value.findTable
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiTopicService
-import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueString
 
 class TopicListFunction(
     private val sdk: ApiSdk
@@ -33,7 +33,7 @@ class TopicListFunction(
                 ).map { topic ->
                     ctx.tableCreate(
                         "id" to ValueString(topic.id.value.value.toString(16)),
-                        "name" to ValueString(topic.name.value),
+                        "name" to topic.name,
                     )
                 }
             )

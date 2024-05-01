@@ -1,5 +1,7 @@
 package io.hamal.plugin.std.sys.namespace
 
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.kua.function.Function1In2Out
@@ -10,8 +12,6 @@ import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.kua.value.getString
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiNamespaceAppendRequest
-import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueString
 
 class NamespaceAppendFunction(
     private val sdk: ApiSdk
@@ -24,7 +24,7 @@ class NamespaceAppendFunction(
         return try {
             val res = sdk.namespace.append(
                 ctx[NamespaceId::class], ApiNamespaceAppendRequest(
-                    name = NamespaceName(arg1.getString("name").stringValue)
+                    name = NamespaceName(arg1.getString("name"))
                 )
             )
 

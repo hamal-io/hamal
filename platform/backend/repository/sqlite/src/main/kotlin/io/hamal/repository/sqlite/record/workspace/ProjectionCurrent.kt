@@ -52,7 +52,7 @@ internal object ProjectionCurrent : ProjectionSqlite<WorkspaceId, WorkspaceRecor
             """.trimIndent()
         ) {
             query {
-                set("name", workspaceName.value)
+                set("name", workspaceName)
             }
             map { rs ->
                 json.decompressAndDeserialize(Workspace::class, rs.getBytes("data"))

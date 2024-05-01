@@ -1,6 +1,9 @@
 package io.hamal.plugin.std.sys.func
 
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueNumber
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
@@ -15,9 +18,6 @@ import io.hamal.lib.kua.value.getString
 import io.hamal.lib.kua.value.type
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiFuncInvokeRequest
-import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueNumber
-import io.hamal.lib.common.value.ValueString
 
 class FuncInvokeFunction(
     private val sdk: ApiSdk
@@ -29,7 +29,7 @@ class FuncInvokeFunction(
         return try {
 
             val correlationId = if (arg1.type("correlation_id") == ValueString::class) {
-                CorrelationId(arg1.getString("correlation_id").stringValue)
+                CorrelationId(arg1.getString("correlation_id"))
             } else {
                 CorrelationId.default
             }

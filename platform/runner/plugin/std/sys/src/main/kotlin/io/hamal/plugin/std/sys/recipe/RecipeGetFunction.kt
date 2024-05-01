@@ -1,5 +1,7 @@
 package io.hamal.plugin.std.sys.recipe
 
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.RecipeId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -7,9 +9,6 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.common.value.ValueCode
-import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueString
 
 class RecipeGetFunction(
     private val sdk: ApiSdk
@@ -23,8 +22,8 @@ class RecipeGetFunction(
                 .let { recipe ->
                     ctx.tableCreate(
                         "id" to ValueString(recipe.id.value.value.toString(16)),
-                        "name" to ValueString(recipe.name.value),
-                        "value" to ValueCode(recipe.value.value)
+                        "name" to recipe.name,
+                        "value" to recipe.value
                     )
                 }
         } catch (t: Throwable) {

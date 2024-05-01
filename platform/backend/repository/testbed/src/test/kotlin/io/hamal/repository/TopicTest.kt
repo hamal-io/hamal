@@ -5,6 +5,7 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import io.hamal.repository.api.TopicCmdRepository.TopicCreateCmd
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import io.hamal.repository.api.TopicRepository

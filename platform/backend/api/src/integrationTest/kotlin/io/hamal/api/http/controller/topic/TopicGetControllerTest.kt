@@ -2,7 +2,7 @@ package io.hamal.api.http.controller.topic
 
 
 import io.hamal.lib.domain._enum.TopicType
-import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.sdk.api.ApiError

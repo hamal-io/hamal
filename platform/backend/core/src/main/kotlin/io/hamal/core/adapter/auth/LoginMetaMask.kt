@@ -93,11 +93,11 @@ class AuthLoginMetaMaskAdapter(
 internal fun verifySignature(req: AuthLogInMetaMaskRequest) {
     val challenge = ChallengeMetaMask(req.address)
     val signedMessage = EvmSignedMessage(
-        data = challenge.value.toByteArray(),
-        signature = EvmSignature(EvmPrefixedHexString(req.signature.value))
+        data = challenge.stringValue.toByteArray(),
+        signature = EvmSignature(EvmPrefixedHexString(req.signature.stringValue))
     )
 
-    if (signedMessage.address.toPrefixedHexString().value.lowercase() != req.address.value.lowercase()) {
+    if (signedMessage.address.toPrefixedHexString().value.lowercase() != req.address.stringValue.lowercase()) {
         throw NoSuchElementException("Account not found")
     }
 }

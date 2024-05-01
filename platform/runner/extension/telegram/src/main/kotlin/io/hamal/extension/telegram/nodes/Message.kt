@@ -1,12 +1,14 @@
 package io.hamal.extension.telegram.nodes
 
-import io.hamal.lib.nodes.*
-import io.hamal.lib.nodes.control.Control
-import io.hamal.lib.nodes.control.ControlExtensionTextArea
-import io.hamal.lib.nodes.generator.Generator
 import io.hamal.lib.common.value.Type
 import io.hamal.lib.common.value.TypeString
 import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.nodes.*
+import io.hamal.lib.nodes.NodeTitle.Companion.NodeTitle
+import io.hamal.lib.nodes.NodeType.Companion.NodeType
+import io.hamal.lib.nodes.control.Control
+import io.hamal.lib.nodes.control.ControlExtensionTextArea
+import io.hamal.lib.nodes.generator.Generator
 
 val SendMessageNode = NodeExtension(
     type = NodeType("Telegram_Send_Message"),

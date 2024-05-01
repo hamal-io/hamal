@@ -4,8 +4,10 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
 import io.hamal.lib.domain.vo.ExecStatus.*
 import io.hamal.repository.api.Exec
 import io.hamal.repository.api.ExecCmdRepository.*
@@ -41,7 +43,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                             .set("hamal", "rocks")
                             .build()
                     ),
-                    code = ExecCode(value = CodeValue("40 + 2"))
+                    code = ExecCode(value = ValueCode("40 + 2"))
                 )
             )
 
@@ -356,7 +358,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 assertThat(correlation?.id, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation?.funcId, equalTo(FuncId(444)))
                 assertThat(inputs, equalTo(ExecInputs(HotObject.builder().set("hamal", "rocks").build())))
-                assertThat(code, equalTo(ExecCode(value = CodeValue("'13'..'37'"))))
+                assertThat(code, equalTo(ExecCode(value = ValueCode("'13'..'37'"))))
             }
         }
 
@@ -388,7 +390,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 assertThat(correlation?.id, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation?.funcId, equalTo(FuncId(444)))
                 assertThat(inputs, equalTo(ExecInputs(HotObject.builder().set("hamal", "rocks").build())))
-                assertThat(code, equalTo(ExecCode(value = CodeValue("'13'..'37'"))))
+                assertThat(code, equalTo(ExecCode(value = ValueCode("'13'..'37'"))))
             }
         }
 
@@ -591,7 +593,7 @@ private fun assertBaseExec(exec: Exec) {
             )
         )
     )
-    assertThat(exec.code, equalTo(ExecCode(value = CodeValue("40 + 2"))))
+    assertThat(exec.code, equalTo(ExecCode(value = ValueCode("40 + 2"))))
 }
 
 private fun ExecRepository.planExec(
@@ -610,7 +612,7 @@ private fun ExecRepository.planExec(
             id = CorrelationId("some-correlation-id"), funcId = FuncId(23)
         ),
         inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
-        code = ExecCode(value = CodeValue("40 + 2")),
+        code = ExecCode(value = ValueCode("40 + 2")),
     )
 )
 
@@ -640,7 +642,7 @@ fun ExecRepository.createExec(
             workspaceId = workspaceId,
             correlation = correlation,
             inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
-            code = ExecCode(value = CodeValue("'13'..'37'")),
+            code = ExecCode(value = ValueCode("'13'..'37'")),
         )
     )
 

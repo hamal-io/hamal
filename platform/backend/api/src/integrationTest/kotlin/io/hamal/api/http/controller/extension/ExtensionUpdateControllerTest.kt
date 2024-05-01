@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.extension
 
-import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.domain.vo.ExtensionName
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.domain.vo.ExtensionName.Companion.ExtensionName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.body
@@ -20,7 +20,7 @@ internal class ExtensionUpdateControllerTest : ExtensionBaseControllerTest() {
             createExtension(
                 ApiExtensionCreateRequest(
                     name = ExtensionName("TestExtension"),
-                    code = CodeValue("x='hamal")
+                    code = ValueCode("x='hamal")
                 )
             )
         ).id
@@ -30,14 +30,14 @@ internal class ExtensionUpdateControllerTest : ExtensionBaseControllerTest() {
                 extensionId,
                 ApiExtensionUpdateRequest(
                     name = ExtensionName("UpdateExtension"),
-                    code = CodeValue("x='hamal")
+                    code = ValueCode("x='hamal")
                 )
             )
         )
 
         val ext = extensionQueryRepository.get(extensionId)
         assertThat(ext.name, equalTo(ExtensionName("UpdateExtension")))
-        assertThat(codeQueryRepository.get(ext.code.id).value, equalTo(CodeValue("x='hamal")))
+        assertThat(codeQueryRepository.get(ext.code.id).value, equalTo(ValueCode("x='hamal")))
     }
 
 
@@ -47,7 +47,7 @@ internal class ExtensionUpdateControllerTest : ExtensionBaseControllerTest() {
             createExtension(
                 ApiExtensionCreateRequest(
                     name = ExtensionName("TestExtension"),
-                    code = CodeValue("x='hamal")
+                    code = ValueCode("x='hamal")
                 )
             )
         ).id
@@ -72,7 +72,7 @@ internal class ExtensionUpdateControllerTest : ExtensionBaseControllerTest() {
             .body(
                 ApiExtensionUpdateRequest(
                     name = ExtensionName("UpdateExtension"),
-                    code = CodeValue("x='hamal")
+                    code = ValueCode("x='hamal")
                 )
             )
             .execute()

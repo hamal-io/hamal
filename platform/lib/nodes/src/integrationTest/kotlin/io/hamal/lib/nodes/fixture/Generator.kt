@@ -3,6 +3,7 @@ package io.hamal.lib.nodes.fixture
 import io.hamal.lib.common.hot.HotString
 import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.*
+import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.generator.Generator
 import org.hamcrest.CoreMatchers.equalTo

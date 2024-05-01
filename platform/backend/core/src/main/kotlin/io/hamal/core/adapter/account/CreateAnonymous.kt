@@ -10,6 +10,7 @@ import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.AccountCreateAnonymousRequest
 import io.hamal.lib.domain.request.AccountCreateAnonymousRequested
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.Password.Companion.Password
 import org.springframework.stereotype.Component
 
 fun interface AccountCreateAnonymousPort {

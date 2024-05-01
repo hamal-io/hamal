@@ -1,5 +1,8 @@
 package io.hamal.plugin.std.sys.extension
 
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueNumber
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -7,10 +10,6 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.common.value.ValueCode
-import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueNumber
-import io.hamal.lib.common.value.ValueString
 
 class ExtensionGetFunction(
     private val sdk: ApiSdk
@@ -24,11 +23,11 @@ class ExtensionGetFunction(
 
             null to ctx.tableCreate(
                 "id" to ValueString(ext.id.value.value.toString(16)),
-                "name" to ValueString(ext.name.value),
+                "name" to ext.name,
                 "code" to ctx.tableCreate(
                     "id" to ValueString(ext.code.id.value.value.toString(16)),
                     "version" to ValueNumber(ext.code.version.value),
-                    "value" to ValueCode(ext.code.value.value)
+                    "value" to ext.code.value
                 )
             )
 

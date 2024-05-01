@@ -6,7 +6,7 @@ import io.hamal.core.adapter.namespace_tree.NamespaceTreeListPort
 import io.hamal.lib.common.TreeNode
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.sdk.api.ApiNamespaceList
 import io.hamal.repository.api.Namespace
@@ -84,7 +84,7 @@ private fun assemble(
             val newNamespace = ApiNamespaceList.Namespace(
                 id = namespace.id,
                 parentId = parent.id,
-                name = NamespaceName(parent.name.value + "::" + namespace.name.value)
+                name = NamespaceName(parent.name.stringValue + "::" + namespace.name.stringValue)
             )
             listOf(newNamespace).plus(assemble(newNamespace, child, namespaces))
         }

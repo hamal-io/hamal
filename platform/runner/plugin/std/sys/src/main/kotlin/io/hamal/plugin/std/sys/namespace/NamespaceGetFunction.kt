@@ -1,5 +1,7 @@
 package io.hamal.plugin.std.sys.namespace
 
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -7,8 +9,6 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueString
 
 class NamespaceGetFunction(
     private val sdk: ApiSdk
@@ -22,7 +22,7 @@ class NamespaceGetFunction(
                 .let { namespace ->
                     ctx.tableCreate(
                         "id" to ValueString(namespace.id.value.value.toString(16)),
-                        "name" to ValueString(namespace.name.value)
+                        "name" to namespace.name
                     )
                 }
         } catch (t: Throwable) {

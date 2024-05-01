@@ -34,16 +34,16 @@ class TriggerListFunction(
                         ctx.tableCreate(
                             "id" to ValueString(trigger.id.value.value.toString(16)),
                             "type" to ValueString("FixedRate"),
-                            "name" to ValueString(trigger.name.value),
+                            "name" to trigger.name,
                             "namespace" to ctx.tableCreate(
                                 "id" to ValueString(trigger.namespace.id.value.value.toString(16)),
-                                "name" to ValueString(trigger.namespace.name.value)
+                                "name" to trigger.namespace.name
                             ),
                             "func" to ctx.tableCreate(
                                 "id" to ValueString(trigger.func.id.value.value.toString(16)),
                                 "name" to trigger.func.name
                             ),
-                            "duration" to ValueString(trigger.duration.value)
+                            "duration" to trigger.duration
                         )
                     }
 
@@ -51,10 +51,10 @@ class TriggerListFunction(
                         ctx.tableCreate(
                             "id" to ValueString(trigger.id.value.value.toString(16)),
                             "type" to ValueString("Event"),
-                            "name" to ValueString(trigger.name.value),
+                            "name" to trigger.name,
                             "namespace" to ctx.tableCreate(
                                 "id" to ValueString(trigger.namespace.id.value.value.toString(16)),
-                                "name" to ValueString(trigger.namespace.name.value)
+                                "name" to trigger.namespace.name
                             ),
                             "func" to ctx.tableCreate(
                                 "id" to ValueString(trigger.func.id.value.value.toString(16)),
@@ -62,7 +62,7 @@ class TriggerListFunction(
                             ),
                             "topic" to ctx.tableCreate(
                                 "id" to ValueString(trigger.topic.id.value.value.toString(16)),
-                                "name" to ValueString(trigger.topic.name.value)
+                                "name" to trigger.topic.name
                             ),
                         )
                     }
@@ -71,10 +71,10 @@ class TriggerListFunction(
                         ctx.tableCreate(
                             "id" to ValueString(trigger.id.value.value.toString(16)),
                             "type" to ValueString("Hook"),
-                            "name" to ValueString(trigger.name.value),
+                            "name" to trigger.name,
                             "namespace" to ctx.tableCreate(
                                 "id" to ValueString(trigger.namespace.id.value.value.toString(16)),
-                                "name" to ValueString(trigger.namespace.name.value)
+                                "name" to trigger.namespace.name
                             ),
                             "func" to ctx.tableCreate(
                                 "id" to ValueString(trigger.func.id.value.value.toString(16)),
@@ -86,26 +86,26 @@ class TriggerListFunction(
                     is ApiTriggerList.Cron -> ctx.tableCreate(
                         "id" to ValueString(trigger.id.value.value.toString(16)),
                         "type" to ValueString("Cron"),
-                        "name" to ValueString(trigger.name.value),
+                        "name" to trigger.name,
                         "namespace" to ctx.tableCreate(
                             "id" to ValueString(trigger.namespace.id.value.value.toString(16)),
-                            "name" to ValueString(trigger.namespace.name.value)
+                            "name" to trigger.namespace.name
                         ),
                         "func" to ctx.tableCreate(
                             "id" to ValueString(trigger.func.id.value.value.toString(16)),
                             "name" to trigger.func.name
                         ),
-                        "cron" to ValueString(trigger.cron.value)
+                        "cron" to trigger.cron
                     )
 
                     is ApiTriggerList.Endpoint -> {
                         ctx.tableCreate(
                             "id" to ValueString(trigger.id.value.value.toString(16)),
                             "type" to ValueString("Endpoint"),
-                            "name" to ValueString(trigger.name.value),
+                            "name" to trigger.name,
                             "namespace" to ctx.tableCreate(
                                 "id" to ValueString(trigger.namespace.id.value.value.toString(16)),
-                                "name" to ValueString(trigger.namespace.name.value)
+                                "name" to trigger.namespace.name
                             ),
                             "func" to ctx.tableCreate(
                                 "id" to ValueString(trigger.func.id.value.value.toString(16)),

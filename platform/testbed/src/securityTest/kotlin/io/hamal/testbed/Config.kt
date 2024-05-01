@@ -7,6 +7,7 @@ import io.hamal.core.config.BackendBasePath
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
@@ -14,7 +15,19 @@ import io.hamal.lib.domain._enum.ExecLogLevel
 import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
+import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
+import io.hamal.lib.domain.vo.CronPattern.Companion.CronPattern
+import io.hamal.lib.domain.vo.DeployMessage.Companion.DeployMessage
+import io.hamal.lib.domain.vo.ExecLogMessage.Companion.ExecLogMessage
+import io.hamal.lib.domain.vo.ExtensionName.Companion.ExtensionName
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
+import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
+import io.hamal.lib.domain.vo.PasswordSalt.Companion.PasswordSalt
+import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
+import io.hamal.lib.domain.vo.TriggerDuration.Companion.TriggerDuration
+import io.hamal.lib.domain.vo.TriggerName.Companion.TriggerName
+import io.hamal.lib.domain.vo.WorkspaceName.Companion.WorkspaceName
 import io.hamal.repository.api.*
 import io.hamal.repository.api.ExecCmdRepository.PlanCmd
 import jakarta.annotation.PostConstruct
@@ -127,7 +140,7 @@ class TestSetupConfig {
             CodeCmdRepository.CreateCmd(
                 id = CmdId(id),
                 codeId = CodeId(id),
-                value = CodeValue(""),
+                value = ValueCode(""),
                 workspaceId = WorkspaceId(id)
             )
         )
@@ -299,7 +312,6 @@ class TestSetupConfig {
                 cron = CronPattern("0 0 * * * *")
             )
         )
-
     }
 
     @Autowired

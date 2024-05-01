@@ -1,5 +1,6 @@
 package io.hamal.lib.sdk.api
 
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.RecipeCreateRequest
 import io.hamal.lib.domain.request.RecipeUpdateRequest
@@ -12,14 +13,14 @@ data class ApiRecipe(
     val id: RecipeId,
     val name: RecipeName,
     val inputs: RecipeInputs,
-    val value: CodeValue,
+    val value: ValueCode,
     val description: RecipeDescription
 ) : ApiObject()
 
 data class ApiRecipeCreateRequest(
     override val name: RecipeName,
     override val inputs: RecipeInputs,
-    override val value: CodeValue,
+    override val value: ValueCode,
     override val description: RecipeDescription? = null
 ) : RecipeCreateRequest
 
@@ -32,7 +33,7 @@ data class ApiRecipeCreateRequested(
 data class ApiRecipeUpdateRequest(
     override val name: RecipeName? = null,
     override val inputs: RecipeInputs? = null,
-    override val value: CodeValue? = null,
+    override val value: ValueCode? = null,
     override val description: RecipeDescription? = null
 ) : RecipeUpdateRequest
 

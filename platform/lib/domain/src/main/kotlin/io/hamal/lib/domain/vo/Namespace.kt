@@ -2,9 +2,10 @@ package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.domain.ValueObjectHotObject
 import io.hamal.lib.common.domain.ValueObjectId
-import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueVariableString
 import io.hamal.lib.domain._enum.NamespaceFeature
 import io.hamal.lib.domain._enum.NamespaceFeature.*
 
@@ -17,8 +18,9 @@ class NamespaceId(override val value: SnowflakeId) : ValueObjectId() {
     }
 }
 
-class NamespaceName(override val value: String) : ValueObjectString() {
+class NamespaceName(override val value: ValueString) : ValueVariableString() {
     companion object {
+        fun NamespaceName(value: String) = NamespaceName(ValueString(value))
         val default = NamespaceName("default")
     }
 }

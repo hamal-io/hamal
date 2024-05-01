@@ -135,7 +135,7 @@ internal class ApiTopicServiceImpl(
         return topicNameCache(topicName) {
             template.get("/v1/topics")
                 .parameter("namespace_ids", namespaceId)
-                .parameter("names", topicName.value)
+                .parameter("names", topicName)
                 .execute()
                 .fold(ApiTopicList::class)
                 .topics

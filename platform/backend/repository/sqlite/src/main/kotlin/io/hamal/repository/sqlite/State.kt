@@ -4,6 +4,7 @@ import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId
+import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
@@ -53,7 +54,7 @@ class StateSqliteRepository(
         ) {
             query {
                 set("funcId", cmd.correlatedState.correlation.funcId)
-                set("correlationId", cmd.correlatedState.correlation.id.value)
+                set("correlationId", cmd.correlatedState.correlation.id)
                 set("value", json.serializeAndCompress(cmd.correlatedState.value))
             }
         }
@@ -67,7 +68,7 @@ class StateSqliteRepository(
         return connection.executeQueryOne("SELECT func_id, correlation_id, value FROM states WHERE func_id = :funcId AND correlation_id = :correlationId") {
             query {
                 set("funcId", correlation.funcId)
-                set("correlationId", correlation.id.value)
+                set("correlationId", correlation.id)
             }
             map { rs ->
                 CorrelatedState(

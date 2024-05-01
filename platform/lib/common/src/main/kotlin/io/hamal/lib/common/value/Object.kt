@@ -1,6 +1,7 @@
 package io.hamal.lib.common.value
 
 import io.hamal.lib.common.value.Property.Companion.Property
+import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 
 
 // FIXME objects are equal if they have the same fields
@@ -19,7 +20,7 @@ data class TypeObject(override val identifier: TypeIdentifier, val fields: Set<F
     operator fun invoke(vararg args: Any, kwargs: Map<String, Any> = emptyMap()) =
         ValueObject(this, args.zip(fields).map { (value, field) ->
             Property(field, value)
-        } + kwargs.mapNotNull { (k, v) -> fieldsByIdentifier[FieldIdentifier(k)]?.let { Property(it, v) } })
+        } + kwargs.mapNotNull { (k, v) -> fieldsByIdentifier[FieldIdentifier(ValueString(k))]?.let { Property(it, v) } })
 
     val fieldsByIdentifier by lazy {
         fields.associateBy(Field::identifier)
@@ -57,7 +58,7 @@ data class ValueObject(
 
     operator fun <T : Value> get(identifier: FieldIdentifier) = valuesByIdentifier[identifier] as T
 
-    operator fun <T : Value> get(identifier: String) = get<T>(FieldIdentifier(identifier))
+    operator fun <T : Value> get(identifier: String) = get<T>(FieldIdentifier(ValueString(identifier)))
 
     override fun toString() = "${type.identifier}(${properties.joinToString(", ") { it.toString() }})"
 

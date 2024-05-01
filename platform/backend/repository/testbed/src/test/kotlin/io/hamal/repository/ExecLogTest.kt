@@ -5,6 +5,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.TimeUtils.withInstant
 import io.hamal.lib.domain._enum.ExecLogLevel
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.ExecLogMessage.Companion.ExecLogMessage
 import io.hamal.repository.api.ExecLogCmdRepository.AppendCmd
 import io.hamal.repository.api.ExecLogQueryRepository.ExecLogQuery
 import io.hamal.repository.api.ExecLogRepository

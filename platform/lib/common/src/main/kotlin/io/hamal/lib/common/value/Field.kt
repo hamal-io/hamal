@@ -1,8 +1,7 @@
 package io.hamal.lib.common.value
 
-import io.hamal.lib.common.domain.ValueObjectString
 
-class FieldIdentifier(override val value: String) : ValueObjectString()
+class FieldIdentifier(override val value: ValueString) : ValueVariableString()
 
 data class Field(
     val type: Type,
@@ -11,7 +10,7 @@ data class Field(
 ) {
     constructor(type: Type, identifier: String, valueType: TypeObject? = null) : this(
         type,
-        FieldIdentifier(identifier),
+        FieldIdentifier(ValueString(identifier)),
         valueType
     )
 }

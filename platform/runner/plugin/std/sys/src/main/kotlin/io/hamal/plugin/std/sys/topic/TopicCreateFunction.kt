@@ -1,6 +1,8 @@
 package io.hamal.plugin.std.sys.topic
 
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicName
@@ -13,8 +15,6 @@ import io.hamal.lib.kua.value.findString
 import io.hamal.lib.kua.value.getString
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiTopicCreateRequest
-import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueString
 
 class TopicCreateFunction(
     private val sdk: ApiSdk
@@ -28,7 +28,7 @@ class TopicCreateFunction(
                 arg1.findString("namespaceId")?.let { NamespaceId(SnowflakeId(it.stringValue)) }
                     ?: ctx[NamespaceId::class],
                 ApiTopicCreateRequest(
-                    name = TopicName(arg1.getString("name").stringValue),
+                    name = TopicName(arg1.getString("name")),
                     type = TopicType.Namespace
                 )
             )

@@ -2,9 +2,11 @@ package io.hamal.api.http.controller.func
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
+import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
@@ -25,7 +27,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                 ApiFuncUpdateRequest(
                     name = FuncName("update"),
                     inputs = FuncInputs(),
-                    code = CodeValue("")
+                    code = ValueCode("")
                 )
             )
             .execute()
@@ -55,7 +57,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                 req = ApiFuncCreateRequest(
                     name = FuncName("created-name"),
                     inputs = FuncInputs(HotObject.builder().set("hamal", "createdInputs").build()),
-                    code = CodeValue("createdCode"),
+                    code = ValueCode("createdCode"),
                     codeType = CodeType.Lua54
                 )
             )
@@ -67,7 +69,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                 ApiFuncUpdateRequest(
                     name = FuncName("updated-name"),
                     inputs = FuncInputs(HotObject.builder().set("hamal", "updatedInputs").build()),
-                    code = CodeValue("updatedCode")
+                    code = ValueCode("updatedCode")
                 )
             )
             .execute()
@@ -87,10 +89,10 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "updatedInputs").build())))
 
             assertThat(code.version, equalTo(CodeVersion(2)))
-            assertThat(code.value, equalTo(CodeValue("updatedCode")))
+            assertThat(code.value, equalTo(ValueCode("updatedCode")))
 
             assertThat(deployment.version, equalTo(CodeVersion(1)))
-            assertThat(deployment.value, equalTo(CodeValue("createdCode")))
+            assertThat(deployment.value, equalTo(ValueCode("createdCode")))
         }
     }
 
@@ -98,7 +100,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
     fun `Updates func without updating values`() {
         val funcId = createFuncInNamespace(
             FuncName("created-name"),
-            CodeValue("createdCode")
+            ValueCode("createdCode")
         ).id
 
         val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
@@ -125,10 +127,10 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "createdInputs").build())))
 
             assertThat(code.version, equalTo(CodeVersion(1)))
-            assertThat(code.value, equalTo(CodeValue("createdCode")))
+            assertThat(code.value, equalTo(ValueCode("createdCode")))
 
             assertThat(deployment.version, equalTo(CodeVersion(1)))
-            assertThat(deployment.value, equalTo(CodeValue("createdCode")))
+            assertThat(deployment.value, equalTo(ValueCode("createdCode")))
         }
     }
 
@@ -136,7 +138,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
     fun `Does not increment code version if req code is null`() {
         val funcId = createFuncInNamespace(
             FuncName("created-name"),
-            CodeValue("createdCode")
+            ValueCode("createdCode")
         ).id
 
         val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
@@ -157,10 +159,10 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
 
             assertThat(code.version, equalTo(CodeVersion(1)))
-            assertThat(code.value, equalTo(CodeValue("createdCode")))
+            assertThat(code.value, equalTo(ValueCode("createdCode")))
 
             assertThat(deployment.version, equalTo(CodeVersion(1)))
-            assertThat(deployment.value, equalTo(CodeValue("createdCode")))
+            assertThat(deployment.value, equalTo(ValueCode("createdCode")))
         }
     }
 
@@ -168,7 +170,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
     fun `Does not increment code version if req code is equal to existing`() {
         val funcId = createFuncInNamespace(
             FuncName("func-1"),
-            CodeValue("createdCode")
+            ValueCode("createdCode")
         ).id
 
         val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
@@ -177,7 +179,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                 ApiFuncUpdateRequest(
                     name = FuncName("updated-name"),
                     inputs = FuncInputs(HotObject.builder().set("hamal", "updatedInputs").build()),
-                    code = CodeValue("createdCode")
+                    code = ValueCode("createdCode")
                 )
             )
             .execute()
@@ -194,14 +196,14 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "updatedInputs").build())))
 
             assertThat(code.version, equalTo(CodeVersion(1)))
-            assertThat(code.value, equalTo(CodeValue("createdCode")))
+            assertThat(code.value, equalTo(ValueCode("createdCode")))
 
             assertThat(deployment.version, equalTo(CodeVersion(1)))
-            assertThat(deployment.value, equalTo(CodeValue("createdCode")))
+            assertThat(deployment.value, equalTo(ValueCode("createdCode")))
         }
     }
 
-    private fun createFuncInNamespace(name: FuncName, code: CodeValue): ApiFuncCreateRequested {
+    private fun createFuncInNamespace(name: FuncName, code: ValueCode): ApiFuncCreateRequested {
         val createdNamespace = namespaceCmdRepository.create(
             CreateCmd(
                 id = CmdGen(),

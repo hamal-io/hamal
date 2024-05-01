@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.exec
 
 import io.hamal.api.http.controller.BaseControllerTest
-import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.HttpSuccessResponse
@@ -20,7 +20,7 @@ internal sealed class ExecBaseControllerTest : BaseControllerTest() {
             .body(
                 ApiAdhocInvokeRequest(
                     inputs = InvocationInputs(),
-                    code = CodeValue("40 + 2")
+                    code = ValueCode("40 + 2")
                 )
             )
             .execute()

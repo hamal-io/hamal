@@ -2,10 +2,12 @@ package io.hamal.core.request.handler.exec
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -28,7 +30,7 @@ internal class ExecInvokeHandlerTest : BaseRequestHandlerTest() {
                 namespaceId = testNamespace.id,
                 workspaceId = testWorkspace.id,
                 inputs = InvocationInputs(HotObject.builder().set("hamal", "justworks").build()),
-                code = ExecCode(value = CodeValue("code")),
+                code = ExecCode(value = ValueCode("code")),
                 funcId = null,
                 correlationId = null
             )
@@ -41,7 +43,7 @@ internal class ExecInvokeHandlerTest : BaseRequestHandlerTest() {
                 assertThat(id, equalTo(ExecId(3333)))
                 assertThat(correlation, nullValue())
                 assertThat(inputs, equalTo(ExecInputs(HotObject.builder().set("hamal", "justworks").build())))
-                assertThat(code, equalTo(ExecCode(value = CodeValue("code"))))
+                assertThat(code, equalTo(ExecCode(value = ValueCode("code"))))
             }
         }
     }

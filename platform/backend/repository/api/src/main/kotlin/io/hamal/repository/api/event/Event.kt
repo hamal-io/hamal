@@ -3,12 +3,18 @@ package io.hamal.repository.api.event
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.serialization.JsonAdapter
-import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueVariableString
+import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
+import io.hamal.repository.api.event.InternalEventClass.Companion.InternalEventClass
 import kotlin.reflect.KClass
 
-class InternalEventClass(override val value: String) : ValueObjectString()
+class InternalEventClass(override val value: ValueString) : ValueVariableString() {
+    companion object {
+        fun InternalEventClass(value: String) = InternalEventClass(ValueString(value))
+    }
+}
 
 val internalEventClasses = listOf(
     AccountCreatedEvent::class,

@@ -6,6 +6,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.WorkspaceName
+import io.hamal.lib.domain.vo.WorkspaceName.Companion.WorkspaceName
 import io.hamal.repository.api.WorkspaceCmdRepository.CreateCmd
 import io.hamal.repository.api.WorkspaceQueryRepository.WorkspaceQuery
 import io.hamal.repository.api.WorkspaceRepository

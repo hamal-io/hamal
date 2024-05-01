@@ -30,7 +30,7 @@ fun Event.toHot() = HotObject.builder()
     .set(
         "topic", HotObject.builder()
             .set("id", topic.id.value.value.toString(16))
-            .set("name", topic.name.value)
+            .set("name", topic.name.stringValue)
             .build()
     )
     .set("payload", payload.value)

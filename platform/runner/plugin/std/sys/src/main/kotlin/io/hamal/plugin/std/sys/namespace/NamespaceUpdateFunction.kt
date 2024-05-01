@@ -1,5 +1,7 @@
 package io.hamal.plugin.std.sys.namespace
 
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.kua.function.Function1In2Out
@@ -11,8 +13,6 @@ import io.hamal.lib.kua.value.findString
 import io.hamal.lib.kua.value.getString
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiNamespaceUpdateRequest
-import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueString
 
 class NamespaceUpdateFunction(
     private val sdk: ApiSdk
@@ -25,7 +25,7 @@ class NamespaceUpdateFunction(
             val res = sdk.namespace.update(
                 NamespaceId(arg1.getString("id").stringValue),
                 ApiNamespaceUpdateRequest(
-                    name = arg1.findString("name")?.let { NamespaceName(it.stringValue) },
+                    name = arg1.findString("name")?.let { NamespaceName(it) },
                     features = null
                 )
             )

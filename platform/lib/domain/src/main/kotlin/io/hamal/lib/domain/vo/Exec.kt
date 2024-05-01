@@ -3,10 +3,12 @@ package io.hamal.lib.domain.vo
 import io.hamal.lib.common.domain.ValueObjectHotObject
 import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.domain.ValueObjectInstant
-import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueVariableString
 import io.hamal.lib.domain._enum.CodeType
 import java.time.Instant
 
@@ -15,14 +17,18 @@ class ExecId(override val value: SnowflakeId) : ValueObjectId() {
     constructor(value: String) : this(SnowflakeId(value.toLong(16)))
 }
 
-class ExecType(override val value: String) : ValueObjectString()
+class ExecType(override val value: ValueString) : ValueVariableString() {
+    companion object {
+        fun ExecType(value: String) = ExecType(ValueString(value))
+    }
+}
 
 class ExecInputs(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
 
 data class ExecCode(
     val id: CodeId? = null,
     val version: CodeVersion? = null,
-    val value: CodeValue? = null,
+    val value: ValueCode? = null,
     val type: CodeType? = null
 )
 
@@ -43,7 +49,11 @@ enum class ExecStatus(val value: Int) {
 }
 
 
-class ExecToken(override val value: String) : ValueObjectString()
+class ExecToken(override val value: ValueString) : ValueVariableString() {
+    companion object {
+        fun ExecToken(value: String) = ExecToken(ValueString(value))
+    }
+}
 
 class ExecResult(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
 

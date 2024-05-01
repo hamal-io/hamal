@@ -1,8 +1,8 @@
 package io.hamal.plugin.std.sys.func
 
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
@@ -29,7 +29,7 @@ class FuncUpdateFunction(
                 ApiFuncUpdateRequest(
                     name = arg1.findString("name")?.let { FuncName(it) },
                     inputs = FuncInputs(),
-                    code = arg1.findString("code")?.let { CodeValue(it.stringValue) }
+                    code = arg1.findString("code")?.let { ValueCode(it.stringValue) }
                 )
             )
             null to ctx.tableCreate(

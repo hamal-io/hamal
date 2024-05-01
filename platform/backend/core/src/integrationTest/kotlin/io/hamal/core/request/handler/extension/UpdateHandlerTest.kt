@@ -1,10 +1,15 @@
 package io.hamal.core.request.handler.extension
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.ExtensionCreateRequested
 import io.hamal.lib.domain.request.ExtensionUpdateRequested
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AuthId
+import io.hamal.lib.domain.vo.CodeId
+import io.hamal.lib.domain.vo.ExtensionId
+import io.hamal.lib.domain.vo.ExtensionName.Companion.ExtensionName
+import io.hamal.lib.domain.vo.RequestId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -19,7 +24,7 @@ internal class ExtensionUpdateHandlerTest : BaseRequestHandlerTest() {
         updateHandler(submittedUpdateExtensionReq)
 
         assertThat(extensionQueryRepository.get(ExtensionId(1234)).name, equalTo(ExtensionName("UpdateExtension")))
-        assertThat(codeQueryRepository.get(CodeId(1)).value, equalTo(CodeValue("40 + 2")))
+        assertThat(codeQueryRepository.get(CodeId(1)).value, equalTo(ValueCode("40 + 2")))
     }
 
     private val submitCreateExtensionReq by lazy {
@@ -31,7 +36,7 @@ internal class ExtensionUpdateHandlerTest : BaseRequestHandlerTest() {
             id = ExtensionId(1234),
             name = ExtensionName("TestExtension"),
             codeId = CodeId(1),
-            code = CodeValue("x='hamal'")
+            code = ValueCode("x='hamal'")
         )
     }
 
@@ -43,7 +48,7 @@ internal class ExtensionUpdateHandlerTest : BaseRequestHandlerTest() {
             workspaceId = testWorkspace.id,
             id = ExtensionId(1234),
             name = ExtensionName("UpdateExtension"),
-            code = CodeValue("40 + 2")
+            code = ValueCode("40 + 2")
         )
     }
 

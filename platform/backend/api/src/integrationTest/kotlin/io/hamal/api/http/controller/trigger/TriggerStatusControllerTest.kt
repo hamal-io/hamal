@@ -3,9 +3,9 @@ package io.hamal.api.http.controller.trigger
 
 import io.hamal.lib.domain._enum.TriggerStatus.Active
 import io.hamal.lib.domain._enum.TriggerStatus.Inactive
-import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.domain.vo.TriggerName
+import io.hamal.lib.domain.vo.TriggerName.Companion.TriggerName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.sdk.api.ApiError

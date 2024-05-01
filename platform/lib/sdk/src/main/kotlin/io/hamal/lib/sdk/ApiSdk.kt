@@ -49,7 +49,7 @@ class ApiSdkImpl : ApiSdk {
             headerFactory = {
                 this["accept"] = "application/json"
                 this["authorization"] = "Bearer ${token.value}"
-                this["x-exec-token"] = execToken.value
+                this["x-exec-token"] = execToken.stringValue
             },
             serdeFactory = JsonHttpSerdeFactory(json)
         )

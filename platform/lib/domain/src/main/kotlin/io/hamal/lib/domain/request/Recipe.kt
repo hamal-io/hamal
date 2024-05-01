@@ -1,12 +1,13 @@
 package io.hamal.lib.domain.request
 
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.*
 
 interface RecipeCreateRequest {
     val name: RecipeName
     val inputs: RecipeInputs
-    val value: CodeValue
+    val value: ValueCode
     val description: RecipeDescription?
 }
 
@@ -18,7 +19,7 @@ data class RecipeCreateRequested(
     val creatorId: AccountId,
     val name: RecipeName,
     val inputs: RecipeInputs,
-    val value: CodeValue,
+    val value: ValueCode,
     val description: RecipeDescription?
 ) : Requested()
 
@@ -26,7 +27,7 @@ data class RecipeCreateRequested(
 interface RecipeUpdateRequest {
     val name: RecipeName?
     val inputs: RecipeInputs?
-    val value: CodeValue?
+    val value: ValueCode?
     val description: RecipeDescription?
 }
 
@@ -37,6 +38,6 @@ data class RecipeUpdateRequested(
     val id: RecipeId,
     val name: RecipeName?,
     val inputs: RecipeInputs?,
-    val value: CodeValue?,
+    val value: ValueCode?,
     val description: RecipeDescription?
 ) : Requested()

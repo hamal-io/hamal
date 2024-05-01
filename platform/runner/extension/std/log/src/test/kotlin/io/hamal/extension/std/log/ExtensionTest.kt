@@ -2,7 +2,7 @@ package io.hamal.extension.std.log
 
 import io.hamal.lib.domain._enum.ExecLogLevel.*
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.ExecLogMessage
+import io.hamal.lib.domain.vo.ExecLogMessage.Companion.ExecLogMessage
 import io.hamal.lib.sdk.api.ApiExecLogAppendRequest
 import io.hamal.lib.sdk.api.ApiExecLogService
 import io.hamal.plugin.std.log.PluginLogFactory

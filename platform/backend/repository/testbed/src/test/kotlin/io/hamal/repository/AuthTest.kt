@@ -6,6 +6,10 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
+import io.hamal.lib.domain.vo.Email.Companion.Email
+import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
+import io.hamal.lib.domain.vo.PasswordHash.Companion.PasswordHash
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.AuthCmdRepository.*
 import io.hamal.repository.api.AuthQueryRepository.AuthQuery

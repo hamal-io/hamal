@@ -4,6 +4,7 @@ import io.hamal.lib.common.value.ValueBoolean
 import io.hamal.lib.common.value.ValueDecimal
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.nodes.NodeId
+import io.hamal.lib.nodes.control.ControlType.Companion.ControlType
 
 sealed interface ControlConstant : Control
 

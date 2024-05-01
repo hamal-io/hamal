@@ -30,7 +30,7 @@ internal sealed class TopicBaseControllerTest : BaseControllerTest() {
         names: List<TopicName> = listOf()
     ): ApiTopicList {
         val listTopicsResponse = httpTemplate.get("/v1/topics")
-            .parameter("names", names.joinToString(",") { it.value })
+            .parameter("names", names.joinToString(",") { it.stringValue })
             .execute()
 
         assertThat(listTopicsResponse.statusCode, equalTo(Ok))

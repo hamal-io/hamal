@@ -1,10 +1,10 @@
 package io.hamal.plugin.std.sys.func
 
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain._enum.CodeType
-import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.domain.vo.NamespaceId
@@ -32,7 +32,7 @@ class FuncCreateFunction(
                 ApiFuncCreateRequest(
                     name = FuncName(arg1.getString("name")),
                     inputs = FuncInputs(),
-                    code = CodeValue(arg1.getString("code").stringValue),
+                    code = ValueCode(arg1.getString("code").stringValue),
                     codeType = CodeType.Lua54
                 )
             )

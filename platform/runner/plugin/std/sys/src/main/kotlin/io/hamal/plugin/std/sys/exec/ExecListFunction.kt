@@ -1,5 +1,8 @@
 package io.hamal.plugin.std.sys.exec
 
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueNil
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.kua.function.Function1In2Out
@@ -11,9 +14,6 @@ import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.kua.value.findTable
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiExecService
-import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueNil
-import io.hamal.lib.common.value.ValueString
 
 class ExecListFunction(
     private val sdk: ApiSdk
@@ -42,7 +42,7 @@ class ExecListFunction(
                     ctx.tableCreate(
                         "id" to ValueString(exec.id.value.value.toString(16)),
                         "status" to ValueString(exec.status.toString()),
-                        "correlation_id" to (exec.correlation?.value?.let(::ValueString) ?: ValueNil)
+                        "correlation_id" to (exec.correlation?.value ?: ValueNil)
                     )
                 }
             )

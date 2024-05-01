@@ -35,7 +35,7 @@ class FuncListFunction(
                         "id" to ValueString(func.id.value.value.toString(16)),
                         "namespace" to ctx.tableCreate(
                             "id" to ValueString(func.namespace.id.value.value.toString(16)),
-                            "name" to ValueString(func.namespace.name.value)
+                            "name" to func.namespace.name
                         ),
                         "name" to func.name.value,
                     )

@@ -4,7 +4,6 @@ package io.hamal.lib.sqlite
 
 import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.domain.ValueObjectId
-import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TokenizerUtils
 import io.hamal.lib.common.value.ValueVariableString
@@ -27,7 +26,6 @@ interface NamedPreparedStatement<STATEMENT> : AutoCloseable {
     operator fun set(parameter: String, value: String): STATEMENT
     operator fun set(parameter: String, value: SnowflakeId): STATEMENT
     operator fun set(parameter: String, value: ValueObjectId): STATEMENT
-    operator fun set(parameter: String, value: ValueObjectString): STATEMENT
     operator fun set(parameter: String, value: ValueVariableString): STATEMENT
     operator fun set(parameter: String, value: ByteArray): STATEMENT
     fun execute(): NamedResultSet?
@@ -98,12 +96,6 @@ class DefaultNamedPreparedStatement(
     override fun set(parameter: String, value: ValueObjectId): DefaultNamedPreparedStatement {
         parametersSet.add(parameter)
         parseResult.parameterIndexesOf(parameter).forEach { delegate.setLong(it, value.value.value) }
-        return this
-    }
-
-    override fun set(parameter: String, value: ValueObjectString): DefaultNamedPreparedStatement {
-        parametersSet.add(parameter)
-        parseResult.parameterIndexesOf(parameter).forEach { delegate.setString(it, value.value) }
         return this
     }
 

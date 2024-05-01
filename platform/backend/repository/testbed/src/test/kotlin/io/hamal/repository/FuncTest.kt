@@ -5,6 +5,7 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.DeployMessage.Companion.DeployMessage
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.*

@@ -1,6 +1,8 @@
 package io.hamal.plugin.std.sys.recipe
 
-import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.RecipeId
 import io.hamal.lib.domain.vo.RecipeInputs
 import io.hamal.lib.domain.vo.RecipeName
@@ -13,8 +15,6 @@ import io.hamal.lib.kua.value.findString
 import io.hamal.lib.kua.value.getString
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiRecipeUpdateRequest
-import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueString
 
 class RecipeUpdateFunction(
     private val sdk: ApiSdk
@@ -28,9 +28,9 @@ class RecipeUpdateFunction(
             val res = sdk.recipe.update(
                 RecipeId(arg1.getString("id").stringValue),
                 ApiRecipeUpdateRequest(
-                    name = arg1.findString("name")?.let { RecipeName(it.stringValue) },
+                    name = arg1.findString("name")?.let { RecipeName(it) },
                     inputs = RecipeInputs(),
-                    value = arg1.findString("value")?.let { CodeValue(it.stringValue) }
+                    value = arg1.findString("value")?.let { ValueCode(it.stringValue) }
                 )
             )
 

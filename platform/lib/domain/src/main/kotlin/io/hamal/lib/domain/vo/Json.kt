@@ -8,37 +8,77 @@ import io.hamal.lib.domain.State
 
 object ValueVariableJsonModule : HotModule() {
     init {
+
+        this[Email::class] = JsonAdapters.String(::Email)
+        this[Web3Address::class] = JsonAdapters.String(::Web3Address)
+        this[Web3Challenge::class] = JsonAdapters.String(::Web3Challenge)
+        this[Web3Signature::class] = JsonAdapters.String(::Web3Signature)
+
+        this[AuthToken::class] = JsonAdapters.String(::AuthToken)
+        this[Password::class] = JsonAdapters.String(::Password)
+        this[PasswordHash::class] = JsonAdapters.String(::PasswordHash)
+        this[PasswordSalt::class] = JsonAdapters.String(::PasswordSalt)
+
+        this[RecipeName::class] = JsonAdapters.String(::RecipeName)
+        this[RecipeDescription::class] = JsonAdapters.String(::RecipeDescription)
+
+
+        this[CorrelationId::class] = JsonAdapters.String(::CorrelationId)
+
+        this[CronPattern::class] = JsonAdapters.String(::CronPattern)
+
+        this[ExecType::class] = JsonAdapters.String(::ExecType)
+        this[ExecToken::class] = JsonAdapters.String(::ExecToken)
+        this[ExecLogMessage::class] = JsonAdapters.String(::ExecLogMessage)
+
+
+        this[ExtensionName::class] = JsonAdapters.String(::ExtensionName)
+
+        this[FeedbackMessage::class] = JsonAdapters.String(::FeedbackMessage)
+
+        this[NamespaceName::class] = JsonAdapters.String(::NamespaceName)
+
         this[FuncName::class] = JsonAdapters.String(::FuncName)
+
+        this[DeployMessage::class] = JsonAdapters.String(::DeployMessage)
+
+        this[WorkspaceName::class] = JsonAdapters.String(::WorkspaceName)
+
+        this[RequestClass::class] = JsonAdapters.String(::RequestClass)
+
+        this[TopicName::class] = JsonAdapters.String(::TopicName)
+
+        this[TriggerDuration::class] = JsonAdapters.String(::TriggerDuration)
+        this[TriggerName::class] = JsonAdapters.String(::TriggerName)
     }
 }
 
 object ValueObjectJsonModule : HotModule() {
     init {
         this[AccountId::class] = ValueObjectIdAdapter(::AccountId)
-        this[Email::class] = ValueObjectStringAdapter(::Email)
-        this[Web3Address::class] = ValueObjectStringAdapter(::Web3Address)
-        this[Web3Challenge::class] = ValueObjectStringAdapter(::Web3Challenge)
-        this[Web3Signature::class] = ValueObjectStringAdapter(::Web3Signature)
+        this[Email::class] = JsonAdapters.String(::Email)
+        this[Web3Address::class] = JsonAdapters.String(::Web3Address)
+        this[Web3Challenge::class] = JsonAdapters.String(::Web3Challenge)
+        this[Web3Signature::class] = JsonAdapters.String(::Web3Signature)
 
         this[AuthId::class] = ValueObjectIdAdapter(::AuthId)
-        this[AuthToken::class] = ValueObjectStringAdapter(::AuthToken)
-        this[Password::class] = ValueObjectStringAdapter(::Password)
-        this[PasswordHash::class] = ValueObjectStringAdapter(::PasswordHash)
-        this[PasswordSalt::class] = ValueObjectStringAdapter(::PasswordSalt)
+        this[AuthToken::class] = JsonAdapters.String(::AuthToken)
+        this[Password::class] = JsonAdapters.String(::Password)
+        this[PasswordHash::class] = JsonAdapters.String(::PasswordHash)
+        this[PasswordSalt::class] = JsonAdapters.String(::PasswordSalt)
 
         this[RecipeId::class] = ValueObjectIdAdapter(::RecipeId)
-        this[RecipeName::class] = ValueObjectStringAdapter(::RecipeName)
+        this[RecipeName::class] = JsonAdapters.String(::RecipeName)
         this[RecipeInputs::class] = ValueObjectHotObjectAdapter(::RecipeInputs)
-        this[RecipeDescription::class] = ValueObjectStringAdapter(::RecipeDescription)
+        this[RecipeDescription::class] = JsonAdapters.String(::RecipeDescription)
 
         this[CmdId::class] = ValueObjectIdAdapter(::CmdId)
         this[CodeId::class] = ValueObjectIdAdapter(::CodeId)
-        this[CodeValue::class] = ValueObjectStringAdapter(::CodeValue)
         this[CodeVersion::class] = ValueObjectIntAdapter(::CodeVersion)
 
-        this[CorrelationId::class] = ValueObjectStringAdapter(::CorrelationId)
+        this[CorrelationId::class] = JsonAdapters.String(::CorrelationId)
 
-        this[CronPattern::class] = ValueObjectStringAdapter(::CronPattern)
+        this[CronPattern::class] = JsonAdapters.String(::CronPattern)
 
         this[EndpointHeaders::class] = ValueObjectHotObjectAdapter(::EndpointHeaders)
         this[EndpointParameters::class] = ValueObjectHotObjectAdapter(::EndpointParameters)
@@ -47,35 +87,35 @@ object ValueObjectJsonModule : HotModule() {
         this[EventPayload::class] = ValueObjectHotObjectAdapter(::EventPayload)
 
         this[ExecId::class] = ValueObjectIdAdapter(::ExecId)
-        this[ExecType::class] = ValueObjectStringAdapter(::ExecType)
+        this[ExecType::class] = JsonAdapters.String(::ExecType)
         this[ExecInputs::class] = ValueObjectHotObjectAdapter(::ExecInputs)
         this[ExecResult::class] = ValueObjectHotObjectAdapter(::ExecResult)
         this[ExecState::class] = ValueObjectHotObjectAdapter(::ExecState)
-        this[ExecToken::class] = ValueObjectStringAdapter(::ExecToken)
+        this[ExecToken::class] = JsonAdapters.String(::ExecToken)
         this[ExecLogId::class] = ValueObjectIdAdapter(::ExecLogId)
         this[ExecLogTimestamp::class] = ValueObjectInstantAdapter(::ExecLogTimestamp)
-        this[ExecLogMessage::class] = ValueObjectStringAdapter(::ExecLogMessage)
+        this[ExecLogMessage::class] = JsonAdapters.String(::ExecLogMessage)
 
         this[ExpiresAt::class] = ValueObjectInstantAdapter(::ExpiresAt)
 
         this[ExtensionId::class] = ValueObjectIdAdapter(::ExtensionId)
-        this[ExtensionName::class] = ValueObjectStringAdapter(::ExtensionName)
+        this[ExtensionName::class] = JsonAdapters.String(::ExtensionName)
 
         this[FeedbackId::class] = ValueObjectIdAdapter(::FeedbackId)
-        this[FeedbackMessage::class] = ValueObjectStringAdapter(::FeedbackMessage)
+        this[FeedbackMessage::class] = JsonAdapters.String(::FeedbackMessage)
 
         this[NamespaceId::class] = ValueObjectIdAdapter(::NamespaceId)
-        this[NamespaceName::class] = ValueObjectStringAdapter(::NamespaceName)
+        this[NamespaceName::class] = JsonAdapters.String(::NamespaceName)
         this[NamespaceFeatures::class] = ValueObjectHotObjectAdapter(::NamespaceFeatures)
 
         this[FuncId::class] = ValueObjectIdAdapter(::FuncId)
 
         this[FuncInputs::class] = ValueObjectHotObjectAdapter(::FuncInputs)
-        this[DeployMessage::class] = ValueObjectStringAdapter(::DeployMessage)
+        this[DeployMessage::class] = JsonAdapters.String(::DeployMessage)
         this[DeployedAt::class] = ValueObjectInstantAdapter(::DeployedAt)
 
         this[WorkspaceId::class] = ValueObjectIdAdapter(::WorkspaceId)
-        this[WorkspaceName::class] = ValueObjectStringAdapter(::WorkspaceName)
+        this[WorkspaceName::class] = JsonAdapters.String(::WorkspaceName)
 
         this[HookHeaders::class] = ValueObjectHotObjectAdapter(::HookHeaders)
         this[HookParameters::class] = ValueObjectHotObjectAdapter(::HookParameters)
@@ -87,20 +127,20 @@ object ValueObjectJsonModule : HotModule() {
         this[Count::class] = ValueObjectLongAdapter(::Count)
 
         this[RequestId::class] = ValueObjectIdAdapter(::RequestId)
-        this[RequestClass::class] = ValueObjectStringAdapter(::RequestClass)
+        this[RequestClass::class] = JsonAdapters.String(::RequestClass)
 
         this[RunnerId::class] = ValueObjectIdAdapter(::RunnerId)
         this[RunnerEnv::class] = ValueObjectHotObjectAdapter(::RunnerEnv)
 
         this[State::class] = ValueObjectHotObjectAdapter(::State)
         this[TopicId::class] = ValueObjectIdAdapter(::TopicId)
-        this[TopicName::class] = ValueObjectStringAdapter(::TopicName)
+        this[TopicName::class] = JsonAdapters.String(::TopicName)
         this[TopicEventId::class] = ValueObjectIdAdapter(::TopicEventId)
         this[TopicEventPayload::class] = ValueObjectHotObjectAdapter(::TopicEventPayload)
 
-        this[TriggerDuration::class] = ValueObjectStringAdapter(::TriggerDuration)
+        this[TriggerDuration::class] = JsonAdapters.String(::TriggerDuration)
         this[TriggerId::class] = ValueObjectIdAdapter(::TriggerId)
-        this[TriggerName::class] = ValueObjectStringAdapter(::TriggerName)
+        this[TriggerName::class] = JsonAdapters.String(::TriggerName)
         this[TriggerInputs::class] = ValueObjectHotObjectAdapter(::TriggerInputs)
     }
 }

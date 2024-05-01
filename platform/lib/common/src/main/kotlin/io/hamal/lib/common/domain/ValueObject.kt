@@ -42,8 +42,6 @@ abstract class ValueObjectId : ValueObject.ComparableImpl<SnowflakeId>() {
     }
 }
 
-abstract class ValueObjectString : ValueObject.ComparableImpl<String>()
-
 abstract class ValueObjectInt : ValueObject.ComparableImpl<Int>()
 
 abstract class ValueObjectLong : ValueObject.ComparableImpl<Long>()

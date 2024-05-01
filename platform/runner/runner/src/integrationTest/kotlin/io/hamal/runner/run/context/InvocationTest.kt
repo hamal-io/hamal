@@ -3,15 +3,18 @@ package io.hamal.runner.run.context
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.hot.HotString
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.Event
 import io.hamal.lib.domain.EventTopic
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.toHot
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
+import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.common.value.ValueString
 import io.hamal.runner.connector.UnitOfWork
 import io.hamal.runner.run.AbstractExecuteTest
 import org.hamcrest.MatcherAssert.assertThat
@@ -31,7 +34,7 @@ internal object EventInvocationTest : AbstractExecuteTest() {
                 workspaceId = WorkspaceId(5432),
                 inputs = ExecInputs(HotObject.builder().set("events", events.toHot()).build()),
                 state = State(),
-                code = CodeValue(
+                code = ValueCode(
                     """
                     assert( context.exec.hook == nil )
                     assert( context.exec.events ~= nil )
@@ -67,7 +70,7 @@ internal object EventInvocationTest : AbstractExecuteTest() {
                 workspaceId = WorkspaceId(5432),
                 inputs = ExecInputs(HotObject.builder().set("events", events.toHot()).build()),
                 state = State(),
-                code = CodeValue("require_plugin('test').fn()"),
+                code = ValueCode("require_plugin('test').fn()"),
                 codeType = CodeType.Lua54
             )
         )
@@ -121,7 +124,7 @@ internal object HookInvocationTest : AbstractExecuteTest() {
                     ).build()
                 ),
                 state = State(),
-                code = CodeValue(
+                code = ValueCode(
                     """
                     assert( context.exec.events == nil )
                     assert( context.exec.hook ~= nil )
@@ -168,7 +171,7 @@ internal object HookInvocationTest : AbstractExecuteTest() {
                     ).build()
                 ),
                 state = State(),
-                code = CodeValue("require_plugin('test').fn()"),
+                code = ValueCode("require_plugin('test').fn()"),
                 codeType = CodeType.Lua54
             )
         )
@@ -217,7 +220,7 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
                     ).build()
                 ),
                 state = State(),
-                code = CodeValue(
+                code = ValueCode(
                     """
                     assert( context.exec.events == nil )
                     assert( context.exec.endpoint ~= nil )
@@ -264,7 +267,7 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
                     ).build()
                 ),
                 state = State(),
-                code = CodeValue("require_plugin('test').fn()"),
+                code = ValueCode("require_plugin('test').fn()"),
                 codeType = CodeType.Lua54
             )
         )

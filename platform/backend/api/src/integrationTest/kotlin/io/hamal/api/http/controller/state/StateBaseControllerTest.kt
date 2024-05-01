@@ -1,6 +1,7 @@
 package io.hamal.api.http.controller.state
 
 import io.hamal.api.http.controller.BaseControllerTest
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain._enum.CodeType
@@ -26,7 +27,7 @@ internal sealed class StateBaseControllerTest : BaseControllerTest() {
                 ApiFuncCreateRequest(
                     name = name,
                     inputs = FuncInputs(),
-                    code = CodeValue(""),
+                    code = ValueCode(""),
                     codeType = CodeType.Lua54
                 )
             )
@@ -58,7 +59,7 @@ internal sealed class StateBaseControllerTest : BaseControllerTest() {
     fun getState(funcId: FuncId, correlationId: CorrelationId): ApiCorrelatedState {
         val response = httpTemplate.get("/v1/funcs/{funcId}/states/{correlationId}")
             .path("funcId", funcId)
-            .path("correlationId", correlationId.value)
+            .path("correlationId", correlationId.stringValue)
             .execute()
         assertThat(response.statusCode, equalTo(Ok))
         require(response is HttpSuccessResponse) { "request was not successful" }
@@ -69,7 +70,7 @@ internal sealed class StateBaseControllerTest : BaseControllerTest() {
     fun setState(correlatedState: CorrelatedState): ApiStateSetRequested {
         val response = httpTemplate.put("/v1/funcs/{funcId}/states/{correlationId}")
             .path("funcId", correlatedState.correlation.funcId)
-            .path("correlationId", correlatedState.correlation.id.value)
+            .path("correlationId", correlatedState.correlation.id.stringValue)
             .body(correlatedState.value)
             .execute()
 

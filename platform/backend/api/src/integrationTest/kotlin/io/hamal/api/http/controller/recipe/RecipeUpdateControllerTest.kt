@@ -1,10 +1,11 @@
 package io.hamal.api.http.controller.recipe
 
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.vo.RecipeDescription
+import io.hamal.lib.domain.vo.RecipeDescription.Companion.RecipeDescription
 import io.hamal.lib.domain.vo.RecipeInputs
-import io.hamal.lib.domain.vo.RecipeName
+import io.hamal.lib.domain.vo.RecipeName.Companion.RecipeName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.HttpSuccessResponse
@@ -25,7 +26,7 @@ internal class RecipeUpdateControllerTest : RecipeBaseControllerTest() {
             createRecipe(
                 ApiRecipeCreateRequest(
                     name = RecipeName("TestRecipe"),
-                    value = CodeValue("40 + 2"),
+                    value = ValueCode("40 + 2"),
                     inputs = RecipeInputs()
                 )
             )
@@ -36,7 +37,7 @@ internal class RecipeUpdateControllerTest : RecipeBaseControllerTest() {
             .body(
                 ApiRecipeUpdateRequest(
                     name = RecipeName("Other"),
-                    value = CodeValue("1 + 1"),
+                    value = ValueCode("1 + 1"),
                     inputs = RecipeInputs(HotObject.builder().set("hamal", "createdInputs").build()),
                     description = RecipeDescription("updated description")
                 )
@@ -53,7 +54,7 @@ internal class RecipeUpdateControllerTest : RecipeBaseControllerTest() {
         with(getRecipe(recipeId)) {
             assertThat(id, equalTo(recipeId))
             assertThat(name, equalTo(RecipeName("Other")))
-            assertThat(value, equalTo(CodeValue("1 + 1")))
+            assertThat(value, equalTo(ValueCode("1 + 1")))
             assertThat(inputs, equalTo(RecipeInputs(HotObject.builder().set("hamal", "createdInputs").build())))
             assertThat(description, equalTo(RecipeDescription("updated description")))
         }
@@ -65,7 +66,7 @@ internal class RecipeUpdateControllerTest : RecipeBaseControllerTest() {
             createRecipe(
                 ApiRecipeCreateRequest(
                     name = RecipeName("TestRecipe"),
-                    value = CodeValue("40 + 2"),
+                    value = ValueCode("40 + 2"),
                     inputs = RecipeInputs(HotObject.builder().set("hamal", "createdInputs").build())
                 )
             )
@@ -93,7 +94,7 @@ internal class RecipeUpdateControllerTest : RecipeBaseControllerTest() {
         with(getRecipe(bpId)) {
             assertThat(id, equalTo(bpId))
             assertThat(name, equalTo(RecipeName("TestRecipe")))
-            assertThat(value, equalTo(CodeValue("40 + 2")))
+            assertThat(value, equalTo(ValueCode("40 + 2")))
             assertThat(inputs, equalTo(RecipeInputs(HotObject.builder().set("hamal", "createdInputs").build())))
             assertThat(description, equalTo(RecipeDescription.empty))
         }
@@ -106,7 +107,7 @@ internal class RecipeUpdateControllerTest : RecipeBaseControllerTest() {
             .body(
                 ApiRecipeUpdateRequest(
                     name = RecipeName("TestRecipe"),
-                    value = CodeValue("40 + 2"),
+                    value = ValueCode("40 + 2"),
                     inputs = RecipeInputs()
                 )
             )

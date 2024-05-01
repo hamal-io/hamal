@@ -6,7 +6,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.logger
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.AuthId
-import io.hamal.lib.domain.vo.ExecToken
+import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
 import io.hamal.repository.api.AuthCmdRepository.CreateExecTokenAuthCmd
 import io.hamal.repository.api.AuthRepository
 import io.hamal.repository.api.event.ExecPlannedEvent

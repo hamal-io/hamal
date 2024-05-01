@@ -1,6 +1,8 @@
 package io.hamal.plugin.std.sys.trigger
 
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.function.Function1In2Out
@@ -13,8 +15,6 @@ import io.hamal.lib.kua.value.getString
 import io.hamal.lib.kua.value.type
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiTriggerCreateReq
-import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueString
 
 class TriggerCreateFunction(
     private val sdk: ApiSdk
@@ -30,10 +30,10 @@ class TriggerCreateFunction(
                 ApiTriggerCreateReq(
                     type = TriggerType.valueOf(arg1.getString("type").stringValue),
                     funcId = FuncId(SnowflakeId(arg1.getString("func_id").stringValue)),
-                    name = TriggerName(arg1.getString("name").stringValue),
+                    name = TriggerName(arg1.getString("name")),
                     inputs = TriggerInputs(),
                     duration = if (arg1.type("duration") == ValueString::class) {
-                        TriggerDuration(arg1.getString("duration").stringValue)
+                        TriggerDuration(arg1.getString("duration"))
                     } else {
                         null
                     },
@@ -43,7 +43,7 @@ class TriggerCreateFunction(
                         null
                     },
                     cron = if (arg1.type("cron") == ValueString::class) {
-                        CronPattern(arg1.getString("cron").stringValue)
+                        CronPattern(arg1.getString("cron"))
                     } else {
                         null
                     }

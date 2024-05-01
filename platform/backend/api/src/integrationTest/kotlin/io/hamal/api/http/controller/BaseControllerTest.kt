@@ -4,7 +4,7 @@ import io.hamal.api.BaseTest
 import io.hamal.lib.domain._enum.RequestStatus.Completed
 import io.hamal.lib.domain._enum.RequestStatus.Failed
 import io.hamal.lib.domain.request.Requested
-import io.hamal.lib.domain.vo.AuthToken
+import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.sdk.ApiSdkImpl

@@ -1,5 +1,8 @@
 package io.hamal.plugin.std.sys.func
 
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueNumber
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.DeployMessage
 import io.hamal.lib.domain.vo.FuncId
@@ -13,9 +16,6 @@ import io.hamal.lib.kua.value.getString
 import io.hamal.lib.kua.value.type
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiFuncDeployRequest
-import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueNumber
-import io.hamal.lib.common.value.ValueString
 
 class FuncDeployFunction(
     private val sdk: ApiSdk
@@ -28,7 +28,7 @@ class FuncDeployFunction(
 
             val funcId = FuncId(arg1.getString("id").stringValue)
             val message = if (arg1.type("message") == ValueString::class) {
-                DeployMessage(arg1.getString("message").stringValue)
+                DeployMessage(arg1.getString("message"))
             } else {
                 null
             }

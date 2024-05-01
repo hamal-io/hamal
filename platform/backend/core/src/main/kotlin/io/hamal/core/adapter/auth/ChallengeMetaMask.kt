@@ -3,6 +3,7 @@ package io.hamal.core.adapter.auth
 import io.hamal.lib.domain.request.AuthChallengeMetaMaskRequest
 import io.hamal.lib.domain.vo.Web3Address
 import io.hamal.lib.domain.vo.Web3Challenge
+import io.hamal.lib.domain.vo.Web3Challenge.Companion.Web3Challenge
 import org.springframework.stereotype.Component
 
 fun interface AuthChallengeMetaMaskPort {
@@ -16,6 +17,6 @@ class AuthChallengeMetaMaskAdapter : AuthChallengeMetaMaskPort {
 
 object ChallengeMetaMask {
     operator fun invoke(address: Web3Address) = Web3Challenge(
-        "Please sign this message to login: ${address.value.substring(2, 10).lowercase()}"
+        "Please sign this message to login: ${address.stringValue.substring(2, 10).lowercase()}"
     )
 }

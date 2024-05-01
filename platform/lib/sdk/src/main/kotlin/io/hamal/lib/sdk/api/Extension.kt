@@ -1,5 +1,6 @@
 package io.hamal.lib.sdk.api
 
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.ExtensionCreateRequest
 import io.hamal.lib.domain.request.ExtensionUpdateRequest
@@ -16,7 +17,7 @@ data class ApiExtension(
     data class Code(
         val id: CodeId,
         val version: CodeVersion,
-        val value: CodeValue
+        val value: ValueCode
     )
 }
 
@@ -31,7 +32,7 @@ data class ApiExtensionList(
 
 data class ApiExtensionCreateRequest(
     override val name: ExtensionName,
-    override val code: CodeValue
+    override val code: ValueCode
 ) : ExtensionCreateRequest
 
 data class ApiExtensionCreateRequested(
@@ -43,7 +44,7 @@ data class ApiExtensionCreateRequested(
 
 data class ApiExtensionUpdateRequest(
     override val name: ExtensionName? = null,
-    override val code: CodeValue? = null
+    override val code: ValueCode? = null
 ) : ExtensionUpdateRequest
 
 data class ApiExtensionUpdateRequested(

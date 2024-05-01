@@ -1,12 +1,13 @@
 package io.hamal.lib.nodes.generator
 
-import io.hamal.lib.nodes.Node
-import io.hamal.lib.nodes.NodeType
-import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.common.value.Type
 import io.hamal.lib.common.value.TypeDecimal
 import io.hamal.lib.common.value.TypeNumber
 import io.hamal.lib.common.value.TypeString
+import io.hamal.lib.nodes.Node
+import io.hamal.lib.nodes.NodeType
+import io.hamal.lib.nodes.NodeType.Companion.NodeType
+import io.hamal.lib.nodes.control.Control
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test

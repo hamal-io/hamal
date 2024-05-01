@@ -2,7 +2,11 @@ package io.hamal.repository.sqlite
 
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain._enum.ExecLogLevel
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecLogId
+import io.hamal.lib.domain.vo.ExecLogMessage.Companion.ExecLogMessage
+import io.hamal.lib.domain.vo.ExecLogTimestamp
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.NamedResultSet
 import io.hamal.lib.sqlite.SqliteBaseRepository
@@ -53,7 +57,7 @@ class ExecLogSqliteRepository(
                 set("id", cmd.execLogId)
                 set("exec_id", cmd.execId)
                 set("workspace_id", cmd.workspaceId)
-                set("message", cmd.message.value)
+                set("message", cmd.message)
                 set("level", cmd.level.value)
                 set("timestamp", cmd.timestamp.value.toEpochMilli())
             }

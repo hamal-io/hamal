@@ -3,9 +3,9 @@ package io.hamal.repository
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.CodeId
-import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.repository.api.Code
@@ -33,7 +33,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                     id = CmdId(1),
                     codeId = CodeId(123),
                     workspaceId = WorkspaceId(1),
-                    value = CodeValue("40 + 2")
+                    value = ValueCode("40 + 2")
                 )
             )
 
@@ -41,7 +41,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(CodeId(123)))
                 assertThat(workspaceId, equalTo(WorkspaceId(1)))
                 assertThat(version, equalTo(CodeVersion(1)))
-                assertThat(value, equalTo(CodeValue("40 + 2")))
+                assertThat(value, equalTo(ValueCode("40 + 2")))
                 assertThat(type, equalTo(CodeType.Lua54))
             }
         }
@@ -51,13 +51,13 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             createCode(
                 codeId = CodeId(1),
                 workspaceId = WorkspaceId(1),
-                codeValue = CodeValue("40 + 2")
+                ValueCode = ValueCode("40 + 2")
             )
 
             createCode(
                 codeId = CodeId(2),
                 workspaceId = WorkspaceId(1),
-                codeValue = CodeValue("40 + 2")
+                ValueCode = ValueCode("40 + 2")
             )
 
             verifyCount(2)
@@ -65,7 +65,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             with(get(CodeId(1))) {
                 assertThat(id, equalTo(CodeId(1)))
                 assertThat(version, equalTo(CodeVersion(1)))
-                assertThat(value, equalTo(CodeValue("40 + 2")))
+                assertThat(value, equalTo(ValueCode("40 + 2")))
                 assertThat(type, equalTo(CodeType.Lua54))
 
             }
@@ -73,7 +73,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             with(get(CodeId(2))) {
                 assertThat(id, equalTo(CodeId(2)))
                 assertThat(version, equalTo(CodeVersion(1)))
-                assertThat(value, equalTo(CodeValue("40 + 2")))
+                assertThat(value, equalTo(ValueCode("40 + 2")))
                 assertThat(type, equalTo(CodeType.Lua54))
             }
         }
@@ -87,16 +87,16 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             createCode(
                 codeId = CodeId(1),
                 workspaceId = WorkspaceId(1),
-                codeValue = CodeValue("8 + 8")
+                ValueCode = ValueCode("8 + 8")
             )
 
-            val result = update(CodeId(1), UpdateCmd(CmdId(2), CodeValue("40 + 2")))
+            val result = update(CodeId(1), UpdateCmd(CmdId(2), ValueCode("40 + 2")))
 
             with(result) {
                 assertThat(id, equalTo(CodeId(1)))
                 assertThat(workspaceId, equalTo(WorkspaceId(1)))
                 assertThat(version, equalTo(CodeVersion(2)))
-                assertThat(value, equalTo(CodeValue("40 + 2")))
+                assertThat(value, equalTo(ValueCode("40 + 2")))
                 assertThat(type, equalTo(CodeType.Lua54))
             }
 
@@ -108,19 +108,19 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             createCode(
                 codeId = CodeId(1),
                 workspaceId = WorkspaceId(1),
-                codeValue = CodeValue("8 + 8")
+                ValueCode = ValueCode("8 + 8")
             )
 
             verifyCount(1)
 
             repeat(13) { iteration ->
-                val result = update(CodeId(1), UpdateCmd(CmdId(iteration + 2), CodeValue("40 + $iteration")))
+                val result = update(CodeId(1), UpdateCmd(CmdId(iteration + 2), ValueCode("40 + $iteration")))
 
                 with(result) {
                     assertThat(id, equalTo(CodeId(1)))
                     assertThat(workspaceId, equalTo(WorkspaceId(1)))
                     assertThat(version, equalTo(CodeVersion(iteration + 2)))
-                    assertThat(value, equalTo(CodeValue("40 + $iteration")))
+                    assertThat(value, equalTo(ValueCode("40 + $iteration")))
                     assertThat(type, equalTo(CodeType.Lua54))
 
                 }
@@ -143,14 +143,14 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             createCode(
                 codeId = CodeId(1),
                 workspaceId = WorkspaceId(3),
-                codeValue = CodeValue("1 + 1")
+                ValueCode = ValueCode("1 + 1")
 
             )
 
             createCode(
                 codeId = CodeId(2),
                 workspaceId = WorkspaceId(3),
-                codeValue = CodeValue("2 + 2")
+                ValueCode = ValueCode("2 + 2")
             )
 
             clear()
@@ -165,14 +165,14 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             createCode(
                 codeId = CodeId(1),
                 workspaceId = WorkspaceId(3),
-                codeValue = CodeValue("1 + 1")
+                ValueCode = ValueCode("1 + 1")
             )
 
             with(get(CodeId(1))) {
                 assertThat(id, equalTo(CodeId(1)))
                 assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(version, equalTo(CodeVersion(1)))
-                assertThat(value, equalTo(CodeValue("1 + 1")))
+                assertThat(value, equalTo(ValueCode("1 + 1")))
                 assertThat(type, equalTo(CodeType.Lua54))
 
             }
@@ -183,26 +183,26 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             createCode(
                 codeId = CodeId(1),
                 workspaceId = WorkspaceId(3),
-                codeValue = CodeValue("created")
+                ValueCode = ValueCode("created")
             )
 
             repeat(10) { iteration ->
-                update(CodeId(1), UpdateCmd(CmdId(iteration + 2), CodeValue("1 + $iteration")))
+                update(CodeId(1), UpdateCmd(CmdId(iteration + 2), ValueCode("1 + $iteration")))
             }
 
             with(get(CodeId(1), CodeVersion(1))) {
                 assertThat(version, equalTo(CodeVersion(1)))
-                assertThat(value, equalTo(CodeValue("created")))
+                assertThat(value, equalTo(ValueCode("created")))
             }
 
             with(get(CodeId(1), CodeVersion(2))) {
                 assertThat(version, equalTo(CodeVersion(2)))
-                assertThat(value, equalTo(CodeValue("1 + 0")))
+                assertThat(value, equalTo(ValueCode("1 + 0")))
             }
 
             with(get(CodeId(1), CodeVersion(5))) {
                 assertThat(version, equalTo(CodeVersion(5)))
-                assertThat(value, equalTo(CodeValue("1 + 3")))
+                assertThat(value, equalTo(ValueCode("1 + 3")))
                 assertThat(type, equalTo(CodeType.Lua54))
             }
         }
@@ -212,7 +212,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             createCode(
                 codeId = CodeId(1),
                 workspaceId = WorkspaceId(3),
-                codeValue = CodeValue("1 + 1")
+                ValueCode = ValueCode("1 + 1")
             )
 
             val exception = assertThrows<NoSuchElementException> {
@@ -226,7 +226,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             createCode(
                 codeId = CodeId(1),
                 workspaceId = WorkspaceId(3),
-                codeValue = CodeValue("1 + 1")
+                ValueCode = ValueCode("1 + 1")
             )
 
             assertThat(
@@ -244,7 +244,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             createCode(
                 codeId = CodeId(1),
                 workspaceId = WorkspaceId(3),
-                codeValue = CodeValue("1 + 1")
+                ValueCode = ValueCode("1 + 1")
             )
             assertThat(
                 assertThrows<IllegalArgumentException> { get(CodeId(1), CodeVersion(-5)) }.message,
@@ -265,14 +265,14 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             createCode(
                 codeId = CodeId(1),
                 workspaceId = WorkspaceId(3),
-                codeValue = CodeValue("1 + 1")
+                ValueCode = ValueCode("1 + 1")
             )
 
             with(find(CodeId(1))!!) {
                 assertThat(id, equalTo(CodeId(1)))
                 assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(version, equalTo(CodeVersion(1)))
-                assertThat(value, equalTo(CodeValue("1 + 1")))
+                assertThat(value, equalTo(ValueCode("1 + 1")))
                 assertThat(type, equalTo(CodeType.Lua54))
             }
         }
@@ -282,28 +282,28 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             createCode(
                 codeId = CodeId(1),
                 workspaceId = WorkspaceId(3),
-                codeValue = CodeValue("created")
+                ValueCode = ValueCode("created")
             )
 
             repeat(10) { iteration ->
-                update(CodeId(1), UpdateCmd(CmdId(iteration + 2), CodeValue("1 + $iteration")))
+                update(CodeId(1), UpdateCmd(CmdId(iteration + 2), ValueCode("1 + $iteration")))
             }
 
             with(find(CodeId(1), CodeVersion(1))!!) {
                 assertThat(version, equalTo(CodeVersion(1)))
-                assertThat(value, equalTo(CodeValue("created")))
+                assertThat(value, equalTo(ValueCode("created")))
                 assertThat(type, equalTo(CodeType.Lua54))
             }
 
             with(find(CodeId(1), CodeVersion(2))!!) {
                 assertThat(version, equalTo(CodeVersion(2)))
-                assertThat(value, equalTo(CodeValue("1 + 0")))
+                assertThat(value, equalTo(ValueCode("1 + 0")))
                 assertThat(type, equalTo(CodeType.Lua54))
             }
 
             with(find(CodeId(1), CodeVersion(5))!!) {
                 assertThat(version, equalTo(CodeVersion(5)))
-                assertThat(value, equalTo(CodeValue("1 + 3")))
+                assertThat(value, equalTo(ValueCode("1 + 3")))
                 assertThat(type, equalTo(CodeType.Lua54))
             }
         }
@@ -313,7 +313,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             createCode(
                 codeId = CodeId(1),
                 workspaceId = WorkspaceId(3),
-                codeValue = CodeValue("1 + 1")
+                ValueCode = ValueCode("1 + 1")
             )
 
             val result = find(CodeId(111111))
@@ -326,7 +326,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             createCode(
                 codeId = CodeId(1),
                 workspaceId = WorkspaceId(3),
-                codeValue = CodeValue("1 + 1")
+                ValueCode = ValueCode("1 + 1")
             )
 
             assertThat(find(CodeId(1), CodeVersion(1000)), nullValue())
@@ -338,7 +338,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             createCode(
                 codeId = CodeId(1),
                 workspaceId = WorkspaceId(3),
-                codeValue = CodeValue("1 + 1")
+                ValueCode = ValueCode("1 + 1")
             )
             assertThat(
                 assertThrows<IllegalArgumentException> { get(CodeId(1), CodeVersion(-5)) }.message,
@@ -364,7 +364,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             with(result[0]) {
                 assertThat(id, equalTo(CodeId(3)))
                 assertThat(workspaceId, equalTo(WorkspaceId(4)))
-                assertThat(value, equalTo(CodeValue("1 + 3")))
+                assertThat(value, equalTo(ValueCode("1 + 3")))
                 assertThat(type, equalTo(CodeType.Lua54))
             }
         }
@@ -385,14 +385,14 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             with(result[0]) {
                 assertThat(id, equalTo(CodeId(4)))
                 assertThat(workspaceId, equalTo(WorkspaceId(5)))
-                assertThat(value, equalTo(CodeValue("1 + 4")))
+                assertThat(value, equalTo(ValueCode("1 + 4")))
                 assertThat(type, equalTo(CodeType.Lua54))
             }
 
             with(result[1]) {
                 assertThat(id, equalTo(CodeId(3)))
                 assertThat(workspaceId, equalTo(WorkspaceId(4)))
-                assertThat(value, equalTo(CodeValue("1 + 3")))
+                assertThat(value, equalTo(ValueCode("1 + 3")))
                 assertThat(type, equalTo(CodeType.Lua54))
             }
         }
@@ -402,22 +402,22 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             createCode(
                 codeId = CodeId(1),
                 workspaceId = WorkspaceId(3),
-                codeValue = CodeValue("1 + 1")
+                ValueCode = ValueCode("1 + 1")
             )
             createCode(
                 codeId = CodeId(2),
                 workspaceId = WorkspaceId(3),
-                codeValue = CodeValue("1 + 2")
+                ValueCode = ValueCode("1 + 2")
             )
             createCode(
                 codeId = CodeId(3),
                 workspaceId = WorkspaceId(4),
-                codeValue = CodeValue("1 + 3")
+                ValueCode = ValueCode("1 + 3")
             )
             createCode(
                 codeId = CodeId(4),
                 workspaceId = WorkspaceId(5),
-                codeValue = CodeValue("1 + 4")
+                ValueCode = ValueCode("1 + 4")
             )
         }
 
@@ -461,14 +461,14 @@ private fun CodeRepository.createCode(
     codeId: CodeId,
     workspaceId: WorkspaceId,
     cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10),
-    codeValue: CodeValue
+    ValueCode: ValueCode
 ): Code {
     return create(
         CreateCmd(
             id = cmdId,
             codeId = codeId,
             workspaceId = workspaceId,
-            value = codeValue
+            value = ValueCode
         )
     )
 }

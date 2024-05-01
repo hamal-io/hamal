@@ -1,13 +1,17 @@
 package io.hamal.lib.nodes.compiler
 
-import io.hamal.lib.nodes.*
+import io.hamal.lib.common.value.Type
+import io.hamal.lib.nodes.ControlTextArea
+import io.hamal.lib.nodes.NodeId
+import io.hamal.lib.nodes.NodeType.Companion.NodeType
+import io.hamal.lib.nodes.NodesGraph
+import io.hamal.lib.nodes.PortId
 import io.hamal.lib.nodes.compiler.ComputationGraph.Companion.ComputationGraph
 import io.hamal.lib.nodes.control.ControlInput
 import io.hamal.lib.nodes.control.ControlInvoke
-import io.hamal.lib.nodes.control.ControlType
+import io.hamal.lib.nodes.control.ControlType.Companion.ControlType
 import io.hamal.lib.nodes.generator.Generator
 import io.hamal.lib.nodes.generator.GeneratorRegistry
-import io.hamal.lib.common.value.Type
 
 class Compiler(
     private val generatorRegistry: GeneratorRegistry

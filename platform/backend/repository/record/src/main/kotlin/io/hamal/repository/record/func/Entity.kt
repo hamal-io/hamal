@@ -2,6 +2,7 @@ package io.hamal.repository.record.func
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.DeployMessage.Companion.DeployMessage
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCode
 import io.hamal.repository.api.FuncDeployment

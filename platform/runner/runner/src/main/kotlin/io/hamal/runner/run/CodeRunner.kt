@@ -3,6 +3,10 @@ package io.hamal.runner.run
 import io.hamal.lib.common.hot.HotNumber
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.logger
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueNil
+import io.hamal.lib.common.value.ValueNumber
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.AssertionError
@@ -15,10 +19,6 @@ import io.hamal.lib.kua.value.toHotObject
 import io.hamal.lib.nodes.NodesGraph
 import io.hamal.lib.nodes.compiler.Compiler
 import io.hamal.lib.nodes.json
-import io.hamal.lib.common.value.ValueCode
-import io.hamal.lib.common.value.ValueNil
-import io.hamal.lib.common.value.ValueNumber
-import io.hamal.lib.common.value.ValueString
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
@@ -80,12 +80,12 @@ class CodeRunnerImpl(
                         when (unitOfWork.codeType) {
                             CodeType.None -> TODO()
                             CodeType.Lua54 -> {
-                                sandbox.codeLoad(ValueCode(unitOfWork.code.value))
+                                sandbox.codeLoad(unitOfWork.code)
                             }
 
                             CodeType.Nodes -> {
                                 // FIXME load graph from code
-                                val graph = json.deserialize(NodesGraph::class, unitOfWork.code.value)
+                                val graph = json.deserialize(NodesGraph::class, unitOfWork.code.stringValue)
                                 val compiledCode = Compiler(sandbox.generatorRegistry).compile(graph)
                                 sandbox.codeLoad(ValueCode(compiledCode))
                             }

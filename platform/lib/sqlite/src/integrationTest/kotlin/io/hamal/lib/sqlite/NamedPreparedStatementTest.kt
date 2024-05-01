@@ -2,8 +2,9 @@ package io.hamal.lib.sqlite
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.ValueObjectId
-import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueVariableString
 import io.hamal.lib.sqlite.DefaultNamedPreparedStatement.Companion.prepare
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
@@ -277,13 +278,13 @@ class NamedPreparedStatementTest {
         }
 
         @Test
-        fun `Sets named parameter of type domain name`() {
-            class TestValueObjectString(override val value: String) : ValueObjectString()
+        fun `Sets named parameter of type value string`() {
+            class TestValueObjectString(override val value: ValueString) : ValueVariableString()
 
             connection.prepare("INSERT INTO domain_name_table(value, another_value) VALUES(:some_value, :another_value)")
                 .use {
-                    it["some_value"] = TestValueObjectString("hamal")
-                    it["another_value"] = TestValueObjectString("rocks")
+                    it["some_value"] = TestValueObjectString(ValueString("hamal"))
+                    it["another_value"] = TestValueObjectString(ValueString("rocks"))
                     it.execute()
                 }
             verifyIsOne("SELECT COUNT(*) FROM domain_name_table WHERE value = 'hamal'")

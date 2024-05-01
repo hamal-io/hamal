@@ -5,6 +5,7 @@ import io.hamal.lib.nodes.PortInput
 import io.hamal.lib.nodes.PortInputExtension
 import io.hamal.lib.common.value.ValueBoolean
 import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.nodes.control.ControlType.Companion.ControlType
 
 
 interface ControlExtensionInput : ControlExtension {

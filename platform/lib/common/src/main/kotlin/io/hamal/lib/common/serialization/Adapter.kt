@@ -62,20 +62,6 @@ class ValueObjectIdAdapter<TYPE : ValueObjectId>(
     }
 }
 
-
-class ValueObjectStringAdapter<TYPE : ValueObjectString>(
-    val ctor: (String) -> TYPE
-) : JsonAdapter<TYPE> {
-
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {
-        return ctor(json.asString)
-    }
-
-    override fun serialize(src: TYPE, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-        return JsonPrimitive(src.value)
-    }
-}
-
 object JsonAdapters {
 
     class String<TYPE : ValueVariableString>(

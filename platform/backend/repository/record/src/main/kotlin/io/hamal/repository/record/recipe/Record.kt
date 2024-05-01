@@ -1,6 +1,7 @@
 package io.hamal.repository.record.recipe
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordAdapter
@@ -27,7 +28,7 @@ sealed class RecipeRecord(
         val creatorId: AccountId,
         val name: RecipeName,
         val inputs: RecipeInputs,
-        val value: CodeValue,
+        val value: ValueCode,
         val description: RecipeDescription
     ) : RecipeRecord()
 
@@ -37,7 +38,7 @@ sealed class RecipeRecord(
         override val cmdId: CmdId,
         val name: RecipeName,
         val inputs: RecipeInputs,
-        val value: CodeValue,
+        val value: ValueCode,
         val description: RecipeDescription
     ) : RecipeRecord()
 }

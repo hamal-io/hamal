@@ -5,10 +5,15 @@ import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
+import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
+import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
+import io.hamal.lib.domain.vo.PasswordSalt.Companion.PasswordSalt
+import io.hamal.lib.domain.vo.WorkspaceName.Companion.WorkspaceName
 import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.ExecCmdRepository.PlanCmd
@@ -190,7 +195,7 @@ internal abstract class BaseTest {
         correlation: Correlation? = null,
         codeId: CodeId? = null,
         codeVersion: CodeVersion? = null,
-        code: CodeValue = CodeValue("")
+        code: ValueCode = ValueCode("")
     ): Exec {
 
         val planedExec = execCmdRepository.plan(

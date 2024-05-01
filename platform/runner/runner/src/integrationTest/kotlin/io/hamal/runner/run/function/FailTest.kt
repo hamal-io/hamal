@@ -1,14 +1,16 @@
 package io.hamal.runner.run.function
 
 import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
 import io.hamal.lib.kua.function.Function0In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput1Schema
-import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueString
 import io.hamal.runner.connector.UnitOfWork
 import io.hamal.runner.run.AbstractExecuteTest
 import io.hamal.runner.test.TestFailConnector
@@ -142,7 +144,7 @@ internal class FailTest : AbstractExecuteTest() {
         workspaceId = WorkspaceId(5432),
         inputs = ExecInputs(),
         state = State(),
-        code = CodeValue(code),
+        code = ValueCode(code),
         codeType = CodeType.Lua54,
         correlation = null
     )

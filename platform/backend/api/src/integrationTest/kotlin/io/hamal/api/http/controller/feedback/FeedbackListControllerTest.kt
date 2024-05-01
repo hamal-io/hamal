@@ -2,7 +2,7 @@ package io.hamal.api.http.controller.feedback
 
 import io.hamal.lib.domain._enum.FeedbackMood
 import io.hamal.lib.domain.request.FeedbackCreateRequest
-import io.hamal.lib.domain.vo.FeedbackMessage
+import io.hamal.lib.domain.vo.FeedbackMessage.Companion.FeedbackMessage
 import io.hamal.lib.sdk.api.ApiFeedbackList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*

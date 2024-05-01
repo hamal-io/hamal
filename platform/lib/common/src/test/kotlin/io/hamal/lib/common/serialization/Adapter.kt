@@ -6,6 +6,8 @@ import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueVariableString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
@@ -92,28 +94,28 @@ internal object ValueObjectIdAdapterTest {
 }
 
 
-internal object ValueObjectStringAdapterTest {
+internal object ValueVariableStringAdapterTest {
 
     @Test
     fun serialize() {
-        val result = testDelegate.toJson(TestStringValueObject("Hamal Rocks"))
+        val result = testDelegate.toJson(TestStringValueVariable(ValueString("Hamal Rocks")))
         assertThat(result, equalTo("\"Hamal Rocks\""))
     }
 
     @Test
     fun deserialize() {
-        val expected = TestStringValueObject("Hamal Rocks")
-        val result = testDelegate.fromJson("\"Hamal Rocks\"", TestStringValueObject::class.java)
+        val expected = TestStringValueVariable(ValueString("Hamal Rocks"))
+        val result = testDelegate.fromJson("\"Hamal Rocks\"", TestStringValueVariable::class.java)
         assertThat(result, equalTo(expected))
     }
 
     private val testDelegate: Gson = GsonBuilder().registerTypeAdapter(
-        TestStringValueObject::class.java, ValueObjectStringAdapter(::TestStringValueObject)
+        TestStringValueVariable::class.java, JsonAdapters.String(::TestStringValueVariable)
     ).create()
 
-    private class TestStringValueObject(
-        override val value: String
-    ) : ValueObjectString()
+    private class TestStringValueVariable(
+        override val value: ValueString
+    ) : ValueVariableString()
 }
 
 

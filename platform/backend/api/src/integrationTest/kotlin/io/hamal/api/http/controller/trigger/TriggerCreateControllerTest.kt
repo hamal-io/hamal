@@ -8,7 +8,12 @@ import io.hamal.lib.domain._enum.TriggerType.Cron
 import io.hamal.lib.domain._enum.TriggerType.FixedRate
 import io.hamal.lib.domain.request.TriggerCreateRequested
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CronPattern.Companion.CronPattern
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
+import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
+import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
+import io.hamal.lib.domain.vo.TriggerDuration.Companion.TriggerDuration
+import io.hamal.lib.domain.vo.TriggerName.Companion.TriggerName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.*
 import io.hamal.lib.http.HttpSuccessResponse

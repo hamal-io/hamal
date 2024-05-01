@@ -1,6 +1,7 @@
 package io.hamal.api.http.controller.trigger
 
 import io.hamal.lib.domain.vo.TriggerName
+import io.hamal.lib.domain.vo.TriggerName.Companion.TriggerName
 import io.hamal.lib.sdk.api.ApiTriggerList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*

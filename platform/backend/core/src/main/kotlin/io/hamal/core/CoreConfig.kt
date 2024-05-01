@@ -6,8 +6,8 @@ import io.hamal.core.component.SetupInternalTopics
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.request.AccountCreateRequest
 import io.hamal.lib.domain.request.AccountCreateRootRequest
-import io.hamal.lib.domain.vo.Email
-import io.hamal.lib.domain.vo.Password
+import io.hamal.lib.domain.vo.Email.Companion.Email
+import io.hamal.lib.domain.vo.Password.Companion.Password
 import io.hamal.repository.api.Auth
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner

@@ -6,6 +6,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.NamespaceAppendRequested
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.repository.api.NamespaceCmdRepository
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import io.hamal.repository.api.NamespaceTreeCmdRepository

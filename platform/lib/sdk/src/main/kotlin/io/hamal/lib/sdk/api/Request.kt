@@ -6,6 +6,7 @@ import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.RequestClass
+import io.hamal.lib.domain.vo.RequestClass.Companion.RequestClass
 import io.hamal.lib.domain.vo.RequestId
 
 data class ApiRequestList(

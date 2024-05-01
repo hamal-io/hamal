@@ -1,5 +1,8 @@
 package io.hamal.plugin.std.sys.func
 
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueNumber
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -8,9 +11,6 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueNumber
-import io.hamal.lib.common.value.ValueString
 
 class FuncDeploymentsFunction(
     private val sdk: ApiSdk
@@ -25,7 +25,7 @@ class FuncDeploymentsFunction(
                     .map { deployed ->
                         ctx.tableCreate(
                             "version" to ValueNumber(deployed.version.value),
-                            "message" to ValueString(deployed.message.value),
+                            "message" to deployed.message,
                             "deployed_at" to ValueString(deployed.deployedAt.toString())
                         )
                     }

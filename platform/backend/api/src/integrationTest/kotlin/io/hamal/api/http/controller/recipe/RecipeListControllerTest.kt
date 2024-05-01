@@ -1,9 +1,9 @@
 package io.hamal.api.http.controller.recipe
 
-import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.domain.vo.RecipeDescription
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.domain.vo.RecipeDescription.Companion.RecipeDescription
 import io.hamal.lib.domain.vo.RecipeInputs
-import io.hamal.lib.domain.vo.RecipeName
+import io.hamal.lib.domain.vo.RecipeName.Companion.RecipeName
 import io.hamal.lib.sdk.api.ApiRecipeCreateRequest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -19,7 +19,7 @@ internal class RecipeListControllerTest : RecipeBaseControllerTest() {
                 createRecipe(
                     ApiRecipeCreateRequest(
                         name = RecipeName("TestRecipe $iteration"),
-                        value = CodeValue("40 + 2"),
+                        value = ValueCode("40 + 2"),
                         inputs = RecipeInputs(),
                         description = RecipeDescription("TestRecipeDescription")
 

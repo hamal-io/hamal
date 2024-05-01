@@ -1,11 +1,14 @@
 package io.hamal.lib.common.value
 
 import io.hamal.lib.common.Decimal
-import io.hamal.lib.common.domain.ValueObjectString
 import java.time.LocalDate
 import java.time.LocalTime
 
-class TypeIdentifier(override val value: String) : ValueObjectString()
+class TypeIdentifier(override val value: ValueString) : ValueVariableString(){
+    companion object {
+        fun TypeIdentifier(value: String) = TypeIdentifier(ValueString(value))
+    }
+}
 
 sealed class Type {
     abstract val identifier: TypeIdentifier

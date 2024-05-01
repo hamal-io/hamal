@@ -1,6 +1,7 @@
 package io.hamal.repository.record.recipe
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Recipe
 import io.hamal.repository.record.CreateDomainObject
@@ -17,7 +18,7 @@ data class RecipeEntity(
 
     var name: RecipeName? = null,
     var inputs: RecipeInputs? = null,
-    var codeValue: CodeValue? = null,
+    var ValueCode: ValueCode? = null,
     var description: RecipeDescription? = null,
 
     ) : RecordEntity<RecipeId, RecipeRecord, Recipe> {
@@ -30,7 +31,7 @@ data class RecipeEntity(
                 sequence = rec.sequence(),
                 name = rec.name,
                 inputs = rec.inputs,
-                codeValue = rec.value,
+                ValueCode = rec.value,
                 description = rec.description,
                 recordedAt = rec.recordedAt()
             )
@@ -41,7 +42,7 @@ data class RecipeEntity(
                 sequence = rec.sequence(),
                 name = rec.name,
                 inputs = rec.inputs,
-                codeValue = rec.value,
+                ValueCode = rec.value,
                 description = rec.description,
                 recordedAt = rec.recordedAt()
             )
@@ -56,7 +57,7 @@ data class RecipeEntity(
             creatorId = creatorId,
             name = name!!,
             inputs = inputs!!,
-            value = codeValue!!,
+            value = ValueCode!!,
             description = description!!
         )
     }

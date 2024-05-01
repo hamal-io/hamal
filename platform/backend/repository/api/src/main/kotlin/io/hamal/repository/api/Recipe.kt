@@ -2,6 +2,7 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.vo.*
 
 data class Recipe(
@@ -11,7 +12,7 @@ data class Recipe(
     val creatorId: AccountId,
     val name: RecipeName,
     val inputs: RecipeInputs,
-    val value: CodeValue,
+    val value: ValueCode,
     val description: RecipeDescription
 ) : DomainObject<RecipeId>, HasAccountId {
     override val accountId: AccountId get() = creatorId
@@ -29,7 +30,7 @@ interface RecipeCmdRepository : CmdRepository {
         val creatorId: AccountId,
         val inputs: RecipeInputs,
         val name: RecipeName,
-        val value: CodeValue,
+        val value: ValueCode,
         val description: RecipeDescription
     )
 
@@ -37,7 +38,7 @@ interface RecipeCmdRepository : CmdRepository {
         val id: CmdId,
         val name: RecipeName? = null,
         val inputs: RecipeInputs? = null,
-        val value: CodeValue? = null,
+        val value: ValueCode? = null,
         val description: RecipeDescription? = null
     )
 }

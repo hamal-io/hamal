@@ -1,11 +1,11 @@
 package io.hamal.repository.api.event
 
 import io.hamal.lib.common.serialization.HotModule
-import io.hamal.lib.common.serialization.ValueObjectStringAdapter
+import io.hamal.lib.common.serialization.JsonAdapters
 
 object PlatformEventJsonModule : HotModule() {
     init {
-        set(InternalEventClass::class, ValueObjectStringAdapter(::InternalEventClass))
+        set(InternalEventClass::class, JsonAdapters.String(::InternalEventClass))
         set(InternalEvent::class, InternalEvent.Adapter)
     }
 }

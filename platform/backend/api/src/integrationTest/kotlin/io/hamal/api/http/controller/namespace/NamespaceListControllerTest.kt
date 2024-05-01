@@ -2,6 +2,7 @@ package io.hamal.api.http.controller.namespace
 
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.lib.sdk.api.ApiNamespaceAppendRequest
 import io.hamal.lib.sdk.api.ApiNamespaceList
 import org.hamcrest.MatcherAssert.assertThat

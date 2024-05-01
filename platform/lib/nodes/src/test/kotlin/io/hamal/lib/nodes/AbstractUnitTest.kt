@@ -1,7 +1,10 @@
 package io.hamal.lib.nodes
 
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.nodes.NodeTitle.Companion.NodeTitle
+import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.control.ControlIdentifier
+import io.hamal.lib.nodes.control.ControlIdentifier.Companion.ControlIdentifier
 
 
 internal abstract class AbstractUnitTest {

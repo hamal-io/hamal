@@ -1,5 +1,8 @@
 package io.hamal.plugin.std.sys.code
 
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueNumber
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.kua.function.Function2In2Out
@@ -8,10 +11,6 @@ import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.common.value.ValueCode
-import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueNumber
-import io.hamal.lib.common.value.ValueString
 
 
 class CodeGetFunction(
@@ -36,7 +35,7 @@ class CodeGetFunction(
                 .let { code ->
                     ctx.tableCreate(
                         "id" to ValueString(code.id.value.value.toString(16)),
-                        "code" to ValueCode(code.value.value),
+                        "code" to code.value,
                         "version" to ValueNumber(code.version.value)
                         // FIXME-53 deployed_version ????
                     )

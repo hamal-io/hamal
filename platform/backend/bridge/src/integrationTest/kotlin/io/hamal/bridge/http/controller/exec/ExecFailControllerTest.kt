@@ -3,6 +3,7 @@ package io.hamal.bridge.http.controller.exec
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound

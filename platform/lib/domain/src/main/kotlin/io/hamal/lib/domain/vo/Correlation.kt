@@ -1,14 +1,17 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.ValueObjectString
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueVariableString
 
-class CorrelationId(override val value: String) : ValueObjectString() {
+
+class CorrelationId(override val value: ValueString) : ValueVariableString() {
     companion object {
+        fun CorrelationId(value: String) = CorrelationId(ValueString(value))
         val default = CorrelationId("__default__")
     }
 
     init {
-        CorrelationIdValidator.validate(value)
+        CorrelationIdValidator.validate(value.stringValue)
     }
 
     override fun toString(): String {

@@ -7,7 +7,12 @@ import io.hamal.extension.net.http.ExtensionHttpFactory
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
+import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
+import io.hamal.lib.domain.vo.PasswordSalt.Companion.PasswordSalt
+import io.hamal.lib.domain.vo.WorkspaceName.Companion.WorkspaceName
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
@@ -322,7 +327,7 @@ abstract class BaseApiTest {
 
             val execReq = sdk.adhoc.invoke(
                 NamespaceId.root,
-                ApiAdhocInvokeRequest(InvocationInputs(), CodeValue(String(Files.readAllBytes(file))))
+                ApiAdhocInvokeRequest(InvocationInputs(), ValueCode(String(Files.readAllBytes(file))))
             )
 
             sdk.await(execReq)

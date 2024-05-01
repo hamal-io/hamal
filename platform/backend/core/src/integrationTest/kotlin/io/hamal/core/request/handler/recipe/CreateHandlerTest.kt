@@ -2,9 +2,15 @@ package io.hamal.core.request.handler.recipe
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.RecipeCreateRequested
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AuthId
+import io.hamal.lib.domain.vo.RecipeDescription.Companion.RecipeDescription
+import io.hamal.lib.domain.vo.RecipeId
+import io.hamal.lib.domain.vo.RecipeInputs
+import io.hamal.lib.domain.vo.RecipeName.Companion.RecipeName
+import io.hamal.lib.domain.vo.RequestId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -19,7 +25,7 @@ internal class RecipeCreateHandlerTest : BaseRequestHandlerTest() {
         with(recipeQueryRepository.get(RecipeId(123))) {
             assertThat(id, equalTo(RecipeId(123)))
             assertThat(name, equalTo(RecipeName("TestRecipe")))
-            assertThat(value, equalTo(CodeValue("1 + 1")))
+            assertThat(value, equalTo(ValueCode("1 + 1")))
             assertThat(creatorId, equalTo(testAccount.id))
             assertThat(description, equalTo(RecipeDescription("TestDescription")))
         }
@@ -33,7 +39,7 @@ internal class RecipeCreateHandlerTest : BaseRequestHandlerTest() {
             id = RecipeId(123),
             name = RecipeName("TestRecipe"),
             inputs = RecipeInputs(HotObject.builder().set("hamal", "rocks").build()),
-            value = CodeValue("1 + 1"),
+            value = ValueCode("1 + 1"),
             creatorId = testAccount.id,
             description = RecipeDescription("TestDescription")
 

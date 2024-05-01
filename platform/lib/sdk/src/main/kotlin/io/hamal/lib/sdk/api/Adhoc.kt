@@ -1,8 +1,8 @@
 package io.hamal.lib.sdk.api
 
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.request.AdhocInvokeRequest
-import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.http.HttpTemplate
@@ -10,7 +10,7 @@ import io.hamal.lib.http.body
 
 data class ApiAdhocInvokeRequest(
     override val inputs: InvocationInputs? = null,
-    override val code: CodeValue,
+    override val code: ValueCode,
     override val codeType: CodeType = CodeType.Lua54
 ) : AdhocInvokeRequest
 

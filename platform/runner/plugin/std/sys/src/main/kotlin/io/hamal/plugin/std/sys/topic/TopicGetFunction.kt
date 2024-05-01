@@ -1,5 +1,7 @@
 package io.hamal.plugin.std.sys.topic
 
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -7,8 +9,6 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueString
 
 class TopicGetFunction(
     private val sdk: ApiSdk
@@ -22,7 +22,7 @@ class TopicGetFunction(
                 .let { topic ->
                     ctx.tableCreate(
                         "id" to ValueString(topic.id.value.value.toString(16)),
-                        "name" to ValueString(topic.name.value),
+                        "name" to topic.name
                     )
                 }
         } catch (t: Throwable) {

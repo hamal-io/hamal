@@ -7,6 +7,7 @@ import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.AuthId
 import io.hamal.lib.domain.vo.RequestClass
+import io.hamal.lib.domain.vo.RequestClass.Companion.RequestClass
 import io.hamal.lib.domain.vo.RequestId
 import java.lang.reflect.Type
 

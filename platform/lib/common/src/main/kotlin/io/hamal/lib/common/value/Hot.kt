@@ -6,12 +6,13 @@ import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.HotModule
 import io.hamal.lib.common.serialization.JsonAdapter
-import io.hamal.lib.common.serialization.ValueObjectStringAdapter
+import io.hamal.lib.common.serialization.JsonAdapters
+import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 import java.lang.reflect.Type
 
 object TypesystemHotModule : HotModule() {
     init {
-        this[FieldIdentifier::class] = ValueObjectStringAdapter(::FieldIdentifier)
+        this[FieldIdentifier::class] = JsonAdapters.String(::FieldIdentifier)
 
         this[io.hamal.lib.common.value.Type::class] = object : JsonAdapter<io.hamal.lib.common.value.Type> {
             override fun serialize(
@@ -19,7 +20,7 @@ object TypesystemHotModule : HotModule() {
                 typeOfSrc: Type,
                 context: JsonSerializationContext
             ): JsonElement {
-                return JsonPrimitive(src.identifier.value)
+                return JsonPrimitive(src.identifier.stringValue)
             }
 
             override fun deserialize(

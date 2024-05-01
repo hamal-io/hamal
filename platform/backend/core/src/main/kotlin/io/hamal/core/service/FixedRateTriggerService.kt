@@ -50,7 +50,7 @@ internal class FixedRateTriggerService(
 
     fun triggerAdded(trigger: Trigger.FixedRate) {
         scheduledTasks.add(
-            workerPool.atFixedRate(Duration.parseIsoString(trigger.duration.value).inWholeSeconds.seconds) {
+            workerPool.atFixedRate(Duration.parseIsoString(trigger.duration.stringValue).inWholeSeconds.seconds) {
                 requestInvocation(trigger)
             }
         )

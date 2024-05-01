@@ -4,7 +4,10 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.RecipeDescription.Companion.RecipeDescription
+import io.hamal.lib.domain.vo.RecipeName.Companion.RecipeName
 import io.hamal.repository.api.RecipeCmdRepository.CreateCmd
 import io.hamal.repository.api.RecipeCmdRepository.UpdateCmd
 import io.hamal.repository.api.RecipeQueryRepository.RecipeQuery
@@ -32,7 +35,7 @@ class RecipeRepositoryTest : AbstractUnitTest() {
                     creatorId = AccountId("123"),
                     name = RecipeName("TestRecipe"),
                     inputs = RecipeInputs(HotObject.builder().set("hamal", "rocks").build()),
-                    value = CodeValue("1 + 1"),
+                    value = ValueCode("1 + 1"),
                     description = RecipeDescription("Nice Recipe")
                 )
             )
@@ -42,7 +45,7 @@ class RecipeRepositoryTest : AbstractUnitTest() {
                 assertThat(creatorId, equalTo(AccountId("123")))
                 assertThat(name, equalTo(RecipeName("TestRecipe")))
                 assertThat(inputs, equalTo(RecipeInputs(HotObject.builder().set("hamal", "rocks").build())))
-                assertThat(value, equalTo(CodeValue("1 + 1")))
+                assertThat(value, equalTo(ValueCode("1 + 1")))
                 assertThat(description, equalTo(RecipeDescription("Nice Recipe")))
             }
             verifyCount(1)
@@ -53,27 +56,27 @@ class RecipeRepositoryTest : AbstractUnitTest() {
             createRecipe(
                 recipeId = RecipeId(1),
                 name = RecipeName("TestRecipe"),
-                value = CodeValue("40 + 2"),
+                value = ValueCode("40 + 2"),
             )
 
             createRecipe(
                 recipeId = RecipeId(2),
                 name = RecipeName("TestRecipe"),
-                value = CodeValue("40 + 2")
+                value = ValueCode("40 + 2")
             )
 
             verifyCount(2)
 
             with(get(RecipeId(1))) {
                 assertThat(id, equalTo(RecipeId(1)))
-                assertThat(value, equalTo(CodeValue("40 + 2")))
+                assertThat(value, equalTo(ValueCode("40 + 2")))
                 assertThat(name, equalTo(RecipeName("TestRecipe")))
                 assertThat(creatorId, equalTo(AccountId("123")))
             }
 
             with(get(RecipeId(2))) {
                 assertThat(id, equalTo(RecipeId(2)))
-                assertThat(value, equalTo(CodeValue("40 + 2")))
+                assertThat(value, equalTo(ValueCode("40 + 2")))
                 assertThat(name, equalTo(RecipeName("TestRecipe")))
                 assertThat(creatorId, equalTo(AccountId("123")))
             }
@@ -94,7 +97,7 @@ class RecipeRepositoryTest : AbstractUnitTest() {
                 UpdateCmd(
                     id = CmdId(2),
                     name = RecipeName("TestRecipe2"),
-                    value = CodeValue("1 + 1"),
+                    value = ValueCode("1 + 1"),
                     inputs = RecipeInputs(HotObject.builder().set("answer", 42).build()),
                     description = RecipeDescription("Updated description")
                 )
@@ -103,7 +106,7 @@ class RecipeRepositoryTest : AbstractUnitTest() {
             with(result) {
                 assertThat(id, equalTo(RecipeId(1)))
                 assertThat(name, equalTo(RecipeName("TestRecipe2")))
-                assertThat(value, equalTo(CodeValue("1 + 1")))
+                assertThat(value, equalTo(ValueCode("1 + 1")))
                 assertThat(inputs, equalTo(RecipeInputs(HotObject.builder().set("answer", 42).build())))
                 assertThat(creatorId, equalTo(AccountId("123")))
                 assertThat(description, equalTo(RecipeDescription("Updated description")))
@@ -125,7 +128,7 @@ class RecipeRepositoryTest : AbstractUnitTest() {
                     RecipeId(1), UpdateCmd(
                         id = CmdId(iteration + 2),
                         name = RecipeName("TestRecipe$iteration"),
-                        value = CodeValue("40 + $iteration"),
+                        value = ValueCode("40 + $iteration"),
                         description = RecipeDescription("Updated description + $iteration")
                     )
                 )
@@ -134,7 +137,7 @@ class RecipeRepositoryTest : AbstractUnitTest() {
                     assertThat(id, equalTo(RecipeId(1)))
                     assertThat(creatorId, equalTo(AccountId("123")))
                     assertThat(name, equalTo(RecipeName("TestRecipe$iteration")))
-                    assertThat(value, equalTo(CodeValue("40 + $iteration")))
+                    assertThat(value, equalTo(ValueCode("40 + $iteration")))
                     assertThat(description, equalTo(RecipeDescription("Updated description + $iteration")))
                 }
             }
@@ -149,14 +152,14 @@ class RecipeRepositoryTest : AbstractUnitTest() {
             createRecipe(
                 recipeId = RecipeId(1),
                 name = RecipeName("TestRecipe"),
-                value = CodeValue("1 + 1")
+                value = ValueCode("1 + 1")
             )
 
             with(find(RecipeId(1))!!) {
                 assertThat(id, equalTo(RecipeId(1)))
                 assertThat(creatorId, equalTo(AccountId("123")))
                 assertThat(name, equalTo(RecipeName("TestRecipe")))
-                assertThat(value, equalTo(CodeValue("1 + 1")))
+                assertThat(value, equalTo(ValueCode("1 + 1")))
             }
         }
 
@@ -177,14 +180,14 @@ class RecipeRepositoryTest : AbstractUnitTest() {
             createRecipe(
                 recipeId = RecipeId(1),
                 name = RecipeName("TestRecipe"),
-                value = CodeValue("1 + 1")
+                value = ValueCode("1 + 1")
             )
 
             with(find(RecipeId(1))!!) {
                 assertThat(id, equalTo(RecipeId(1)))
                 assertThat(creatorId, equalTo(AccountId("123")))
                 assertThat(name, equalTo(RecipeName("TestRecipe")))
-                assertThat(value, equalTo(CodeValue("1 + 1")))
+                assertThat(value, equalTo(ValueCode("1 + 1")))
             }
         }
 
@@ -284,7 +287,7 @@ class RecipeRepositoryTest : AbstractUnitTest() {
     private fun RecipeRepository.createRecipe(
         recipeId: RecipeId,
         name: RecipeName,
-        value: CodeValue = CodeValue("1 + 1"),
+        value: ValueCode = ValueCode("1 + 1"),
         cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
     ) {
         create(

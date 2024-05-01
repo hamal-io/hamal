@@ -1,6 +1,7 @@
 package io.hamal.lib.common.value
 
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 
 
 data object TypeSnowflakeId : Type() {

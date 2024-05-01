@@ -1,10 +1,10 @@
 package io.hamal.api.http.controller.func
 
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.CodeType
-import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
-import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.lib.sdk.api.ApiFuncCreateRequest
 import io.hamal.lib.sdk.api.ApiFuncList
 import org.hamcrest.MatcherAssert.assertThat
@@ -25,7 +25,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
                 ApiFuncCreateRequest(
                     name = FuncName("func-one"),
                     inputs = FuncInputs(),
-                    code = CodeValue(""),
+                    code = ValueCode(""),
                     codeType = CodeType.Lua54
                 )
             )
@@ -48,7 +48,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
                     ApiFuncCreateRequest(
                         name = FuncName("func-$it"),
                         inputs = FuncInputs(),
-                        code = CodeValue(""),
+                        code = ValueCode(""),
                         codeType = CodeType.Lua54
                     )
                 )
@@ -74,7 +74,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
                 ApiFuncCreateRequest(
                     name = FuncName("func-$it"),
                     inputs = FuncInputs(),
-                    code = CodeValue(""),
+                    code = ValueCode(""),
                     codeType = CodeType.Lua54
                 )
             )
