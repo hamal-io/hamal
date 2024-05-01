@@ -1,4 +1,4 @@
-package io.hamal.lib.kua.type
+package io.hamal.lib.kua.value
 
 import io.hamal.lib.kua.Native
 import io.hamal.lib.kua.StateImpl
@@ -9,7 +9,7 @@ abstract class KuaFunction<
         INPUT : FunctionInput<INPUT_SCHEMA, INPUT>,
         OUTPUT_SCHEMA : FunctionOutputSchema<OUTPUT>,
         OUTPUT : FunctionOutput<OUTPUT_SCHEMA, OUTPUT>
-        > : KuaType {
+        > : KuaValue {
 
     abstract val inputSchema: INPUT_SCHEMA
     abstract val outputSchema: OUTPUT_SCHEMA

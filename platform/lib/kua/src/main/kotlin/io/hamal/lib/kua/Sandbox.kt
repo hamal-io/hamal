@@ -6,9 +6,9 @@ import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.extension.RunnerExtensionFactory
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
-import io.hamal.lib.kua.type.KuaFunction
-import io.hamal.lib.kua.type.KuaReference
-import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.value.KuaFunction
+import io.hamal.lib.kua.value.KuaReference
+import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.nodes.generator.GeneratorRegistry
 import io.hamal.lib.value.*
 
@@ -115,4 +115,8 @@ class Sandbox(
     override fun close() {
         state.close()
     }
+}
+
+fun Sandbox.registerGlobalFunction(name: String, function: KuaFunction<*, *, *, *>) {
+    globalSet(ValueString(name), function)
 }

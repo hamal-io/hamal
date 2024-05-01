@@ -6,8 +6,8 @@ import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
-import io.hamal.lib.kua.type.toKua
-import io.hamal.lib.kua.type.toKuaSnakeCase
+import io.hamal.lib.kua.value.toKua
+import io.hamal.lib.kua.value.toKuaSnakeCase
 import io.hamal.lib.value.ValueString
 import io.hamal.runner.run.function.CompleteRunFunction
 import io.hamal.runner.run.function.EmitFunction

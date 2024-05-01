@@ -4,8 +4,8 @@ import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type
-import io.hamal.lib.kua.type.KuaFunction
-import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.value.KuaFunction
+import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.value.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo

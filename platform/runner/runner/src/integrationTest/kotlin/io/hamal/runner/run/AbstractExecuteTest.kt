@@ -7,7 +7,7 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.value.ValueCode
-import io.hamal.lib.kua.type.KuaType
+import io.hamal.lib.kua.value.KuaValue
 import io.hamal.lib.value.ValueString
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
@@ -16,7 +16,7 @@ import io.hamal.runner.test.TestConnector
 
 internal abstract class AbstractExecuteTest {
     fun createTestRunner(
-        vararg testPlugins: Pair<ValueString, KuaType>,
+        vararg testPlugins: Pair<ValueString, KuaValue>,
         connector: Connector = TestConnector()
     ) = CodeRunnerImpl(
         connector,

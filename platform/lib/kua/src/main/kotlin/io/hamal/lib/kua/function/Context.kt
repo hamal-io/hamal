@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.function
 
 import io.hamal.lib.kua.*
-import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.value.*
 import io.hamal.lib.value.*
 import kotlin.reflect.KClass
 

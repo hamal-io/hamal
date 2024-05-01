@@ -1,6 +1,6 @@
 package io.hamal.lib.kua
 
-import io.hamal.lib.kua.type.KuaFunction
+import io.hamal.lib.kua.value.KuaFunction
 
 class Native : AutoCloseable {
 

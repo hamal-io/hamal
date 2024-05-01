@@ -1,4 +1,4 @@
-package io.hamal.lib.kua.type
+package io.hamal.lib.kua.value
 
 import io.hamal.lib.common.hot.*
 import io.hamal.lib.common.util.StringUtils

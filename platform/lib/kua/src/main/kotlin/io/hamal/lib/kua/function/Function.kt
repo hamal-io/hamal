@@ -1,6 +1,6 @@
 package io.hamal.lib.kua.function
 
-import io.hamal.lib.kua.type.KuaFunction
+import io.hamal.lib.kua.value.KuaFunction
 import io.hamal.lib.value.Value
 
 

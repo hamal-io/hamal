@@ -3,8 +3,8 @@ package io.hamal.lib.kua.state
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.type
-import io.hamal.lib.kua.type.KuaTable
-import io.hamal.lib.kua.type.getNumber
+import io.hamal.lib.kua.value.KuaTable
+import io.hamal.lib.kua.value.getNumber
 import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat

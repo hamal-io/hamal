@@ -9,9 +9,9 @@ import io.hamal.lib.kua.AssertionError
 import io.hamal.lib.kua.ExitError
 import io.hamal.lib.kua.ExtensionError
 import io.hamal.lib.kua.tableCreate
-import io.hamal.lib.kua.type.KuaFunction
-import io.hamal.lib.kua.type.KuaTable
-import io.hamal.lib.kua.type.toHotObject
+import io.hamal.lib.kua.value.KuaFunction
+import io.hamal.lib.kua.value.KuaTable
+import io.hamal.lib.kua.value.toHotObject
 import io.hamal.lib.nodes.NodesGraph
 import io.hamal.lib.nodes.compiler.Compiler
 import io.hamal.lib.nodes.json

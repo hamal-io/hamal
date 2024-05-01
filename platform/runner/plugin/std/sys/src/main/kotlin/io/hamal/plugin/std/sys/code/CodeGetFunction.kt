@@ -6,7 +6,7 @@ import io.hamal.lib.kua.function.Function2In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.value.ValueCode
 import io.hamal.lib.value.ValueError

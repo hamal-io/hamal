@@ -9,7 +9,7 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.topPop
-import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.value.*
 import io.hamal.lib.value.ValueError
 import io.hamal.lib.value.ValueNumber
 import io.hamal.lib.value.ValueString

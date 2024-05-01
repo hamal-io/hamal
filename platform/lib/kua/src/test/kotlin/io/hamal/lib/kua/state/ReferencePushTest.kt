@@ -3,9 +3,9 @@ package io.hamal.lib.kua.state
 import io.hamal.lib.kua.*
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.type.KuaFunction
-import io.hamal.lib.kua.type.KuaTable
-import io.hamal.lib.kua.type.getNumber
+import io.hamal.lib.kua.value.KuaFunction
+import io.hamal.lib.kua.value.KuaTable
+import io.hamal.lib.kua.value.getNumber
 import io.hamal.lib.value.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo

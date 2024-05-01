@@ -1,4 +1,4 @@
-package io.hamal.lib.kua.type
+package io.hamal.lib.kua.value
 
 import io.hamal.lib.kua.*
 import io.hamal.lib.value.*
@@ -7,7 +7,7 @@ import kotlin.reflect.KClass
 class KuaTable(
     val index: ValueNumber,
     val state: State
-) : KuaType {
+) : KuaValue {
 
     constructor(index: Int, state: State) : this(ValueNumber(index), state)
 
@@ -297,7 +297,7 @@ class KuaTable(
 
 
 fun KuaTable.unset(key: String) = unset(ValueString(key))
-operator fun KuaTable.set(key: String, value: KuaType) = set(ValueString(key), value)
+operator fun KuaTable.set(key: String, value: KuaValue) = set(ValueString(key), value)
 operator fun KuaTable.set(key: String, value: Value) = set(ValueString(key), value)
 operator fun KuaTable.set(key: String, value: Boolean) = set(ValueString(key), ValueBoolean.of(value))
 operator fun KuaTable.set(key: String, value: Int) = set(ValueString(key), ValueNumber(value))

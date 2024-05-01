@@ -4,7 +4,7 @@ import io.hamal.lib.kua.function.Function1In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
-import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.value.*
 import io.hamal.lib.value.ValueBoolean
 import io.hamal.lib.value.ValueError
 

@@ -6,9 +6,9 @@ import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
-import io.hamal.lib.kua.type.KuaTable
-import io.hamal.lib.kua.type.getString
-import io.hamal.lib.kua.type.toHotObject
+import io.hamal.lib.kua.value.KuaTable
+import io.hamal.lib.kua.value.getString
+import io.hamal.lib.kua.value.toHotObject
 import io.hamal.runner.run.RunnerContext
 
 internal class EmitFunction(

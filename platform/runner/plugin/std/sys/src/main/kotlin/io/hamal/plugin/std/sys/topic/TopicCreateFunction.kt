@@ -8,9 +8,9 @@ import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.KuaTable
-import io.hamal.lib.kua.type.findString
-import io.hamal.lib.kua.type.getString
+import io.hamal.lib.kua.value.KuaTable
+import io.hamal.lib.kua.value.findString
+import io.hamal.lib.kua.value.getString
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiTopicCreateRequest
 import io.hamal.lib.value.ValueError
