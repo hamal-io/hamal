@@ -3,8 +3,9 @@ package io.hamal.repository
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.FeedbackMood
-import io.hamal.lib.domain.vo.AccountId
+import io.hamal.lib.domain.vo.AccountId.Companion.AccountId
 import io.hamal.lib.domain.vo.FeedbackId
+import io.hamal.lib.domain.vo.FeedbackId.Companion.FeedbackId
 import io.hamal.lib.domain.vo.FeedbackMessage.Companion.FeedbackMessage
 import io.hamal.repository.api.Feedback
 import io.hamal.repository.api.FeedbackCmdRepository.CreateCmd

@@ -5,10 +5,10 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain._enum.TopicType.Namespace
 import io.hamal.lib.domain.request.TopicCreateRequested
-import io.hamal.lib.domain.vo.AuthId
-import io.hamal.lib.domain.vo.LogTopicId
-import io.hamal.lib.domain.vo.RequestId
-import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
+import io.hamal.lib.domain.vo.LogTopicId.Companion.LogTopicId
+import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
+import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import io.hamal.repository.api.log.LogBrokerRepository

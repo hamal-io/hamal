@@ -12,7 +12,7 @@ import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.repository.api.log.LogBrokerRepository.CreateTopicCmd
-import io.hamal.repository.api.log.LogEventId
+import io.hamal.repository.api.log.LogEventId.Companion.LogEventId
 import io.hamal.repository.record.json
 import io.hamal.repository.record.topic.CreateTopicFromRecords
 import io.hamal.repository.record.topic.TopicRecord
@@ -67,7 +67,7 @@ class TopicSqliteRepository(
     override fun list(query: TopicEventQuery): List<TopicEvent> {
         val topic = get(query.topicId)
         return logBrokerRepository.read(
-            firstId = LogEventId(SnowflakeId(query.afterId.value.value + 1)),
+            firstId = LogEventId(SnowflakeId(query.afterId.longValue + 1)),
             topicId = topic.logTopicId,
             limit = query.limit
         ).map { evt ->

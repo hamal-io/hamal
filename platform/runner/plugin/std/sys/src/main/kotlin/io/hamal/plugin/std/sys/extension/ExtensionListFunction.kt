@@ -21,7 +21,7 @@ class ExtensionListFunction(
             null to ctx.tableCreate(
                 extensions.map { ext ->
                     ctx.tableCreate(
-                        "id" to ValueString(ext.id.value.value.toString(16)),
+                        "id" to ValueString(ext.id.stringValue),
                         "name" to ext.name
                     )
                 }

@@ -5,7 +5,7 @@ import io.hamal.lib.common.value.ValueNumber
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.DeployMessage
-import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -47,9 +47,9 @@ class FuncDeployFunction(
             )
 
             null to ctx.tableCreate(
-                "request_id" to ValueString(res.requestId.value.value.toString(16)),
+                "request_id" to res.requestId,
                 "request_status" to ValueString(res.requestStatus.name),
-                "id" to ValueString(res.id.value.value.toString(16)),
+                "id" to res.id,
             )
         } catch (t: Throwable) {
             ValueError(t.message!!) to null

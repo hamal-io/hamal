@@ -19,8 +19,8 @@ class NamespaceListFunction(
         return try {
             null to ctx.tableCreate(sdk.namespace.list(ctx[WorkspaceId::class]).map { namespace ->
                 ctx.tableCreate(
-                    "id" to ValueString(namespace.id.value.value.toString(16)),
-                    "parent_id" to ValueString(namespace.parentId.value.value.toString(16)),
+                    "id" to ValueString(namespace.id.stringValue),
+                    "parent_id" to namespace.parentId,
                     "name" to namespace.name
                 )
             })

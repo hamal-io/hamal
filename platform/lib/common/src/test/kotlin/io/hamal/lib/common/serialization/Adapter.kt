@@ -2,11 +2,16 @@ package io.hamal.lib.common.serialization
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import io.hamal.lib.common.domain.*
+import io.hamal.lib.common.domain.ValueObjectHotObject
+import io.hamal.lib.common.domain.ValueObjectInstant
+import io.hamal.lib.common.domain.ValueObjectInt
+import io.hamal.lib.common.domain.ValueObjectLong
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueSnowflakeId
 import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueVariableSnowflakeId
 import io.hamal.lib.common.value.ValueVariableString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -69,28 +74,28 @@ internal object InstantAdapterTest {
 
 }
 
-internal object ValueObjectIdAdapterTest {
+internal object ValueVariableSnowflakeIdAdapterTest {
 
     @Test
     fun serialize() {
-        val result = testDelegate.toJson(TestIdValueObject(SnowflakeId(42)))
+        val result = testDelegate.toJson(TestIdValueObject(ValueSnowflakeId(SnowflakeId(42))))
         assertThat(result, equalTo("\"2a\""))
     }
 
     @Test
     fun deserialize() {
-        val expected = TestIdValueObject(SnowflakeId(42))
+        val expected = TestIdValueObject(ValueSnowflakeId(SnowflakeId(42)))
         val result = testDelegate.fromJson("\"2a\"", TestIdValueObject::class.java)
         assertThat(result, equalTo(expected))
     }
 
     private val testDelegate: Gson = GsonBuilder().registerTypeAdapter(
-        TestIdValueObject::class.java, ValueObjectIdAdapter(::TestIdValueObject)
+        TestIdValueObject::class.java, JsonAdapters.SnowflakeId(::TestIdValueObject)
     ).create()
 
     private class TestIdValueObject(
-        override val value: SnowflakeId
-    ) : ValueObjectId()
+        override val value: ValueSnowflakeId
+    ) : ValueVariableSnowflakeId()
 }
 
 

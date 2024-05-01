@@ -5,6 +5,7 @@ import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.CodeId
+import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.WorkspaceId
 

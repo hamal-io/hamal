@@ -6,6 +6,7 @@ import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.DeployMessage
 import io.hamal.lib.domain.vo.DeployMessage.Companion.DeployMessage
 import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
 import io.hamal.lib.http.HttpErrorResponse

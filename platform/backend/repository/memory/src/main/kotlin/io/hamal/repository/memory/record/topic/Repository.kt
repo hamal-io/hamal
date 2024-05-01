@@ -12,7 +12,7 @@ import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.repository.api.log.LogBrokerRepository.CreateTopicCmd
-import io.hamal.repository.api.log.LogEventId
+import io.hamal.repository.api.log.LogEventId.Companion.LogEventId
 import io.hamal.repository.memory.record.RecordMemoryRepository
 import io.hamal.repository.record.json
 import io.hamal.repository.record.topic.CreateTopicFromRecords
@@ -65,7 +65,7 @@ class TopicMemoryRepository(
         return lock.withLock {
             val topic = get(query.topicId)
             logBrokerRepository.read(
-                firstId = LogEventId(SnowflakeId(query.afterId.value.value + 1)),
+                firstId = LogEventId(SnowflakeId(query.afterId.longValue + 1)),
                 topicId = topic.logTopicId,
                 limit = query.limit
             ).map { evt ->

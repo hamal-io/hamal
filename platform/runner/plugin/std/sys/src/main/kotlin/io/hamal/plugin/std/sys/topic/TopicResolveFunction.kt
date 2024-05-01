@@ -20,10 +20,7 @@ class TopicResolveFunction(
     override fun invoke(ctx: FunctionContext, arg1: ValueString): Pair<ValueError?, ValueString?> {
         return try {
             null to ValueString(
-                sdk.topic.resolve(ctx[NamespaceId::class], TopicName(arg1))
-                    .value
-                    .value
-                    .toString(16)
+                sdk.topic.resolve(ctx[NamespaceId::class], TopicName(arg1)).stringValue
             )
         } catch (t: Throwable) {
             ValueError(t.message ?: "Unknown Error") to null

@@ -1,18 +1,24 @@
 package io.hamal.api.http.controller.trigger
 
-import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain._enum.TriggerType.Cron
 import io.hamal.lib.domain._enum.TriggerType.FixedRate
 import io.hamal.lib.domain.request.TriggerCreateRequested
-import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.CronPattern.Companion.CronPattern
+import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
+import io.hamal.lib.domain.vo.NamespaceFeatures
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
+import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import io.hamal.lib.domain.vo.TriggerDuration.Companion.TriggerDuration
+import io.hamal.lib.domain.vo.TriggerInputs
+import io.hamal.lib.domain.vo.TriggerName
 import io.hamal.lib.domain.vo.TriggerName.Companion.TriggerName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.*
@@ -400,7 +406,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
                 """{
                 |"type":"Cron",
                 |"name": "cron-trigger",
-                |"funcId": "${funcId.value.value.toString(16)}",
+                |"funcId": "${funcId.stringValue}",
                 |"inputs": {},
                 |"cron": "Invalid cron pattern"
                 |}""".trimMargin()

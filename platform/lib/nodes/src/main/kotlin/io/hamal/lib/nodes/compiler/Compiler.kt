@@ -42,7 +42,7 @@ class Compiler(
             val builder = StringBuilder()
             val args = List(generator.inputTypes.size) { "arg_${it + 1}" }.joinToString { it }
 
-            builder.append("""function n_${node.id.value.value.toString(16)}(${args})""")
+            builder.append("""function n_${node.id.stringValue}(${args})""")
             builder.append("\n")
             builder.append(generator.toCode(node, controls.filter {
                 it.nodeId == node.id
@@ -60,7 +60,7 @@ class Compiler(
 
             node.outputs.mapIndexed { index, portOutput ->
                 outputPortMapping[portOutput.id] =
-                    "n_${node.id.value.value.toString(16)}_${index + 1}" to generator.outputTypes[index]
+                    "n_${node.id.stringValue}_${index + 1}" to generator.outputTypes[index]
             }
         }
 
@@ -77,7 +77,7 @@ class Compiler(
 
             val connections = graph.connections.filter { it.inputNode.id == inputNodeId }
             if (connections.isEmpty()) {
-                code.append("n_${inputNode.id.value.value.toString(16)}_1 = n_1()\n")
+                code.append("n_${inputNode.id.stringValue}_1 = n_1()\n")
             } else {
 
                 val connection = connections.first()
@@ -95,7 +95,7 @@ class Compiler(
 
                         code.append("if p_1 ~= nil then \n")
 
-                        code.append("n_${inputNode.id.value.value.toString(16)}(p_1)\n")
+                        code.append("n_${inputNode.id.stringValue}(p_1)\n")
 
                         code.append("end\n")
 
@@ -112,7 +112,7 @@ class Compiler(
                         }
 
                         code.append("local p_1 = $p1 \n")
-                        code.append("n_${inputNode.id.value.value.toString(16)}(p_1)")
+                        code.append("n_${inputNode.id.stringValue}(p_1)")
 
                     } else if (controls.size == 2) {
                         var control = controls.first()
@@ -132,7 +132,7 @@ class Compiler(
 
                         code.append("local p_2 = $p2 \n")
 
-                        code.append("n_${inputNode.id.value.value.toString(16)}(p_1, p_2)")
+                        code.append("n_${inputNode.id.stringValue}(p_1, p_2)")
                     } else {
                         TODO()
                     }
@@ -162,9 +162,9 @@ class Compiler(
 
                         if (control is ControlTextArea) {
                             val defaultValue = control.value.stringValue
-                            code.append("n_${inputNode.id.value.value.toString(16)}(${outputPortMapping[connection.outputPort.id]!!.first} or '${defaultValue}')")
+                            code.append("n_${inputNode.id.stringValue}(${outputPortMapping[connection.outputPort.id]!!.first} or '${defaultValue}')")
                         } else {
-                            code.append("n_${inputNode.id.value.value.toString(16)}(${outputPortMapping[connection.outputPort.id]!!.first})")
+                            code.append("n_${inputNode.id.stringValue}(${outputPortMapping[connection.outputPort.id]!!.first})")
                         }
 
                         code.append("\nelse\n")
@@ -198,11 +198,11 @@ class Compiler(
 
                         code.append("local p_2 = $p2 \n")
 
-                        code.append("n_${inputNode.id.value.value.toString(16)}(p_1, p_2)")
+                        code.append("n_${inputNode.id.stringValue}(p_1, p_2)")
                     } else {
 
 
-                        code.append("n_${inputNode.id.value.value.toString(16)}(${outputPortMapping[connection.outputPort.id]!!.first})")
+                        code.append("n_${inputNode.id.stringValue}(${outputPortMapping[connection.outputPort.id]!!.first})")
                     }
                 }
                 code.append("\n")

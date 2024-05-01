@@ -1,20 +1,20 @@
 package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.domain.ValueObjectHotObject
-import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.domain.ValueObjectInstant
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.common.value.ValueCode
-import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.common.value.ValueVariableString
+import io.hamal.lib.common.value.*
 import io.hamal.lib.domain._enum.CodeType
 import java.time.Instant
 
-class ExecId(override val value: SnowflakeId) : ValueObjectId() {
-    constructor(value: Int) : this(SnowflakeId(value.toLong()))
-    constructor(value: String) : this(SnowflakeId(value.toLong(16)))
+class ExecId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
+    companion object {
+        fun ExecId(value: SnowflakeId) = ExecId(ValueSnowflakeId(value))
+        fun ExecId(value: Int) = ExecId(ValueSnowflakeId(SnowflakeId(value.toLong())))
+        fun ExecId(value: String) = ExecId(ValueSnowflakeId(SnowflakeId(value.toLong(16))))
+    }
 }
 
 class ExecType(override val value: ValueString) : ValueVariableString() {

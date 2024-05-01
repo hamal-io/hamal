@@ -11,7 +11,7 @@ import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain.request.TriggerInvokeRequest
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.InvocationInputs
-import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.Trigger

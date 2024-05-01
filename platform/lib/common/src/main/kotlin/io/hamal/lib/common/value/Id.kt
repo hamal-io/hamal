@@ -19,9 +19,16 @@ value class ValueSnowflakeId(private val value: SnowflakeId) : ValueComparable<V
     override fun toString(): String = value.toString()
     override fun compareTo(other: ValueSnowflakeId) = value.compareTo(other.value)
     val snowflakeIdValue: SnowflakeId get() = value
+    val stringValue: String get() = value.toString()
     fun partition() = value.partition()
     fun sequence() = value.sequence()
     fun elapsed() = value.elapsed()
 }
 
-abstract class ValueVariableSnowflakeId : ValueVariable.ComparableImpl<ValueSnowflakeId>()
+abstract class ValueVariableSnowflakeId : ValueVariable.ComparableImpl<ValueSnowflakeId>() {
+    val longValue: Long get() = value.snowflakeIdValue.toLong()
+    val stringValue: String get() = value.toString()
+    fun partition() = value.partition()
+    fun sequence() = value.sequence()
+    fun elapsed() = value.elapsed()
+}

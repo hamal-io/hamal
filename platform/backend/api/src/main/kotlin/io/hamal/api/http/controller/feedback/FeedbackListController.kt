@@ -22,7 +22,9 @@ internal class FeedbackListController(
     ): ResponseEntity<ApiFeedbackList> {
         return feedbackList(
             FeedbackQuery(
-                afterId = afterId, limit = limit, feedbackIds = feedbackIds
+                afterId = afterId,
+                limit = limit,
+                feedbackIds = feedbackIds
             )
         ).let { feedbacks ->
             ResponseEntity.ok(ApiFeedbackList(feedbacks.map {

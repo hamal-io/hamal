@@ -1,8 +1,9 @@
 package io.hamal.bridge.http.controller.code
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.value.ValueCode
-import io.hamal.lib.domain.vo.CodeId
+import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode

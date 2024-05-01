@@ -12,7 +12,10 @@ internal class FeedbackListControllerTest : FeedbackBaseControllerTest() {
 
     @Test
     fun `No feedbacks`() {
-        val res = httpTemplate.get("/v1/feedbacks").execute(ApiFeedbackList::class)
+        val res = httpTemplate
+            .get("/v1/feedbacks")
+            .execute(ApiFeedbackList::class)
+
         assertThat(res.feedbacks, empty())
     }
 

@@ -36,6 +36,16 @@ class KuaTable(
                 state.tableAppend(index)
             }
 
+            is ValueSnowflakeId -> {
+                state.stringPush(ValueString(value.stringValue))
+                state.tableAppend(index)
+            }
+
+            is ValueVariableSnowflakeId -> {
+                state.stringPush(ValueString(value.stringValue))
+                state.tableAppend(index)
+            }
+
             is ValueNil -> {
                 state.nilPush()
                 state.tableAppend(index)
@@ -155,6 +165,18 @@ class KuaTable(
             is KuaFunction<*, *, *, *> -> {
                 state.stringPush(key)
                 state.functionPush(value)
+                state.tableRawSet(index)
+            }
+
+            is ValueSnowflakeId -> {
+                state.stringPush(key)
+                state.stringPush(ValueString(value.stringValue))
+                state.tableRawSet(index)
+            }
+
+            is ValueVariableSnowflakeId -> {
+                state.stringPush(key)
+                state.stringPush(ValueString(value.stringValue))
                 state.tableRawSet(index)
             }
 

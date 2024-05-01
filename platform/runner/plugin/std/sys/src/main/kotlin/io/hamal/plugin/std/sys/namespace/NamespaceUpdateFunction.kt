@@ -2,7 +2,7 @@ package io.hamal.plugin.std.sys.namespace
 
 import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -31,9 +31,9 @@ class NamespaceUpdateFunction(
             )
 
             null to ctx.tableCreate(
-                "request_id" to ValueString(res.requestId.value.value.toString(16)),
+                "request_id" to res.requestId,
                 "request_status" to ValueString(res.requestStatus.name),
-                "id" to ValueString(res.id.value.value.toString(16))
+                "id" to ValueString(res.id.stringValue)
             )
         } catch (t: Throwable) {
             ValueError(t.message!!) to null

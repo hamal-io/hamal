@@ -137,7 +137,7 @@ private fun ExecLogQuery.ids(): String {
     return if (execLogIds.isEmpty()) {
         ""
     } else {
-        "AND id IN (${execLogIds.joinToString(",") { "${it.value.value}" }})"
+        "AND id IN (${execLogIds.joinToString(",") { "${it.longValue}" }})"
     }
 }
 
@@ -145,7 +145,7 @@ private fun ExecLogQuery.workspaceIds(): String {
     return if (workspaceIds.isEmpty()) {
         ""
     } else {
-        "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
+        "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.longValue}" }})"
     }
 }
 
@@ -153,7 +153,7 @@ private fun ExecLogQuery.execIds(): String {
     return if (execIds.isEmpty()) {
         ""
     } else {
-        "AND exec_id IN (${execIds.joinToString(",") { "${it.value.value}" }})"
+        "AND exec_id IN (${execIds.joinToString(",") { "${it.longValue}" }})"
     }
 }
 

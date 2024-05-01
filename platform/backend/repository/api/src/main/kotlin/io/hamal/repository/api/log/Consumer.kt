@@ -2,16 +2,21 @@ package io.hamal.repository.api.log
 
 import io.hamal.lib.common.domain.BatchSize
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueSnowflakeId
+import io.hamal.lib.common.value.ValueVariableSnowflakeId
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.lib.domain.vo.TopicEventId
 import io.hamal.lib.domain.vo.TopicEventPayload
 import io.hamal.repository.api.TopicEvent
 import kotlin.reflect.KClass
 
-class LogConsumerId(override val value: SnowflakeId) : ValueObjectId() {
-    constructor(value: Int) : this(SnowflakeId(value))
+class LogConsumerId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
+    companion object {
+        fun LogConsumerId(value: SnowflakeId) = LogConsumerId(ValueSnowflakeId(value))
+        fun LogConsumerId(value: Int) = LogConsumerId(ValueSnowflakeId(SnowflakeId(value.toLong())))
+        fun LogConsumerId(value: String) = LogConsumerId(ValueSnowflakeId(SnowflakeId(value.toLong(16))))
+    }
 }
 
 interface LogConsumer<VALUE : Any> {

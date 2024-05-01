@@ -5,6 +5,7 @@ import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.FeedbackMood
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.FeedbackId
+import io.hamal.lib.domain.vo.FeedbackId.Companion.FeedbackId
 import io.hamal.lib.domain.vo.FeedbackMessage
 
 data class Feedback(

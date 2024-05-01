@@ -5,8 +5,9 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain._enum.RequestStatus.*
 import io.hamal.lib.domain.request.TestRequested
-import io.hamal.lib.domain.vo.AuthId
+import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
 import io.hamal.repository.api.RequestQueryRepository.RequestQuery
 import io.hamal.repository.api.RequestRepository
 import io.hamal.repository.fixture.AbstractUnitTest

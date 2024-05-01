@@ -1,12 +1,17 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
 import io.hamal.lib.domain.vo.DeployMessage.Companion.DeployMessage
+import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
+import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.*
 import io.hamal.repository.api.FuncCode

@@ -119,7 +119,7 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
         return if (workspaceIds.isEmpty()) {
             ""
         } else {
-            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -127,7 +127,7 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
         return if (codeIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${codeIds.joinToString(",") { "${it.value.value}" }})"
+            "AND id IN (${codeIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 }

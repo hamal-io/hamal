@@ -8,6 +8,7 @@ import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecType.Companion.ExecType
 
 interface ExecRepository : ExecCmdRepository, ExecQueryRepository

@@ -151,7 +151,7 @@ internal object ProjectionCurrent : ProjectionSqlite<WorkspaceId, WorkspaceRecor
         return if (workspaceIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND id IN (${workspaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -159,7 +159,7 @@ internal object ProjectionCurrent : ProjectionSqlite<WorkspaceId, WorkspaceRecor
         return if (accountIds.isEmpty()) {
             ""
         } else {
-            "AND creator_id IN (${accountIds.joinToString(",") { "${it.value.value}" }})"
+            "AND creator_id IN (${accountIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 }

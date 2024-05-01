@@ -31,10 +31,10 @@ class ExtensionCreateFunction(
             )
 
             null to ctx.tableCreate(
-                "request_id" to ValueString(res.requestId.value.value.toString(16)),
+                "request_id" to res.requestId,
                 "request_status" to ValueString(res.requestStatus.name),
-                "id" to ValueString(res.id.value.value.toString(16)),
-                "workspace_id" to ValueString(res.workspaceId.value.value.toString(16))
+                "id" to res.id,
+                "workspace_id" to res.workspaceId
             )
 
         } catch (t: Throwable) {

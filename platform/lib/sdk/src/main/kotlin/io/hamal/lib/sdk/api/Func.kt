@@ -10,6 +10,7 @@ import io.hamal.lib.domain.request.FuncDeployRequest
 import io.hamal.lib.domain.request.FuncInvokeRequest
 import io.hamal.lib.domain.request.FuncUpdateRequest
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.http.HttpRequest
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body

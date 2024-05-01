@@ -7,6 +7,7 @@ import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.ExecLogLevel
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.ExecLogId.Companion.ExecLogId
 
 interface ExecLogRepository : ExecLogCmdRepository, ExecLogQueryRepository
 

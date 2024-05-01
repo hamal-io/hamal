@@ -113,7 +113,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FeedbackId, FeedbackRecord,
         return if (feedbackIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${feedbackIds.joinToString(",") { "${it.value.value}" }})"
+            "AND id IN (${feedbackIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 }

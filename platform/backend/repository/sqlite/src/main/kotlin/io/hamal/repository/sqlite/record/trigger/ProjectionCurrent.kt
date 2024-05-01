@@ -150,7 +150,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
         return if (triggerIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${triggerIds.joinToString(",") { "${it.value.value}" }})"
+            "AND id IN (${triggerIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -158,7 +158,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
         return if (workspaceIds.isEmpty()) {
             ""
         } else {
-            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -166,7 +166,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
         return if (funcIds.isEmpty()) {
             ""
         } else {
-            "AND func_id IN (${funcIds.joinToString(",") { "${it.value.value}" }})"
+            "AND func_id IN (${funcIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -174,7 +174,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
         return if (topicIds.isEmpty()) {
             ""
         } else {
-            "AND topic_id IN (${topicIds.joinToString(",") { "${it.value.value}" }})"
+            "AND topic_id IN (${topicIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -182,7 +182,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
         return if (namespaceIds.isEmpty()) {
             ""
         } else {
-            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 }

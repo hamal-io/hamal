@@ -2,8 +2,8 @@ package io.hamal.repository.sqlite.record
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
+import io.hamal.lib.common.value.ValueVariableSnowflakeId
 import io.hamal.lib.sqlite.NamedPreparedStatementDelegate
 import io.hamal.lib.sqlite.NamedPreparedStatementResultSetDelegate
 import io.hamal.lib.sqlite.Transaction
@@ -11,7 +11,7 @@ import io.hamal.repository.record.*
 import kotlin.reflect.KClass
 
 
-class RecordTransactionSqlite<ID : ValueObjectId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
+class RecordTransactionSqlite<ID : ValueVariableSnowflakeId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
     private val createDomainObject: CreateDomainObject<ID, RECORD, OBJ>,
     private val recordClass: KClass<RECORD>,
     private val delegate: Transaction,

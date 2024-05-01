@@ -5,10 +5,11 @@ import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
-import io.hamal.lib.domain.vo.NamespaceId
-import io.hamal.lib.domain.vo.WorkspaceId
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
+import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.runner.connector.UnitOfWork
@@ -58,7 +59,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
 
     class TestFunction(var result: String? = null) : Function0In0Out() {
         override fun invoke(ctx: FunctionContext) {
-            result = ctx[ExecId::class].value.value.toString(16)
+            result = ctx[ExecId::class].stringValue
         }
     }
 }

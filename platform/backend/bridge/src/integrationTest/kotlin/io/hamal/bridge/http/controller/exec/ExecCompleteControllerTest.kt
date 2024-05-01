@@ -7,6 +7,7 @@ import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
+import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecStatus.Started
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import io.hamal.lib.http.HttpErrorResponse
@@ -19,7 +20,7 @@ import io.hamal.lib.sdk.bridge.BridgeExecCompleteRequest
 import io.hamal.lib.sdk.bridge.BridgeExecCompleteRequested
 import io.hamal.repository.api.Exec
 import io.hamal.repository.api.log.LogConsumerBatchImpl
-import io.hamal.repository.api.log.LogConsumerId
+import io.hamal.repository.api.log.LogConsumerId.Companion.LogConsumerId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize

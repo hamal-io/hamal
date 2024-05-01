@@ -1,15 +1,19 @@
 package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.domain.ValueObjectHotObject
-import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueSnowflakeId
 import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueVariableSnowflakeId
 import io.hamal.lib.common.value.ValueVariableString
 
-class TriggerId(override val value: SnowflakeId) : ValueObjectId() {
-    constructor(value: Int) : this(SnowflakeId(value.toLong()))
-    constructor(value: String) : this(SnowflakeId(value.toLong(16)))
+class TriggerId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
+    companion object {
+        fun TriggerId(value: SnowflakeId) = TriggerId(ValueSnowflakeId(value))
+        fun TriggerId(value: Int) = TriggerId(ValueSnowflakeId(SnowflakeId(value.toLong())))
+        fun TriggerId(value: String) = TriggerId(ValueSnowflakeId(SnowflakeId(value.toLong(16))))
+    }
 }
 
 class TriggerName(override val value: ValueString) : ValueVariableString() {

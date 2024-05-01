@@ -1,7 +1,7 @@
 package io.hamal.bridge
 
 import io.hamal.core.CoreConfig
-import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.common.value.ValueCode
@@ -13,6 +13,7 @@ import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
 import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
 import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.lib.domain.vo.PasswordSalt.Companion.PasswordSalt
+import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import io.hamal.lib.domain.vo.WorkspaceName.Companion.WorkspaceName
 import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.CreateExecTokenAuthCmd

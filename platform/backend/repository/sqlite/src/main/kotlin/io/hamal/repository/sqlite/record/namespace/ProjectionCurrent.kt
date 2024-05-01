@@ -118,7 +118,7 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceId, NamespaceRecor
         return if (workspaceIds.isEmpty()) {
             ""
         } else {
-            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -126,7 +126,7 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceId, NamespaceRecor
         return if (namespaceIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${namespaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND id IN (${namespaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 }

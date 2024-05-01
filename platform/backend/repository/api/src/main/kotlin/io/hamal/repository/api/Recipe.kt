@@ -4,6 +4,7 @@ import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.RecipeId.Companion.RecipeId
 
 data class Recipe(
     override val id: RecipeId,

@@ -2,7 +2,7 @@ package io.hamal.repository.sqlite.record.exec
 
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Exec
@@ -131,7 +131,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
         return if (execIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${execIds.joinToString(",") { "${it.value.value}" }})"
+            "AND id IN (${execIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -139,7 +139,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
         return if (workspaceIds.isEmpty()) {
             ""
         } else {
-            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -147,7 +147,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
         return if (funcIds.isEmpty()) {
             ""
         } else {
-            "AND func_id IN (${funcIds.joinToString(",") { "${it.value.value}" }})"
+            "AND func_id IN (${funcIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -155,7 +155,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
         return if (namespaceIds.isEmpty()) {
             ""
         } else {
-            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 }

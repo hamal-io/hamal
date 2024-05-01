@@ -2,9 +2,13 @@ package io.hamal.repository.fixture
 
 import io.hamal.lib.common.domain.CreatedAt
 import io.hamal.lib.common.domain.UpdatedAt
-import io.hamal.lib.domain.vo.LogTopicId
+import io.hamal.lib.domain.vo.LogTopicId.Companion.LogTopicId
 import io.hamal.repository.api.*
-import io.hamal.repository.api.log.*
+import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.LogSegmentId.Companion.LogSegmentId
+import io.hamal.repository.api.log.LogSegmentRepository
+import io.hamal.repository.api.log.LogTopic
+import io.hamal.repository.api.log.LogTopicRepository
 import io.hamal.repository.memory.AuthMemoryRepository
 import io.hamal.repository.memory.ExecLogMemoryRepository
 import io.hamal.repository.memory.RequestMemoryRepository

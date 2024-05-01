@@ -8,6 +8,7 @@ import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.request.TopicAppendEntryRequest
 import io.hamal.lib.domain.request.TopicCreateRequest
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
 import io.hamal.lib.http.HttpRequest
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body

@@ -1,14 +1,17 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.NamespaceFeature.*
 import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.lib.domain.vo.WorkspaceId
+import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
 import io.hamal.repository.api.NamespaceCmdRepository.UpdateCmd
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery

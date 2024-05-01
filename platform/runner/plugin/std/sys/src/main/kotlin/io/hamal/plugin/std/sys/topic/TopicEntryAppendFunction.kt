@@ -1,7 +1,9 @@
 package io.hamal.plugin.std.sys.topic
 
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.TopicEventPayload
-import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
 import io.hamal.lib.kua.function.Function2In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
@@ -9,8 +11,6 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.kua.value.toHotObject
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueString
 
 class TopicEntryAppendFunction(
     private val sdk: ApiSdk
@@ -27,9 +27,9 @@ class TopicEntryAppendFunction(
             )
 
             null to ctx.tableCreate(
-                "request_id" to ValueString(res.requestId.value.value.toString(16)),
+                "request_id" to ValueString(res.requestId.stringValue),
                 "request_status" to ValueString(res.requestStatus.name),
-                "id" to ValueString(res.id.value.value.toString(16))
+                "id" to ValueString(res.id.stringValue)
             )
 
         } catch (t: Throwable) {

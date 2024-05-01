@@ -3,6 +3,7 @@ package io.hamal.plugin.std.sys.trigger
 import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -32,15 +33,15 @@ class TriggerListFunction(
                 when (trigger) {
                     is ApiTriggerList.FixedRate -> {
                         ctx.tableCreate(
-                            "id" to ValueString(trigger.id.value.value.toString(16)),
+                            "id" to ValueString(trigger.id.stringValue),
                             "type" to ValueString("FixedRate"),
                             "name" to trigger.name,
                             "namespace" to ctx.tableCreate(
-                                "id" to ValueString(trigger.namespace.id.value.value.toString(16)),
+                                "id" to ValueString(trigger.namespace.id.stringValue),
                                 "name" to trigger.namespace.name
                             ),
                             "func" to ctx.tableCreate(
-                                "id" to ValueString(trigger.func.id.value.value.toString(16)),
+                                "id" to ValueString(trigger.func.id.stringValue),
                                 "name" to trigger.func.name
                             ),
                             "duration" to trigger.duration
@@ -49,19 +50,19 @@ class TriggerListFunction(
 
                     is ApiTriggerList.Event -> {
                         ctx.tableCreate(
-                            "id" to ValueString(trigger.id.value.value.toString(16)),
+                            "id" to ValueString(trigger.id.stringValue),
                             "type" to ValueString("Event"),
                             "name" to trigger.name,
                             "namespace" to ctx.tableCreate(
-                                "id" to ValueString(trigger.namespace.id.value.value.toString(16)),
+                                "id" to ValueString(trigger.namespace.id.stringValue),
                                 "name" to trigger.namespace.name
                             ),
                             "func" to ctx.tableCreate(
-                                "id" to ValueString(trigger.func.id.value.value.toString(16)),
+                                "id" to ValueString(trigger.func.id.stringValue),
                                 "name" to trigger.func.name
                             ),
                             "topic" to ctx.tableCreate(
-                                "id" to ValueString(trigger.topic.id.value.value.toString(16)),
+                                "id" to ValueString(trigger.topic.id.stringValue),
                                 "name" to trigger.topic.name
                             ),
                         )
@@ -69,30 +70,30 @@ class TriggerListFunction(
 
                     is ApiTriggerList.Hook -> {
                         ctx.tableCreate(
-                            "id" to ValueString(trigger.id.value.value.toString(16)),
+                            "id" to ValueString(trigger.id.stringValue),
                             "type" to ValueString("Hook"),
                             "name" to trigger.name,
                             "namespace" to ctx.tableCreate(
-                                "id" to ValueString(trigger.namespace.id.value.value.toString(16)),
+                                "id" to ValueString(trigger.namespace.id.stringValue),
                                 "name" to trigger.namespace.name
                             ),
                             "func" to ctx.tableCreate(
-                                "id" to ValueString(trigger.func.id.value.value.toString(16)),
+                                "id" to ValueString(trigger.func.id.stringValue),
                                 "name" to trigger.func.name
                             ),
                         )
                     }
 
                     is ApiTriggerList.Cron -> ctx.tableCreate(
-                        "id" to ValueString(trigger.id.value.value.toString(16)),
+                        "id" to ValueString(trigger.id.stringValue),
                         "type" to ValueString("Cron"),
                         "name" to trigger.name,
                         "namespace" to ctx.tableCreate(
-                            "id" to ValueString(trigger.namespace.id.value.value.toString(16)),
+                            "id" to ValueString(trigger.namespace.id.stringValue),
                             "name" to trigger.namespace.name
                         ),
                         "func" to ctx.tableCreate(
-                            "id" to ValueString(trigger.func.id.value.value.toString(16)),
+                            "id" to ValueString(trigger.func.id.stringValue),
                             "name" to trigger.func.name
                         ),
                         "cron" to trigger.cron
@@ -100,15 +101,15 @@ class TriggerListFunction(
 
                     is ApiTriggerList.Endpoint -> {
                         ctx.tableCreate(
-                            "id" to ValueString(trigger.id.value.value.toString(16)),
+                            "id" to ValueString(trigger.id.stringValue),
                             "type" to ValueString("Endpoint"),
                             "name" to trigger.name,
                             "namespace" to ctx.tableCreate(
-                                "id" to ValueString(trigger.namespace.id.value.value.toString(16)),
+                                "id" to ValueString(trigger.namespace.id.stringValue),
                                 "name" to trigger.namespace.name
                             ),
                             "func" to ctx.tableCreate(
-                                "id" to ValueString(trigger.func.id.value.value.toString(16)),
+                                "id" to ValueString(trigger.func.id.stringValue),
                                 "name" to trigger.func.name
                             )
                         )

@@ -115,7 +115,7 @@ internal object ProjectionCurrent : ProjectionSqlite<AccountId, AccountRecord, A
         return if (accountIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${accountIds.joinToString(",") { "${it.value.value}" }})"
+            "AND id IN (${accountIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 }

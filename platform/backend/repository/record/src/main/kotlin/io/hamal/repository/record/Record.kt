@@ -3,6 +3,7 @@ package io.hamal.repository.record
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueVariableSnowflakeId
 import io.hamal.lib.common.value.ValueVariableString
 import io.hamal.repository.record.RecordClass.Companion.RecordClass
 import java.time.Instant
@@ -31,7 +32,7 @@ class RecordedAt(override val value: Instant) : ValueObjectInstant() {
 }
 
 
-abstract class Record<ID : ValueObjectId> {
+abstract class Record<ID : ValueVariableSnowflakeId> {
     abstract val cmdId: CmdId
     abstract val entityId: ID
     abstract var recordSequence: RecordSequence?
@@ -45,7 +46,7 @@ abstract class Record<ID : ValueObjectId> {
         recordedAt ?: throw IllegalStateException("Records needs to be stored to db before it can be accessed")
 }
 
-interface RecordEntity<ID : ValueObjectId, RECORD : Record<ID>, OBJ : DomainObject<ID>> {
+interface RecordEntity<ID : ValueVariableSnowflakeId, RECORD : Record<ID>, OBJ : DomainObject<ID>> {
     val id: ID
     val cmdId: CmdId
     val sequence: RecordSequence
@@ -54,6 +55,6 @@ interface RecordEntity<ID : ValueObjectId, RECORD : Record<ID>, OBJ : DomainObje
     fun toDomainObject(): OBJ
 }
 
-interface CreateDomainObject<ID : ValueObjectId, RECORD : Record<ID>, OBJ : DomainObject<ID>> {
+interface CreateDomainObject<ID : ValueVariableSnowflakeId, RECORD : Record<ID>, OBJ : DomainObject<ID>> {
     operator fun invoke(recs: List<RECORD>): OBJ
 }

@@ -1,10 +1,13 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.AccountId
+import io.hamal.lib.domain.vo.AccountId.Companion.AccountId
 import io.hamal.lib.domain.vo.WorkspaceId
+import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.lib.domain.vo.WorkspaceName
 import io.hamal.lib.domain.vo.WorkspaceName.Companion.WorkspaceName
 import io.hamal.repository.api.WorkspaceCmdRepository.CreateCmd

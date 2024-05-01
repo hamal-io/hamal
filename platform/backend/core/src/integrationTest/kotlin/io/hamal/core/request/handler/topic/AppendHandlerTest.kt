@@ -7,11 +7,15 @@ import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.TopicAppendEventRequested
 import io.hamal.lib.domain.vo.AuthId
+import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
 import io.hamal.lib.domain.vo.TopicEventPayload
 import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import io.hamal.repository.api.log.LogEventId
+import io.hamal.repository.api.log.LogEventId.Companion.LogEventId
 import io.hamal.repository.record.json
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo

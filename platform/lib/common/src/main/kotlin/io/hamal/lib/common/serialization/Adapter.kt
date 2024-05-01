@@ -1,11 +1,16 @@
 package io.hamal.lib.common.serialization
 
 import com.google.gson.*
-import io.hamal.lib.common.domain.*
+import io.hamal.lib.common.domain.ValueObjectHotObject
+import io.hamal.lib.common.domain.ValueObjectInstant
+import io.hamal.lib.common.domain.ValueObjectInt
+import io.hamal.lib.common.domain.ValueObjectLong
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueSnowflakeId
 import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueVariableSnowflakeId
 import io.hamal.lib.common.value.ValueVariableString
 import java.lang.reflect.Type
 import java.time.Instant
@@ -49,20 +54,21 @@ internal object InstantAdapter : JsonAdapter<Instant> {
 }
 
 
-class ValueObjectIdAdapter<TYPE : ValueObjectId>(
-    val ctor: (SnowflakeId) -> TYPE
-) : JsonAdapter<TYPE> {
-
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {
-        return ctor(SnowflakeId(json.asString))
-    }
-
-    override fun serialize(src: TYPE, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-        return JsonPrimitive(src.value.value.toString(16))
-    }
-}
-
 object JsonAdapters {
+
+    class SnowflakeId<TYPE : ValueVariableSnowflakeId>(
+        val ctor: (ValueSnowflakeId) -> TYPE
+    ) : JsonAdapter<TYPE> {
+
+        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {
+            return ctor(ValueSnowflakeId(SnowflakeId(json.asString)))
+        }
+
+        override fun serialize(src: TYPE, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+            return JsonPrimitive(src.stringValue)
+        }
+    }
+
 
     class String<TYPE : ValueVariableString>(
         val ctor: (ValueString) -> TYPE

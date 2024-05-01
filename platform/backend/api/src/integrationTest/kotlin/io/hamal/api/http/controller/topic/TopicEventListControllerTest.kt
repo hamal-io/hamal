@@ -1,9 +1,9 @@
 package io.hamal.api.http.controller.topic
 
 import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.domain.vo.TopicEventId
+import io.hamal.lib.domain.vo.TopicEventId.Companion.TopicEventId
 import io.hamal.lib.domain.vo.TopicEventPayload
-import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode

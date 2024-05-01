@@ -8,6 +8,8 @@ import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.TopicEventId.Companion.TopicEventId
+import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
 import java.lang.reflect.Type
 
 sealed class Topic : DomainObject<TopicId>, HasNamespaceId, HasWorkspaceId {

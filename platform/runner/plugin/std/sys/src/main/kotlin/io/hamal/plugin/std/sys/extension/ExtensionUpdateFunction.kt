@@ -4,7 +4,7 @@ import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.domain.vo.ExtensionId
+import io.hamal.lib.domain.vo.ExtensionId.Companion.ExtensionId
 import io.hamal.lib.domain.vo.ExtensionName.Companion.ExtensionName
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -33,9 +33,9 @@ class ExtensionUpdateFunction(
             )
 
             null to ctx.tableCreate(
-                "request_id" to ValueString(res.requestId.value.value.toString(16)),
+                "request_id" to res.requestId,
                 "request_status" to ValueString(res.requestStatus.name),
-                "id" to ValueString(res.id.value.value.toString(16)),
+                "id" to res.id,
             )
 
         } catch (t: Throwable) {

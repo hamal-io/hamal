@@ -1,12 +1,12 @@
 package io.hamal.repository
 
-import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
-import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.repository.api.StateCmdRepository
 import io.hamal.repository.api.StateRepository
 import io.hamal.repository.fixture.AbstractUnitTest

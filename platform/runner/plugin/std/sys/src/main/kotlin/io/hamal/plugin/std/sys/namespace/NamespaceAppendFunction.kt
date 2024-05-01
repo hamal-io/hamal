@@ -29,9 +29,9 @@ class NamespaceAppendFunction(
             )
 
             null to ctx.tableCreate(
-                "request_id" to ValueString(res.requestId.value.value.toString(16)),
+                "request_id" to res.requestId,
                 "request_status" to ValueString(res.requestStatus.name),
-                "id" to ValueString(res.id.value.value.toString(16))
+                "id" to ValueString(res.id.stringValue)
             )
 
         } catch (t: Throwable) {

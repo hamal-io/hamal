@@ -4,6 +4,7 @@ import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.WorkspaceId
 

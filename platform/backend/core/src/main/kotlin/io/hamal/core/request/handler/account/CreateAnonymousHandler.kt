@@ -51,7 +51,7 @@ class AccountCreateAnonymousHandler(
             WorkspaceCmdRepository.CreateCmd(
                 id = req.cmdId(),
                 workspaceId = req.workspaceId,
-                name = WorkspaceName("Workspace ${req.workspaceId.value.value.toString(16)}"),
+                name = WorkspaceName("Workspace ${req.workspaceId.stringValue}"),
                 creatorId = req.id
             )
         )

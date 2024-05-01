@@ -1,16 +1,20 @@
 package io.hamal.lib.nodes
 
 import io.hamal.lib.common.domain.ValueObjectHotObject
-import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueSnowflakeId
 import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueVariableSnowflakeId
 import io.hamal.lib.common.value.ValueVariableString
 
 
-class NodeId(override val value: SnowflakeId) : ValueObjectId() {
-    constructor(value: Int) : this(SnowflakeId(value.toLong()))
-    constructor(value: String) : this(SnowflakeId(value.toLong(16)))
+class NodeId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
+    companion object {
+        fun NodeId(value: SnowflakeId) = NodeId(ValueSnowflakeId(value))
+        fun NodeId(value: Int) = NodeId(ValueSnowflakeId(SnowflakeId(value.toLong())))
+        fun NodeId(value: String) = NodeId(ValueSnowflakeId(SnowflakeId(value.toLong(16))))
+    }
 }
 
 class NodeTitle(override val value: ValueString) : ValueVariableString() {

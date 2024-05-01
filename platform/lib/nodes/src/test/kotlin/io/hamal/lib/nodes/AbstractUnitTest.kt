@@ -1,8 +1,11 @@
 package io.hamal.lib.nodes
 
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.nodes.ConnectionId.Companion.ConnectionId
+import io.hamal.lib.nodes.NodeId.Companion.NodeId
 import io.hamal.lib.nodes.NodeTitle.Companion.NodeTitle
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
+import io.hamal.lib.nodes.PortId.Companion.PortId
 import io.hamal.lib.nodes.control.ControlIdentifier
 import io.hamal.lib.nodes.control.ControlIdentifier.Companion.ControlIdentifier
 

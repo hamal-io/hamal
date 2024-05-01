@@ -8,6 +8,7 @@ import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -38,11 +39,11 @@ class FuncCreateFunction(
             )
 
             null to ctx.tableCreate(
-                "request_id" to ValueString(res.requestId.value.value.toString(16)),
+                "request_id" to res.requestId,
                 "request_status" to ValueString(res.requestStatus.name),
-                "id" to ValueString(res.id.value.value.toString(16)),
-                "workspace_id" to ValueString(res.workspaceId.value.value.toString(16)),
-                "namespace_id" to ValueString(res.namespaceId.value.value.toString(16))
+                "id" to ValueString(res.id.stringValue),
+                "workspace_id" to res.workspaceId,
+                "namespace_id" to res.namespaceId
             )
 
 

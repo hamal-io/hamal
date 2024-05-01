@@ -122,7 +122,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
         return if (funcIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${funcIds.joinToString(",") { "${it.value.value}" }})"
+            "AND id IN (${funcIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -130,7 +130,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
         return if (workspaceIds.isEmpty()) {
             ""
         } else {
-            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -138,7 +138,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
         return if (namespaceIds.isEmpty()) {
             ""
         } else {
-            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 }

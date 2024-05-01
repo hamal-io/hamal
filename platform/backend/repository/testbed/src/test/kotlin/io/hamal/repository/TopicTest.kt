@@ -1,11 +1,16 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.LogTopicId.Companion.LogTopicId
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
+import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
+import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.repository.api.TopicCmdRepository.TopicCreateCmd
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import io.hamal.repository.api.TopicRepository

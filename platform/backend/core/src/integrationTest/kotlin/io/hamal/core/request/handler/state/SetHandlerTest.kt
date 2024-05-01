@@ -7,7 +7,11 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.StateSetRequested
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
+import io.hamal.lib.domain.vo.CorrelationId
+import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
+import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
+import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test

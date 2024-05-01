@@ -371,7 +371,7 @@ private fun AuthQuery.ids(): String {
     return if (authIds.isEmpty()) {
         ""
     } else {
-        "AND id IN (${authIds.joinToString(",") { "${it.value.value}" }})"
+        "AND id IN (${authIds.joinToString(",") { "${it.longValue}" }})"
     }
 }
 
@@ -379,6 +379,6 @@ private fun AuthQuery.accountIds(): String {
     return if (accountIds.isEmpty()) {
         ""
     } else {
-        "AND entity_id IN (${accountIds.joinToString(",") { "${it.value.value}" }})"
+        "AND entity_id IN (${accountIds.joinToString(",") { "${it.longValue}" }})"
     }
 }

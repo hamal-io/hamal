@@ -3,7 +3,7 @@ package io.hamal.plugin.std.sys.recipe
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.domain.vo.RecipeId
+import io.hamal.lib.domain.vo.RecipeId.Companion.RecipeId
 import io.hamal.lib.domain.vo.RecipeInputs
 import io.hamal.lib.domain.vo.RecipeName
 import io.hamal.lib.kua.function.Function1In2Out
@@ -35,9 +35,9 @@ class RecipeUpdateFunction(
             )
 
             null to ctx.tableCreate(
-                "request_id" to ValueString(res.requestId.value.value.toString(16)),
+                "request_id" to ValueString(res.requestId.stringValue),
                 "request_status" to ValueString(res.requestStatus.name),
-                "id" to ValueString(res.id.value.value.toString(16))
+                "id" to ValueString(res.id.stringValue)
             )
         } catch (t: Throwable) {
             ValueError(t.message!!) to null

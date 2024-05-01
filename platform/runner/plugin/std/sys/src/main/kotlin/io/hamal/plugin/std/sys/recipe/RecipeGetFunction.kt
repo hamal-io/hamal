@@ -2,7 +2,7 @@ package io.hamal.plugin.std.sys.recipe
 
 import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.domain.vo.RecipeId
+import io.hamal.lib.domain.vo.RecipeId.Companion.RecipeId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -21,7 +21,7 @@ class RecipeGetFunction(
             null to sdk.recipe.get(RecipeId(arg1.stringValue))
                 .let { recipe ->
                     ctx.tableCreate(
-                        "id" to ValueString(recipe.id.value.value.toString(16)),
+                        "id" to ValueString(recipe.id.stringValue),
                         "name" to recipe.name,
                         "value" to recipe.value
                     )

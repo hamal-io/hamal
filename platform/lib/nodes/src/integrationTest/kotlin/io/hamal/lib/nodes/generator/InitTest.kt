@@ -6,6 +6,7 @@ import io.hamal.lib.common.hot.HotNumber
 import io.hamal.lib.common.hot.HotString
 import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.*
+import io.hamal.lib.nodes.NodeId.Companion.NodeId
 import io.hamal.lib.nodes.control.ControlInit
 import io.hamal.runner.test.TestFailConnector
 import org.hamcrest.CoreMatchers.containsString

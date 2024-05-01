@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.state
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
-import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecState
 import io.hamal.lib.domain.vo.ExecStatus.Started
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName

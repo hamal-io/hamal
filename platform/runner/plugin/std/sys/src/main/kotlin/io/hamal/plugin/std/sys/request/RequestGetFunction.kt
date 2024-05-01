@@ -1,5 +1,7 @@
 package io.hamal.plugin.std.sys.request
 
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpSuccessResponse
 import io.hamal.lib.http.HttpTemplate
@@ -9,8 +11,6 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.sdk.api.ApiRequested
-import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueString
 
 class RequestGetFunction(
     private val httpTemplate: HttpTemplate
@@ -27,7 +27,7 @@ class RequestGetFunction(
             return null to response.result(ApiRequested::class)
                 .let { exec ->
                     ctx.tableCreate(
-                        "request_id" to ValueString(exec.requestId.value.value.toString(16)),
+                        "request_id" to ValueString(exec.requestId.stringValue),
                         "request_status" to ValueString(exec.requestStatus.name)
                     )
                 }

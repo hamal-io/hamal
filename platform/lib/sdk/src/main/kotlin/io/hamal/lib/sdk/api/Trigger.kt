@@ -11,6 +11,7 @@ import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.request.TriggerCreateRequest
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.http.HttpRequest
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body

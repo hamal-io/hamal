@@ -3,7 +3,7 @@ package io.hamal.plugin.std.sys.code
 import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueNumber
 import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.domain.vo.CodeId
+import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.kua.function.Function2In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -34,7 +34,7 @@ class CodeGetFunction(
             null to response
                 .let { code ->
                     ctx.tableCreate(
-                        "id" to ValueString(code.id.value.value.toString(16)),
+                        "id" to ValueString(code.id.stringValue),
                         "code" to code.value,
                         "version" to ValueNumber(code.version.value)
                         // FIXME-53 deployed_version ????

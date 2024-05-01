@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.recipe
 import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.recipe.RecipeCreatePort
 import io.hamal.core.component.Retry
-import io.hamal.lib.domain.vo.AccountId
+import io.hamal.lib.domain.vo.AccountId.Companion.AccountId
 import io.hamal.lib.sdk.api.ApiRecipeCreateRequest
 import io.hamal.lib.sdk.api.ApiRequested
 import org.springframework.http.ResponseEntity

@@ -6,11 +6,12 @@ import io.hamal.core.component.SetupInternalTopics
 import io.hamal.core.config.BackendBasePath
 import io.hamal.core.service.InternalEventService
 import io.hamal.extension.net.http.ExtensionHttpFactory
-import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
 import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.lib.domain.vo.PasswordSalt.Companion.PasswordSalt

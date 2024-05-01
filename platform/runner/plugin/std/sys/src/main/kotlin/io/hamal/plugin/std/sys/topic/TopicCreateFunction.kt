@@ -5,6 +5,7 @@ import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -34,12 +35,12 @@ class TopicCreateFunction(
             )
 
             null to ctx.tableCreate(
-                "request_id" to ValueString(res.requestId.value.value.toString(16)),
+                "request_id" to ValueString(res.requestId.stringValue),
                 "request_status" to ValueString(res.requestStatus.name),
-                "id" to ValueString(res.id.value.value.toString(16)),
+                "id" to ValueString(res.id.stringValue),
                 "type" to ValueString(res.type.name),
-                "workspace_id" to ValueString(res.workspaceId.value.value.toString(16)),
-                "namespace_id" to ValueString(res.namespaceId.value.value.toString(16))
+                "workspace_id" to ValueString(res.workspaceId.stringValue),
+                "namespace_id" to ValueString(res.namespaceId.stringValue)
             )
 
         } catch (t: Throwable) {

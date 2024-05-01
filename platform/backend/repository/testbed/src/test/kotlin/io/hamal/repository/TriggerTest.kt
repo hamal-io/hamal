@@ -1,6 +1,7 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.hot.HotObject
@@ -9,8 +10,13 @@ import io.hamal.lib.domain._enum.TriggerStatus.Inactive
 import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.CronPattern.Companion.CronPattern
+import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
+import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
 import io.hamal.lib.domain.vo.TriggerDuration.Companion.TriggerDuration
+import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import io.hamal.lib.domain.vo.TriggerName.Companion.TriggerName
+import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerCmdRepository.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery

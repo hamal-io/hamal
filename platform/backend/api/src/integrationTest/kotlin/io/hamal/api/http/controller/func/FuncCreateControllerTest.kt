@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.func
 
-import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.CodeType
@@ -8,7 +8,7 @@ import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
 import io.hamal.lib.domain.vo.NamespaceFeatures
-import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound

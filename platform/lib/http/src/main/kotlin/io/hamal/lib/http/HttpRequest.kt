@@ -1,8 +1,8 @@
 package io.hamal.lib.http
 
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueVariableSnowflakeId
 import io.hamal.lib.common.value.ValueVariableString
 import io.hamal.lib.http.HttpRequest.HttpMethod.*
 import kotlin.reflect.KClass
@@ -15,17 +15,17 @@ interface HttpRequest {
     val client: org.apache.http.client.HttpClient
 
     fun path(key: String, value: String): HttpRequest
-    fun path(key: String, value: SnowflakeId) = path(key, value.value.toString(16))
-    fun path(key: String, value: ValueObjectId) = path(key, value.value)
+    fun path(key: String, value: SnowflakeId) = path(key, value.toString())
+    fun path(key: String, value: ValueVariableSnowflakeId) = path(key, value.stringValue)
 
     fun header(key: String, value: String): HttpRequest
     fun parameter(key: String, value: String): HttpRequest
     fun parameter(key: String, value: Number): HttpRequest
     fun parameter(key: String, value: SnowflakeId): HttpRequest
-    fun parameter(key: String, value: ValueObjectId): HttpRequest
+    fun parameter(key: String, value: ValueVariableSnowflakeId): HttpRequest
     fun parameter(key: String, value: ValueVariableString): HttpRequest
     fun parameter(key: String, value: Limit): HttpRequest
-    fun parameter(key: String, value: List<ValueObjectId>): HttpRequest
+    fun parameter(key: String, value: List<ValueVariableSnowflakeId>): HttpRequest
     fun parameter(key: String, value: Boolean): HttpRequest
     fun execute(): HttpResponse
     fun <RESULT : Any> execute(action: HttpResponse.() -> RESULT): RESULT
@@ -45,7 +45,7 @@ interface HttpRequest {
 interface HttpRequestWithBody : HttpRequest {
     override fun path(key: String, value: String): HttpRequestWithBody
     override fun path(key: String, value: SnowflakeId) = path(key, value.value.toString(16))
-    override fun path(key: String, value: ValueObjectId) = path(key, value.value)
+    override fun path(key: String, value: ValueVariableSnowflakeId) = path(key, value.stringValue)
 
     override fun header(key: String, value: String): HttpRequestWithBody
     fun <BODY_TYPE : Any> body(body: BODY_TYPE, clazz: KClass<BODY_TYPE>): HttpRequestWithBody
@@ -125,8 +125,8 @@ class HttpRequestImpl(
         return this
     }
 
-    override fun parameter(key: String, value: ValueObjectId): HttpRequest {
-        parameters.add(HttpParameter(key, value.value.value.toString(16)))
+    override fun parameter(key: String, value: ValueVariableSnowflakeId): HttpRequest {
+        parameters.add(HttpParameter(key, value.stringValue))
         return this
     }
 
@@ -140,8 +140,8 @@ class HttpRequestImpl(
         return this
     }
 
-    override fun parameter(key: String, value: List<ValueObjectId>): HttpRequest {
-        parameters.add(HttpParameter(key, value.joinToString(",") { it.value.value.toString(16) }))
+    override fun parameter(key: String, value: List<ValueVariableSnowflakeId>): HttpRequest {
+        parameters.add(HttpParameter(key, value.joinToString(",") { it.stringValue }))
         return this
     }
 

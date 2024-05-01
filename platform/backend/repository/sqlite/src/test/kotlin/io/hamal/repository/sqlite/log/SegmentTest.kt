@@ -1,8 +1,8 @@
 package io.hamal.repository.sqlite.log
 
 import io.hamal.lib.common.util.FileUtils
-import io.hamal.lib.domain.vo.LogTopicId
-import io.hamal.repository.api.log.LogSegmentId
+import io.hamal.lib.domain.vo.LogTopicId.Companion.LogTopicId
+import io.hamal.repository.api.log.LogSegmentId.Companion.LogSegmentId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Assertions.assertTrue

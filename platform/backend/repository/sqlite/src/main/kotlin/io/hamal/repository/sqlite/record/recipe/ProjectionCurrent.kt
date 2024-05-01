@@ -115,7 +115,7 @@ object ProjectionCurrent : ProjectionSqlite<RecipeId, RecipeRecord, Recipe> {
         return if (recipeIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${recipeIds.joinToString(",") { "${it.value.value}" }})"
+            "AND id IN (${recipeIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 }

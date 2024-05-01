@@ -26,10 +26,10 @@ data class EventTopic(
 
 
 fun Event.toHot() = HotObject.builder()
-    .set("id", id.value.value.toString(16))
+    .set("id", id.stringValue)
     .set(
         "topic", HotObject.builder()
-            .set("id", topic.id.value.value.toString(16))
+            .set("id", topic.id.stringValue)
             .set("name", topic.name.stringValue)
             .build()
     )

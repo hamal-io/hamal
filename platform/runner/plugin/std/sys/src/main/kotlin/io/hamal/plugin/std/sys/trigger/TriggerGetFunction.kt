@@ -2,7 +2,7 @@ package io.hamal.plugin.std.sys.trigger
 
 import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -24,15 +24,15 @@ class TriggerGetFunction(
                     when (trigger) {
                         is ApiTrigger.FixedRate ->
                             ctx.tableCreate(
-                                "id" to ValueString(trigger.id.value.value.toString(16)),
+                                "id" to ValueString(trigger.id.stringValue),
                                 "type" to ValueString("FixedRate"),
                                 "name" to trigger.name,
                                 "namespace" to ctx.tableCreate(
-                                    "id" to ValueString(trigger.namespace.id.value.value.toString(16)),
+                                    "id" to ValueString(trigger.namespace.id.stringValue),
                                     "name" to trigger.namespace.name
                                 ),
                                 "func" to ctx.tableCreate(
-                                    "id" to ValueString(trigger.func.id.value.value.toString(16)),
+                                    "id" to ValueString(trigger.func.id.stringValue),
                                     "name" to trigger.func.name.value
                                 ),
                                 "duration" to trigger.duration,
@@ -41,19 +41,19 @@ class TriggerGetFunction(
 
                         is ApiTrigger.Event -> {
                             ctx.tableCreate(
-                                "id" to ValueString(trigger.id.value.value.toString(16)),
+                                "id" to ValueString(trigger.id.stringValue),
                                 "type" to ValueString("Event"),
                                 "name" to trigger.name,
                                 "namespace" to ctx.tableCreate(
-                                    "id" to ValueString(trigger.namespace.id.value.value.toString(16)),
+                                    "id" to ValueString(trigger.namespace.id.stringValue),
                                     "name" to trigger.namespace.name
                                 ),
                                 "func" to ctx.tableCreate(
-                                    "id" to ValueString(trigger.func.id.value.value.toString(16)),
+                                    "id" to ValueString(trigger.func.id.stringValue),
                                     "name" to trigger.func.name
                                 ),
                                 "topic" to ctx.tableCreate(
-                                    "id" to ValueString(trigger.topic.id.value.value.toString(16)),
+                                    "id" to ValueString(trigger.topic.id.stringValue),
                                     "name" to trigger.topic.name
                                 ),
                                 "status" to ValueString(trigger.status.name),
@@ -62,15 +62,15 @@ class TriggerGetFunction(
 
                         is ApiTrigger.Hook -> {
                             ctx.tableCreate(
-                                "id" to ValueString(trigger.id.value.value.toString(16)),
+                                "id" to ValueString(trigger.id.stringValue),
                                 "type" to ValueString("Hook"),
                                 "name" to trigger.name,
                                 "namespace" to ctx.tableCreate(
-                                    "id" to ValueString(trigger.namespace.id.value.value.toString(16)),
+                                    "id" to ValueString(trigger.namespace.id.stringValue),
                                     "name" to trigger.namespace.name
                                 ),
                                 "func" to ctx.tableCreate(
-                                    "id" to ValueString(trigger.func.id.value.value.toString(16)),
+                                    "id" to ValueString(trigger.func.id.stringValue),
                                     "name" to trigger.func.name
                                 ),
                                 "status" to ValueString(trigger.status.name),
@@ -78,15 +78,15 @@ class TriggerGetFunction(
                         }
 
                         is ApiTrigger.Cron -> ctx.tableCreate(
-                            "id" to ValueString(trigger.id.value.value.toString(16)),
+                            "id" to ValueString(trigger.id.stringValue),
                             "type" to ValueString("Cron"),
                             "name" to trigger.name,
                             "namespace" to ctx.tableCreate(
-                                "id" to ValueString(trigger.namespace.id.value.value.toString(16)),
+                                "id" to ValueString(trigger.namespace.id.stringValue),
                                 "name" to trigger.namespace.name
                             ),
                             "func" to ctx.tableCreate(
-                                "id" to ValueString(trigger.func.id.value.value.toString(16)),
+                                "id" to ValueString(trigger.func.id.stringValue),
                                 "name" to trigger.func.name
                             ),
                             "cron" to trigger.cron,
@@ -95,15 +95,15 @@ class TriggerGetFunction(
 
                         is ApiTrigger.Endpoint -> {
                             ctx.tableCreate(
-                                "id" to ValueString(trigger.id.value.value.toString(16)),
+                                "id" to ValueString(trigger.id.stringValue),
                                 "type" to ValueString("Endpoint"),
                                 "name" to trigger.name,
                                 "namespace" to ctx.tableCreate(
-                                    "id" to ValueString(trigger.namespace.id.value.value.toString(16)),
+                                    "id" to ValueString(trigger.namespace.id.stringValue),
                                     "name" to trigger.namespace.name
                                 ),
                                 "func" to ctx.tableCreate(
-                                    "id" to ValueString(trigger.func.id.value.value.toString(16)),
+                                    "id" to ValueString(trigger.func.id.stringValue),
                                     "name" to trigger.func.name
                                 ),
                                 "status" to ValueString(trigger.status.name),

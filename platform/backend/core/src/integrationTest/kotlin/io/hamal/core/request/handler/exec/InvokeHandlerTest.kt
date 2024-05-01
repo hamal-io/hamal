@@ -7,7 +7,13 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
+import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
 import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
+import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
+import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
+import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
+import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*

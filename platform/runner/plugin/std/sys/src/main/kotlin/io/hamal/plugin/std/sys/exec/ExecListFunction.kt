@@ -4,7 +4,9 @@ import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueNil
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.WorkspaceId
+import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -40,7 +42,7 @@ class ExecListFunction(
             null to ctx.tableCreate(
                 execs.map { exec ->
                     ctx.tableCreate(
-                        "id" to ValueString(exec.id.value.value.toString(16)),
+                        "id" to ValueString(exec.id.stringValue),
                         "status" to ValueString(exec.status.toString()),
                         "correlation_id" to (exec.correlation?.value ?: ValueNil)
                     )

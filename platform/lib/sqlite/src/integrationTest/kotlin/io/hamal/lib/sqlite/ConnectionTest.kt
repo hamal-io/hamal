@@ -1,8 +1,9 @@
 package io.hamal.lib.sqlite
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.ValueObjectId
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueSnowflakeId
+import io.hamal.lib.common.value.ValueVariableSnowflakeId
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Assertions.*
@@ -504,8 +505,8 @@ class ConnectionImplTest {
         )
     }
 
-    private class TestDomainId(override val value: SnowflakeId) : ValueObjectId() {
-        constructor(value: Int) : this(SnowflakeId(value.toLong()))
+    private class TestDomainId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
+        constructor(value: Int) : this(ValueSnowflakeId(SnowflakeId(value.toLong())))
     }
 
 }

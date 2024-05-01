@@ -5,12 +5,12 @@ import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.RecipeCreateRequested
-import io.hamal.lib.domain.vo.AuthId
+import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.RecipeDescription.Companion.RecipeDescription
-import io.hamal.lib.domain.vo.RecipeId
+import io.hamal.lib.domain.vo.RecipeId.Companion.RecipeId
 import io.hamal.lib.domain.vo.RecipeInputs
 import io.hamal.lib.domain.vo.RecipeName.Companion.RecipeName
-import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test

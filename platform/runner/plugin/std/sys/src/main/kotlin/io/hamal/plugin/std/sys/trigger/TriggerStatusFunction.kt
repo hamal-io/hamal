@@ -1,6 +1,8 @@
 package io.hamal.plugin.std.sys.trigger
 
-import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -8,8 +10,6 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.kua.value.getString
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueString
 
 class TriggerActivateFunction(
     private val sdk: ApiSdk
@@ -24,9 +24,9 @@ class TriggerActivateFunction(
             )
 
             null to ctx.tableCreate(
-                "request_id" to ValueString(res.requestId.value.value.toString(16)),
+                "request_id" to ValueString(res.requestId.stringValue),
                 "request_status" to ValueString(res.requestStatus.name),
-                "id" to ValueString(res.id.value.value.toString(16)),
+                "id" to ValueString(res.id.stringValue),
             )
         } catch (t: Throwable) {
             ValueError(t.message!!) to null
@@ -47,9 +47,9 @@ class TriggerDeactivateFunction(
             )
 
             null to ctx.tableCreate(
-                "request_id" to ValueString(res.requestId.value.value.toString(16)),
+                "request_id" to ValueString(res.requestId.stringValue),
                 "request_status" to ValueString(res.requestStatus.name),
-                "id" to ValueString(res.id.value.value.toString(16)),
+                "id" to ValueString(res.id.stringValue),
             )
         } catch (t: Throwable) {
             ValueError(t.message!!) to null

@@ -3,7 +3,7 @@ package io.hamal.plugin.std.sys.func
 import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueNumber
 import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema

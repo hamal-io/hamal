@@ -1,6 +1,7 @@
 package io.hamal.repository.fixture
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.repository.api.log.LogSegmentRepository

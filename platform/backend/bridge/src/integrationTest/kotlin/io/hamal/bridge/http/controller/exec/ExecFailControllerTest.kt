@@ -4,6 +4,7 @@ import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
+import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound

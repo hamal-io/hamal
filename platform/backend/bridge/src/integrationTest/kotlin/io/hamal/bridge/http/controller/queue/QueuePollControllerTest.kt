@@ -8,7 +8,7 @@ import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecStatus.Queued
 import io.hamal.lib.domain.vo.ExecStatus.Started
 import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
-import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test

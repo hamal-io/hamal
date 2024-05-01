@@ -11,6 +11,7 @@ import io.hamal.lib.kua.value.toKua
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
 
 class TopicEntryListFunction(
     private val sdk: ApiSdk

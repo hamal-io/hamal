@@ -3,6 +3,7 @@ package io.hamal.repository.api
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.AccountId
+import io.hamal.lib.domain.vo.AccountId.Companion.AccountId
 import io.hamal.lib.domain.vo.AccountType
 import io.hamal.lib.domain.vo.Email
 import io.hamal.lib.domain.vo.PasswordSalt

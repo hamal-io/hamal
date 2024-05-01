@@ -5,11 +5,11 @@ import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.ExtensionCreateRequested
 import io.hamal.lib.domain.request.ExtensionUpdateRequested
-import io.hamal.lib.domain.vo.AuthId
-import io.hamal.lib.domain.vo.CodeId
-import io.hamal.lib.domain.vo.ExtensionId
+import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
+import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
+import io.hamal.lib.domain.vo.ExtensionId.Companion.ExtensionId
 import io.hamal.lib.domain.vo.ExtensionName.Companion.ExtensionName
-import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test

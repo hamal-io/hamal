@@ -3,6 +3,7 @@ package io.hamal.plugin.std.sys.topic
 import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -32,7 +33,7 @@ class TopicListFunction(
                     )
                 ).map { topic ->
                     ctx.tableCreate(
-                        "id" to ValueString(topic.id.value.value.toString(16)),
+                        "id" to ValueString(topic.id.stringValue),
                         "name" to topic.name,
                     )
                 }

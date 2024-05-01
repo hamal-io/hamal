@@ -5,7 +5,10 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.LogTopicId
+import io.hamal.lib.domain.vo.LogTopicId.Companion.LogTopicId
 import io.hamal.repository.api.CmdRepository
+import io.hamal.repository.api.log.LogConsumerId.Companion.LogConsumerId
+import io.hamal.repository.api.log.LogEventId.Companion.LogEventId
 
 interface LogBrokerRepository : CmdRepository {
 

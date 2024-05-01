@@ -9,6 +9,7 @@ import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import java.lang.reflect.Type
 
 interface TriggerRepository : TriggerCmdRepository, TriggerQueryRepository

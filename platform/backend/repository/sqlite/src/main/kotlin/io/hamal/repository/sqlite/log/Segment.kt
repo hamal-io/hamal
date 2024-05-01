@@ -23,7 +23,7 @@ class LogSegmentSqliteRepository(
     private val segment: LogSegmentSqlite
 ) : SqliteBaseRepository(
     path = segment.path,
-    filename = String.format("%020d.db", segment.id.value.toLong())
+    filename = String.format("%020d.db", segment.id.longValue)
 ), LogSegmentRepository {
 
     override fun setupConnection(connection: Connection) {
@@ -66,7 +66,7 @@ class LogSegmentSqliteRepository(
             """SELECT id, bytes, instant FROM events WHERE id >= :firstId LIMIT :limit """.trimIndent()
         ) {
             query {
-                set("firstId", firstId.value)
+                set("firstId", firstId)
                 set("limit", limit)
             }
             map {

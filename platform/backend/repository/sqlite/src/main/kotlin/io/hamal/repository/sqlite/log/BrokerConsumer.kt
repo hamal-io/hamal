@@ -7,6 +7,7 @@ import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.log.LogBrokerRepository.LogConsumerQuery
 import io.hamal.repository.api.log.LogConsumerId
 import io.hamal.repository.api.log.LogEventId
+import io.hamal.repository.api.log.LogEventId.Companion.LogEventId
 import java.nio.file.Path
 
 
@@ -44,11 +45,11 @@ internal class LogBrokerConsumerSqliteRepository(
             """SELECT next_event_id FROM consumers WHERE workspace_id = :workspaceId and topic_id = :topicId"""
         ) {
             query {
-                set("workspaceId", consumerId.value)
-                set("topicId", topicId.value)
+                set("workspaceId", consumerId)
+                set("topicId", topicId)
             }
             map {
-                LogEventId(it.getInt("next_event_id"))
+                it.getId("next_event_id", ::LogEventId)
             }
         } ?: LogEventId(0)
     }
@@ -65,9 +66,9 @@ internal class LogBrokerConsumerSqliteRepository(
                             excluded.topic_id  == consumers.topic_id;
                     """.trimIndent(),
         ) {
-            set("workspaceId", consumerId.value)
-            set("topicId", topicId.value)
-            set("nextEventId", eventId.value.toInt() + 1)
+            set("workspaceId", consumerId)
+            set("topicId", topicId)
+            set("nextEventId", eventId.longValue + 1)
         }
     }
 
