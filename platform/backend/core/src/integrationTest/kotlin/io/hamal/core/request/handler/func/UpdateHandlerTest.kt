@@ -6,6 +6,7 @@ import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.FuncUpdateRequested
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
 import io.hamal.repository.api.CodeCmdRepository
 import io.hamal.repository.api.FuncCmdRepository
 import io.hamal.repository.api.FuncCode

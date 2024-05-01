@@ -8,7 +8,7 @@ import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 import io.hamal.lib.kua.value.toKua
 import io.hamal.lib.kua.value.toKuaSnakeCase
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.ValueString
 import io.hamal.runner.run.function.CompleteRunFunction
 import io.hamal.runner.run.function.EmitFunction
 import io.hamal.runner.run.function.FailRunFunction

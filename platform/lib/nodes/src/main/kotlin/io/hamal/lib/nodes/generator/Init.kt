@@ -4,10 +4,10 @@ import io.hamal.lib.nodes.Node
 import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.control.ControlInit
-import io.hamal.lib.value.Type
-import io.hamal.lib.value.TypeBoolean
-import io.hamal.lib.value.TypeNumber
-import io.hamal.lib.value.TypeString
+import io.hamal.lib.common.value.Type
+import io.hamal.lib.common.value.TypeBoolean
+import io.hamal.lib.common.value.TypeNumber
+import io.hamal.lib.common.value.TypeString
 
 
 sealed interface GeneratorInit : Generator {

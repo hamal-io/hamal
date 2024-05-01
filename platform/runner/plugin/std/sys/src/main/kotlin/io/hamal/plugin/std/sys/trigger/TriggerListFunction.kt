@@ -1,5 +1,7 @@
 package io.hamal.plugin.std.sys.trigger
 
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -11,8 +13,6 @@ import io.hamal.lib.kua.value.findTable
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiTriggerList
 import io.hamal.lib.sdk.api.ApiTriggerService
-import io.hamal.lib.value.ValueError
-import io.hamal.lib.value.ValueString
 
 class TriggerListFunction(
     private val sdk: ApiSdk
@@ -41,7 +41,7 @@ class TriggerListFunction(
                             ),
                             "func" to ctx.tableCreate(
                                 "id" to ValueString(trigger.func.id.value.value.toString(16)),
-                                "name" to ValueString(trigger.func.name.value)
+                                "name" to trigger.func.name
                             ),
                             "duration" to ValueString(trigger.duration.value)
                         )
@@ -58,7 +58,7 @@ class TriggerListFunction(
                             ),
                             "func" to ctx.tableCreate(
                                 "id" to ValueString(trigger.func.id.value.value.toString(16)),
-                                "name" to ValueString(trigger.func.name.value)
+                                "name" to trigger.func.name
                             ),
                             "topic" to ctx.tableCreate(
                                 "id" to ValueString(trigger.topic.id.value.value.toString(16)),
@@ -78,7 +78,7 @@ class TriggerListFunction(
                             ),
                             "func" to ctx.tableCreate(
                                 "id" to ValueString(trigger.func.id.value.value.toString(16)),
-                                "name" to ValueString(trigger.func.name.value)
+                                "name" to trigger.func.name
                             ),
                         )
                     }
@@ -93,7 +93,7 @@ class TriggerListFunction(
                         ),
                         "func" to ctx.tableCreate(
                             "id" to ValueString(trigger.func.id.value.value.toString(16)),
-                            "name" to ValueString(trigger.func.name.value)
+                            "name" to trigger.func.name
                         ),
                         "cron" to ValueString(trigger.cron.value)
                     )
@@ -109,7 +109,7 @@ class TriggerListFunction(
                             ),
                             "func" to ctx.tableCreate(
                                 "id" to ValueString(trigger.func.id.value.value.toString(16)),
-                                "name" to ValueString(trigger.func.name.value)
+                                "name" to trigger.func.name
                             )
                         )
                     }

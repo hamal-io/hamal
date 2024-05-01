@@ -20,9 +20,9 @@ import io.hamal.lib.nodes.fixture.GeneratorInvoked
 import io.hamal.lib.nodes.fixture.InvokeFunction
 import io.hamal.lib.nodes.generator.GeneratorRegistry
 import io.hamal.lib.nodes.generator.defaultGeneratorRegistry
-import io.hamal.lib.value.Type
-import io.hamal.lib.value.ValueCode
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.Type
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueString
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector

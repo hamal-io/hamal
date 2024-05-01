@@ -1,4 +1,4 @@
-package io.hamal.lib.value
+package io.hamal.lib.common.value
 
 interface Value {
     val type: Type
@@ -6,9 +6,10 @@ interface Value {
 
 interface ValueComparable<VALUE_TYPE : Value> : Value, Comparable<VALUE_TYPE>
 
-interface ValueVariable<VALUE_TYPE : Value> {
+interface ValueVariable<VALUE_TYPE : Value> : Value{
 
     val value: VALUE_TYPE
+    override val type: Type get() = value.type
 
     abstract class BaseImpl<VALUE_TYPE : Value> : ValueVariable<VALUE_TYPE> {
 

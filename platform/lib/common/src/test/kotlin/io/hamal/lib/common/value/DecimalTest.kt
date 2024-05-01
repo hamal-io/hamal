@@ -1,4 +1,4 @@
-package io.hamal.lib.value
+package io.hamal.lib.common.value
 
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsString

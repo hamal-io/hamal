@@ -1,4 +1,4 @@
-package io.hamal.lib.value
+package io.hamal.lib.common.value
 
 import io.hamal.lib.common.domain.ValueObjectString
 

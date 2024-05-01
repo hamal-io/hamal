@@ -1,10 +1,10 @@
 package io.hamal.lib.nodes.fixture
 
 import io.hamal.lib.common.hot.HotString
+import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.generator.Generator
-import io.hamal.lib.value.*
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test

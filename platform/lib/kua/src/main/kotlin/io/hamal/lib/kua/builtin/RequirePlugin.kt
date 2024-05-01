@@ -7,7 +7,7 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.lib.kua.tableGet
 import io.hamal.lib.kua.value.KuaTable
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.ValueString
 
 class RequirePlugin(
     private val registry: SandboxRegistry

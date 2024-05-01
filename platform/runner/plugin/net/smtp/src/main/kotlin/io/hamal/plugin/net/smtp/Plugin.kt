@@ -3,7 +3,7 @@ package io.hamal.plugin.net.smtp
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.ValueString
 
 class PluginSmtpFactory(
     private val sender: Sender = SenderDefaultImpl

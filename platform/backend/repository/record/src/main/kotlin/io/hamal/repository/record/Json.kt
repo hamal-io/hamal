@@ -10,6 +10,7 @@ import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.common.serialization.ValueObjectStringAdapter
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ValueObjectJsonModule
+import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import io.hamal.repository.api.DomainJsonModule
 import io.hamal.repository.record.account.AccountRecord
 import io.hamal.repository.record.code.CodeRecord
@@ -50,6 +51,7 @@ val json = Json(
         .register(HotObjectModule)
         .register(RecordJsonModule)
         .register(ValueObjectJsonModule)
+        .register(ValueVariableJsonModule)
 )
 
 abstract class RecordAdapter<BASE_TYPE : Record<*>>(

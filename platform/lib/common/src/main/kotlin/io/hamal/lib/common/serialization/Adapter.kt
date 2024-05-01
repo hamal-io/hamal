@@ -5,6 +5,8 @@ import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueVariableString
 import java.lang.reflect.Type
 import java.time.Instant
 import java.time.ZoneOffset
@@ -72,6 +74,23 @@ class ValueObjectStringAdapter<TYPE : ValueObjectString>(
     override fun serialize(src: TYPE, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
         return JsonPrimitive(src.value)
     }
+}
+
+object JsonAdapters {
+
+    class String<TYPE : ValueVariableString>(
+        val ctor: (ValueString) -> TYPE
+    ) : JsonAdapter<TYPE> {
+
+        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {
+            return ctor(ValueString(json.asString))
+        }
+
+        override fun serialize(src: TYPE, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+            return JsonPrimitive(src.value.stringValue)
+        }
+    }
+
 }
 
 

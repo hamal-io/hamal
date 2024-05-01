@@ -5,6 +5,7 @@ import io.hamal.core.request.handler.NextCommandId
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.FuncDeployRequested
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
 import io.hamal.repository.api.CodeCmdRepository
 import io.hamal.repository.api.FuncCmdRepository
 import org.hamcrest.CoreMatchers.equalTo

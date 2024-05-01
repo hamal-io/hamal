@@ -1,9 +1,9 @@
 package io.hamal.extension.net.smtp
 
-import io.hamal.lib.value.ValueFalse
-import io.hamal.lib.value.ValueNumber
-import io.hamal.lib.value.ValueString
-import io.hamal.lib.value.ValueTrue
+import io.hamal.lib.common.value.ValueFalse
+import io.hamal.lib.common.value.ValueNumber
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueTrue
 import io.hamal.plugin.net.smtp.Message
 import io.hamal.plugin.net.smtp.PluginSmtpFactory
 import io.hamal.plugin.net.smtp.Sender

@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.function
 
 import io.hamal.lib.kua.value.KuaFunction
-import io.hamal.lib.value.Value
+import io.hamal.lib.common.value.Value
 
 
 abstract class Function0In0Out : KuaFunction<

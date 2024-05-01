@@ -1,5 +1,9 @@
 package io.hamal.plugin.std.sys.func
 
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueNumber
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -7,10 +11,6 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.value.ValueCode
-import io.hamal.lib.value.ValueError
-import io.hamal.lib.value.ValueNumber
-import io.hamal.lib.value.ValueString
 
 class FuncGetFunction(
     private val sdk: ApiSdk
@@ -28,7 +28,7 @@ class FuncGetFunction(
                             "id" to ValueString(func.namespace.id.value.value.toString(16)),
                             "name" to ValueString(func.namespace.name.value)
                         ),
-                        "name" to ValueString(func.name.value),
+                        "name" to func.name.value,
                         "code" to ctx.tableCreate(
                             "id" to ValueString(func.code.id.value.value.toString(16)),
                             "version" to ValueNumber(func.code.version.value),

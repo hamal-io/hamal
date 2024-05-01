@@ -2,8 +2,8 @@ package io.hamal.lib.kua
 
 import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
-import io.hamal.lib.value.ValueCode
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueString
 
 interface SandboxRegistry {
     fun register(plugin: RunnerPlugin)

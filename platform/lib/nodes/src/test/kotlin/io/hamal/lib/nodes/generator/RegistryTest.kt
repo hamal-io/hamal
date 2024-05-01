@@ -3,10 +3,10 @@ package io.hamal.lib.nodes.generator
 import io.hamal.lib.nodes.Node
 import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.control.Control
-import io.hamal.lib.value.Type
-import io.hamal.lib.value.TypeDecimal
-import io.hamal.lib.value.TypeNumber
-import io.hamal.lib.value.TypeString
+import io.hamal.lib.common.value.Type
+import io.hamal.lib.common.value.TypeDecimal
+import io.hamal.lib.common.value.TypeNumber
+import io.hamal.lib.common.value.TypeString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test

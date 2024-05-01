@@ -1,4 +1,4 @@
-package io.hamal.lib.value
+package io.hamal.lib.common.value
 
 data object TypeError : Type() {
     override val identifier = TypeIdentifier("Error")

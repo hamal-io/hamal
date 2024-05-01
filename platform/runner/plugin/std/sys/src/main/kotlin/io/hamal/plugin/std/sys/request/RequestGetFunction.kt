@@ -9,8 +9,8 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.sdk.api.ApiRequested
-import io.hamal.lib.value.ValueError
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 
 class RequestGetFunction(
     private val httpTemplate: HttpTemplate

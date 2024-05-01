@@ -56,7 +56,6 @@ include(":platform:lib:kua")
 include(":platform:lib:nodes")
 include(":platform:lib:sdk")
 include(":platform:lib:sqlite")
-include(":platform:lib:value")
 include(":platform:lib:web3")
 
 include(":platform:runner:runner")

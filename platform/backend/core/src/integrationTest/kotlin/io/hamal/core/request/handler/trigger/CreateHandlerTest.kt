@@ -6,6 +6,7 @@ import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain._enum.TriggerType.*
 import io.hamal.lib.domain.request.TriggerCreateRequested
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import org.hamcrest.MatcherAssert.assertThat

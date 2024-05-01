@@ -1,10 +1,10 @@
 package io.hamal.lib.nodes.fixture
 
+import io.hamal.lib.common.value.*
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.Function1In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
-import io.hamal.lib.value.*
 
 class InvokeFunction : Function0In0Out() {
     override fun invoke(ctx: FunctionContext) {

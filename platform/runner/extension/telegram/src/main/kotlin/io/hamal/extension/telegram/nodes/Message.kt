@@ -4,9 +4,9 @@ import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.control.ControlExtensionTextArea
 import io.hamal.lib.nodes.generator.Generator
-import io.hamal.lib.value.Type
-import io.hamal.lib.value.TypeString
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.Type
+import io.hamal.lib.common.value.TypeString
+import io.hamal.lib.common.value.ValueString
 
 val SendMessageNode = NodeExtension(
     type = NodeType("Telegram_Send_Message"),

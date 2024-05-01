@@ -2,8 +2,8 @@ package io.hamal.lib.kua.value
 
 import io.hamal.lib.common.hot.*
 import io.hamal.lib.common.util.StringUtils
+import io.hamal.lib.common.value.*
 import io.hamal.lib.kua.*
-import io.hamal.lib.value.*
 
 //FIXME replace toKua with this
 fun HotNode<*>?.toKua(state: State): Value {

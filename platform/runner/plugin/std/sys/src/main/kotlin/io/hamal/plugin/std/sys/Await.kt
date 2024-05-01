@@ -7,8 +7,8 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.lib.sdk.api.ApiRequested
-import io.hamal.lib.value.ValueError
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 
 class AwaitFunction(
     private val httpTemplate: HttpTemplate

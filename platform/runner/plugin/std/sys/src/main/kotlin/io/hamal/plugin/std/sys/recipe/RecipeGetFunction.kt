@@ -7,9 +7,9 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.sdk.ApiSdk
-import io.hamal.lib.value.ValueCode
-import io.hamal.lib.value.ValueError
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 
 class RecipeGetFunction(
     private val sdk: ApiSdk

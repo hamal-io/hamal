@@ -5,6 +5,7 @@ import io.hamal.core.component.*
 import io.hamal.lib.common.hot.HotObjectModule
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.domain.vo.ValueObjectJsonModule
+import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import io.hamal.lib.sdk.api.ApiJsonModule
 import io.hamal.repository.api.DomainJsonModule
 import io.hamal.repository.api.event.PlatformEventJsonModule
@@ -44,6 +45,7 @@ open class WebConfig : WebMvcConfigurer {
         .register(HotObjectModule)
         .register(PlatformEventJsonModule)
         .register(ValueObjectJsonModule)
+        .register(ValueVariableJsonModule)
         .build()
 
     @Bean

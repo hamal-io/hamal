@@ -4,8 +4,8 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
-import io.hamal.lib.value.ValueCode
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueString
 import org.junit.jupiter.api.Test
 
 internal object PluginTest {

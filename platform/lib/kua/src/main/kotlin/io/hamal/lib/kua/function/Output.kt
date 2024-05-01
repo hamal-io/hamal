@@ -1,6 +1,6 @@
 package io.hamal.lib.kua.function
 
-import io.hamal.lib.value.Value
+import io.hamal.lib.common.value.Value
 
 
 interface FunctionOutput<SCHEMA : FunctionOutputSchema<OUTPUT>, OUTPUT : FunctionOutput<SCHEMA, OUTPUT>> {

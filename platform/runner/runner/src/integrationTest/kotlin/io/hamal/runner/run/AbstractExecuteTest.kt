@@ -6,9 +6,9 @@ import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
-import io.hamal.lib.value.ValueCode
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.kua.value.KuaValue
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.ValueString
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector

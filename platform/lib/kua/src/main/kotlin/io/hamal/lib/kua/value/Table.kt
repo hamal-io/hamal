@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.value
 
+import io.hamal.lib.common.value.*
 import io.hamal.lib.kua.*
-import io.hamal.lib.value.*
 import kotlin.reflect.KClass
 
 class KuaTable(
@@ -51,12 +51,17 @@ class KuaTable(
                 state.tableAppend(index)
             }
 
+            is ValueVariableString -> {
+                state.stringPush(value.value)
+                state.tableAppend(index)
+            }
+
             is KuaTable -> {
                 state.tablePush(value)
                 state.tableAppend(index)
             }
 
-            else -> TODO()
+            else -> TODO("$value not supported yet")
         }
     }
 
@@ -172,13 +177,19 @@ class KuaTable(
                 state.tableRawSet(index)
             }
 
+            is ValueVariableString -> {
+                state.stringPush(key)
+                state.stringPush(value.value)
+                state.tableRawSet(index)
+            }
+
             is KuaTable -> {
                 state.stringPush(key)
                 state.tablePush(value)
                 state.tableRawSet(index)
             }
 
-            else -> TODO()
+            else -> TODO("$value of class ${value::class} not supported yet")
         }
     }
 

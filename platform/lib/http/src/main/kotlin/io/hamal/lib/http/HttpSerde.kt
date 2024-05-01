@@ -5,6 +5,7 @@ import io.hamal.lib.common.hot.HotObjectModule
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ValueObjectJsonModule
+import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import java.io.InputStream
 import kotlin.reflect.KClass
 
@@ -40,6 +41,7 @@ private val json = Json(
     JsonFactoryBuilder()
         .register(HotObjectModule)
         .register(ValueObjectJsonModule)
+        .register(ValueVariableJsonModule)
 )
 
 interface HttpErrorDeserializer {

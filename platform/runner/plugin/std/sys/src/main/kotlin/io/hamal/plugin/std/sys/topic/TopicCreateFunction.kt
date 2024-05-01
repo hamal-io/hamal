@@ -13,8 +13,8 @@ import io.hamal.lib.kua.value.findString
 import io.hamal.lib.kua.value.getString
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiTopicCreateRequest
-import io.hamal.lib.value.ValueError
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 
 class TopicCreateFunction(
     private val sdk: ApiSdk

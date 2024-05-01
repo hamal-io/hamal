@@ -1,8 +1,8 @@
 package io.hamal.lib.kua.function
 
+import io.hamal.lib.common.value.*
 import io.hamal.lib.kua.*
 import io.hamal.lib.kua.value.KuaTable
-import io.hamal.lib.value.*
 import kotlin.reflect.KClass
 
 sealed interface FunctionInputSchema<INPUT : FunctionInput<*, *>> {

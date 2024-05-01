@@ -4,10 +4,10 @@ import io.hamal.lib.kua.*
 import io.hamal.lib.kua.function.Function0In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.value.ValueCode
-import io.hamal.lib.value.ValueError
-import io.hamal.lib.value.ValueNumber
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueNumber
+import io.hamal.lib.common.value.ValueString
 import org.junit.jupiter.api.Test
 
 internal class KuaTableTest {

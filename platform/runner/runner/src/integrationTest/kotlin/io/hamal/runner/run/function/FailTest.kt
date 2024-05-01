@@ -7,8 +7,8 @@ import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.function.Function0In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput1Schema
-import io.hamal.lib.value.ValueError
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 import io.hamal.runner.connector.UnitOfWork
 import io.hamal.runner.run.AbstractExecuteTest
 import io.hamal.runner.test.TestFailConnector

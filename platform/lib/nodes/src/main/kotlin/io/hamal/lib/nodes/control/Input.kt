@@ -3,8 +3,8 @@ package io.hamal.lib.nodes.control
 import io.hamal.lib.nodes.NodeId
 import io.hamal.lib.nodes.PortInput
 import io.hamal.lib.nodes.PortInputExtension
-import io.hamal.lib.value.ValueBoolean
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.ValueBoolean
+import io.hamal.lib.common.value.ValueString
 
 
 interface ControlExtensionInput : ControlExtension {

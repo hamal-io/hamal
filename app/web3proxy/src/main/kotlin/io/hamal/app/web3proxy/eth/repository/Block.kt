@@ -5,6 +5,7 @@ import io.hamal.lib.common.hot.HotObjectModule
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ValueObjectJsonModule
+import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.web3.evm.EvmHotModule
@@ -114,7 +115,8 @@ internal class EthBlockRepositoryImpl(
         factory = JsonFactoryBuilder()
             .register(EvmHotModule)
             .register(HotObjectModule)
-            .register(ValueObjectJsonModule),
+            .register(ValueObjectJsonModule)
+            .register(ValueVariableJsonModule),
         compressor = BzipCompressor
     )
 }

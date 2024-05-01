@@ -4,10 +4,10 @@ import io.hamal.lib.kua.function.Function2In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.value.Value
-import io.hamal.lib.value.ValueError
-import io.hamal.lib.value.ValueNumber
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.Value
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueNumber
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.web3.evm.abi.EvmTypeDecoder
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.util.ByteWindow

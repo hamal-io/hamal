@@ -2,9 +2,9 @@ package io.hamal.lib.kua.state
 
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.booleanGet
-import io.hamal.lib.value.ValueFalse
-import io.hamal.lib.value.ValueString
-import io.hamal.lib.value.ValueTrue
+import io.hamal.lib.common.value.ValueFalse
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueTrue
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory

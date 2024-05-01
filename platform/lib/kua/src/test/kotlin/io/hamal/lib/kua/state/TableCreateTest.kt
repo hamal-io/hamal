@@ -2,8 +2,8 @@ package io.hamal.lib.kua.state
 
 import io.hamal.lib.kua.*
 import io.hamal.lib.kua.value.KuaTable
-import io.hamal.lib.value.ValueNumber
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.ValueNumber
+import io.hamal.lib.common.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory

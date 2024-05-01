@@ -5,8 +5,8 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.lib.kua.value.*
-import io.hamal.lib.value.ValueBoolean
-import io.hamal.lib.value.ValueError
+import io.hamal.lib.common.value.ValueBoolean
+import io.hamal.lib.common.value.ValueError
 
 class SmtpSendFunction(
     private val sender: Sender

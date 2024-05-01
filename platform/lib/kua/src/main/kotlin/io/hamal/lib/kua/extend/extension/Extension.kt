@@ -1,10 +1,10 @@
 package io.hamal.lib.kua.extend.extension
 
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.value.ValueCode
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.nodes.NodeExtension
 import io.hamal.lib.nodes.generator.Generator
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.ValueString
 
 
 interface RunnerExtensionFactory {

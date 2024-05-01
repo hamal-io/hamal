@@ -4,9 +4,9 @@ import io.hamal.lib.common.hot.HotBoolean
 import io.hamal.lib.common.hot.HotNull
 import io.hamal.lib.common.hot.HotNumber
 import io.hamal.lib.common.hot.HotString
+import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.control.ControlInit
-import io.hamal.lib.value.*
 import io.hamal.runner.test.TestFailConnector
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.equalTo

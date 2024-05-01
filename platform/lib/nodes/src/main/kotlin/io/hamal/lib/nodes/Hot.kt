@@ -5,13 +5,14 @@ import io.hamal.lib.common.serialization.HotModule
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.common.serialization.ValueObjectIdAdapter
 import io.hamal.lib.common.serialization.ValueObjectStringAdapter
+import io.hamal.lib.common.value.TypesystemHotModule
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ValueObjectJsonModule
+import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.control.ControlExtension
 import io.hamal.lib.nodes.control.ControlIdentifier
 import io.hamal.lib.nodes.control.ControlType
-import io.hamal.lib.value.TypesystemHotModule
 
 
 object NodesHotModule : HotModule() {
@@ -36,6 +37,7 @@ val json = Json(
     JsonFactoryBuilder()
         .register(HotObjectModule)
         .register(ValueObjectJsonModule)
+        .register(ValueVariableJsonModule)
         .register(NodesHotModule)
         .register(TypesystemHotModule)
 )

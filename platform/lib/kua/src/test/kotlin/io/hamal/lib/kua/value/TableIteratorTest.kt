@@ -2,7 +2,7 @@ import io.hamal.lib.kua.*
 import io.hamal.lib.kua.value.KuaTableIterator
 import io.hamal.lib.kua.value.getNumber
 import io.hamal.lib.kua.value.set
-import io.hamal.lib.value.ValueNumber
+import io.hamal.lib.common.value.ValueNumber
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test

@@ -4,7 +4,7 @@ import io.hamal.lib.kua.DecimalError
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.value.ValueCode
+import io.hamal.lib.common.value.ValueCode
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test

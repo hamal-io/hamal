@@ -1,9 +1,9 @@
 package io.hamal.lib.kua
 
+import io.hamal.lib.common.value.*
 import io.hamal.lib.kua.value.KuaFunction
 import io.hamal.lib.kua.value.KuaReference
 import io.hamal.lib.kua.value.KuaTable
-import io.hamal.lib.value.*
 import java.math.BigDecimal
 import kotlin.reflect.KClass
 

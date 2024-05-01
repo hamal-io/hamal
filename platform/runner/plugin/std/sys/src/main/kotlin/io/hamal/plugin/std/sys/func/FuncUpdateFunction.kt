@@ -1,5 +1,7 @@
 package io.hamal.plugin.std.sys.func
 
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.CodeValue
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
@@ -13,8 +15,6 @@ import io.hamal.lib.kua.value.findString
 import io.hamal.lib.kua.value.getString
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiFuncUpdateRequest
-import io.hamal.lib.value.ValueError
-import io.hamal.lib.value.ValueString
 
 class FuncUpdateFunction(
     private val sdk: ApiSdk
@@ -27,7 +27,7 @@ class FuncUpdateFunction(
             val res = sdk.func.update(
                 FuncId(arg1.getString("id").stringValue),
                 ApiFuncUpdateRequest(
-                    name = arg1.findString("name")?.let { FuncName(it.stringValue) },
+                    name = arg1.findString("name")?.let { FuncName(it) },
                     inputs = FuncInputs(),
                     code = arg1.findString("code")?.let { CodeValue(it.stringValue) }
                 )

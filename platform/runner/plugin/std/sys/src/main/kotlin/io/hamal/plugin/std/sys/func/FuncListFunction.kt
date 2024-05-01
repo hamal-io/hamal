@@ -1,5 +1,7 @@
 package io.hamal.plugin.std.sys.func
 
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -10,8 +12,6 @@ import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.kua.value.findTable
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiFuncService
-import io.hamal.lib.value.ValueError
-import io.hamal.lib.value.ValueString
 
 class FuncListFunction(
     private val sdk: ApiSdk
@@ -37,7 +37,7 @@ class FuncListFunction(
                             "id" to ValueString(func.namespace.id.value.value.toString(16)),
                             "name" to ValueString(func.namespace.name.value)
                         ),
-                        "name" to ValueString(func.name.value),
+                        "name" to func.name.value,
                     )
                 }
             )

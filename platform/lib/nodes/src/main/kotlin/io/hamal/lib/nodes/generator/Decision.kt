@@ -4,9 +4,9 @@ import io.hamal.lib.nodes.ControlCheckbox
 import io.hamal.lib.nodes.Node
 import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.control.Control
-import io.hamal.lib.value.Type
-import io.hamal.lib.value.TypeBoolean
-import io.hamal.lib.value.ValueTrue
+import io.hamal.lib.common.value.Type
+import io.hamal.lib.common.value.TypeBoolean
+import io.hamal.lib.common.value.ValueTrue
 
 sealed interface GeneratorDecision : Generator {
     override val type: NodeType get() = NodeType("Decision")

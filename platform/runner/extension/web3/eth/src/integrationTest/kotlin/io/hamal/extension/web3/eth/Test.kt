@@ -7,6 +7,7 @@ import io.hamal.lib.common.hot.HotObjectModule
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.lib.domain.vo.ValueObjectJsonModule
+import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.plugin.web3.evm.evm.PluginWeb3EvmFactory
 import io.hamal.runner.test.AbstractRunnerTest
@@ -48,6 +49,7 @@ internal open class TestWebConfig : WebMvcConfigurer {
     open fun gson(): Gson = JsonFactoryBuilder()
         .register(HotObjectModule)
         .register(ValueObjectJsonModule)
+        .register(ValueVariableJsonModule)
         .build()
 
     @Bean

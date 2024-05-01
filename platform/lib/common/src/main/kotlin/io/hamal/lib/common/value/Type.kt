@@ -1,4 +1,4 @@
-package io.hamal.lib.value
+package io.hamal.lib.common.value
 
 import io.hamal.lib.common.Decimal
 import io.hamal.lib.common.domain.ValueObjectString
@@ -61,6 +61,7 @@ data class Property(
                 is TypeDateTime -> TODO()
                 is TypeDecimal -> ValueDecimal(value as Decimal)
                 is TypeError -> TODO()
+                is TypeInstant -> TODO()
                 is TypeList -> {
                     if (value is Iterable<*>) {
                         ValueList(field.type, value.map { mapTypeToValue(field.valueType!!, it) })
@@ -80,7 +81,7 @@ data class Property(
                         throw ClassCastException("cannot cast $value to DTypeValue")
                     }
                 }
-
+                is TypeSnowflakeId -> TODO()
                 is TypeString -> ValueString(value as String)
                 is TypeTime -> ValueTime(value as LocalTime)
             }

@@ -3,6 +3,7 @@ package io.hamal.api.http.controller.trigger
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain._enum.TriggerType.*
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpStatusCode.Ok

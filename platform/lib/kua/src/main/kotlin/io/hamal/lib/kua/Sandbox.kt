@@ -1,5 +1,6 @@
 package io.hamal.lib.kua
 
+import io.hamal.lib.common.value.*
 import io.hamal.lib.kua.builtin.Require
 import io.hamal.lib.kua.builtin.RequirePlugin
 import io.hamal.lib.kua.extend.extension.RunnerExtension
@@ -10,7 +11,6 @@ import io.hamal.lib.kua.value.KuaFunction
 import io.hamal.lib.kua.value.KuaReference
 import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.nodes.generator.GeneratorRegistry
-import io.hamal.lib.value.*
 
 // FIXME super dirty temporary hack
 val sandboxContextLocal = ThreadLocal<SandboxContext>()

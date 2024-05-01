@@ -1,7 +1,7 @@
 package io.hamal.lib.kua.value
 
-import io.hamal.lib.value.Type
-import io.hamal.lib.value.Value
+import io.hamal.lib.common.value.Type
+import io.hamal.lib.common.value.Value
 import kotlin.reflect.KClass
 
 interface KuaValue : Value {

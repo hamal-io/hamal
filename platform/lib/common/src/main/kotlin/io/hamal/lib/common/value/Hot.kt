@@ -1,4 +1,4 @@
-package io.hamal.lib.value
+package io.hamal.lib.common.value
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
@@ -13,9 +13,9 @@ object TypesystemHotModule : HotModule() {
     init {
         this[FieldIdentifier::class] = ValueObjectStringAdapter(::FieldIdentifier)
 
-        this[io.hamal.lib.value.Type::class] = object : JsonAdapter<io.hamal.lib.value.Type> {
+        this[io.hamal.lib.common.value.Type::class] = object : JsonAdapter<io.hamal.lib.common.value.Type> {
             override fun serialize(
-                src: io.hamal.lib.value.Type,
+                src: io.hamal.lib.common.value.Type,
                 typeOfSrc: Type,
                 context: JsonSerializationContext
             ): JsonElement {
@@ -26,7 +26,7 @@ object TypesystemHotModule : HotModule() {
                 json: JsonElement,
                 typeOfT: Type,
                 context: JsonDeserializationContext
-            ): io.hamal.lib.value.Type {
+            ): io.hamal.lib.common.value.Type {
                 return when (TypeIdentifier(json.asString)) {
                     TypeBoolean.identifier -> TypeBoolean
                     TypeNumber.identifier -> TypeNumber

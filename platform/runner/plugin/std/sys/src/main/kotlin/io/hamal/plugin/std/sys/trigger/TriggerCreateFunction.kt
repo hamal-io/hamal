@@ -13,8 +13,8 @@ import io.hamal.lib.kua.value.getString
 import io.hamal.lib.kua.value.type
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiTriggerCreateReq
-import io.hamal.lib.value.ValueError
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 
 class TriggerCreateFunction(
     private val sdk: ApiSdk

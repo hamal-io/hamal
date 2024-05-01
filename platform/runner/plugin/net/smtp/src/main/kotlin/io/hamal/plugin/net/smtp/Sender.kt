@@ -1,8 +1,8 @@
 package io.hamal.plugin.net.smtp
 
-import io.hamal.lib.value.ValueBoolean
-import io.hamal.lib.value.ValueNumber
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.ValueBoolean
+import io.hamal.lib.common.value.ValueNumber
+import io.hamal.lib.common.value.ValueString
 import org.springframework.mail.javamail.JavaMailSenderImpl
 import org.springframework.mail.javamail.MimeMessageHelper
 

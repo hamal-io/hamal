@@ -3,9 +3,9 @@ package io.hamal.lib.nodes.generator
 import io.hamal.lib.nodes.Node
 import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.control.Control
-import io.hamal.lib.value.Type
-import io.hamal.lib.value.TypeNumber
-import io.hamal.lib.value.TypeString
+import io.hamal.lib.common.value.Type
+import io.hamal.lib.common.value.TypeNumber
+import io.hamal.lib.common.value.TypeString
 
 interface GeneratorPrint : Generator {
     override val type: NodeType get() = NodeType("Print")

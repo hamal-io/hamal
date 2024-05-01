@@ -13,4 +13,5 @@ internal val json = Json(
         .register(HotObjectModule)
         .register(PlatformEventJsonModule)
         .register(ValueObjectJsonModule)
+        .register(ValueObjectJsonModule)
 )

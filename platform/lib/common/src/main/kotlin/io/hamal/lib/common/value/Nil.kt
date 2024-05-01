@@ -1,4 +1,4 @@
-package io.hamal.lib.value
+package io.hamal.lib.common.value
 
 data object TypeNil : Type() {
     override val identifier = TypeIdentifier("Nil")

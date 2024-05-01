@@ -1,6 +1,7 @@
 package io.hamal.plugin.net.http.function
 
 import io.hamal.lib.common.hot.HotNode
+import io.hamal.lib.common.value.*
 import io.hamal.lib.http.*
 import io.hamal.lib.kua.absIndex
 import io.hamal.lib.kua.function.Function1In2Out
@@ -10,7 +11,6 @@ import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.topPop
 import io.hamal.lib.kua.value.*
-import io.hamal.lib.value.*
 
 
 class HttpExecuteFunction : Function1In2Out<KuaTable, ValueError, KuaTable>(

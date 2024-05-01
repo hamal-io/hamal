@@ -10,8 +10,8 @@ import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.kua.value.getString
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiNamespaceAppendRequest
-import io.hamal.lib.value.ValueError
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
 
 class NamespaceAppendFunction(
     private val sdk: ApiSdk

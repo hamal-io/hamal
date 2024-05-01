@@ -1,8 +1,8 @@
 package io.hamal.plugin.net.smtp
 
-import io.hamal.lib.value.ValueNumber
-import io.hamal.lib.value.ValueString
-import io.hamal.lib.value.ValueTrue
+import io.hamal.lib.common.value.ValueNumber
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueTrue
 import io.hamal.runner.test.AbstractRunnerTest
 import io.hamal.runner.test.TestFailConnector
 import org.hamcrest.MatcherAssert.assertThat

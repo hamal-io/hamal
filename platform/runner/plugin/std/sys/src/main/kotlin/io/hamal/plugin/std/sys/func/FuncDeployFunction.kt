@@ -13,9 +13,9 @@ import io.hamal.lib.kua.value.getString
 import io.hamal.lib.kua.value.type
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiFuncDeployRequest
-import io.hamal.lib.value.ValueError
-import io.hamal.lib.value.ValueNumber
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueNumber
+import io.hamal.lib.common.value.ValueString
 
 class FuncDeployFunction(
     private val sdk: ApiSdk

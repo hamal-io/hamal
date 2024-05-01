@@ -3,8 +3,8 @@ package io.hamal.lib.kua.value
 import io.hamal.lib.kua.State
 import io.hamal.lib.kua.absIndex
 import io.hamal.lib.kua.topPop
-import io.hamal.lib.value.Value
-import io.hamal.lib.value.ValueNumber
+import io.hamal.lib.common.value.Value
+import io.hamal.lib.common.value.ValueNumber
 import kotlin.collections.Map.Entry
 
 class KuaTableIterator<KEY : Value, TYPE : Value>(

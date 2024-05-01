@@ -7,8 +7,8 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.kua.value.toHotObject
-import io.hamal.lib.value.Value
-import io.hamal.lib.value.ValueError
+import io.hamal.lib.common.value.Value
+import io.hamal.lib.common.value.ValueError
 
 internal object FailRunFunction : Function1In0Out<Value>(
     FunctionInput1Schema(Value::class)

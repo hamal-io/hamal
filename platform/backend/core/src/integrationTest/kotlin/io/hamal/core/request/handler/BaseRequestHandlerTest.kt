@@ -4,6 +4,7 @@ import io.hamal.core.BaseTest
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.CreateCmd
 import io.hamal.repository.api.Topic

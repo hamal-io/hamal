@@ -1,6 +1,6 @@
-package io.hamal.lib.value
+package io.hamal.lib.common.value
 
-import io.hamal.lib.value.Property.Companion.Property
+import io.hamal.lib.common.value.Property.Companion.Property
 
 
 // FIXME objects are equal if they have the same fields

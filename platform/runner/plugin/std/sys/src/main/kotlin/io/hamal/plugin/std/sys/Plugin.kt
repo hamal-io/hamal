@@ -4,7 +4,7 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 import io.hamal.lib.sdk.ApiSdkImpl
-import io.hamal.lib.value.ValueString
+import io.hamal.lib.common.value.ValueString
 import io.hamal.plugin.std.sys.adhoc.AdhocFunction
 import io.hamal.plugin.std.sys.code.CodeGetFunction
 import io.hamal.plugin.std.sys.exec.ExecGetFunction

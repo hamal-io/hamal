@@ -7,6 +7,8 @@ import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueVariableString
 import java.time.Instant
 
 class FuncId(override val value: SnowflakeId) : ValueObjectId() {
@@ -15,7 +17,11 @@ class FuncId(override val value: SnowflakeId) : ValueObjectId() {
 }
 
 
-class FuncName(override val value: String) : ValueObjectString()
+class FuncName(override val value: ValueString) : ValueVariableString() {
+    companion object {
+        fun FuncName(value: String) = FuncName(ValueString(value))
+    }
+}
 
 class FuncInputs(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
 
