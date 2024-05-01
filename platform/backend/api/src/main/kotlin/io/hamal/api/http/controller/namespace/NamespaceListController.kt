@@ -62,7 +62,7 @@ internal class NamespaceListController(
                             namespaces = (listOfNotNull(root).plus(assemble(root, tree.root, namespacesById)))
                                 .filter { namespace -> namespace.id < afterId }
                                 .reversed()
-                                .take(limit.value)
+                                .take(limit.intValue)
                         )
                     }
                 }

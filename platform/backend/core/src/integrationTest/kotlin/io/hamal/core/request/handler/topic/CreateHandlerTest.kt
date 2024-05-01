@@ -1,7 +1,7 @@
 package io.hamal.core.request.handler.topic
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
-import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain._enum.TopicType.Namespace
 import io.hamal.lib.domain.request.TopicCreateRequested

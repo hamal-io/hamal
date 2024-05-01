@@ -1,8 +1,8 @@
 package io.hamal.repository.log
 
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
-import io.hamal.lib.common.domain.Count
-import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.Count.Companion.Count
+import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.util.TimeUtils.withEpochMilli
 import io.hamal.lib.common.util.TimeUtils.withInstant
 import io.hamal.lib.domain.vo.LogTopicId.Companion.LogTopicId

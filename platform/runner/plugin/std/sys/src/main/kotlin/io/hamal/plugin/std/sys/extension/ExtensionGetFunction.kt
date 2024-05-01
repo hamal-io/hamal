@@ -1,7 +1,6 @@
 package io.hamal.plugin.std.sys.extension
 
 import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueNumber
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.ExtensionId.Companion.ExtensionId
 import io.hamal.lib.kua.function.Function1In2Out
@@ -26,7 +25,7 @@ class ExtensionGetFunction(
                 "name" to ext.name,
                 "code" to ctx.tableCreate(
                     "id" to ValueString(ext.code.id.stringValue),
-                    "version" to ValueNumber(ext.code.version.value),
+                    "version" to ext.code.version,
                     "value" to ext.code.value
                 )
             )

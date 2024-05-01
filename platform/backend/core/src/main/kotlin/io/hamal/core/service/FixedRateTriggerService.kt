@@ -4,7 +4,7 @@ import io.hamal.core.adapter.trigger.TriggerInvokePort
 import io.hamal.core.component.WorkerPool
 import io.hamal.core.event.InternalEventEmitter
 import io.hamal.core.security.SecurityContext
-import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.TriggerStatus

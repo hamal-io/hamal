@@ -6,6 +6,7 @@ import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
+import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.CreateCmd

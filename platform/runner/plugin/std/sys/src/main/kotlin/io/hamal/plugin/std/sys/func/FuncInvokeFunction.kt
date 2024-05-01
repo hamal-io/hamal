@@ -35,7 +35,7 @@ class FuncInvokeFunction(
             }
 
             val version = if (arg1.type("version") == ValueNumber::class) {
-                CodeVersion(arg1.getNumber("version").intValue)
+                CodeVersion(arg1.getNumber("version"))
             } else {
                 null
             }

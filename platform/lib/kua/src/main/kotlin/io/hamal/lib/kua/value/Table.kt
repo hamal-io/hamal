@@ -56,6 +56,11 @@ class KuaTable(
                 state.tableAppend(index)
             }
 
+            is ValueVariableNumber -> {
+                state.numberPush(value.value)
+                state.tableAppend(index)
+            }
+
             is ValueString -> {
                 state.stringPush(value)
                 state.tableAppend(index)
@@ -190,7 +195,12 @@ class KuaTable(
                 state.stringPush(key)
                 state.numberPush(value)
                 state.tableRawSet(index)
+            }
 
+            is ValueVariableNumber -> {
+                state.stringPush(key)
+                state.numberPush(value.value)
+                state.tableRawSet(index)
             }
 
             is ValueString -> {

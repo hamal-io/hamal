@@ -31,8 +31,4 @@ interface ValueObject<VALUE_TYPE : Any> {
     }
 }
 
-abstract class ValueObjectInt : ValueObject.ComparableImpl<Int>()
-
-abstract class ValueObjectLong : ValueObject.ComparableImpl<Long>()
-
 abstract class ValueObjectHotObject : ValueObject.BaseImpl<HotObject>()

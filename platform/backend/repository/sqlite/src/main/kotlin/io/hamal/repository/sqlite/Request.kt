@@ -2,6 +2,7 @@ package io.hamal.repository.sqlite
 
 import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.Requested

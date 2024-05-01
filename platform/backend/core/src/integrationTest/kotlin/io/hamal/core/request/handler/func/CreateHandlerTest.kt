@@ -9,9 +9,8 @@ import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.FuncCreateRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
-import io.hamal.lib.domain.vo.CodeVersion
+import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.domain.vo.DeployMessage.Companion.DeployMessage
-import io.hamal.lib.domain.vo.DeployedAt
 import io.hamal.lib.domain.vo.DeployedAt.Companion.DeployedAt
 import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.domain.vo.FuncInputs

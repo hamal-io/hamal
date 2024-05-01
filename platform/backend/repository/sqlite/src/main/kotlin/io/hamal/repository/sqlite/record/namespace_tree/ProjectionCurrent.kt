@@ -1,6 +1,7 @@
 package io.hamal.repository.sqlite.record.namespace_tree
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceTreeId
 import io.hamal.lib.sqlite.Connection

@@ -1,6 +1,7 @@
 package io.hamal.repository.memory.record.func
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
@@ -33,7 +34,7 @@ internal class ProjectionCurrent : ProjectionMemory<FuncId, Func>{
             .filter { if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId) }
             .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
             .dropWhile { it.id >= query.afterId }
-            .take(query.limit.value)
+            .take(query.limit.intValue)
             .toList()
     }
 

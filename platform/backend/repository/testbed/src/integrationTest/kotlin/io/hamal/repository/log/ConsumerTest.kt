@@ -1,7 +1,7 @@
 package io.hamal.repository.log
 
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
-import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.snowflake.PartitionSourceImpl
 import io.hamal.lib.common.snowflake.SnowflakeGenerator
 import io.hamal.lib.domain.GenerateCmdId

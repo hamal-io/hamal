@@ -3,8 +3,6 @@ package io.hamal.lib.common.serialization
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.hamal.lib.common.domain.ValueObjectHotObject
-import io.hamal.lib.common.domain.ValueObjectInt
-import io.hamal.lib.common.domain.ValueObjectLong
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
@@ -120,53 +118,30 @@ internal object ValueVariableStringAdapterTest {
 }
 
 
-internal object ValueObjectIntAdapterTest {
+internal object ValueVariableNumberAdapterTest {
 
     @Test
     fun serialize() {
-        val result = testDelegate.toJson(TestIntValueObject(1337))
-        assertThat(result, equalTo("1337"))
+        val result = testDelegate.toJson(TestValueVariableNumber(ValueNumber(1337)))
+        assertThat(result, equalTo("1337.0"))
     }
 
     @Test
     fun deserialize() {
-        val expected = TestIntValueObject(1337)
-        val result = testDelegate.fromJson("1337", TestIntValueObject::class.java)
+        val expected = TestValueVariableNumber(ValueNumber(1337))
+        val result = testDelegate.fromJson("1337", TestValueVariableNumber::class.java)
         assertThat(result, equalTo(expected))
     }
 
     private val testDelegate: Gson = GsonBuilder().registerTypeAdapter(
-        TestIntValueObject::class.java, ValueObjectIntAdapter(::TestIntValueObject)
+        TestValueVariableNumber::class.java, JsonAdapters.Number(::TestValueVariableNumber)
     ).create()
 
-    private class TestIntValueObject(
-        override val value: Int
-    ) : ValueObjectInt()
+    private class TestValueVariableNumber(
+        override val value: ValueNumber
+    ) : ValueVariableNumber()
 }
 
-internal object ValueObjectULongAdapterTest {
-
-    @Test
-    fun serialize() {
-        val result = testDelegate.toJson(TestULongValueObject(Long.MAX_VALUE))
-        assertThat(result, equalTo("9223372036854775807"))
-    }
-
-    @Test
-    fun deserialize() {
-        val expected = TestULongValueObject(Long.MAX_VALUE)
-        val result = testDelegate.fromJson("9223372036854775807", TestULongValueObject::class.java)
-        assertThat(result, equalTo(expected))
-    }
-
-    private val testDelegate: Gson = GsonBuilder().registerTypeAdapter(
-        TestULongValueObject::class.java, ValueObjectLongAdapter(::TestULongValueObject)
-    ).create()
-
-    private class TestULongValueObject(
-        override val value: Long
-    ) : ValueObjectLong()
-}
 
 internal object ValueVariableInstantAdapterTest {
 

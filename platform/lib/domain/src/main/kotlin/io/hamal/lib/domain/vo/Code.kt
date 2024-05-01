@@ -1,8 +1,9 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.ValueObjectInt
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueNumber
 import io.hamal.lib.common.value.ValueSnowflakeId
+import io.hamal.lib.common.value.ValueVariableNumber
 import io.hamal.lib.common.value.ValueVariableSnowflakeId
 
 class CodeId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
@@ -13,8 +14,12 @@ class CodeId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() 
     }
 }
 
-class CodeVersion(override val value: Int) : ValueObjectInt() {
+class CodeVersion(override val value: ValueNumber) : ValueVariableNumber() {
     init {
-        require(value > 0) { "CodeVersion must be positive" }
+        require(value > ValueNumber(0)) { "CodeVersion must be positive" }
+    }
+
+    companion object {
+        fun CodeVersion(value: Int) = CodeVersion(ValueNumber(value))
     }
 }

@@ -3,7 +3,6 @@ package io.hamal.repository.record
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.domain.UpdatedAt
-import io.hamal.lib.common.domain.ValueObjectInt
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.common.value.*
 import io.hamal.repository.record.RecordClass.Companion.RecordClass
@@ -15,12 +14,13 @@ class RecordClass(override val value: ValueString) : ValueVariableString() {
     }
 }
 
-class RecordSequence(override val value: Int) : ValueObjectInt() {
+class RecordSequence(override val value: ValueNumber) : ValueVariableNumber() {
     companion object {
         fun first() = RecordSequence(1)
+        fun RecordSequence(value: Int) = RecordSequence(ValueNumber(value))
     }
 
-    fun next() = RecordSequence(value + 1)
+    fun next() = RecordSequence(value.intValue + 1)
 }
 
 class RecordedAt(override val value: ValueInstant) : ValueVariableInstant() {

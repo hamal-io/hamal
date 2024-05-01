@@ -4,7 +4,7 @@ import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.request.ExecInvokeRequested
-import io.hamal.lib.domain.vo.CodeVersion
+import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
 import io.hamal.lib.domain.vo.FuncInputs
@@ -141,7 +141,6 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         awaitCompleted(result)
 
         with(execQueryRepository.get(result.id)) {
-            //assertThat(code.value, equalTo(ValueCode("code-6")))
             assertThat(code.version, equalTo(CodeVersion(5)))
         }
     }

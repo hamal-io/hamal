@@ -2,10 +2,9 @@ package io.hamal.api.http.controller.func
 
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.CodeType
-import io.hamal.lib.domain.vo.CodeVersion
+import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.domain.vo.DeployMessage
 import io.hamal.lib.domain.vo.DeployMessage.Companion.DeployMessage
-import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName

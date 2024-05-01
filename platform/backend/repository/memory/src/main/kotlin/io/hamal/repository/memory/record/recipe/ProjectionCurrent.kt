@@ -1,6 +1,7 @@
 package io.hamal.repository.memory.record.recipe
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.RecipeId
 import io.hamal.repository.api.Recipe
 import io.hamal.repository.api.RecipeQueryRepository
@@ -20,7 +21,7 @@ internal class ProjectionCurrent : ProjectionMemory<RecipeId, Recipe> {
             .reversed()
             .asSequence()
             .dropWhile { it.id >= query.afterId }
-            .take(query.limit.value)
+            .take(query.limit.intValue)
             .toList()
     }
 

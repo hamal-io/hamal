@@ -59,7 +59,7 @@ class NamedPreparedStatementDelegate(
     operator fun set(
         param: String, value: Limit
     ): NamedPreparedStatementDelegate {
-        delegate[param] = value.value
+        delegate[param] = value.longValue
         return this
     }
 

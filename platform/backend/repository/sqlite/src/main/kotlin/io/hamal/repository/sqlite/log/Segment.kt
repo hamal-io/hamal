@@ -2,6 +2,7 @@ package io.hamal.repository.sqlite.log
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.common.domain.Count.Companion.None
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.Limit.Companion.one

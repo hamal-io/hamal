@@ -1,6 +1,7 @@
 package io.hamal.repository.sqlite.record.workspace
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.WorkspaceName
 import io.hamal.lib.sqlite.Connection

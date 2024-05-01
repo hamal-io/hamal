@@ -5,6 +5,7 @@ import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
 import io.hamal.lib.domain.vo.CodeVersion
+import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.sdk.api.ApiError

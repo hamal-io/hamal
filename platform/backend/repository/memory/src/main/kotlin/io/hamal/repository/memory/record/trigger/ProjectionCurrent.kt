@@ -1,6 +1,7 @@
 package io.hamal.repository.memory.record.trigger
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
@@ -47,7 +48,7 @@ internal class ProjectionCurrent : ProjectionMemory<TriggerId, Trigger> {
                 }
             }
             .dropWhile { it.id >= query.afterId }
-            .take(query.limit.value)
+            .take(query.limit.intValue)
             .toList()
     }
 

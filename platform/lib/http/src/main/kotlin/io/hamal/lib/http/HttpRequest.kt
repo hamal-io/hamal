@@ -136,7 +136,7 @@ class HttpRequestImpl(
     }
 
     override fun parameter(key: String, value: Limit): HttpRequest {
-        parameters.add(HttpParameter(key, value.value))
+        parameters.add(HttpParameter(key, value.longValue))
         return this
     }
 

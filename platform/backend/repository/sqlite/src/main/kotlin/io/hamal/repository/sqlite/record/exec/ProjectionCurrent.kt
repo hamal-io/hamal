@@ -1,6 +1,7 @@
 package io.hamal.repository.sqlite.record.exec
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.sqlite.Connection

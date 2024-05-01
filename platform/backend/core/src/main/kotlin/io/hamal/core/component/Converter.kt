@@ -1,10 +1,12 @@
 package io.hamal.core.component
 
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.ValueSnowflakeId
 import io.hamal.lib.common.value.ValueVariableSnowflakeId
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName

@@ -3,6 +3,7 @@ package io.hamal.repository.sqlite.record
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
+import io.hamal.lib.common.value.ValueNumber
 import io.hamal.lib.common.value.ValueVariableSnowflakeId
 import io.hamal.lib.sqlite.NamedPreparedStatementDelegate
 import io.hamal.lib.sqlite.NamedPreparedStatementResultSetDelegate
@@ -46,7 +47,7 @@ class RecordTransactionSqlite<ID : ValueVariableSnowflakeId, RECORD : Record<ID>
             }
             map {
                 json.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
-                    record.recordSequence = RecordSequence(it.getInt("sequence"))
+                    record.recordSequence = RecordSequence(ValueNumber(it.getInt("sequence")))
                     record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }
             }
@@ -64,7 +65,7 @@ class RecordTransactionSqlite<ID : ValueVariableSnowflakeId, RECORD : Record<ID>
             }
             map {
                 json.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
-                    record.recordSequence = RecordSequence(it.getInt("sequence"))
+                    record.recordSequence = RecordSequence(ValueNumber(it.getInt("sequence")))
                     record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }
             }
@@ -89,11 +90,11 @@ class RecordTransactionSqlite<ID : ValueVariableSnowflakeId, RECORD : Record<ID>
         ) {
             query {
                 set("entityId", id)
-                set("sequence", sequence.value)
+                set("sequence", sequence.intValue)
             }
             map {
                 json.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
-                    record.recordSequence = RecordSequence(it.getInt("sequence"))
+                    record.recordSequence = RecordSequence(ValueNumber(it.getInt("sequence")))
                     record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }
             }

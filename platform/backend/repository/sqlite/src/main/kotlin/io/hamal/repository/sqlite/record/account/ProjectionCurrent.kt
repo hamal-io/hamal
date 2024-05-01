@@ -1,6 +1,7 @@
 package io.hamal.repository.sqlite.record.account
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction

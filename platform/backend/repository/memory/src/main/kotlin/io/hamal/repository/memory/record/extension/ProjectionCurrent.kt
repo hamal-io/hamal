@@ -1,12 +1,13 @@
 package io.hamal.repository.memory.record.extension
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.repository.api.Extension
 import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
 import io.hamal.repository.memory.record.ProjectionMemory
 
-internal class ProjectionCurrent : ProjectionMemory<ExtensionId, Extension>{
+internal class ProjectionCurrent : ProjectionMemory<ExtensionId, Extension> {
 
     override fun upsert(obj: Extension) {
         val currentExt = projection[obj.id]
@@ -32,7 +33,7 @@ internal class ProjectionCurrent : ProjectionMemory<ExtensionId, Extension>{
             .asSequence()
             .filter { if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId) }
             .dropWhile { it.id >= query.afterId }
-            .take(query.limit.value)
+            .take(query.limit.intValue)
             .toList()
     }
 

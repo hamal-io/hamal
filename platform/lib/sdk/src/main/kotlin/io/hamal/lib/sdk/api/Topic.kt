@@ -2,6 +2,7 @@ package io.hamal.lib.sdk.api
 
 import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain._enum.TopicType

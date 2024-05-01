@@ -1,6 +1,7 @@
 package io.hamal.repository.memory.record.account
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.repository.api.Account
 import io.hamal.repository.api.AccountQueryRepository
@@ -20,7 +21,7 @@ internal class ProjectionCurrent : ProjectionMemory<AccountId, Account> {
             .reversed()
             .asSequence()
             .dropWhile { it.id >= query.afterId }
-            .take(query.limit.value)
+            .take(query.limit.intValue)
             .toList()
     }
 

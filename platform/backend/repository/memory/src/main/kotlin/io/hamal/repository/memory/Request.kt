@@ -2,6 +2,7 @@ package io.hamal.repository.memory
 
 import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain._enum.RequestStatus.Processing
@@ -31,7 +32,7 @@ class RequestMemoryRepository : RequestRepository {
         return lock.withLock {
             val result = mutableListOf<Requested>()
 
-            repeat(limit.value) {
+            repeat(limit.intValue) {
                 if (queue.isEmpty()) {
                     return result
                 }
@@ -85,7 +86,7 @@ class RequestMemoryRepository : RequestRepository {
     override fun list(query: RequestQueryRepository.RequestQuery): List<Requested> {
         return store.keys.sorted()
             .dropWhile { it <= query.afterId }
-            .take(query.limit.value)
+            .take(query.limit.intValue)
             .mapNotNull { find(it) }
             .reversed()
     }

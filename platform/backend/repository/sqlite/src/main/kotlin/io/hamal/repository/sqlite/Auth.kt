@@ -2,6 +2,7 @@ package io.hamal.repository.sqlite
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
 import io.hamal.lib.domain.vo.Email.Companion.Email

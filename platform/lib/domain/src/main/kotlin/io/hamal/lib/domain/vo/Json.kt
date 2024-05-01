@@ -3,7 +3,9 @@ package io.hamal.lib.domain.vo
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.serialization.*
+import io.hamal.lib.common.serialization.HotModule
+import io.hamal.lib.common.serialization.JsonAdapters
+import io.hamal.lib.common.serialization.ValueObjectHotObjectAdapter
 import io.hamal.lib.domain.State
 
 object ValueVariableJsonModule : HotModule() {
@@ -24,7 +26,9 @@ object ValueVariableJsonModule : HotModule() {
         this[RecipeDescription::class] = JsonAdapters.String(::RecipeDescription)
 
         this[CmdId::class] = JsonAdapters.SnowflakeId(::CmdId)
+
         this[CodeId::class] = JsonAdapters.SnowflakeId(::CodeId)
+        this[CodeVersion::class] = JsonAdapters.Number(::CodeVersion)
 
         this[CorrelationId::class] = JsonAdapters.String(::CorrelationId)
 
@@ -54,6 +58,10 @@ object ValueVariableJsonModule : HotModule() {
 
         this[DeployedAt::class] = JsonAdapters.Instant(::DeployedAt)
         this[DeployMessage::class] = JsonAdapters.String(::DeployMessage)
+
+        this[Limit::class] = JsonAdapters.Number(::Limit)
+        this[Count::class] = JsonAdapters.Number(::Count)
+
 
         this[RequestId::class] = JsonAdapters.SnowflakeId(::RequestId)
         this[RequestClass::class] = JsonAdapters.String(::RequestClass)
@@ -97,7 +105,6 @@ object ValueObjectJsonModule : HotModule() {
         this[RecipeDescription::class] = JsonAdapters.String(::RecipeDescription)
 
 
-        this[CodeVersion::class] = ValueObjectIntAdapter(::CodeVersion)
 
         this[CorrelationId::class] = JsonAdapters.String(::CorrelationId)
 
@@ -143,8 +150,6 @@ object ValueObjectJsonModule : HotModule() {
 
         this[InvocationInputs::class] = ValueObjectHotObjectAdapter(::InvocationInputs)
 
-        this[Limit::class] = ValueObjectIntAdapter(::Limit)
-        this[Count::class] = ValueObjectLongAdapter(::Count)
 
 
         this[RequestClass::class] = JsonAdapters.String(::RequestClass)

@@ -1,6 +1,7 @@
 package io.hamal.bridge.http.controller.exec
 
 import io.hamal.lib.common.domain.BatchSize
+import io.hamal.lib.common.domain.BatchSize.Companion.BatchSize
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.EventToSubmit

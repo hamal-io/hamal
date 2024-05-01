@@ -2,6 +2,7 @@ package io.hamal.repository.memory.log
 
 import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.domain.*
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.log.*
@@ -80,7 +81,7 @@ class LogBrokerMemoryRepository : LogBrokerRepository {
                 .reversed()
                 .asSequence()
                 .dropWhile { it.id >= query.afterId }
-                .take(query.limit.value)
+                .take(query.limit.intValue)
                 .toList()
         }
     }

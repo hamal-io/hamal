@@ -3,8 +3,8 @@ package io.hamal.core.service
 import io.hamal.core.adapter.trigger.TriggerInvokePort
 import io.hamal.core.component.WorkerPool
 import io.hamal.core.security.SecurityContext
-import io.hamal.lib.common.domain.BatchSize
-import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.BatchSize.Companion.BatchSize
+import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.request.TriggerInvokeRequest

@@ -1,7 +1,6 @@
 package io.hamal.plugin.std.sys.func
 
 import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueNumber
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.kua.function.Function1In2Out
@@ -24,7 +23,7 @@ class FuncDeploymentsFunction(
                 sdk.func.listDeployments(FuncId(arg1.stringValue))
                     .map { deployed ->
                         ctx.tableCreate(
-                            "version" to ValueNumber(deployed.version.value),
+                            "version" to deployed.version,
                             "message" to deployed.message,
                             "deployed_at" to ValueString(deployed.deployedAt.toString())
                         )

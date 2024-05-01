@@ -1,7 +1,7 @@
 package io.hamal.repository.memory.log
 
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
-import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.domain.vo.LogTopicId.Companion.LogTopicId
 import io.hamal.repository.api.log.LogBrokerRepository.CreateTopicCmd
 import io.hamal.repository.api.log.LogConsumerId.Companion.LogConsumerId

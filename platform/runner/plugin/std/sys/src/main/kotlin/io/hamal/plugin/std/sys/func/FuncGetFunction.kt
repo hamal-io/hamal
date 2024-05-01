@@ -1,7 +1,6 @@
 package io.hamal.plugin.std.sys.func
 
 import io.hamal.lib.common.value.ValueError
-import io.hamal.lib.common.value.ValueNumber
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.kua.function.Function1In2Out
@@ -30,12 +29,12 @@ class FuncGetFunction(
                         "name" to func.name.value,
                         "code" to ctx.tableCreate(
                             "id" to ValueString(func.code.id.stringValue),
-                            "version" to ValueNumber(func.code.version.value),
+                            "version" to func.code.version,
                             "value" to func.code.value
                         ),
                         "deployment" to ctx.tableCreate(
                             "id" to ValueString(func.deployment.id.stringValue),
-                            "version" to ValueNumber(func.deployment.version.value),
+                            "version" to func.deployment.version,
                             "value" to func.deployment.value,
                             "message" to func.deployment.message
                         ),

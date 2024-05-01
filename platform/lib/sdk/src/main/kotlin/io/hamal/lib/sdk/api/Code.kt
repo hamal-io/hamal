@@ -25,7 +25,7 @@ internal class ApiCodeServiceImpl(
             .path("codeId", codeId)
             .let { builder ->
                 if (codeVersion != null) {
-                    builder.parameter("code_version", codeVersion.value)
+                    builder.parameter("code_version", codeVersion.intValue)
                 } else {
                     builder
                 }

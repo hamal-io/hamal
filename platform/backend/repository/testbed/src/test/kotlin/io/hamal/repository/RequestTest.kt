@@ -1,7 +1,7 @@
 package io.hamal.repository
 
-import io.hamal.lib.common.domain.Count
-import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.Count.Companion.Count
+import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain._enum.RequestStatus.*
 import io.hamal.lib.domain.request.TestRequested
