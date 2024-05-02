@@ -76,7 +76,7 @@ data class Property(
                     }
                 }
 
-                is TypeBoolean -> valueOf(value as Boolean)
+                is TypeBoolean -> booleanValueOf(value as Boolean)
                 is TypeCode -> TODO()
                 is TypeDate -> ValueDate(value as LocalDate)
                 is TypeDateTime -> TODO()

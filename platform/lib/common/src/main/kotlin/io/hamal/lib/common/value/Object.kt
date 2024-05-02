@@ -1,10 +1,15 @@
 package io.hamal.lib.common.value
 
+import io.hamal.lib.common.value.FieldIdentifier.Companion.FieldIdentifier
 import io.hamal.lib.common.value.Property.Companion.Property
 import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
+import java.math.BigDecimal
+import java.math.BigInteger
 
 
 // FIXME objects are equal if they have the same fields
+
+
 data class TypeObject(
     override val identifier: TypeIdentifier,
     val fields: Set<Field>
@@ -29,6 +34,8 @@ data class TypeObject(
         fields.associateBy(Field::identifier)
     }
 }
+
+val TypeObjectUnknown = TypeObject("Unknown")
 
 infix fun TypeObject.extends(superclass: TypeObject): TypeObject {
     val fieldClashes = fieldsByIdentifier.keys.intersect(superclass.fieldsByIdentifier.keys)
@@ -57,10 +64,85 @@ data class ValueObject(
     override fun toString() = "${type.identifier}(${properties.joinToString(", ") { it.toString() }})"
 
     private val valuesByIdentifier = properties.associateBy { it.identifier }.mapValues { it.value.value }
+
+    companion object {
+        fun builder(): ValueObjectBuilder = ValueObjectBuilder()
+    }
 }
 
 fun <T : Value> ValueObject.forType(type: TypeObject, block: () -> T) =
     if (!this.implements(type.fields)) throw NotImplementedError()
     else block()
 
-infix fun ValueObject.implements(interfaceFields: Set<Field>) = this.type.fields.containsAll(interfaceFields)
+infix fun ValueObject.implements(interfaceFields: Set<Field>) = type is TypeObject && this.type.fields.containsAll(interfaceFields)
+
+class ValueObjectBuilder {
+
+    val values = mutableMapOf<String, Value>()
+
+    operator fun set(key: String, value: Value): ValueObjectBuilder {
+        values[key] = value
+        return this
+    }
+
+    operator fun set(key: String, value: String): ValueObjectBuilder {
+        values[key] = ValueString(value)
+        return this
+    }
+
+    operator fun set(key: String, value: Byte): ValueObjectBuilder {
+        values[key] = ValueNumber(value)
+        return this
+    }
+
+    operator fun set(key: String, value: Short): ValueObjectBuilder {
+        values[key] = ValueNumber(value)
+        return this
+    }
+
+    operator fun set(key: String, value: BigInteger): ValueObjectBuilder {
+        values[key] = ValueNumber(value)
+        return this
+    }
+
+    operator fun set(key: String, value: BigDecimal): ValueObjectBuilder {
+        values[key] = ValueNumber(value)
+        return this
+    }
+
+    operator fun set(key: String, value: Int): ValueObjectBuilder {
+        values[key] = ValueNumber(value)
+        return this
+    }
+
+    operator fun set(key: String, value: Float): ValueObjectBuilder {
+        values[key] = ValueNumber(value)
+        return this
+    }
+
+    operator fun set(key: String, value: Double): ValueObjectBuilder {
+        values[key] = ValueNumber(value)
+        return this
+    }
+
+    operator fun set(key: String, value: Long): ValueObjectBuilder {
+        values[key] = ValueNumber(value)
+        return this
+    }
+
+    operator fun set(key: String, value: Boolean): ValueObjectBuilder {
+        values[key] = booleanValueOf(value)
+        return this
+    }
+
+    fun setNil(key: String): ValueObjectBuilder {
+        values[key] = ValueNil
+        return this
+    }
+
+    fun build(type: TypeObject = TypeObjectUnknown): ValueObject {
+        // FIXME if type != Unknown validate fields
+        val properties = values.map { (key, value) -> Property(FieldIdentifier(key), value) }
+        return ValueObject(type, properties)
+    }
+}

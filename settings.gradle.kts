@@ -86,7 +86,6 @@ include(":app:fn-guru")
 include(":app:hamal-backend")
 include(":app:hamal-mono")
 include(":app:hamal-runner")
-include(":app:nyanbot")
 include(":app:web3proxy")
 
 rootProject.name = "hamal"

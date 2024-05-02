@@ -68,4 +68,10 @@ fun main() {
 //    val numberList = TypeArrayNumber(ValueNumber(12), ValueNumber(323), ValueNumber(4))
 //
 //    println(numberList)
+
+    val builder = ValueObject.builder().also { builder ->
+        builder["test"] = ValueString("Test")
+    }
+
+    println(builder.build())
 }

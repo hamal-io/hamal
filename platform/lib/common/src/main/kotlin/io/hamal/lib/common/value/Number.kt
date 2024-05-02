@@ -1,6 +1,7 @@
 package io.hamal.lib.common.value
 
 import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
+import java.math.BigInteger
 
 data object TypeNumber : TypePrimitive() {
     override val identifier = TypeIdentifier("Number")
@@ -10,8 +11,13 @@ data object TypeNumber : TypePrimitive() {
 value class ValueNumber(private val value: Double) : ValueComparable<ValueNumber> {
     override val type get() = TypeNumber
 
+    constructor(value: Byte) : this(value.toDouble())
+    constructor(value: Short) : this(value.toDouble())
     constructor(value: Int) : this(value.toDouble())
     constructor(value: Long) : this(value.toDouble())
+    constructor(value: Float) : this(value.toDouble())
+    constructor(value: Number) : this(value.toDouble())
+    constructor(value: BigInteger) : this(value.toDouble())
 
     operator fun times(value: Int) = ValueNumber(this.value * value)
     operator fun times(value: Double) = ValueNumber(this.value * value)

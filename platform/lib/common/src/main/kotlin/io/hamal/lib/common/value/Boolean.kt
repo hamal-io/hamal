@@ -6,7 +6,7 @@ data object TypeBoolean : TypePrimitive() {
     override val identifier = TypeIdentifier("Boolean")
 }
 
-fun valueOf(value: Boolean) = if (value) ValueTrue else ValueFalse
+fun booleanValueOf(value: Boolean) = if (value) ValueTrue else ValueFalse
 
 sealed class ValueBoolean(
     private val value: Boolean
