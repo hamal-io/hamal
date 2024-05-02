@@ -1,8 +1,8 @@
 package io.hamal.extension.net.http.endpoint
 
-import io.hamal.lib.common.hot.HotArray
-import io.hamal.lib.common.hot.HotNode
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.serialization.serde.SerdeArray
+import io.hamal.lib.common.serialization.serde.SerdeNode
+import io.hamal.lib.common.serialization.serde.SerdeObject
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -12,19 +12,19 @@ import org.springframework.web.bind.annotation.RestController
 open class TestJsonController {
 
     @RequestMapping("/v1/json-empty-object")
-    fun jsonEmptyObject(): ResponseEntity<HotObject> {
-        return ResponseEntity.ok(HotObject.empty)
+    fun jsonEmptyObject(): ResponseEntity<SerdeObject> {
+        return ResponseEntity.ok(SerdeObject.empty)
     }
 
     @RequestMapping("/v1/json-empty-array")
-    fun jsonEmptyArray(): ResponseEntity<HotArray> {
-        return ResponseEntity.ok(HotArray.empty)
+    fun jsonEmptyArray(): ResponseEntity<SerdeArray> {
+        return ResponseEntity.ok(SerdeArray.empty)
     }
 
     @RequestMapping("/v1/json-array")
-    fun jsonArray(): ResponseEntity<HotArray> {
+    fun jsonArray(): ResponseEntity<SerdeArray> {
         return ResponseEntity.ok(
-            HotArray.builder()
+            SerdeArray.builder()
                 .append(23)
                 .append(true)
                 .append("24.23")
@@ -34,9 +34,9 @@ open class TestJsonController {
     }
 
     @RequestMapping("/v1/json-error")
-    fun jsonError(): ResponseEntity<HotObject> {
+    fun jsonError(): ResponseEntity<SerdeObject> {
         return ResponseEntity.badRequest().body(
-            HotObject.builder()
+            SerdeObject.builder()
                 .set("code", 400)
                 .set("message", "bad-request")
                 .set("boolean-value", true)
@@ -45,7 +45,7 @@ open class TestJsonController {
     }
 
     @RequestMapping("/v1/json-echo")
-    fun jsonEcho(@RequestBody body: HotNode<*>): ResponseEntity<HotNode<*>> {
+    fun jsonEcho(@RequestBody body: SerdeNode<*>): ResponseEntity<SerdeNode<*>> {
         return ResponseEntity.ok(body)
     }
 }

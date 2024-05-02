@@ -1,6 +1,5 @@
 package io.hamal.lib.nodes.control
 
-import io.hamal.lib.common.hot.HotString
 import io.hamal.lib.common.value.TypeString
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.nodes.AbstractIntegrationTest

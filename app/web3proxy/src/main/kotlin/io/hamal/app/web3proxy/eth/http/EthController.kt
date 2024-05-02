@@ -1,9 +1,9 @@
 package io.hamal.app.web3proxy.eth.http
 
 import io.hamal.app.web3proxy.eth.handler.HandleEthRequest
-import io.hamal.lib.common.hot.HotArray
-import io.hamal.lib.common.hot.HotNode
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.serialization.serde.SerdeArray
+import io.hamal.lib.common.serialization.serde.SerdeNode
+import io.hamal.lib.common.serialization.serde.SerdeObject
 import io.hamal.lib.web3.evm.chain.eth.domain.EthRequest
 import io.hamal.lib.web3.evm.chain.eth.domain.EthResponse
 import io.hamal.lib.web3.evm.chain.eth.domain.parseEthRequest
@@ -19,17 +19,17 @@ internal class EthController(
 ) {
 
     @PostMapping("/eth")
-    fun handle(@RequestBody body: HotNode<*>): ResponseEntity<*> {
+    fun handle(@RequestBody body: SerdeNode<*>): ResponseEntity<*> {
         return when (body) {
-            is HotArray -> handleArray(body)
-            is HotObject -> handleObject(body)
+            is SerdeArray -> handleArray(body)
+            is SerdeObject -> handleObject(body)
             else -> TODO()
         }
     }
 
-    private fun handleArray(requests: HotArray): ResponseEntity<List<EthResponse>> {
+    private fun handleArray(requests: SerdeArray): ResponseEntity<List<EthResponse>> {
         val reqs = requests
-            .filterIsInstance<HotObject>()
+            .filterIsInstance<SerdeObject>()
             .map { request ->
                 val (err, req) = parseEthRequest(json, request)
                 if (err != null) {
@@ -45,7 +45,7 @@ internal class EthController(
         )
     }
 
-    private fun handleObject(request: HotObject): ResponseEntity<EthResponse> {
+    private fun handleObject(request: SerdeObject): ResponseEntity<EthResponse> {
         val (err, req) = parseEthRequest(json, request)
         if (err != null) {
             return ResponseEntity.ok(err)

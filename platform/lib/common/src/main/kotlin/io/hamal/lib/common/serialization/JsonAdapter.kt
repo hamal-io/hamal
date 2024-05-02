@@ -1,8 +1,8 @@
 package io.hamal.lib.common.serialization
 
 import com.google.gson.*
-import io.hamal.lib.common.hot.HotArray
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.serialization.serde.SerdeArray
+import io.hamal.lib.common.serialization.serde.SerdeObject
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.*
 import java.lang.reflect.Type
@@ -11,22 +11,22 @@ import java.time.format.DateTimeFormatter
 
 interface JsonAdapter<T : Any> : JsonSerializer<T>, JsonDeserializer<T>
 
-internal object HotArrayAdapter : JsonAdapter<HotArray> {
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): HotArray {
+internal object HotArrayAdapter : JsonAdapter<SerdeArray> {
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): SerdeArray {
         return GsonTransform.toNode(json).asArray()
     }
 
-    override fun serialize(src: HotArray, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+    override fun serialize(src: SerdeArray, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
         return GsonTransform.fromNode(src)
     }
 }
 
-internal object HotObjectAdapter : JsonAdapter<HotObject> {
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): HotObject {
+internal object HotObjectAdapter : JsonAdapter<SerdeObject> {
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): SerdeObject {
         return GsonTransform.toNode(json).asObject()
     }
 
-    override fun serialize(src: HotObject, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+    override fun serialize(src: SerdeObject, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
         return GsonTransform.fromNode(src)
     }
 }

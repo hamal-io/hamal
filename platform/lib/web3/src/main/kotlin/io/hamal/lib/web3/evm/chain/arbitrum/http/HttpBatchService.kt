@@ -1,9 +1,9 @@
 package io.hamal.lib.web3.evm.chain.arbitrum.http
 
-import io.hamal.lib.common.hot.HotArray
-import io.hamal.lib.common.hot.HotNull
-import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.common.hot.HotString
+import io.hamal.lib.common.serialization.serde.SerdeArray
+import io.hamal.lib.common.serialization.serde.SerdeNull
+import io.hamal.lib.common.serialization.serde.SerdeObject
+import io.hamal.lib.common.serialization.serde.SerdeString
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.web3.evm.EvmBatchService
 import io.hamal.lib.web3.evm.abi.type.EvmAddress
@@ -25,7 +25,7 @@ class ArbitrumHttpBatchService(
     override fun getBlock(number: EvmUint64) = also {
         request(
             method = "eth_getBlockByNumber",
-            params = HotArray.builder()
+            params = SerdeArray.builder()
                 .append(number.toPrefixedHexString().value)
                 .append(true)
                 .build(),
@@ -36,15 +36,15 @@ class ArbitrumHttpBatchService(
     override fun call(to: EvmAddress, data: EvmPrefixedHexString, number: EvmUint64, from: EvmAddress?) = also {
         request(
             method = "eth_call",
-            params = HotArray.builder()
+            params = SerdeArray.builder()
                 .append(
-                    HotObject.builder()
-                        .set("from", from?.toPrefixedHexString()?.value?.let(::HotString) ?: HotNull)
+                    SerdeObject.builder()
+                        .set("from", from?.toPrefixedHexString()?.value?.let(::SerdeString) ?: SerdeNull)
                         .set("to", to.toPrefixedHexString().value)
                         .set("data", data.value)
                         .build()
                 )
-                .append(HotString(number.toPrefixedHexString().value))
+                .append(SerdeString(number.toPrefixedHexString().value))
                 .build(),
             resultClass = ArbitrumCallResponse::class
         )

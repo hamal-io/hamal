@@ -1,8 +1,8 @@
 package io.hamal.runner.run.context
 
-import io.hamal.lib.common.hot.HotArray
-import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.common.hot.HotString
+import io.hamal.lib.common.serialization.serde.SerdeArray
+import io.hamal.lib.common.serialization.serde.SerdeObject
+import io.hamal.lib.common.serialization.serde.SerdeString
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.common.value.ValueString
@@ -90,7 +90,7 @@ internal object EventInvocationTest : AbstractExecuteTest() {
         TODO()
     }
 
-    class TestFunction(var result: HotArray? = null) : Function0In0Out() {
+    class TestFunction(var result: SerdeArray? = null) : Function0In0Out() {
         override fun invoke(ctx: FunctionContext) {
 //            val inputs = ctx[ExecInputs::class]
 //            result = inputs.value.asArray("events")
@@ -184,17 +184,17 @@ internal object HookInvocationTest : AbstractExecuteTest() {
                 codeType = CodeType.Lua54
             )
         )
-        assertThat(testFn.method, equalTo(HotString("Delete")))
+        assertThat(testFn.method, equalTo(SerdeString("Delete")))
         assertThat(testFn.headers, equalTo(ValueObject.builder().set("content-type", "application/json").build()))
         assertThat(testFn.parameters, equalTo(ValueObject.builder().set("answer", 42).build()))
         assertThat(testFn.content, equalTo(ValueObject.builder().set("hamal", "rocks").build()))
     }
 
     class TestFunction(
-        var method: HotString? = null,
-        var headers: HotObject? = null,
-        var parameters: HotObject? = null,
-        var content: HotObject? = null
+        var method: SerdeString? = null,
+        var headers: SerdeObject? = null,
+        var parameters: SerdeObject? = null,
+        var content: SerdeObject? = null
     ) : Function0In0Out() {
         override fun invoke(ctx: FunctionContext) {
             val inputs = ctx[ExecInputs::class]
@@ -281,17 +281,17 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
                 codeType = CodeType.Lua54
             )
         )
-        assertThat(testFn.method, equalTo(HotString("Delete")))
-        assertThat(testFn.headers, equalTo(HotObject.builder().set("content-type", "application/json").build()))
-        assertThat(testFn.parameters, equalTo(HotObject.builder().set("answer", "42").build()))
-        assertThat(testFn.content, equalTo(HotObject.builder().set("hamal", "rocks").build()))
+        assertThat(testFn.method, equalTo(SerdeString("Delete")))
+        assertThat(testFn.headers, equalTo(SerdeObject.builder().set("content-type", "application/json").build()))
+        assertThat(testFn.parameters, equalTo(SerdeObject.builder().set("answer", "42").build()))
+        assertThat(testFn.content, equalTo(SerdeObject.builder().set("hamal", "rocks").build()))
     }
 
     class TestFunction(
-        var method: HotString? = null,
-        var headers: HotObject? = null,
-        var parameters: HotObject? = null,
-        var content: HotObject? = null
+        var method: SerdeString? = null,
+        var headers: SerdeObject? = null,
+        var parameters: SerdeObject? = null,
+        var content: SerdeObject? = null
     ) : Function0In0Out() {
         override fun invoke(ctx: FunctionContext) {
             val inputs = ctx[ExecInputs::class]

@@ -1,6 +1,6 @@
 package io.hamal.plugin.net.http.function
 
-import io.hamal.lib.common.hot.HotNode
+import io.hamal.lib.common.serialization.serde.SerdeNode
 import io.hamal.lib.common.value.*
 import io.hamal.lib.http.*
 import io.hamal.lib.kua.absIndex
@@ -106,7 +106,7 @@ private fun HttpResponse.toMap(ctx: FunctionContext): KuaReference {
 private fun HttpResponse.content(ctx: FunctionContext) = when (this) {
     is HttpSuccessResponse -> {
         if (isNotEmpty) {
-            result(HotNode::class).toKua(ctx)
+            result(SerdeNode::class).toKua(ctx)
         } else {
             ctx.tableCreate()
         }
@@ -114,7 +114,7 @@ private fun HttpResponse.content(ctx: FunctionContext) = when (this) {
 
     is HttpErrorResponse -> {
         if (isNotEmpty) {
-            error(HotNode::class).toKua(ctx)
+            error(SerdeNode::class).toKua(ctx)
         } else {
             ctx.tableCreate()
         }

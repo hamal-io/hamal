@@ -1,23 +1,23 @@
 package io.hamal.lib.common.serialization
 
 import com.google.gson.*
-import io.hamal.lib.common.hot.*
+import io.hamal.lib.common.serialization.serde.*
 import java.util.function.Consumer
 
 object GsonTransform {
 
-    fun fromNode(node: HotNode<*>): JsonElement {
+    fun fromNode(node: SerdeNode<*>): JsonElement {
         if (node.isObject) {
             return fromObject(node.asObject())
         } else if (node.isArray) {
             return fromArray(node.asArray())
-        } else if (node.isTerminal) {
-            return fromTerminal(node.asTerminal()) ?: JsonNull.INSTANCE
+        } else if (node.isPrimitive) {
+            return fromTerminal(node.asPrimitive()) ?: JsonNull.INSTANCE
         }
         return JsonNull.INSTANCE
     }
 
-    fun toNode(element: JsonElement): HotNode<*> {
+    fun toNode(element: JsonElement): SerdeNode<*> {
         if (element.isJsonObject) {
             return toObject(element.asJsonObject)
         } else if (element.isJsonArray) {
@@ -25,22 +25,22 @@ object GsonTransform {
         } else if (element.isJsonPrimitive) {
             return toTerminal(element.asJsonPrimitive)
         }
-        return HotNull
+        return SerdeNull
     }
 
-    private fun fromObject(obj: HotObject): JsonObject {
+    private fun fromObject(obj: SerdeObject): JsonObject {
         val result = JsonObject()
         obj.nodes.forEach { entry -> result.add(entry.key, fromNode(entry.value)) }
         return result
     }
 
-    private fun fromArray(array: HotArray): JsonArray {
+    private fun fromArray(array: SerdeArray): JsonArray {
         val result = JsonArray()
         array.nodes.forEach { node -> result.add(fromNode(node)) }
         return result
     }
 
-    private fun fromTerminal(terminal: HotTerminal<*>): JsonPrimitive? {
+    private fun fromTerminal(terminal: SerdePrimitive<*>): JsonPrimitive? {
         if (terminal.isString) {
             return JsonPrimitive(terminal.stringValue)
         } else if (terminal.isBoolean) {
@@ -51,8 +51,8 @@ object GsonTransform {
         return null
     }
 
-    private fun toObject(obj: JsonObject): HotObject {
-        val resultBuilder = HotObject.builder()
+    private fun toObject(obj: JsonObject): SerdeObject {
+        val resultBuilder = SerdeObject.builder()
 
         obj.entrySet().forEach(Consumer<Map.Entry<String, JsonElement>> { entry: Map.Entry<String, JsonElement> ->
             val key = entry.key
@@ -63,8 +63,8 @@ object GsonTransform {
         return resultBuilder.build()
     }
 
-    private fun toArray(array: JsonArray): HotArray {
-        val resultBuilder = HotArray.builder()
+    private fun toArray(array: JsonArray): SerdeArray {
+        val resultBuilder = SerdeArray.builder()
         for (element in array) {
             resultBuilder.append(toNode(element))
         }
@@ -72,15 +72,15 @@ object GsonTransform {
     }
 
 
-    private fun toTerminal(primitive: JsonPrimitive): HotTerminal<*> {
+    private fun toTerminal(primitive: JsonPrimitive): SerdePrimitive<*> {
         if (primitive.isString) {
-            return HotString(primitive.asString)
+            return SerdeString(primitive.asString)
         } else if (primitive.isBoolean) {
-            return HotBoolean(primitive.asBoolean)
+            return SerdeBoolean(primitive.asBoolean)
         } else if (primitive.isNumber) {
-            return HotNumber(primitive.asBigDecimal)
+            return SerdeNumber(primitive.asBigDecimal)
         }
-        return HotNull
+        return SerdeNull
     }
 
 }

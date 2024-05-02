@@ -1,8 +1,8 @@
 package io.hamal.extension.web3.arbitrum
 
 import com.google.gson.Gson
-import io.hamal.lib.common.hot.HotArray
-import io.hamal.lib.common.hot.HotObjectModule
+import io.hamal.lib.common.serialization.serde.SerdeArray
+import io.hamal.lib.common.serialization.serde.HotObjectModule
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.RunnerEnv
@@ -72,8 +72,8 @@ internal open class TestWebConfig : WebMvcConfigurer {
 internal class TestEvmController {
     @PostMapping("/arbitrum")
     fun handle(
-        @RequestBody requests: HotArray
-    ): ResponseEntity<HotArray> {
+        @RequestBody requests: SerdeArray
+    ): ResponseEntity<SerdeArray> {
         return ResponseEntity.ok(TestHandler.handle(requests))
     }
 }

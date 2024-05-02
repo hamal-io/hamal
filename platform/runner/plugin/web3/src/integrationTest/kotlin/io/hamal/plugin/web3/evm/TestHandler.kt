@@ -1,7 +1,7 @@
 package io.hamal.plugin.web3.evm
 
-import io.hamal.lib.common.hot.HotArray
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.serialization.serde.SerdeArray
+import io.hamal.lib.common.serialization.serde.SerdeObject
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.domain.EvmRequest
 import io.hamal.lib.web3.evm.domain.EvmResponse
@@ -17,9 +17,9 @@ import io.hamal.lib.web3.json
 
 object TestHandler {
 
-    fun handle(chain: String, requests: HotArray): HotArray {
+    fun handle(chain: String, requests: SerdeArray): SerdeArray {
         val reqs = requests
-            .filterIsInstance<HotObject>()
+            .filterIsInstance<SerdeObject>()
             .map { request ->
 
                 val (err, req) = if (chain == "eth") {
@@ -35,7 +35,7 @@ object TestHandler {
             .map { req -> handle(req) }
             .plus(reqs.filterIsInstance<EvmResponse>())
             .let { responses ->
-                json.deserialize(HotArray::class, json.serialize(responses))
+                json.deserialize(SerdeArray::class, json.serialize(responses))
             }
     }
 

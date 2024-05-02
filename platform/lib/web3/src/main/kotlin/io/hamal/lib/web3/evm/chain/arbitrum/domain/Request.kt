@@ -3,9 +3,9 @@ package io.hamal.lib.web3.evm.chain.arbitrum.domain
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.hot.HotArray
-import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.common.hot.HotString
+import io.hamal.lib.common.serialization.serde.SerdeArray
+import io.hamal.lib.common.serialization.serde.SerdeObject
+import io.hamal.lib.common.serialization.serde.SerdeString
 import io.hamal.lib.common.serialization.GsonTransform
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.domain.Json
@@ -27,12 +27,12 @@ sealed interface ArbitrumRequest : EvmRequest {
         override fun serialize(request: ArbitrumRequest, type: Type, ctx: JsonSerializationContext): JsonElement {
             return when (request) {
                 is ArbitrumGetBlockByNumberRequest -> GsonTransform.fromNode(
-                    HotObject.builder()
+                    SerdeObject.builder()
                         .set("id", GsonTransform.toNode(ctx.serialize(request.id)))
                         .set("method", GsonTransform.toNode(ctx.serialize(request.method)))
                         .set(
-                            "params", HotArray.builder()
-                                .append(HotString(request.number.toPrefixedHexString().value))
+                            "params", SerdeArray.builder()
+                                .append(SerdeString(request.number.toPrefixedHexString().value))
                                 .append(request.fullTransaction)
                                 .build()
                         )
@@ -68,12 +68,12 @@ data class ArbitrumGetBlockByNumberRequest(
     object Adapter : JsonAdapter<ArbitrumGetBlockByNumberRequest> {
         override fun serialize(request: ArbitrumGetBlockByNumberRequest, type: Type, ctx: JsonSerializationContext): JsonElement {
             return GsonTransform.fromNode(
-                HotObject.builder()
+                SerdeObject.builder()
                     .set("id", GsonTransform.toNode(ctx.serialize(request.id)))
                     .set("method", GsonTransform.toNode(ctx.serialize(request.method)))
                     .set(
-                        "params", HotArray.builder()
-                            .append(HotString(request.number.toPrefixedHexString().value))
+                        "params", SerdeArray.builder()
+                            .append(SerdeString(request.number.toPrefixedHexString().value))
                             .append(request.fullTransaction)
                             .build()
                     )
@@ -92,7 +92,7 @@ data class ArbitrumGetBlockByNumberRequest(
     }
 }
 
-fun parseArbitrumRequest(json: Json, request: HotObject): Pair<ArbitrumErrorResponse?, ArbitrumRequest?> {
+fun parseArbitrumRequest(json: Json, request: SerdeObject): Pair<ArbitrumErrorResponse?, ArbitrumRequest?> {
     return try {
         val ethRequest = json.deserialize(ArbitrumRequest::class, json.serialize(request))
         null to ethRequest

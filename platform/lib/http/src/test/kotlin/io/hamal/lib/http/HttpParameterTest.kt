@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 
 class HttpParameterTest {
     @Nested
-    inner class ToQueryStringVariableTest {
+    inner class ToQuerySerdeStringVariableTest {
 
         @Test
         fun `No parameter to build query string`() {

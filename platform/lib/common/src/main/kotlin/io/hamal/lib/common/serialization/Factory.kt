@@ -2,7 +2,7 @@ package io.hamal.lib.common.serialization
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import io.hamal.lib.common.hot.HotObjectModule
+import io.hamal.lib.common.serialization.serde.HotObjectModule
 import kotlin.reflect.KClass
 
 class JsonFactoryBuilder {

@@ -1,7 +1,7 @@
 package io.hamal.app.web3proxy.config
 
 import com.google.gson.Gson
-import io.hamal.lib.common.hot.HotObjectModule
+import io.hamal.lib.common.serialization.serde.HotObjectModule
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import io.hamal.lib.web3.evm.EvmHotModule

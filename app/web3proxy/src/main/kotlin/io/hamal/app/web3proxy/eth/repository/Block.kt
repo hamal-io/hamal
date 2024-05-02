@@ -1,7 +1,7 @@
 package io.hamal.app.web3proxy.eth.repository
 
 import io.hamal.lib.common.compress.BzipCompressor
-import io.hamal.lib.common.hot.HotObjectModule
+import io.hamal.lib.common.serialization.serde.HotObjectModule
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ValueVariableJsonModule

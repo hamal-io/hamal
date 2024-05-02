@@ -1,9 +1,9 @@
 package io.hamal.lib.web3.evm.http
 
-import io.hamal.lib.common.hot.HotArray
-import io.hamal.lib.common.hot.HotNode
-import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.common.hot.HotObjectBuilder
+import io.hamal.lib.common.serialization.serde.SerdeArray
+import io.hamal.lib.common.serialization.serde.SerdeNode
+import io.hamal.lib.common.serialization.serde.SerdeObject
+import io.hamal.lib.common.serialization.serde.HotObjectBuilder
 import io.hamal.lib.domain.Json
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
@@ -22,10 +22,10 @@ abstract class HttpBaseBatchService<out RESPONSE : EvmResponse>(
 
         val response = httpTemplate
             .post()
-            .body(HotArray.builder().also { builder -> requests.forEach { request -> builder.append(request) } }.build())
-            .execute(HotNode::class)
+            .body(SerdeArray.builder().also { builder -> requests.forEach { request -> builder.append(request) } }.build())
+            .execute(SerdeNode::class)
 
-        if (response is HotArray) {
+        if (response is SerdeArray) {
             return response.nodes.mapIndexed { index, hotNode ->
                 val result = hotNode.asObject()
                 // FIXME handle [{"id":"1","error":{"code":-32603,"message":"Unexpected error"},"jsonrpc":"2.0"}]
@@ -37,9 +37,9 @@ abstract class HttpBaseBatchService<out RESPONSE : EvmResponse>(
                 }
         }
 
-        if (response is HotObject) {
+        if (response is SerdeObject) {
             val error = response.find("error")
-            if (error is HotObject) {
+            if (error is SerdeObject) {
                 val code = error["code"].intValue
                 val message = error["message"].stringValue
                 throw RuntimeException("$code - $message")
@@ -51,7 +51,7 @@ abstract class HttpBaseBatchService<out RESPONSE : EvmResponse>(
 
     protected fun request(
         method: String,
-        params: HotArray,
+        params: SerdeArray,
         resultClass: KClass<out @UnsafeVariance RESPONSE>
     ) {
         addRequest(
@@ -68,14 +68,14 @@ abstract class HttpBaseBatchService<out RESPONSE : EvmResponse>(
         )
     }
 
-    private fun addRequest(createReq: (Int) -> HotObject, resultClass: KClass<out RESPONSE>) {
+    private fun addRequest(createReq: (Int) -> SerdeObject, resultClass: KClass<out RESPONSE>) {
         val reqId = requests.size + 1
         resultClasses.add(resultClass)
         requests.add(createReq(reqId))
     }
 
     private val resultClasses = mutableListOf<KClass<out RESPONSE>>()
-    private val requests = mutableListOf<HotObject>()
+    private val requests = mutableListOf<SerdeObject>()
 }
 
 //class DepEthHttpBatchService(

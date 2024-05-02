@@ -1,6 +1,6 @@
 package io.hamal.lib.nodes
 
-import io.hamal.lib.common.hot.HotObjectModule
+import io.hamal.lib.common.serialization.serde.HotObjectModule
 import io.hamal.lib.common.serialization.HotModule
 import io.hamal.lib.common.serialization.JsonAdapters
 import io.hamal.lib.common.serialization.JsonFactoryBuilder

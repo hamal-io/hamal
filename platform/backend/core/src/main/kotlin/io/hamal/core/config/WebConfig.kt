@@ -2,7 +2,7 @@ package io.hamal.core.config
 
 import com.google.gson.Gson
 import io.hamal.core.component.*
-import io.hamal.lib.common.hot.HotObjectModule
+import io.hamal.lib.common.serialization.serde.HotObjectModule
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import io.hamal.lib.sdk.api.ApiJsonModule
