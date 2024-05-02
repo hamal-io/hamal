@@ -145,7 +145,6 @@ class KuaTable(
                 state.stringPush(key)
                 state.booleanPush(if (value.booleanValue) ValueTrue else ValueFalse)
                 state.tableRawSet(index)
-
             }
 
             is ValueCode -> {

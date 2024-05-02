@@ -14,6 +14,42 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
+internal object ValueArrayJsonAdapterTest {
+
+    @Test
+    fun serialize() {
+        val result = testDelegate.toJson(
+            ValueArray.builder()
+                .append("some-string-value")
+                .append(true)
+                .append(42)
+                .append(ValueDecimal(123))
+                .build()
+        )
+        assertThat(result, equalTo("""["some-string-value",true,42.0,"123"]"""))
+    }
+
+    @Test
+    fun deserialize() {
+        val expected = ValueArray.builder()
+            .append("some-string-value")
+            .append(true)
+            .append(42)
+            .build()
+
+        val result = testDelegate.fromJson(
+            """["some-string-value",true,42.0]""",
+            ValueArray::class.java
+        )
+        assertThat(result, equalTo(expected))
+    }
+
+    private val testDelegate: Gson = GsonFactoryBuilder()
+        .register(ValueJsonModule)
+        .build()
+
+}
+
 internal object ValueBooleanJsonAdapterTest {
     @Test
     fun serialize() {
@@ -123,6 +159,19 @@ internal object ValueInstantVariableJsonAdapterTest {
     private class TestObject(override val value: ValueInstant) : ValueVariableInstant()
 }
 
+internal object ValueNilJsonAdapterTest {
+    @Test
+    fun serialize() {
+        val someNil = ValueNil
+        val result = testDelegate.toJson(someNil)
+        assertThat(result, equalTo("null"))
+    }
+
+    private val testDelegate: Gson = GsonFactoryBuilder()
+        .register(ValueJsonModule)
+        .build()
+}
+
 internal object ValueNumberJsonAdapterTest {
     @Test
     fun serialize() {
@@ -175,9 +224,10 @@ internal object ValueObjectJsonAdapterTest {
                 .set("some-string", "some-string-value")
                 .set("some-boolean", true)
                 .set("some-number", 42)
+                .set("some-decimal", ValueDecimal(123))
                 .build()
         )
-        assertThat(result, equalTo("""{"some-string":"some-string-value","some-boolean":true,"some-number":42.0}"""))
+        assertThat(result, equalTo("""{"some-string":"some-string-value","some-boolean":true,"some-number":42.0,"some-decimal":"123"}"""))
     }
 
     @Test

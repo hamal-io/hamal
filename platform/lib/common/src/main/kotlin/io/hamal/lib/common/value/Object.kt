@@ -83,8 +83,6 @@ infix fun ValueObject.implements(interfaceFields: Set<Field>) = type is TypeObje
 
 class ValueObjectBuilder {
 
-    val values = mutableMapOf<String, Value>()
-
     operator fun set(key: String, value: Enum<*>): ValueObjectBuilder {
         values[key] = ValueString(value.name)
         return this
@@ -160,4 +158,6 @@ class ValueObjectBuilder {
         val properties = values.map { (key, value) -> Property(FieldIdentifier(key), value) }
         return ValueObject(type, properties)
     }
+
+    private val values = mutableMapOf<String, Value>()
 }
