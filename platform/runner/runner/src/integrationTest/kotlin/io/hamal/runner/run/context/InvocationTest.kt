@@ -1,17 +1,9 @@
 package io.hamal.runner.run.context
 
-import io.hamal.lib.common.serialization.json.JsonArray
-import io.hamal.lib.common.serialization.json.JsonObject
-import io.hamal.lib.common.serialization.json.JsonString
-import io.hamal.lib.common.value.ValueCode
-import io.hamal.lib.common.value.ValueObject
-import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.domain.Event
-import io.hamal.lib.domain.EventTopic
+import io.hamal.lib.common.value.*
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.EventId.Companion.EventId
-import io.hamal.lib.domain.vo.EventPayload
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
@@ -29,86 +21,135 @@ import org.junit.jupiter.api.Test
 
 internal object EventInvocationTest : AbstractExecuteTest() {
 
+
     @Test
     fun `Events available in code`() {
-        TODO()
-//        val testExecutor = createTestRunner()
-//        testExecutor.run(
-//            UnitOfWork(
-//                id = ExecId(1234),
-//                execToken = ExecToken("ExecToken"),
-//                namespaceId = NamespaceId(9876),
-//                workspaceId = WorkspaceId(5432),
-//                inputs = ExecInputs(HotObject.builder().set("events", events.toHot()).build()),
-//                state = State(),
-//                code = ValueCode(
-//                    """
-//                    assert( context.exec.hook == nil )
-//                    assert( context.exec.events ~= nil )
-//                    assert( #context.exec.events == 2 )
-//
-//                    assert( context.exec.events[1].id == '4d2' )
-//                    assert( context.exec.events[1].topic.id == '1' )
-//                    assert( context.exec.events[1].topic.name == 'Topic-One' )
-//                    assert( context.exec.events[1].payload.block == 43 )
-//
-//                    assert( context.exec.events[2].id == '10e1' )
-//                    assert( context.exec.events[2].topic.id == '17' )
-//                    assert( context.exec.events[2].topic.name == 'Topic-Two' )
-//                    assert( context.exec.events[2].payload.block == 44 )
-//
-//                """.trimIndent()
-//                ),
-//                codeType = CodeType.Lua54
-//            )
-//        )
+        val testExecutor = createTestRunner()
+        testExecutor.run(
+            UnitOfWork(
+                id = ExecId(1234),
+                execToken = ExecToken("ExecToken"),
+                namespaceId = NamespaceId(9876),
+                workspaceId = WorkspaceId(5432),
+                inputs = ExecInputs(
+                    ValueObject.builder()
+                        .set(
+                            "events", ValueArray.builder()
+                                .append(
+                                    ValueObject.builder()
+                                        .set("id", EventId(1234))
+                                        .set(
+                                            "topic", ValueObject.builder()
+                                                .set("id", TopicId(1))
+                                                .set("name", TopicName("Topic-One"))
+                                                .build()
+                                        )
+                                        .set("payload", ValueObject.builder().set("block", 43).build())
+                                        .build()
+                                )
+                                .append(
+                                    ValueObject.builder()
+                                        .set("id", EventId(4321))
+                                        .set(
+                                            "topic", ValueObject.builder()
+                                                .set("id", TopicId(23))
+                                                .set("name", TopicName("Topic-Two"))
+                                                .build()
+                                        )
+                                        .set("payload", ValueObject.builder().set("block", 44).build())
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .build()
+                ),
+                state = State(),
+                code = ValueCode(
+                    """
+                    assert( context.exec.hook == nil )
+                    assert( context.exec.events ~= nil )
+                    assert( #context.exec.events == 2 )
+
+                    assert( context.exec.events[1].id == '4d2' )
+                    assert( context.exec.events[1].topic.id == '1' )
+                    assert( context.exec.events[1].topic.name == 'Topic-One' )
+                    assert( context.exec.events[1].payload.block == 43 )
+
+                    assert( context.exec.events[2].id == '10e1' )
+                    assert( context.exec.events[2].topic.id == '17' )
+                    assert( context.exec.events[2].topic.name == 'Topic-Two' )
+                    assert( context.exec.events[2].payload.block == 44 )
+
+                """.trimIndent()
+                ),
+                codeType = CodeType.Lua54
+            )
+        )
     }
 
     @Test
     fun `Events available in function`() {
-//        val testFn = TestFunction()
-//
-//        val testExecutor = createTestRunner(ValueString("fn") to testFn)
-//        testExecutor.run(
-//            UnitOfWork(
-//                id = ExecId(1234),
-//                execToken = ExecToken("ExecToken"),
-//                namespaceId = NamespaceId(9876),
-//                workspaceId = WorkspaceId(5432),
-//                inputs = ExecInputs(HotObject.builder().set("events", events.toHot()).build()),
-//                state = State(),
-//                code = ValueCode("require_plugin('test').fn()"),
-//                codeType = CodeType.Lua54
-//            )
-//        )
-//        assertThat(testFn.result?.size, equalTo(2))
-//
-//        assertThat(testFn.result!![0].asObject()["id"].stringValue, equalTo("4d2"))
-//        assertThat(testFn.result!![0].asObject()["topic"].asObject()["id"].stringValue, equalTo("1"))
-//        assertThat(testFn.result!![0].asObject()["topic"].asObject()["name"].stringValue, equalTo("Topic-One"))
-//        assertThat(testFn.result!![0].asObject()["payload"].asObject()["block"].intValue, equalTo(43))
-        TODO()
+        val testFn = TestFunction()
+
+        val testExecutor = createTestRunner(ValueString("fn") to testFn)
+        testExecutor.run(
+            UnitOfWork(
+                id = ExecId(1234),
+                execToken = ExecToken("ExecToken"),
+                namespaceId = NamespaceId(9876),
+                workspaceId = WorkspaceId(5432),
+                inputs = ExecInputs(
+                    ValueObject.builder()
+                        .set(
+                            "events", ValueArray.builder()
+                                .append(
+                                    ValueObject.builder()
+                                        .set("id", EventId(1234))
+                                        .set(
+                                            "topic", ValueObject.builder()
+                                                .set("id", TopicId(1))
+                                                .set("name", TopicName("Topic-One"))
+                                                .build()
+                                        )
+                                        .set("payload", ValueObject.builder().set("block", 43).build())
+                                        .build()
+                                )
+                                .append(
+                                    ValueObject.builder()
+                                        .set("id", EventId(4321))
+                                        .set(
+                                            "topic", ValueObject.builder()
+                                                .set("id", TopicId(23))
+                                                .set("name", TopicName("Topic-Two"))
+                                                .build()
+                                        )
+                                        .set("payload", ValueObject.builder().set("block", 44).build())
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .build()
+                ),
+                state = State(),
+                code = ValueCode("require_plugin('test').fn()"),
+                codeType = CodeType.Lua54
+            )
+        )
+        assertThat(testFn.result?.value?.size, equalTo(2))
+
+        assertThat(testFn.result!!.asObject(0).getSnowflakeId("id"), equalTo(ValueSnowflakeId("4d2")))
+        assertThat(testFn.result!!.asObject(0).getObject("topic").getSnowflakeId("id"), equalTo(ValueSnowflakeId("1")))
+        assertThat(testFn.result!!.asObject(0).getObject("topic").getString("name"), equalTo(ValueString("Topic-One")))
+        assertThat(testFn.result!!.asObject(1).getObject("topic").getString("name"), equalTo(ValueString("Topic-Two")))
+        assertThat(testFn.result!!.asObject(0).getObject("payload").getNumber("block"), equalTo(ValueNumber(43)))
     }
 
-    class TestFunction(var result: JsonArray? = null) : Function0In0Out() {
+    class TestFunction(var result: ValueArray? = null) : Function0In0Out() {
         override fun invoke(ctx: FunctionContext) {
-//            val inputs = ctx[ExecInputs::class]
-//            result = inputs.value.asArray("events")
-            TODO()
+            val inputs = ctx[ExecInputs::class]
+            result = inputs.value["events"] as ValueArray
         }
     }
-
-    private val events = listOf(
-        Event(
-            topic = EventTopic(
-                id = TopicId(1), name = TopicName("Topic-One")
-            ), id = EventId(1234), payload = EventPayload(ValueObject.builder().set("block", 43).build())
-        ), Event(
-            topic = EventTopic(
-                id = TopicId(23), name = TopicName("Topic-Two")
-            ), id = EventId(4321), payload = EventPayload(ValueObject.builder().set("block", 44).build())
-        )
-    )
 }
 
 internal object HookInvocationTest : AbstractExecuteTest() {
@@ -184,25 +225,24 @@ internal object HookInvocationTest : AbstractExecuteTest() {
                 codeType = CodeType.Lua54
             )
         )
-        assertThat(testFn.method, equalTo(JsonString("Delete")))
+        assertThat(testFn.method, equalTo(ValueString("Delete")))
         assertThat(testFn.headers, equalTo(ValueObject.builder().set("content-type", "application/json").build()))
         assertThat(testFn.parameters, equalTo(ValueObject.builder().set("answer", 42).build()))
         assertThat(testFn.content, equalTo(ValueObject.builder().set("hamal", "rocks").build()))
     }
 
     class TestFunction(
-        var method: JsonString? = null,
-        var headers: JsonObject? = null,
-        var parameters: JsonObject? = null,
-        var content: JsonObject? = null
+        var method: ValueString? = null,
+        var headers: ValueObject? = null,
+        var parameters: ValueObject? = null,
+        var content: ValueObject? = null
     ) : Function0In0Out() {
         override fun invoke(ctx: FunctionContext) {
             val inputs = ctx[ExecInputs::class]
-//            method = inputs.value["hook"].asObject()["method"].asString()
-//            headers = inputs.value["hook"].asObject()["headers"].asObject()
-//            parameters = inputs.value["hook"].asObject()["parameters"].asObject()
-//            content = inputs.value["hook"].asObject()["content"].asObject()
-            TODO()
+            method = inputs.value.getObject("hook").getString("method")
+            headers = inputs.value.getObject("hook").getObject("headers")
+            parameters = inputs.value.getObject("hook").getObject("parameters")
+            content = inputs.value.getObject("hook").getObject("content")
         }
     }
 
@@ -281,25 +321,24 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
                 codeType = CodeType.Lua54
             )
         )
-        assertThat(testFn.method, equalTo(JsonString("Delete")))
-        assertThat(testFn.headers, equalTo(JsonObject.builder().set("content-type", "application/json").build()))
-        assertThat(testFn.parameters, equalTo(JsonObject.builder().set("answer", "42").build()))
-        assertThat(testFn.content, equalTo(JsonObject.builder().set("hamal", "rocks").build()))
+        assertThat(testFn.method, equalTo(ValueString("Delete")))
+        assertThat(testFn.headers, equalTo(ValueObject.builder().set("content-type", "application/json").build()))
+        assertThat(testFn.parameters, equalTo(ValueObject.builder().set("answer", "42").build()))
+        assertThat(testFn.content, equalTo(ValueObject.builder().set("hamal", "rocks").build()))
     }
 
     class TestFunction(
-        var method: JsonString? = null,
-        var headers: JsonObject? = null,
-        var parameters: JsonObject? = null,
-        var content: JsonObject? = null
+        var method: ValueString? = null,
+        var headers: ValueObject? = null,
+        var parameters: ValueObject? = null,
+        var content: ValueObject? = null
     ) : Function0In0Out() {
         override fun invoke(ctx: FunctionContext) {
             val inputs = ctx[ExecInputs::class]
-//            method = inputs.value["endpoint"].asObject()["method"].asString()
-//            headers = inputs.value["endpoint"].asObject()["headers"].asObject()
-//            parameters = inputs.value["endpoint"].asObject()["parameters"].asObject()
-//            content = inputs.value["endpoint"].asObject()["content"].asObject()
-            TODO()
+            method = inputs.value.getObject("endpoint").getString("method")
+            headers = inputs.value.getObject("endpoint").getObject("headers")
+            parameters = inputs.value.getObject("endpoint").getObject("parameters")
+            content = inputs.value.getObject("endpoint").getObject("content")
         }
     }
 

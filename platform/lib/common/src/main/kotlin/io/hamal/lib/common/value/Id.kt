@@ -10,6 +10,8 @@ data object TypeSnowflakeId : TypePrimitive() {
 
 @JvmInline
 value class ValueSnowflakeId(private val value: SnowflakeId) : ValueComparable<ValueSnowflakeId> {
+    constructor(value: String) : this(SnowflakeId(value))
+
     override val type get() = TypeSnowflakeId
     override fun toString(): String = value.toString()
     override fun compareTo(other: ValueSnowflakeId) = value.compareTo(other.value)

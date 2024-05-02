@@ -85,64 +85,64 @@ value class JsonArray(
     companion object {
         val empty = JsonArray(LinkedList())
 
-        fun builder() = HotArrayBuilder()
+        fun builder() = JsonArrayBuilder()
     }
 
 }
 
-class HotArrayBuilder {
+class JsonArrayBuilder {
 
-    fun append(value: String): HotArrayBuilder {
+    fun append(value: String): JsonArrayBuilder {
         nodes.add(JsonString(value))
         return this
     }
 
-    fun append(value: Byte): HotArrayBuilder {
+    fun append(value: Byte): JsonArrayBuilder {
         nodes.add(JsonNumber(value))
         return this
     }
 
-    fun append(value: Short): HotArrayBuilder {
+    fun append(value: Short): JsonArrayBuilder {
         nodes.add(JsonNumber(value))
         return this
     }
 
-    fun append(value: BigInteger): HotArrayBuilder {
+    fun append(value: BigInteger): JsonArrayBuilder {
         nodes.add(JsonNumber(value))
         return this
     }
 
-    fun append(value: BigDecimal): HotArrayBuilder {
+    fun append(value: BigDecimal): JsonArrayBuilder {
         nodes.add(JsonNumber(value))
         return this
     }
 
-    fun append(value: Int): HotArrayBuilder {
+    fun append(value: Int): JsonArrayBuilder {
         nodes.add(JsonNumber(value))
         return this
     }
 
-    fun append(value: Float): HotArrayBuilder {
+    fun append(value: Float): JsonArrayBuilder {
         nodes.add(JsonNumber(value))
         return this
     }
 
-    fun append(value: Double): HotArrayBuilder {
+    fun append(value: Double): JsonArrayBuilder {
         nodes.add(JsonNumber(value))
         return this
     }
 
-    fun append(value: Long): HotArrayBuilder {
+    fun append(value: Long): JsonArrayBuilder {
         nodes.add(JsonNumber(value))
         return this
     }
 
-    fun append(value: Boolean): HotArrayBuilder {
+    fun append(value: Boolean): JsonArrayBuilder {
         nodes.add(JsonBoolean(value))
         return this
     }
 
-    fun append(value: JsonNode<*>): HotArrayBuilder {
+    fun append(value: JsonNode<*>): JsonArrayBuilder {
         nodes.add(value)
         return this
     }

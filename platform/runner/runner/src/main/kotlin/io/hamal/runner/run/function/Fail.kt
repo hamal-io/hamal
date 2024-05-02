@@ -16,7 +16,7 @@ internal object FailRunFunction : Function1In0Out<Value>(
 ) {
     override fun invoke(ctx: FunctionContext, arg1: Value) {
         when (arg1) {
-            is ValueError -> throw ExitError(JsonNumber(1), arg1 as ValueObject)
+            is ValueError -> throw ExitError(JsonNumber(1), ValueObject.builder().set("message", arg1.stringValue).build())
             is KuaTable -> throw ExitError(JsonNumber(1), arg1.toValueObject())
             else -> TODO()
         }

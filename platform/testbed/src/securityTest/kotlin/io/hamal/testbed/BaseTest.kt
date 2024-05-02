@@ -14,7 +14,7 @@ import java.nio.file.Path
 abstract class BaseTest(private val apiUrl: String) : AbstractRunnerTest() {
 
     sealed interface TestResult {
-        object Success : TestResult
+        data object Success : TestResult
         data class Failure(val message: String) : TestResult
     }
 
@@ -27,14 +27,13 @@ abstract class BaseTest(private val apiUrl: String) : AbstractRunnerTest() {
                 pluginFactories = listOf(PluginHttpFactory()),
                 extensionFactories = listOf(ExtensionHttpFactory),
                 env = RunnerEnv(
-                    TODO()
-//                    ValueObject.builder().also { builder ->
-//                        testEnv.nodes.forEach { (key, value) ->
-//                            builder[key] = value
-//                        }
-//                    }
-//                        .set("test_api", apiUrl)
-//                        .build()
+                    ValueObject.builder().also { builder ->
+                        testEnv.properties.forEach { (key, value) ->
+                            builder[key.stringValue] = value
+                        }
+                    }
+                        .set("test_api", apiUrl)
+                        .build()
                 )
             ).run(unitOfWork(String(Files.readAllBytes(testFile))))
             Success

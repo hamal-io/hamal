@@ -114,9 +114,9 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
                  status         INTEGER NOT NULL,
-                 workspace_id       INTEGER NOT NULL,
+                 workspace_id   INTEGER NOT NULL,
                  func_id        INTEGER NOT NULL,
-                 namespace_id        INTEGER NOT NULL,
+                 namespace_id   INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
             );

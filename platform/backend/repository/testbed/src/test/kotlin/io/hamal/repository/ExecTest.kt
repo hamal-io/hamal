@@ -218,7 +218,10 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Complete started exec`() = runWith(ExecRepository::class) {
             planExec(
-                cmdId = CmdId(1), execId = ExecId(2), workspaceId = WorkspaceId(3), namespaceId = NamespaceId(4)
+                cmdId = CmdId(1),
+                execId = ExecId(2),
+                workspaceId = WorkspaceId(3),
+                namespaceId = NamespaceId(4)
             )
 
             schedule(ScheduleCmd(CmdId(2), ExecId(2)))

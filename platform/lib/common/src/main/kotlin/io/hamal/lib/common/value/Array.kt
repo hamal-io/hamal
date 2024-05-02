@@ -21,6 +21,11 @@ data class ValueArray(
     override val type: Type,
     val value: List<Value>
 ) : Value {
+
+    operator fun get(idx: Int): Value = value[idx]
+
+    fun asObject(idx: Int): ValueObject = get(idx) as ValueObject
+
     override fun toString() = value.toString()
 
     companion object {

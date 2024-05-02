@@ -61,11 +61,42 @@ data class ValueObject(
 
     operator fun get(identifier: FieldIdentifier): Value = valuesByIdentifier[identifier] ?: ValueNil
 
-    operator fun get(identifier: String): Value = get(FieldIdentifier(ValueString(identifier)))
+    operator fun get(identifier: String): Value = get(FieldIdentifier(identifier))
+
+    fun getNumber(identifier: FieldIdentifier): ValueNumber = get(identifier) as ValueNumber
+    fun getNumber(identifier: String): ValueNumber = getNumber(FieldIdentifier(identifier))
+
+    fun getSnowflakeId(identifier: FieldIdentifier): ValueSnowflakeId = get(identifier) as ValueSnowflakeId
+    fun getSnowflakeId(identifier: String): ValueSnowflakeId = getSnowflakeId(FieldIdentifier(identifier))
+
+    fun findString(identifier: FieldIdentifier): ValueString? = valuesByIdentifier[identifier]?.let { it as ValueString }
+    fun findString(identifier: String): ValueString? = findString(FieldIdentifier(identifier))
+    fun getString(identifier: FieldIdentifier): ValueString = findString(identifier) ?: throw NoSuchElementException(identifier.stringValue)
+    fun getString(identifier: String): ValueString = getString(FieldIdentifier(identifier))
+
+    fun getObject(identifier: FieldIdentifier): ValueObject = get(identifier) as ValueObject
+    fun getObject(identifier: String): ValueObject = getObject(FieldIdentifier(identifier))
 
     override fun toString() = "${type.identifier}(${properties.joinToString(", ") { it.toString() }})"
 
-    private val valuesByIdentifier = properties.associateBy { it.identifier }.mapValues { it.value.value }
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as ValueObject
+
+        if (type != other.type) return false
+        if (valuesByIdentifier != other.valuesByIdentifier) return false
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = type.hashCode()
+        result = 31 * result + valuesByIdentifier.hashCode()
+        return result
+    }
+
+    private val valuesByIdentifier by lazy { properties.associateBy { it.identifier }.mapValues { it.value.value } }
 
     companion object {
         val empty = ValueObject(TypeObjectUnknown, emptyList())

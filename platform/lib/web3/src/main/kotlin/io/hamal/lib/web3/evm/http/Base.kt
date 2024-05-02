@@ -3,7 +3,7 @@ package io.hamal.lib.web3.evm.http
 import io.hamal.lib.common.serialization.json.JsonArray
 import io.hamal.lib.common.serialization.json.JsonNode
 import io.hamal.lib.common.serialization.json.JsonObject
-import io.hamal.lib.common.serialization.json.HotObjectBuilder
+import io.hamal.lib.common.serialization.json.JsonObjectBuilder
 import io.hamal.lib.domain.Json
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
@@ -56,7 +56,7 @@ abstract class HttpBaseBatchService<out RESPONSE : EvmResponse>(
     ) {
         addRequest(
             createReq = { id ->
-                HotObjectBuilder()
+                JsonObjectBuilder()
                     .set("jsonrpc", "2.0")
                     .set("id", id.toString())
                     .set("method", method)

@@ -42,13 +42,12 @@ interface GeneratorCapture : Generator {
     }
 
     fun captureCode(node: Node, controls: List<Control>): kotlin.String {
-//        val captureFunction = node.properties.value.find("capture_fn")?.stringValue ?: "captureOne"
-//        return """
-//            test = require_plugin('test')
-//            test.$captureFunction(arg_1)
-//            return arg_1
-//        """.trimIndent()
-        TODO()
+        val captureFunction = node.properties.value.findString("capture_fn")?.stringValue ?: "captureOne"
+        return """
+            test = require_plugin('test')
+            test.$captureFunction(arg_1)
+            return arg_1
+        """.trimIndent()
     }
 }
 
@@ -61,13 +60,12 @@ sealed interface GeneratorInvoked : Generator {
         override val outputTypes: List<Type> get() = listOf()
 
         override fun toCode(node: Node, controls: List<Control>): kotlin.String {
-//            val invokeFunction = node.properties.value.find("invoke_fn")?.stringValue ?: "invokeOne"
-//            return """
-//            test = require_plugin('test')
-//            test.$invokeFunction()
-//            return
-//        """.trimIndent()
-            TODO()
+            val invokeFunction = node.properties.value.findString("invoke_fn")?.stringValue ?: "invokeOne"
+            return """
+            test = require_plugin('test')
+            test.$invokeFunction()
+            return
+        """.trimIndent()
         }
     }
 
@@ -76,13 +74,12 @@ sealed interface GeneratorInvoked : Generator {
         override val outputTypes: List<Type> get() = listOf()
 
         override fun toCode(node: Node, controls: List<Control>): kotlin.String {
-//            val invokeFunction = node.properties.value.find("invoke_fn")?.stringValue ?: "invokeOne"
-//            return """
-//            test = require_plugin('test')
-//            test.$invokeFunction()
-//            return
-//        """.trimIndent()
-            TODO()
+            val invokeFunction = node.properties.value.findString("invoke_fn")?.stringValue ?: "invokeOne"
+            return """
+            test = require_plugin('test')
+            test.$invokeFunction()
+            return
+        """.trimIndent()
         }
     }
 
@@ -91,14 +88,12 @@ sealed interface GeneratorInvoked : Generator {
         override val outputTypes: List<Type> get() = listOf()
 
         override fun toCode(node: Node, controls: List<Control>): kotlin.String {
-//            val invokeFunction = node.properties.value.find("invoke_fn")?.stringValue ?: "invokeOne"
-//
-//            return """
-//            test = require_plugin('test')
-//            test.$invokeFunction()
-//            return
-//        """.trimIndent()
-            TODO()
+            val invokeFunction = node.properties.value.findString("invoke_fn")?.stringValue ?: "invokeOne"
+            return """
+            test = require_plugin('test')
+            test.$invokeFunction()
+            return
+        """.trimIndent()
         }
     }
 }

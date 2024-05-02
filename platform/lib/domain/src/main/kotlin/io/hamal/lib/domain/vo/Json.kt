@@ -43,6 +43,10 @@ object ValueVariableJsonModule : SerializationModule() {
         this[ExecInputs::class] = ObjectVariable(::ExecInputs)
         this[ExecResult::class] = ObjectVariable(::ExecResult)
         this[ExecState::class] = ObjectVariable(::ExecState)
+        this[ExecScheduledAt::class] = InstantVariable(::ExecScheduledAt)
+        this[ExecQueuedAt::class] = InstantVariable(::ExecQueuedAt)
+        this[ExecCompletedAt::class] = InstantVariable(::ExecCompletedAt)
+        this[ExecFailedAt::class] = InstantVariable(::ExecFailedAt)
 
         this[ExecToken::class] = StringVariable(::ExecToken)
         this[ExecLogId::class] = SnowflakeIdVariable(::ExecLogId)

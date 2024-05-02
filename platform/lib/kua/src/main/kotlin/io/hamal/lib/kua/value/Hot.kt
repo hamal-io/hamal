@@ -6,6 +6,7 @@ import io.hamal.lib.common.value.*
 import io.hamal.lib.kua.*
 
 //FIXME replace toKua with this
+@Deprecated("Remove me")
 fun JsonNode<*>?.toKua(state: State): Value {
     if (this == null) {
         return ValueNil
@@ -56,7 +57,7 @@ fun Value?.toKua(state: State): Value {
     }
 }
 
-
+@Deprecated("Remove me")
 fun JsonNode<*>?.toKuaSnakeCase(state: State): Value {
     if (this == null) {
         return ValueNil
@@ -95,10 +96,10 @@ fun Value?.toKuaSnakeCase(state: State): Value {
     }
 }
 
-
+@Deprecated("Remove me")
 fun Value.toHotNode(): JsonNode<*> {
     return when (this) {
-        is ValueBoolean -> JsonBoolean(false)
+        is ValueBoolean -> JsonBoolean(booleanValue)
         is ValueCode -> JsonString(stringValue)
         is ValueDecimal -> JsonString(value.toString())
         is ValueError -> toHotObject()
@@ -119,6 +120,7 @@ fun Value.toHotNode(): JsonNode<*> {
     }
 }
 
+@Deprecated("Remove me")
 fun ValueError.toHotObject(): JsonObject = JsonObject.builder().set("message", stringValue).build()
 
 fun KuaTable.isArray(): Boolean {
@@ -133,6 +135,7 @@ fun KuaTable.isArray(): Boolean {
     }
 }
 
+@Deprecated("Remove me")
 fun KuaTable.toHotArray(): JsonArray {
     val builder = JsonArray.builder()
 
@@ -150,6 +153,7 @@ fun KuaTable.toHotArray(): JsonArray {
     return builder.build()
 }
 
+@Deprecated("Remove me")
 fun KuaTable.toHotObject(): JsonObject {
     val builder = JsonObject.builder()
 
@@ -177,7 +181,11 @@ fun KuaTable.toValueObject(): ValueObject {
             val key = state.stringGet(state.absIndex(-2))
             val value = state.get(state.absIndex(-1))
 
-            builder[key.stringValue] = value
+            builder[key.stringValue] = if (value is KuaTable) {
+                value.toValueObject()
+            } else {
+                value
+            }
 
             state.topPop(1)
         }

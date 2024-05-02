@@ -28,7 +28,9 @@ function plugin_create(internal)
         if evt.topic == nil then
             return error("Topic not present")
         end
-        internal.emit(evt)
+        local topic = evt.topic
+        evt.topic = nil
+        internal.emit(topic, evt)
     end
 
     function export.fail(reason)

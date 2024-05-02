@@ -92,7 +92,6 @@ internal class EmitTest : AbstractExecuteTest() {
         with(eventsToEmit.first()) {
             assertThat(topicName, equalTo(TopicName("test-topic")))
             assertThat(payload, equalTo(EventPayload(ValueObject.builder().build())))
-            assertThat(payload, equalTo(EventPayload(ValueObject.builder().build())))
         }
     }
 
@@ -106,13 +105,7 @@ internal class EmitTest : AbstractExecuteTest() {
 
         with(eventsToEmit.first()) {
             assertThat(topicName, equalTo(TopicName("test-topic")))
-            assertThat(
-                payload, equalTo(
-                    EventPayload(
-                        ValueObject.builder().set("hamal", "rocks").build()
-                    )
-                )
-            )
+            assertThat(payload, equalTo(EventPayload(ValueObject.builder().set("hamal", "rocks").build())))
         }
     }
 
@@ -126,13 +119,7 @@ internal class EmitTest : AbstractExecuteTest() {
 
         with(eventsToEmit.first()) {
             assertThat(topicName, equalTo(TopicName("test-topic")))
-            assertThat(
-                payload, equalTo(
-                    EventPayload(
-                        ValueObject.builder().set("answer", 42.0).build()
-                    )
-                )
-            )
+            assertThat(payload, equalTo(EventPayload(ValueObject.builder().set("answer", 42.0).build())))
         }
     }
 

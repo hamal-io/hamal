@@ -30,6 +30,7 @@ import kotlin.reflect.KClass
 object RecordJsonModule : SerializationModule() {
     init {
         this[RecordClass::class] = ValueJsonAdapters.StringVariable(::RecordClass)
+        this[RecordedAt::class] = ValueJsonAdapters.InstantVariable(::RecordedAt)
         this[AccountRecord::class] = AccountRecord.Adapter
         this[RecipeRecord::class] = RecipeRecord.Adapter
         this[CodeRecord::class] = CodeRecord.Adapter

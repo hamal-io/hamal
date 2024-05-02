@@ -67,8 +67,8 @@ class MergeTest {
                 ExecInputs(
                     ValueObject.builder()
                         .set("key", 2810)
-                        .set("invoke", "invoke")
                         .set("func", "func")
+                        .set("invoke", "invoke")
                         .build()
                 )
             )

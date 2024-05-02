@@ -76,74 +76,74 @@ value class JsonObject(
     companion object {
         val empty = JsonObject(LinkedHashMap())
 
-        fun builder() = HotObjectBuilder()
+        fun builder() = JsonObjectBuilder()
     }
 }
 
-class HotObjectBuilder {
+class JsonObjectBuilder {
     val nodes: LinkedHashMap<String, JsonNode<*>> = LinkedHashMap()
 
-    operator fun set(key: String, value: String): HotObjectBuilder {
+    operator fun set(key: String, value: String): JsonObjectBuilder {
         nodes[key] = JsonString(value)
         return this
     }
 
-    operator fun set(key: String, value: Byte): HotObjectBuilder {
+    operator fun set(key: String, value: Byte): JsonObjectBuilder {
         nodes[key] = JsonNumber(value)
         return this
     }
 
-    operator fun set(key: String, value: Short): HotObjectBuilder {
+    operator fun set(key: String, value: Short): JsonObjectBuilder {
         nodes[key] = JsonNumber(value)
         return this
     }
 
-    operator fun set(key: String, value: BigInteger): HotObjectBuilder {
+    operator fun set(key: String, value: BigInteger): JsonObjectBuilder {
         nodes[key] = JsonNumber(value)
         return this
     }
 
-    operator fun set(key: String, value: BigDecimal): HotObjectBuilder {
+    operator fun set(key: String, value: BigDecimal): JsonObjectBuilder {
         nodes[key] = JsonNumber(value)
         return this
     }
 
-    operator fun set(key: String, value: Int): HotObjectBuilder {
+    operator fun set(key: String, value: Int): JsonObjectBuilder {
         nodes[key] = JsonNumber(value)
         return this
     }
 
-    operator fun set(key: String, value: Float): HotObjectBuilder {
+    operator fun set(key: String, value: Float): JsonObjectBuilder {
         nodes[key] = JsonNumber(value)
         return this
     }
 
-    operator fun set(key: String, value: Double): HotObjectBuilder {
+    operator fun set(key: String, value: Double): JsonObjectBuilder {
         nodes[key] = JsonNumber(value)
         return this
     }
 
-    operator fun set(key: String, value: Long): HotObjectBuilder {
+    operator fun set(key: String, value: Long): JsonObjectBuilder {
         nodes[key] = JsonNumber(value)
         return this
     }
 
-    operator fun set(key: String, value: Boolean): HotObjectBuilder {
+    operator fun set(key: String, value: Boolean): JsonObjectBuilder {
         nodes[key] = JsonBoolean(value)
         return this
     }
 
-    fun setNull(key: String): HotObjectBuilder {
+    fun setNull(key: String): JsonObjectBuilder {
         nodes[key] = JsonNull
         return this
     }
 
-    operator fun set(key: String, value: JsonNode<*>): HotObjectBuilder {
+    operator fun set(key: String, value: JsonNode<*>): JsonObjectBuilder {
         nodes[key] = value
         return this
     }
 
-    operator fun set(key: String, value: Enum<*>): HotObjectBuilder {
+    operator fun set(key: String, value: Enum<*>): JsonObjectBuilder {
         nodes[key] = JsonString(value.name)
         return this
     }
