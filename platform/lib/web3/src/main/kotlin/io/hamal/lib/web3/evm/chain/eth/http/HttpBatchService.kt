@@ -1,9 +1,9 @@
 package io.hamal.lib.web3.evm.chain.eth.http
 
-import io.hamal.lib.common.serialization.serde.SerdeArray
-import io.hamal.lib.common.serialization.serde.SerdeNull
-import io.hamal.lib.common.serialization.serde.SerdeObject
-import io.hamal.lib.common.serialization.serde.SerdeString
+import io.hamal.lib.common.serialization.json.JsonArray
+import io.hamal.lib.common.serialization.json.JsonNull
+import io.hamal.lib.common.serialization.json.JsonObject
+import io.hamal.lib.common.serialization.json.JsonString
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.web3.evm.EvmBatchService
 import io.hamal.lib.web3.evm.abi.type.EvmAddress
@@ -24,7 +24,7 @@ class EthHttpBatchService(
     override fun getBlock(number: EvmUint64) = also {
         request(
             method = "eth_getBlockByNumber",
-            params = SerdeArray.builder()
+            params = JsonArray.builder()
                 .append(number.toPrefixedHexString().value)
                 .append(true)
                 .build(),
@@ -35,15 +35,15 @@ class EthHttpBatchService(
     override fun call(to: EvmAddress, data: EvmPrefixedHexString, number: EvmUint64, from: EvmAddress?) = also {
         request(
             method = "eth_call",
-            params = SerdeArray.builder()
+            params = JsonArray.builder()
                 .append(
-                    SerdeObject.builder()
-                        .set("from", from?.toPrefixedHexString()?.value?.let(::SerdeString) ?: SerdeNull)
+                    JsonObject.builder()
+                        .set("from", from?.toPrefixedHexString()?.value?.let(::JsonString) ?: JsonNull)
                         .set("to", to.toPrefixedHexString().value)
                         .set("data", data.value)
                         .build()
                 )
-                .append(SerdeString(number.toPrefixedHexString().value))
+                .append(JsonString(number.toPrefixedHexString().value))
                 .build(),
             resultClass = EthCallResponse::class
         )

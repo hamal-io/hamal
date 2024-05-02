@@ -5,10 +5,10 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.GsonTransform
 import io.hamal.lib.common.serialization.JsonAdapter
-import io.hamal.lib.common.serialization.serde.SerdeArray
-import io.hamal.lib.common.serialization.serde.SerdeNull
-import io.hamal.lib.common.serialization.serde.SerdeObject
-import io.hamal.lib.common.serialization.serde.SerdeString
+import io.hamal.lib.common.serialization.json.JsonArray
+import io.hamal.lib.common.serialization.json.JsonNull
+import io.hamal.lib.common.serialization.json.JsonObject
+import io.hamal.lib.common.serialization.json.JsonString
 import io.hamal.lib.domain.Json
 import io.hamal.lib.web3.evm.abi.type.EvmAddress
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
@@ -30,12 +30,12 @@ sealed interface EthRequest : EvmRequest {
         override fun serialize(request: EthRequest, type: Type, ctx: JsonSerializationContext): JsonElement {
             return when (request) {
                 is EthGetBlockByNumberRequest -> GsonTransform.fromNode(
-                    SerdeObject.builder()
+                    JsonObject.builder()
                         .set("id", GsonTransform.toNode(ctx.serialize(request.id)))
                         .set("method", GsonTransform.toNode(ctx.serialize(request.method)))
                         .set(
-                            "params", SerdeArray.builder()
-                                .append(SerdeString(request.number.toPrefixedHexString().value))
+                            "params", JsonArray.builder()
+                                .append(JsonString(request.number.toPrefixedHexString().value))
                                 .append(request.fullTransaction)
                                 .build()
                         )
@@ -73,19 +73,19 @@ data class EthCallRequest(
     object Adapter : JsonAdapter<EthCallRequest> {
         override fun serialize(request: EthCallRequest, typeOfSrc: Type, ctx: JsonSerializationContext): JsonElement {
             return GsonTransform.fromNode(
-                SerdeObject.builder()
+                JsonObject.builder()
                     .set("id", GsonTransform.toNode(ctx.serialize(request.id)))
                     .set("method", GsonTransform.toNode(ctx.serialize(request.method)))
                     .set(
-                        "params", SerdeArray.builder()
+                        "params", JsonArray.builder()
                             .append(
-                                SerdeObject.builder()
-                                    .set("from", request.from?.toPrefixedHexString()?.value?.let(::SerdeString) ?: SerdeNull)
+                                JsonObject.builder()
+                                    .set("from", request.from?.toPrefixedHexString()?.value?.let(::JsonString) ?: JsonNull)
                                     .set("to", request.to.toPrefixedHexString().value)
                                     .set("data", request.data.value)
                                     .build()
                             )
-                            .append(SerdeString(request.number.toPrefixedHexString().value))
+                            .append(JsonString(request.number.toPrefixedHexString().value))
                             .build()
                     )
                     .build()
@@ -116,12 +116,12 @@ data class EthGetBlockByNumberRequest(
     object Adapter : JsonAdapter<EthGetBlockByNumberRequest> {
         override fun serialize(request: EthGetBlockByNumberRequest, type: Type, ctx: JsonSerializationContext): JsonElement {
             return GsonTransform.fromNode(
-                SerdeObject.builder()
+                JsonObject.builder()
                     .set("id", GsonTransform.toNode(ctx.serialize(request.id)))
                     .set("method", GsonTransform.toNode(ctx.serialize(request.method)))
                     .set(
-                        "params", SerdeArray.builder()
-                            .append(SerdeString(request.number.toPrefixedHexString().value))
+                        "params", JsonArray.builder()
+                            .append(JsonString(request.number.toPrefixedHexString().value))
                             .append(request.fullTransaction)
                             .build()
                     )
@@ -140,7 +140,7 @@ data class EthGetBlockByNumberRequest(
     }
 }
 
-fun parseEthRequest(json: Json, request: SerdeObject): Pair<EthErrorResponse?, EthRequest?> {
+fun parseEthRequest(json: Json, request: JsonObject): Pair<EthErrorResponse?, EthRequest?> {
     return try {
         val ethRequest = json.deserialize(EthRequest::class, json.serialize(request))
         null to ethRequest

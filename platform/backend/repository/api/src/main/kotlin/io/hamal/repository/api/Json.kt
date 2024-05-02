@@ -1,9 +1,9 @@
 package io.hamal.repository.api
 
-import io.hamal.lib.common.serialization.HotModule
+import io.hamal.lib.common.serialization.SerializationModule
 import io.hamal.lib.domain.request.Requested
 
-object DomainJsonModule : HotModule() {
+object DomainJsonModule : SerializationModule() {
     init {
         this[Exec::class] = Exec.Adapter
         this[Requested::class] = Requested.Adapter

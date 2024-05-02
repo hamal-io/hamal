@@ -1,29 +1,28 @@
 package io.hamal.lib.kua.value
 
-import io.hamal.lib.common.serialization.serde.*
-import io.hamal.lib.common.serialization.serde.SerdeNumber
-import io.hamal.lib.common.serialization.serde.SerdeString
+import io.hamal.lib.common.serialization.json.*
+import io.hamal.lib.common.serialization.json.JsonString
 import io.hamal.lib.common.util.StringUtils
 import io.hamal.lib.common.value.*
 import io.hamal.lib.kua.*
 
 //FIXME replace toKua with this
-fun SerdeNode<*>?.toKua(state: State): Value {
+fun JsonNode<*>?.toKua(state: State): Value {
     if (this == null) {
         return ValueNil
     }
     return when (this) {
-        is SerdeObject -> state.tableCreate(nodes.map { (key, value) ->
+        is JsonObject -> state.tableCreate(nodes.map { (key, value) ->
             ValueString(key) to value.toKua(
                 state
             )
         }.toMap())
 
-        is SerdeArray -> state.tableCreate(nodes.map { it.toKua(state) })
-        is io.hamal.lib.common.serialization.serde.SerdeBoolean -> if (value) ValueTrue else ValueFalse
-        is SerdeNull -> ValueNil
-        is SerdeNumber -> ValueNumber(value.toDouble())
-        is SerdeString -> ValueString(value)
+        is JsonArray -> state.tableCreate(nodes.map { it.toKua(state) })
+        is JsonBoolean -> if (value) ValueTrue else ValueFalse
+        is JsonNull -> ValueNil
+        is JsonNumber -> ValueNumber(value.toDouble())
+        is JsonString -> ValueString(value)
         else -> TODO()
     }
 }
@@ -50,22 +49,22 @@ fun Value?.toKua(state: State): Value {
 }
 
 
-fun SerdeNode<*>?.toKuaSnakeCase(state: State): Value {
+fun JsonNode<*>?.toKuaSnakeCase(state: State): Value {
     if (this == null) {
         return ValueNil
     }
     return when (this) {
-        is SerdeObject -> state.tableCreate(nodes.map { (key, value) ->
+        is JsonObject -> state.tableCreate(nodes.map { (key, value) ->
             ValueString(StringUtils.snakeCase(key)) to value.toKuaSnakeCase(
                 state
             )
         }.toMap())
 
-        is SerdeArray -> state.tableCreate(nodes.map { it.toKuaSnakeCase(state) })
-        is io.hamal.lib.common.serialization.serde.SerdeBoolean -> if (value) ValueTrue else ValueFalse
-        is SerdeNull -> ValueNil
-        is SerdeNumber -> ValueNumber(value.toDouble())
-        is SerdeString -> ValueString(value)
+        is JsonArray -> state.tableCreate(nodes.map { it.toKuaSnakeCase(state) })
+        is JsonBoolean -> if (value) ValueTrue else ValueFalse
+        is JsonNull -> ValueNil
+        is JsonNumber -> ValueNumber(value.toDouble())
+        is JsonString -> ValueString(value)
         else -> TODO()
     }
 }
@@ -93,17 +92,17 @@ fun Value?.toKuaSnakeCase(state: State): Value {
 }
 
 
-fun Value.toHotNode(): SerdeNode<*> {
+fun Value.toHotNode(): JsonNode<*> {
     return when (this) {
-        is ValueFalse -> SerdeBoolean(false)
-        is ValueTrue -> SerdeBoolean(true)
-        is ValueCode -> SerdeString(stringValue)
-        is ValueDecimal -> SerdeString(value.toString())
+        is ValueFalse -> JsonBoolean(false)
+        is ValueTrue -> JsonBoolean(true)
+        is ValueCode -> JsonString(stringValue)
+        is ValueDecimal -> JsonString(value.toString())
         is ValueError -> toHotObject()
         is KuaFunction<*, *, *, *> -> TODO()
-        is ValueNil -> SerdeNull
-        is ValueNumber -> SerdeNumber(doubleValue)
-        is ValueString -> SerdeString(stringValue)
+        is ValueNil -> JsonNull
+        is ValueNumber -> JsonNumber(doubleValue)
+        is ValueString -> JsonString(stringValue)
         is KuaTable -> {
             if (isArray()) {
                 toHotArray()
@@ -117,7 +116,7 @@ fun Value.toHotNode(): SerdeNode<*> {
     }
 }
 
-fun ValueError.toHotObject(): SerdeObject = SerdeObject.builder().set("message", stringValue).build()
+fun ValueError.toHotObject(): JsonObject = JsonObject.builder().set("message", stringValue).build()
 
 fun KuaTable.isArray(): Boolean {
     return state.checkpoint {
@@ -131,8 +130,8 @@ fun KuaTable.isArray(): Boolean {
     }
 }
 
-fun KuaTable.toHotArray(): SerdeArray {
-    val builder = SerdeArray.builder()
+fun KuaTable.toHotArray(): JsonArray {
+    val builder = JsonArray.builder()
 
     state.checkpoint {
         state.nilPush()
@@ -148,8 +147,8 @@ fun KuaTable.toHotArray(): SerdeArray {
     return builder.build()
 }
 
-fun KuaTable.toHotObject(): SerdeObject {
-    val builder = SerdeObject.builder()
+fun KuaTable.toHotObject(): JsonObject {
+    val builder = JsonObject.builder()
 
     state.checkpoint {
         state.nilPush()

@@ -1,9 +1,9 @@
 package io.hamal.app.web3proxy.arbitrum.http
 
 import io.hamal.app.web3proxy.arbitrum.handler.HandleArbitrumRequest
-import io.hamal.lib.common.serialization.serde.SerdeArray
-import io.hamal.lib.common.serialization.serde.SerdeNode
-import io.hamal.lib.common.serialization.serde.SerdeObject
+import io.hamal.lib.common.serialization.json.JsonArray
+import io.hamal.lib.common.serialization.json.JsonNode
+import io.hamal.lib.common.serialization.json.JsonObject
 import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumRequest
 import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumResponse
 import io.hamal.lib.web3.evm.chain.arbitrum.domain.parseArbitrumRequest
@@ -19,17 +19,17 @@ internal class ArbitrumController(
 ) {
 
     @PostMapping("/arbitrum")
-    fun handle(@RequestBody body: SerdeNode<*>): ResponseEntity<*> {
+    fun handle(@RequestBody body: JsonNode<*>): ResponseEntity<*> {
         return when (body) {
-            is SerdeArray -> handleArray(body)
-            is SerdeObject -> handleObject(body)
+            is JsonArray -> handleArray(body)
+            is JsonObject -> handleObject(body)
             else -> TODO()
         }
     }
 
-    private fun handleArray(requests: SerdeArray): ResponseEntity<List<ArbitrumResponse>> {
+    private fun handleArray(requests: JsonArray): ResponseEntity<List<ArbitrumResponse>> {
         val reqs = requests
-            .filterIsInstance<SerdeObject>()
+            .filterIsInstance<JsonObject>()
             .map { request ->
                 val (err, req) = parseArbitrumRequest(json, request)
                 if (err != null) {
@@ -45,7 +45,7 @@ internal class ArbitrumController(
         )
     }
 
-    private fun handleObject(request: SerdeObject): ResponseEntity<ArbitrumResponse> {
+    private fun handleObject(request: JsonObject): ResponseEntity<ArbitrumResponse> {
         val (err, req) = parseArbitrumRequest(json, request)
         if (err != null) {
             return ResponseEntity.ok(err)

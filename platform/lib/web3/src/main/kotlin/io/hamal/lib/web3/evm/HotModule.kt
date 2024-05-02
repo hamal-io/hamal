@@ -4,14 +4,14 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.serialization.HotModule
+import io.hamal.lib.common.serialization.SerializationModule
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.web3.evm.abi.type.*
 import io.hamal.lib.web3.evm.domain.EvmMethod
 import io.hamal.lib.web3.evm.domain.EvmRequestId
 import java.lang.reflect.Type
 
-object EvmHotModule : HotModule() {
+object EvmHotModule : SerializationModule() {
 
     init {
         set(EvmRequestId::class, EvmRequestId.Adapter)

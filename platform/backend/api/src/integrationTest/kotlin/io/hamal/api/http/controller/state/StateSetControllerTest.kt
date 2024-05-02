@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.state
 
-import io.hamal.lib.common.serialization.serde.SerdeNumber
+import io.hamal.lib.common.serialization.json.JsonNumber
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
@@ -35,7 +35,7 @@ internal class StateSetControllerTest : StateBaseControllerTest() {
         awaitCompleted(response.result(ApiStateSetRequested::class))
 
         val correlatedState = getState(funcId, CorrelationId("__CORRELATION__"))
-        assertThat(correlatedState["answer"], equalTo(SerdeNumber(42)))
+        assertThat(correlatedState["answer"], equalTo(JsonNumber(42)))
     }
 
     @Test
@@ -80,7 +80,7 @@ internal class StateSetControllerTest : StateBaseControllerTest() {
             )
 
             val correlatedState = getState(correlation)
-            assertThat(correlatedState["count"], equalTo(SerdeNumber(currentCount)))
+            assertThat(correlatedState["count"], equalTo(JsonNumber(currentCount)))
         }
     }
 

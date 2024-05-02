@@ -1,7 +1,7 @@
 package io.hamal.app.web3proxy.arbitrum
 
-import io.hamal.lib.common.serialization.serde.SerdeArray
-import io.hamal.lib.common.serialization.serde.SerdeObject
+import io.hamal.lib.common.serialization.json.JsonArray
+import io.hamal.lib.common.serialization.json.JsonObject
 import io.hamal.lib.http.body
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.domain.EvmRequestId
@@ -11,7 +11,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 
-internal class ArbitrumGetBlockBySerdeNumberTest : ArbitrumBaseTest() {
+internal class ArbitrumGetBlockByJsonNumberTest : ArbitrumBaseTest() {
 
     @Test
     fun `Requests the same block multiple times`() {
@@ -90,11 +90,11 @@ internal class ArbitrumGetBlockBySerdeNumberTest : ArbitrumBaseTest() {
     fun `Request single block with full transaction list by hot request`() {
         testTemplate
             .body(
-                SerdeObject.builder()
+                JsonObject.builder()
                     .set("id", "23")
                     .set("jsonrpc", "2.0")
                     .set("method", "eth_getBlockByNumber")
-                    .set("params", SerdeArray.builder().append("0x100002").append(true).build())
+                    .set("params", JsonArray.builder().append("0x100002").append(true).build())
                     .build()
             )
             .execute(ArbitrumGetBlockResponse::class) {
@@ -145,21 +145,21 @@ internal class ArbitrumGetBlockBySerdeNumberTest : ArbitrumBaseTest() {
     fun `Request multiple blocks with full transaction list by hot request`() {
         testTemplate
             .body(
-                SerdeArray.builder()
+                JsonArray.builder()
                     .append(
-                        SerdeObject.builder()
+                        JsonObject.builder()
                             .set("id", "2")
                             .set("jsonrpc", "2.0")
                             .set("method", "eth_getBlockByNumber")
-                            .set("params", SerdeArray.builder().append("0x100002").append(true).build())
+                            .set("params", JsonArray.builder().append("0x100002").append(true).build())
                             .build()
                     )
                     .append(
-                        SerdeObject.builder()
+                        JsonObject.builder()
                             .set("id", "1")
                             .set("jsonrpc", "2.0")
                             .set("method", "eth_getBlockByNumber")
-                            .set("params", SerdeArray.builder().append("0x1284810").append(true).build())
+                            .set("params", JsonArray.builder().append("0x1284810").append(true).build())
                             .build()
                     )
                     .build()

@@ -2,8 +2,8 @@ package io.hamal.core.config
 
 import com.google.gson.Gson
 import io.hamal.core.component.*
-import io.hamal.lib.common.serialization.serde.HotObjectModule
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
+import io.hamal.lib.common.serialization.json.SerdeModule
 import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import io.hamal.lib.sdk.api.ApiJsonModule
 import io.hamal.repository.api.DomainJsonModule
@@ -28,7 +28,6 @@ import javax.xml.transform.Source
 @Configuration
 open class WebConfig : WebMvcConfigurer {
 
-
     @Bean
     open fun protocolHandlerVirtualThreadExecutorCustomizer(): TomcatProtocolHandlerCustomizer<*> {
         return TomcatProtocolHandlerCustomizer { protocolHandler: ProtocolHandler ->
@@ -36,24 +35,22 @@ open class WebConfig : WebMvcConfigurer {
         }
     }
 
-
     @Bean
     open fun gson(): Gson = JsonFactoryBuilder()
+        .register(SerdeModule)
         .register(ApiJsonModule)
         .register(DomainJsonModule)
-        .register(HotObjectModule)
         .register(PlatformEventJsonModule)
         .register(ValueVariableJsonModule)
         .build()
+
 
     @Bean
     open fun gsonHttpMessageConverter(gson: Gson): GsonHttpMessageConverter {
         val result = GsonHttpMessageConverter()
         result.gson = gson
         result.defaultCharset = StandardCharsets.UTF_8
-        result.supportedMediaTypes = listOf(
-            MediaType("application", "json", StandardCharsets.UTF_8)
-        )
+        result.supportedMediaTypes = listOf(MediaType("application", "json", StandardCharsets.UTF_8))
         return result
     }
 
@@ -66,7 +63,6 @@ open class WebConfig : WebMvcConfigurer {
 
         converters.add(ByteArrayHttpMessageConverter())
         converters.add(SourceHttpMessageConverter<Source>())
-
         converters.add(gsonHttpMessageConverter(gson()))
     }
 

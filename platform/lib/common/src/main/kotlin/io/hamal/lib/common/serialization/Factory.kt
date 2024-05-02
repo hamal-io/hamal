@@ -2,7 +2,7 @@ package io.hamal.lib.common.serialization
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import io.hamal.lib.common.serialization.serde.HotObjectModule
+import io.hamal.lib.common.serialization.json.SerdeModule
 import kotlin.reflect.KClass
 
 class JsonFactoryBuilder {
@@ -10,10 +10,10 @@ class JsonFactoryBuilder {
     private val builder = GsonBuilder()
 
     init {
-        register(HotObjectModule)
+        register(SerdeModule)
     }
 
-    fun register(module: HotModule): JsonFactoryBuilder {
+    fun register(module: SerializationModule): JsonFactoryBuilder {
         module.adapters.forEach { (clazz, adapter) ->
             builder.registerTypeAdapter(clazz.java, adapter)
         }

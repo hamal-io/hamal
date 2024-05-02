@@ -1,7 +1,7 @@
 package io.hamal.lib.web3.evm.domain
 
-import io.hamal.lib.common.serialization.serde.SerdeObject
-import io.hamal.lib.common.serialization.serde.SerdeString
+import io.hamal.lib.common.serialization.json.JsonObject
+import io.hamal.lib.common.serialization.json.JsonString
 
 interface EvmResponse {
     val jsonrpc: kotlin.String
@@ -13,7 +13,7 @@ sealed class EvmHotResponse : EvmResponse {
 
 data class EvmHotGetBlockResponse(
     val id: EvmRequestId,
-    val result: SerdeObject?
+    val result: JsonObject?
 ) : EvmHotResponse() {
     override fun toString(): kotlin.String {
         return "GenericGetBlockResponse($result)"
@@ -23,7 +23,7 @@ data class EvmHotGetBlockResponse(
 
 data class EvmHotCallResponse(
     val id: EvmRequestId,
-    val result: SerdeString?
+    val result: JsonString?
 ) : EvmHotResponse() {
     override fun toString(): kotlin.String {
         return "EvmHotCallResponse($result)"
@@ -32,7 +32,7 @@ data class EvmHotCallResponse(
 
 data class EvmHotSendRawTransactionResponse(
     val id: EvmRequestId,
-    val result: SerdeString?
+    val result: JsonString?
 ) : EvmHotResponse() {
     override fun toString(): kotlin.String {
         return "EvmHotSendRawTransactionResponse($result)"

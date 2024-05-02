@@ -3,10 +3,10 @@ package io.hamal.repository.record
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.serialization.serde.HotObjectModule
-import io.hamal.lib.common.serialization.HotModule
+import io.hamal.lib.common.serialization.json.SerdeModule
+import io.hamal.lib.common.serialization.SerializationModule
 import io.hamal.lib.common.serialization.JsonAdapter
-import io.hamal.lib.common.serialization.JsonAdapters
+import io.hamal.lib.common.value.ValueJsonAdapters
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ValueVariableJsonModule
@@ -26,9 +26,9 @@ import io.hamal.repository.record.workspace.WorkspaceRecord
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
-object RecordJsonModule : HotModule() {
+object RecordJsonModule : SerializationModule() {
     init {
-        this[RecordClass::class] = JsonAdapters.StringVariable(::RecordClass)
+        this[RecordClass::class] = ValueJsonAdapters.StringVariable(::RecordClass)
         this[AccountRecord::class] = AccountRecord.Adapter
         this[RecipeRecord::class] = RecipeRecord.Adapter
         this[CodeRecord::class] = CodeRecord.Adapter
@@ -47,7 +47,7 @@ object RecordJsonModule : HotModule() {
 val json = Json(
     JsonFactoryBuilder()
         .register(DomainJsonModule)
-        .register(HotObjectModule)
+        .register(SerdeModule)
         .register(RecordJsonModule)
         .register(ValueVariableJsonModule)
 )

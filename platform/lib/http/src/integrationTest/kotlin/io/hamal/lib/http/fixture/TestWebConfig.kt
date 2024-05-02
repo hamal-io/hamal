@@ -1,7 +1,7 @@
 package io.hamal.lib.http.fixture
 
 import com.google.gson.Gson
-import io.hamal.lib.common.serialization.serde.HotObjectModule
+import io.hamal.lib.common.serialization.json.SerdeModule
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
@@ -23,7 +23,7 @@ open class TestWebConfig : WebMvcConfigurer {
 
     @Bean
     open fun gson(): Gson = JsonFactoryBuilder()
-        .register(HotObjectModule)
+        .register(SerdeModule)
         .register(ValueVariableJsonModule)
         .build()
 

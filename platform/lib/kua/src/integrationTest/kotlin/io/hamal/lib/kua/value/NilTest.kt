@@ -10,7 +10,7 @@ import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueNumber
 import org.junit.jupiter.api.Test
 
-internal class ValueSerdeNullTest {
+internal class ValueJsonNullTest {
 
     @Test
     fun `Single result it nil`() {

@@ -1,7 +1,7 @@
 package io.hamal.extension.web3.eth
 
-import io.hamal.lib.common.serialization.serde.SerdeArray
-import io.hamal.lib.common.serialization.serde.SerdeObject
+import io.hamal.lib.common.serialization.json.JsonArray
+import io.hamal.lib.common.serialization.json.JsonObject
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.chain.eth.domain.EthBlockData
 import io.hamal.lib.web3.evm.chain.eth.domain.EthGetBlockByNumberRequest
@@ -13,9 +13,9 @@ import io.hamal.lib.web3.json
 
 object TestHandler {
 
-    fun handle(requests: SerdeArray): SerdeArray {
+    fun handle(requests: JsonArray): JsonArray {
         val reqs = requests
-            .filterIsInstance<SerdeObject>()
+            .filterIsInstance<JsonObject>()
             .map { request ->
                 val (err, req) = parseEthRequest(json, request)
                 err ?: req
@@ -25,7 +25,7 @@ object TestHandler {
             .map { req -> handle(req) }
             .plus(reqs.filterIsInstance<EvmResponse>())
             .let { responses ->
-                json.deserialize(SerdeArray::class, json.serialize(responses))
+                json.deserialize(JsonArray::class, json.serialize(responses))
             }
     }
 

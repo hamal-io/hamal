@@ -1,10 +1,10 @@
 package io.hamal.lib.nodes
 
-import io.hamal.lib.common.serialization.serde.HotObjectModule
-import io.hamal.lib.common.serialization.HotModule
-import io.hamal.lib.common.serialization.JsonAdapters
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
-import io.hamal.lib.common.value.TypesystemHotModule
+import io.hamal.lib.common.serialization.SerializationModule
+import io.hamal.lib.common.serialization.json.SerdeModule
+import io.hamal.lib.common.value.ValueJsonModule
+import io.hamal.lib.common.value.ValueJsonAdapters
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import io.hamal.lib.nodes.control.Control
@@ -13,28 +13,28 @@ import io.hamal.lib.nodes.control.ControlIdentifier
 import io.hamal.lib.nodes.control.ControlType
 
 
-object NodesHotModule : HotModule() {
+object NodesHotModule : SerializationModule() {
     init {
-        this[ConnectionId::class] = JsonAdapters.SnowflakeIdVariable(::ConnectionId)
+        this[ConnectionId::class] = ValueJsonAdapters.SnowflakeIdVariable(::ConnectionId)
 
-        this[ControlIdentifier::class] = JsonAdapters.StringVariable(::ControlIdentifier)
-        this[ControlType::class] = JsonAdapters.StringVariable(::ControlType)
+        this[ControlIdentifier::class] = ValueJsonAdapters.StringVariable(::ControlIdentifier)
+        this[ControlType::class] = ValueJsonAdapters.StringVariable(::ControlType)
         this[Control::class] = Control.Adapter
         this[ControlExtension::class] = ControlExtension.Adapter
 
-        this[NodeId::class] = JsonAdapters.SnowflakeIdVariable(::NodeId)
-        this[NodeType::class] = JsonAdapters.StringVariable(::NodeType)
-        this[NodeTitle::class] = JsonAdapters.StringVariable(::NodeTitle)
+        this[NodeId::class] = ValueJsonAdapters.SnowflakeIdVariable(::NodeId)
+        this[NodeType::class] = ValueJsonAdapters.StringVariable(::NodeType)
+        this[NodeTitle::class] = ValueJsonAdapters.StringVariable(::NodeTitle)
 
-        this[PortId::class] = JsonAdapters.SnowflakeIdVariable(::PortId)
+        this[PortId::class] = ValueJsonAdapters.SnowflakeIdVariable(::PortId)
     }
 }
 
 
 val json = Json(
     JsonFactoryBuilder()
-        .register(HotObjectModule)
+        .register(SerdeModule)
         .register(ValueVariableJsonModule)
         .register(NodesHotModule)
-        .register(TypesystemHotModule)
+        .register(ValueJsonModule)
 )

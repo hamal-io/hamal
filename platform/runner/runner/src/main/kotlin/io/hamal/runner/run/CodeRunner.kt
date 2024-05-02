@@ -1,6 +1,6 @@
 package io.hamal.runner.run
 
-import io.hamal.lib.common.serialization.serde.SerdeNumber
+import io.hamal.lib.common.serialization.json.JsonNumber
 import io.hamal.lib.common.logger
 import io.hamal.lib.common.value.*
 import io.hamal.lib.domain._enum.CodeType
@@ -107,7 +107,7 @@ class CodeRunnerImpl(
                     } catch (e: ExtensionError) {
                         val cause = e.cause
                         if (cause is ExitError) {
-                            if (cause.status == SerdeNumber(0.0)) {
+                            if (cause.status == JsonNumber(0.0)) {
 
                                 val ctx = sandbox.globalGetTable(ValueString("context"))
                                 val stateToSubmit = ctx.getTable(ValueString("state")).toValueObject()
