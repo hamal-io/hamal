@@ -1,8 +1,9 @@
 package io.hamal.app.web3proxy.arbitrum.repository
 
 import io.hamal.lib.common.compress.BzipCompressor
-import io.hamal.lib.common.serialization.json.SerdeModule
 import io.hamal.lib.common.serialization.GsonFactoryBuilder
+import io.hamal.lib.common.serialization.json.SerdeModule
+import io.hamal.lib.common.value.ValueJsonModule
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import io.hamal.lib.sqlite.Connection
@@ -114,6 +115,7 @@ internal class ArbitrumBlockRepositoryImpl(
         factory = GsonFactoryBuilder()
             .register(EvmHotModule)
             .register(SerdeModule)
+            .register(ValueJsonModule)
             .register(ValueVariableJsonModule),
         compressor = BzipCompressor
     )

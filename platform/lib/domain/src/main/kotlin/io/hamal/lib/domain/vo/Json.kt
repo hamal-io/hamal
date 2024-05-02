@@ -1,8 +1,6 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.Count
-import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.serialization.SerializationModule
 import io.hamal.lib.common.value.ValueJsonAdapters.InstantVariable
 import io.hamal.lib.common.value.ValueJsonAdapters.NumberVariable
@@ -13,10 +11,12 @@ import io.hamal.lib.domain.State
 
 object ValueVariableJsonModule : SerializationModule() {
     init {
+        this[CreatedAt::class] = InstantVariable(::CreatedAt)
+        this[UpdatedAt::class] = InstantVariable(::UpdatedAt)
+
         this[AccountId::class] = SnowflakeIdVariable(::AccountId)
 
         this[Email::class] = StringVariable(::Email)
-
 
         this[AuthId::class] = SnowflakeIdVariable(::AuthId)
         this[AuthToken::class] = StringVariable(::AuthToken)

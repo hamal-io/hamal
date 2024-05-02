@@ -159,5 +159,5 @@ class ValueObjectBuilder {
         return ValueObject(type, properties)
     }
 
-    private val values = mutableMapOf<String, Value>()
+    private val values = LinkedHashMap<String, Value>()
 }

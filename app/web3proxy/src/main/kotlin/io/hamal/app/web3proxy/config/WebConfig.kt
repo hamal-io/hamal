@@ -1,8 +1,9 @@
 package io.hamal.app.web3proxy.config
 
 import com.google.gson.Gson
-import io.hamal.lib.common.serialization.json.SerdeModule
 import io.hamal.lib.common.serialization.GsonFactoryBuilder
+import io.hamal.lib.common.serialization.json.SerdeModule
+import io.hamal.lib.common.value.ValueJsonModule
 import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import io.hamal.lib.web3.evm.EvmHotModule
 import org.apache.coyote.ProtocolHandler
@@ -32,6 +33,7 @@ class WebConfig : WebMvcConfigurer {
     fun gson(): Gson = GsonFactoryBuilder()
         .register(EvmHotModule)
         .register(SerdeModule)
+        .register(ValueJsonModule)
         .register(ValueVariableJsonModule)
         .build()
 

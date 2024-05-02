@@ -3,11 +3,12 @@ package io.hamal.repository.record
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.serialization.json.SerdeModule
-import io.hamal.lib.common.serialization.SerializationModule
-import io.hamal.lib.common.serialization.JsonAdapter
-import io.hamal.lib.common.value.ValueJsonAdapters
 import io.hamal.lib.common.serialization.GsonFactoryBuilder
+import io.hamal.lib.common.serialization.JsonAdapter
+import io.hamal.lib.common.serialization.SerializationModule
+import io.hamal.lib.common.serialization.json.SerdeModule
+import io.hamal.lib.common.value.ValueJsonAdapters
+import io.hamal.lib.common.value.ValueJsonModule
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import io.hamal.repository.api.DomainJsonModule
@@ -49,7 +50,9 @@ val json = Json(
         .register(DomainJsonModule)
         .register(SerdeModule)
         .register(RecordJsonModule)
+        .register(ValueJsonModule)
         .register(ValueVariableJsonModule)
+
 )
 
 abstract class RecordAdapter<BASE_TYPE : Record<*>>(

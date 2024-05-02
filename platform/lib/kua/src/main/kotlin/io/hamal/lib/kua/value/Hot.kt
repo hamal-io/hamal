@@ -44,7 +44,16 @@ fun Value?.toKua(state: State): Value {
 //        is HotString -> ValueString(value)
 //        else -> TODO()
 //    }
-    TODO()
+    return when (this) {
+        is ValueObject -> state.tableCreate(properties.associate { (key, value) ->
+            ValueString(key.stringValue) to value.toKua(
+                state
+            )
+        })
+
+        is ValueArray -> state.tableCreate(value.map { it.toKua(state) })
+        else -> this
+    }
 }
 
 
@@ -73,21 +82,17 @@ fun Value?.toKuaSnakeCase(state: State): Value {
     if (this == null) {
         return ValueNil
     }
-//    return when (this) {
-//        is ValueObject -> state.tableCreate(nodes.map { (key, value) ->
-//            ValueString(StringUtils.snakeCase(key)) to value.toKuaSnakeCase(
-//                state
-//            )
-//        }.toMap())
-//
-//        is ValueArray -> state.tableCreate(nodes.map { it.toKuaSnakeCase(state) })
-////        is ValueBoolean -> if (value) ValueTrue else ValueFalse
-////        is ValueNil -> ValueNil
-////        is ValueNumber -> ValueNumber(value.toDouble())
-////        is ValueString -> ValueString(value)
-//        else -> TODO()
-//    }
-    TODO()
+
+    return when (this) {
+        is ValueObject -> state.tableCreate(properties.associate { (key, value) ->
+            ValueString(StringUtils.snakeCase(key.stringValue)) to value.toKuaSnakeCase(
+                state
+            )
+        })
+
+        is ValueArray -> state.tableCreate(value.map { it.toKuaSnakeCase(state) })
+        else -> this
+    }
 }
 
 

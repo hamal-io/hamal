@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import io.hamal.core.component.*
 import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.common.serialization.json.SerdeModule
+import io.hamal.lib.common.value.ValueJsonModule
 import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import io.hamal.lib.sdk.api.ApiJsonModule
 import io.hamal.repository.api.DomainJsonModule
@@ -41,6 +42,7 @@ open class WebConfig : WebMvcConfigurer {
         .register(ApiJsonModule)
         .register(DomainJsonModule)
         .register(PlatformEventJsonModule)
+        .register(ValueJsonModule)
         .register(ValueVariableJsonModule)
         .build()
 
