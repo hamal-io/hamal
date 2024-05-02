@@ -6,17 +6,9 @@ data object TypeBoolean : TypePrimitive() {
     override val identifier = TypeIdentifier("Boolean")
 }
 
-fun booleanValueOf(value: Boolean) = if (value) ValueTrue else ValueFalse
-
-sealed class ValueBoolean(
-    private val value: Boolean
-) : Value {
+data class ValueBoolean(private val value: Boolean) : Value {
 
     override val type get() = TypeBoolean
-
-    companion object {
-        fun of(value: Boolean) = if (value) ValueTrue else ValueFalse
-    }
 
     val booleanValue: Boolean get() = value
 
@@ -34,10 +26,9 @@ sealed class ValueBoolean(
     }
 }
 
-object ValueTrue : ValueBoolean(true) {
-    override fun toString() = "true"
-}
+val ValueTrue = ValueBoolean(true)
+val ValueFalse = ValueBoolean(false)
 
-object ValueFalse : ValueBoolean(false) {
-    override fun toString() = "false"
+abstract class ValueVariableBoolean : ValueVariable.BaseImpl<ValueBoolean>() {
+    val booleanValue: Boolean get() = value.booleanValue
 }

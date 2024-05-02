@@ -146,7 +146,7 @@ class ValueObjectBuilder {
     }
 
     operator fun set(key: String, value: Boolean): ValueObjectBuilder {
-        values[key] = booleanValueOf(value)
+        values[key] = ValueBoolean(value)
         return this
     }
 

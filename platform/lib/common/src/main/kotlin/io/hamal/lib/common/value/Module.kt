@@ -14,8 +14,6 @@ object ValueJsonModule : SerializationModule() {
     init {
         this[FieldIdentifier::class] = ValueJsonAdapters.StringVariable(::FieldIdentifier)
 
-        this[ValueInstant::class] = ValueJsonAdapters.Instant
-
         this[io.hamal.lib.common.value.Type::class] = object : JsonAdapter<io.hamal.lib.common.value.Type> {
             override fun serialize(
                 src: io.hamal.lib.common.value.Type,
@@ -38,24 +36,13 @@ object ValueJsonModule : SerializationModule() {
                 }
             }
         }
-        this[ValueBoolean::class] = object : JsonAdapter<ValueBoolean> {
-            override fun serialize(p0: ValueBoolean, p1: Type, p2: JsonSerializationContext): JsonElement {
-                return JsonPrimitive(p0.booleanValue)
-            }
 
-            override fun deserialize(p0: JsonElement, p1: Type, p2: JsonDeserializationContext): ValueBoolean {
-                return if (p0.asBoolean) ValueTrue else ValueFalse
-            }
+        this[ValueBoolean::class] = ValueJsonAdapters.Boolean
+        this[ValueInstant::class] = ValueJsonAdapters.Instant
+        this[ValueNumber::class] = ValueJsonAdapters.Number
+        this[ValueObject::class] = ValueJsonAdapters.Object
+        this[ValueSnowflakeId::class] = ValueJsonAdapters.SnowflakeId
+        this[ValueString::class] = ValueJsonAdapters.String
 
-        }
-        this[ValueString::class] = object : JsonAdapter<ValueString> {
-            override fun serialize(p0: ValueString, p1: Type?, p2: JsonSerializationContext?): JsonElement {
-                return JsonPrimitive(p0.stringValue)
-            }
-
-            override fun deserialize(p0: JsonElement, p1: Type, p2: JsonDeserializationContext): ValueString {
-                return ValueString(p0.asString)
-            }
-        }
     }
 }
