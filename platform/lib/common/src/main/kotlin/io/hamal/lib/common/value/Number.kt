@@ -2,13 +2,8 @@ package io.hamal.lib.common.value
 
 import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 
-data object TypeNumber : Type() {
+data object TypeNumber : TypePrimitive() {
     override val identifier = TypeIdentifier("Number")
-}
-
-data object TypeListNumber : TypeList() {
-    override val identifier = TypeIdentifier("List_Number")
-    override val valueType = TypeNumber
 }
 
 @JvmInline
@@ -17,11 +12,6 @@ value class ValueNumber(private val value: Double) : ValueComparable<ValueNumber
 
     constructor(value: Int) : this(value.toDouble())
     constructor(value: Long) : this(value.toDouble())
-
-    companion object {
-        val Zero = ValueNumber(0.0)
-        val One = ValueNumber(1.0)
-    }
 
     operator fun times(value: Int) = ValueNumber(this.value * value)
     operator fun times(value: Double) = ValueNumber(this.value * value)
@@ -33,7 +23,7 @@ value class ValueNumber(private val value: Double) : ValueComparable<ValueNumber
     val intValue: Int get() = value.toInt()
     val longValue: Long get() = value.toLong()
     val floatValue: Float get() = value.toFloat()
-    val doubleValue: Double get() = value.toDouble()
+    val doubleValue: Double get() = value
 }
 
 abstract class ValueVariableNumber : ValueVariable.ComparableImpl<ValueNumber>() {

@@ -7,13 +7,8 @@ import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
 
-data object TypeDecimal : Type() {
+data object TypeDecimal : TypePrimitive() {
     override val identifier = TypeIdentifier("Decimal")
-}
-
-data object TypeListDecimal : TypeList() {
-    override val identifier = TypeIdentifier("List_Decimal")
-    override val valueType = TypeDecimal
 }
 
 @JvmInline

@@ -4,13 +4,8 @@ import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 
 
-data object TypeSnowflakeId : Type() {
+data object TypeSnowflakeId : TypePrimitive() {
     override val identifier = TypeIdentifier("Snowflake_Id")
-}
-
-data object TypeListSnowflakeId : TypeList() {
-    override val identifier = TypeIdentifier("List_Snowflake_Id")
-    override val valueType = TypeNumber
 }
 
 @JvmInline

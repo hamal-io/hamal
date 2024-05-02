@@ -1,5 +1,6 @@
 package io.hamal.lib.common.value
 
+import io.hamal.lib.common.value.TypeArray.Companion.TypeArray
 import java.time.LocalDate
 
 
@@ -43,10 +44,10 @@ fun main() {
 
     val suzy = Pupil("2", "Suzy", "Yzus", LocalDate.of(1992, 8, 23))
 
-    val PupilList = TypeListObject("pupilList", Pupil)
-    val EntityList = TypeListObject("entityList", Entity)
+    val PupilArray = TypeArray(Pupil, "pupilArray")
+    val EntityArray = TypeArray(Entity, "entityArray")
 
-    val l = EntityList(bob, Another("xyz"), No("dasd"))
+    val l = EntityArray(bob, Another("xyz"), No("dasd"))
     println(l)
 
 //    val PupilList = TypeList("pupil_list", Pupil)
@@ -55,7 +56,7 @@ fun main() {
         ValueString("${get<ValueString>("last_name")}, ${get<ValueString>("first_name")}")
     }
 
-    val list = PupilList(bob, suzy)
+    val list = PupilArray(bob, suzy)
 
     val a = Another("xyz")
 
@@ -64,7 +65,7 @@ fun main() {
     println(bob.fullname())
 //    println(a.fullname())
 
-    val numberList = TypeListNumber(ValueNumber(12), ValueNumber(323), ValueNumber(4))
-
-    println(numberList)
+//    val numberList = TypeArrayNumber(ValueNumber(12), ValueNumber(323), ValueNumber(4))
+//
+//    println(numberList)
 }

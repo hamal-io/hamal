@@ -5,7 +5,10 @@ import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 
 
 // FIXME objects are equal if they have the same fields
-data class TypeObject(override val identifier: TypeIdentifier, val fields: Set<Field>) : Type() {
+data class TypeObject(
+    override val identifier: TypeIdentifier,
+    val fields: Set<Field>
+) : Type() {
     constructor(identifier: TypeIdentifier, vararg fields: Field) : this(identifier, fields.toSet())
     constructor(identifier: String, vararg fields: Field) : this(TypeIdentifier(identifier), fields.toSet())
 
@@ -41,15 +44,6 @@ infix fun TypeObject.extends(superclass: TypeObject): TypeObject {
 
 infix fun TypeObject.extends(superclasses: Iterable<TypeObject>) =
     (listOf(this) + superclasses).reduceRight { acc, that -> that extends acc }
-
-
-data class TypeListObject(
-    override val identifier: TypeIdentifier,
-    override val valueType: TypeObject
-) : TypeList() {
-    constructor(identifier: String, valueType: TypeObject) : this(TypeIdentifier(identifier), valueType)
-}
-
 
 data class ValueObject(
     override val type: TypeObject,

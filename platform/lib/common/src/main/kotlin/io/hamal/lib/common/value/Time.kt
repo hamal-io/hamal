@@ -3,13 +3,8 @@ package io.hamal.lib.common.value
 import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 import java.time.LocalTime
 
-data object TypeTime : Type() {
+data object TypeTime : TypePrimitive() {
     override val identifier = TypeIdentifier("Time")
-}
-
-data object TypeListTime : TypeList() {
-    override val identifier = TypeIdentifier("List_Time")
-    override val valueType = TypeNumber
 }
 
 @JvmInline
