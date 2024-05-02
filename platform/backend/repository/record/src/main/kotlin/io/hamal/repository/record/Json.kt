@@ -28,7 +28,7 @@ import kotlin.reflect.KClass
 
 object RecordJsonModule : HotModule() {
     init {
-        this[RecordClass::class] = JsonAdapters.String(::RecordClass)
+        this[RecordClass::class] = JsonAdapters.StringVariable(::RecordClass)
         this[AccountRecord::class] = AccountRecord.Adapter
         this[RecipeRecord::class] = RecipeRecord.Adapter
         this[CodeRecord::class] = CodeRecord.Adapter

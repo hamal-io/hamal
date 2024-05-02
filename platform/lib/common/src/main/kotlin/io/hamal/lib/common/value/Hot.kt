@@ -12,7 +12,7 @@ import java.lang.reflect.Type
 
 object TypesystemHotModule : HotModule() {
     init {
-        this[FieldIdentifier::class] = JsonAdapters.String(::FieldIdentifier)
+        this[FieldIdentifier::class] = JsonAdapters.StringVariable(::FieldIdentifier)
 
         this[io.hamal.lib.common.value.Type::class] = object : JsonAdapter<io.hamal.lib.common.value.Type> {
             override fun serialize(

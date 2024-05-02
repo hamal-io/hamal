@@ -5,7 +5,7 @@ import io.hamal.lib.common.serialization.JsonAdapters
 
 object PlatformEventJsonModule : HotModule() {
     init {
-        set(InternalEventClass::class, JsonAdapters.String(::InternalEventClass))
+        set(InternalEventClass::class, JsonAdapters.StringVariable(::InternalEventClass))
         set(InternalEvent::class, InternalEvent.Adapter)
     }
 }

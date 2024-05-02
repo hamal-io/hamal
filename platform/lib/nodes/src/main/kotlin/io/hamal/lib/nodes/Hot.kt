@@ -15,18 +15,18 @@ import io.hamal.lib.nodes.control.ControlType
 
 object NodesHotModule : HotModule() {
     init {
-        this[ConnectionId::class] = JsonAdapters.SnowflakeId(::ConnectionId)
+        this[ConnectionId::class] = JsonAdapters.SnowflakeIdVariable(::ConnectionId)
 
-        this[ControlIdentifier::class] = JsonAdapters.String(::ControlIdentifier)
-        this[ControlType::class] = JsonAdapters.String(::ControlType)
+        this[ControlIdentifier::class] = JsonAdapters.StringVariable(::ControlIdentifier)
+        this[ControlType::class] = JsonAdapters.StringVariable(::ControlType)
         this[Control::class] = Control.Adapter
         this[ControlExtension::class] = ControlExtension.Adapter
 
-        this[NodeId::class] = JsonAdapters.SnowflakeId(::NodeId)
-        this[NodeType::class] = JsonAdapters.String(::NodeType)
-        this[NodeTitle::class] = JsonAdapters.String(::NodeTitle)
+        this[NodeId::class] = JsonAdapters.SnowflakeIdVariable(::NodeId)
+        this[NodeType::class] = JsonAdapters.StringVariable(::NodeType)
+        this[NodeTitle::class] = JsonAdapters.StringVariable(::NodeTitle)
 
-        this[PortId::class] = JsonAdapters.SnowflakeId(::PortId)
+        this[PortId::class] = JsonAdapters.SnowflakeIdVariable(::PortId)
     }
 }
 

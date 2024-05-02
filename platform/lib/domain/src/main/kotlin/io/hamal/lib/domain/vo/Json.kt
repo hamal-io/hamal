@@ -9,102 +9,102 @@ import io.hamal.lib.domain.State
 
 object ValueVariableJsonModule : HotModule() {
     init {
-        this[AccountId::class] = JsonAdapters.SnowflakeId(::AccountId)
+        this[AccountId::class] = JsonAdapters.SnowflakeIdVariable(::AccountId)
 
-        this[Email::class] = JsonAdapters.String(::Email)
-
-
-        this[AuthId::class] = JsonAdapters.SnowflakeId(::AuthId)
-        this[AuthToken::class] = JsonAdapters.String(::AuthToken)
-        this[Password::class] = JsonAdapters.String(::Password)
-        this[PasswordHash::class] = JsonAdapters.String(::PasswordHash)
-        this[PasswordSalt::class] = JsonAdapters.String(::PasswordSalt)
-
-        this[RecipeId::class] = JsonAdapters.SnowflakeId(::RecipeId)
-        this[RecipeName::class] = JsonAdapters.String(::RecipeName)
-        this[RecipeInputs::class] = JsonAdapters.Object(::RecipeInputs)
-        this[RecipeDescription::class] = JsonAdapters.String(::RecipeDescription)
-
-        this[CmdId::class] = JsonAdapters.SnowflakeId(::CmdId)
-
-        this[CodeId::class] = JsonAdapters.SnowflakeId(::CodeId)
-        this[CodeVersion::class] = JsonAdapters.Number(::CodeVersion)
-
-        this[CorrelationId::class] = JsonAdapters.String(::CorrelationId)
-
-        this[CronPattern::class] = JsonAdapters.String(::CronPattern)
-
-        this[ExecId::class] = JsonAdapters.SnowflakeId(::ExecId)
-        this[ExecType::class] = JsonAdapters.String(::ExecType)
-        this[ExecInputs::class] = JsonAdapters.Object(::ExecInputs)
-        this[ExecResult::class] = JsonAdapters.Object(::ExecResult)
-        this[ExecState::class] = JsonAdapters.Object(::ExecState)
-
-        this[ExecToken::class] = JsonAdapters.String(::ExecToken)
-        this[ExecLogId::class] = JsonAdapters.SnowflakeId(::ExecLogId)
-        this[ExecLogMessage::class] = JsonAdapters.String(::ExecLogMessage)
-        this[ExecLogTimestamp::class] = JsonAdapters.Instant(::ExecLogTimestamp)
-
-        this[EndpointHeaders::class] = JsonAdapters.Object(::EndpointHeaders)
-        this[EndpointParameters::class] = JsonAdapters.Object(::EndpointParameters)
-        this[EndpointContent::class] = JsonAdapters.Object(::EndpointContent)
-
-        this[EventPayload::class] = JsonAdapters.Object(::EventPayload)
-
-        this[ExpiresAt::class] = JsonAdapters.Instant(::ExpiresAt)
-
-        this[ExtensionId::class] = JsonAdapters.SnowflakeId(::ExtensionId)
-        this[ExtensionName::class] = JsonAdapters.String(::ExtensionName)
-
-        this[FeedbackId::class] = JsonAdapters.SnowflakeId(::FeedbackId)
-        this[FeedbackMessage::class] = JsonAdapters.String(::FeedbackMessage)
-
-        this[NamespaceId::class] = JsonAdapters.SnowflakeId(::NamespaceId)
-        this[NamespaceTreeId::class] = JsonAdapters.SnowflakeId(::NamespaceTreeId)
-        this[NamespaceName::class] = JsonAdapters.String(::NamespaceName)
-        this[NamespaceFeatures::class] = JsonAdapters.Object(::NamespaceFeatures)
+        this[Email::class] = JsonAdapters.StringVariable(::Email)
 
 
-        this[FuncId::class] = JsonAdapters.SnowflakeId(::FuncId)
-        this[FuncName::class] = JsonAdapters.String(::FuncName)
-        this[FuncInputs::class] = JsonAdapters.Object(::FuncInputs)
+        this[AuthId::class] = JsonAdapters.SnowflakeIdVariable(::AuthId)
+        this[AuthToken::class] = JsonAdapters.StringVariable(::AuthToken)
+        this[Password::class] = JsonAdapters.StringVariable(::Password)
+        this[PasswordHash::class] = JsonAdapters.StringVariable(::PasswordHash)
+        this[PasswordSalt::class] = JsonAdapters.StringVariable(::PasswordSalt)
 
-        this[DeployedAt::class] = JsonAdapters.Instant(::DeployedAt)
-        this[DeployMessage::class] = JsonAdapters.String(::DeployMessage)
+        this[RecipeId::class] = JsonAdapters.SnowflakeIdVariable(::RecipeId)
+        this[RecipeName::class] = JsonAdapters.StringVariable(::RecipeName)
+        this[RecipeInputs::class] = JsonAdapters.ObjectVariable(::RecipeInputs)
+        this[RecipeDescription::class] = JsonAdapters.StringVariable(::RecipeDescription)
 
-        this[Limit::class] = JsonAdapters.Number(::Limit)
-        this[Count::class] = JsonAdapters.Number(::Count)
+        this[CmdId::class] = JsonAdapters.SnowflakeIdVariable(::CmdId)
 
-        this[HookHeaders::class] = JsonAdapters.Object(::HookHeaders)
-        this[HookParameters::class] = JsonAdapters.Object(::HookParameters)
-        this[HookContent::class] = JsonAdapters.Object(::HookContent)
-        this[InvocationInputs::class] = JsonAdapters.Object(::InvocationInputs)
+        this[CodeId::class] = JsonAdapters.SnowflakeIdVariable(::CodeId)
+        this[CodeVersion::class] = JsonAdapters.NumberVariable(::CodeVersion)
+
+        this[CorrelationId::class] = JsonAdapters.StringVariable(::CorrelationId)
+
+        this[CronPattern::class] = JsonAdapters.StringVariable(::CronPattern)
+
+        this[ExecId::class] = JsonAdapters.SnowflakeIdVariable(::ExecId)
+        this[ExecType::class] = JsonAdapters.StringVariable(::ExecType)
+        this[ExecInputs::class] = JsonAdapters.ObjectVariable(::ExecInputs)
+        this[ExecResult::class] = JsonAdapters.ObjectVariable(::ExecResult)
+        this[ExecState::class] = JsonAdapters.ObjectVariable(::ExecState)
+
+        this[ExecToken::class] = JsonAdapters.StringVariable(::ExecToken)
+        this[ExecLogId::class] = JsonAdapters.SnowflakeIdVariable(::ExecLogId)
+        this[ExecLogMessage::class] = JsonAdapters.StringVariable(::ExecLogMessage)
+        this[ExecLogTimestamp::class] = JsonAdapters.InstantVariable(::ExecLogTimestamp)
+
+        this[EndpointHeaders::class] = JsonAdapters.ObjectVariable(::EndpointHeaders)
+        this[EndpointParameters::class] = JsonAdapters.ObjectVariable(::EndpointParameters)
+        this[EndpointContent::class] = JsonAdapters.ObjectVariable(::EndpointContent)
+
+        this[EventPayload::class] = JsonAdapters.ObjectVariable(::EventPayload)
+
+        this[ExpiresAt::class] = JsonAdapters.InstantVariable(::ExpiresAt)
+
+        this[ExtensionId::class] = JsonAdapters.SnowflakeIdVariable(::ExtensionId)
+        this[ExtensionName::class] = JsonAdapters.StringVariable(::ExtensionName)
+
+        this[FeedbackId::class] = JsonAdapters.SnowflakeIdVariable(::FeedbackId)
+        this[FeedbackMessage::class] = JsonAdapters.StringVariable(::FeedbackMessage)
+
+        this[NamespaceId::class] = JsonAdapters.SnowflakeIdVariable(::NamespaceId)
+        this[NamespaceTreeId::class] = JsonAdapters.SnowflakeIdVariable(::NamespaceTreeId)
+        this[NamespaceName::class] = JsonAdapters.StringVariable(::NamespaceName)
+        this[NamespaceFeatures::class] = JsonAdapters.ObjectVariable(::NamespaceFeatures)
 
 
-        this[RequestId::class] = JsonAdapters.SnowflakeId(::RequestId)
-        this[RequestClass::class] = JsonAdapters.String(::RequestClass)
+        this[FuncId::class] = JsonAdapters.SnowflakeIdVariable(::FuncId)
+        this[FuncName::class] = JsonAdapters.StringVariable(::FuncName)
+        this[FuncInputs::class] = JsonAdapters.ObjectVariable(::FuncInputs)
 
-        this[RunnerId::class] = JsonAdapters.SnowflakeId(::RunnerId)
+        this[DeployedAt::class] = JsonAdapters.InstantVariable(::DeployedAt)
+        this[DeployMessage::class] = JsonAdapters.StringVariable(::DeployMessage)
 
-        this[RunnerEnv::class] = JsonAdapters.Object(::RunnerEnv)
-        this[State::class] = JsonAdapters.Object(::State)
+        this[Limit::class] = JsonAdapters.NumberVariable(::Limit)
+        this[Count::class] = JsonAdapters.NumberVariable(::Count)
 
-        this[TopicId::class] = JsonAdapters.SnowflakeId(::TopicId)
-        this[TopicName::class] = JsonAdapters.String(::TopicName)
-        this[TopicEventId::class] = JsonAdapters.SnowflakeId(::TopicEventId)
-        this[TopicEventPayload::class] = JsonAdapters.Object(::TopicEventPayload)
+        this[HookHeaders::class] = JsonAdapters.ObjectVariable(::HookHeaders)
+        this[HookParameters::class] = JsonAdapters.ObjectVariable(::HookParameters)
+        this[HookContent::class] = JsonAdapters.ObjectVariable(::HookContent)
+        this[InvocationInputs::class] = JsonAdapters.ObjectVariable(::InvocationInputs)
 
 
-        this[TriggerId::class] = JsonAdapters.SnowflakeId(::TriggerId)
-        this[TriggerDuration::class] = JsonAdapters.String(::TriggerDuration)
-        this[TriggerName::class] = JsonAdapters.String(::TriggerName)
-        this[TriggerInputs::class] = JsonAdapters.Object(::TriggerInputs)
+        this[RequestId::class] = JsonAdapters.SnowflakeIdVariable(::RequestId)
+        this[RequestClass::class] = JsonAdapters.StringVariable(::RequestClass)
 
-        this[Web3Address::class] = JsonAdapters.String(::Web3Address)
-        this[Web3Challenge::class] = JsonAdapters.String(::Web3Challenge)
-        this[Web3Signature::class] = JsonAdapters.String(::Web3Signature)
+        this[RunnerId::class] = JsonAdapters.SnowflakeIdVariable(::RunnerId)
 
-        this[WorkspaceId::class] = JsonAdapters.SnowflakeId(::WorkspaceId)
-        this[WorkspaceName::class] = JsonAdapters.String(::WorkspaceName)
+        this[RunnerEnv::class] = JsonAdapters.ObjectVariable(::RunnerEnv)
+        this[State::class] = JsonAdapters.ObjectVariable(::State)
+
+        this[TopicId::class] = JsonAdapters.SnowflakeIdVariable(::TopicId)
+        this[TopicName::class] = JsonAdapters.StringVariable(::TopicName)
+        this[TopicEventId::class] = JsonAdapters.SnowflakeIdVariable(::TopicEventId)
+        this[TopicEventPayload::class] = JsonAdapters.ObjectVariable(::TopicEventPayload)
+
+
+        this[TriggerId::class] = JsonAdapters.SnowflakeIdVariable(::TriggerId)
+        this[TriggerDuration::class] = JsonAdapters.StringVariable(::TriggerDuration)
+        this[TriggerName::class] = JsonAdapters.StringVariable(::TriggerName)
+        this[TriggerInputs::class] = JsonAdapters.ObjectVariable(::TriggerInputs)
+
+        this[Web3Address::class] = JsonAdapters.StringVariable(::Web3Address)
+        this[Web3Challenge::class] = JsonAdapters.StringVariable(::Web3Challenge)
+        this[Web3Signature::class] = JsonAdapters.StringVariable(::Web3Signature)
+
+        this[WorkspaceId::class] = JsonAdapters.SnowflakeIdVariable(::WorkspaceId)
+        this[WorkspaceName::class] = JsonAdapters.StringVariable(::WorkspaceName)
     }
 }

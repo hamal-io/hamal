@@ -6,7 +6,6 @@ import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.*
 import java.lang.reflect.Type
-import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
@@ -32,37 +31,47 @@ internal object HotObjectAdapter : JsonAdapter<HotObject> {
     }
 }
 
-internal object InstantAdapter : JsonAdapter<Instant> {
-
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Instant {
-        return Instant.from(formatter.parse(json.asString))
-    }
-
-    override fun serialize(src: Instant, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-        return JsonPrimitive(formatter.format(src))
-    }
-
-
-    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").withZone(ZoneOffset.UTC)
-}
-
 
 object JsonAdapters {
 
-    class Instant<TYPE : ValueVariableInstant>(
+    internal object Instant : JsonAdapter<ValueInstant> {
+
+        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ValueInstant {
+            return ValueInstant(java.time.Instant.from(formatter.parse(json.asString)))
+        }
+
+        override fun serialize(src: ValueInstant, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+            return JsonPrimitive(formatter.format(src.instantValue))
+        }
+
+        private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").withZone(ZoneOffset.UTC)
+    }
+
+    class InstantVariable<TYPE : ValueVariableInstant>(
         val ctor: (ValueInstant) -> TYPE
     ) : JsonAdapter<TYPE> {
 
         override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {
-            return ctor(ValueInstant(context.deserialize(json, java.time.Instant::class.java)))
+            return ctor(context.deserialize(json, ValueInstant::class.java))
         }
 
         override fun serialize(src: TYPE, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-            return context.serialize(src.value.instantValue, java.time.Instant::class.java)
+            return context.serialize(src.value, ValueInstant::class.java)
         }
     }
 
-    class Number<TYPE : ValueVariableNumber>(
+    data object Number : JsonAdapter<ValueNumber> {
+
+        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ValueNumber {
+            return ValueNumber(json.asDouble)
+        }
+
+        override fun serialize(src: ValueNumber, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+            return JsonPrimitive(src.doubleValue)
+        }
+    }
+
+    class NumberVariable<TYPE : ValueVariableNumber>(
         val ctor: (ValueNumber) -> TYPE
     ) : JsonAdapter<TYPE> {
 
@@ -75,7 +84,7 @@ object JsonAdapters {
         }
     }
 
-    class Object<TYPE : ValueVariableObject>(
+    class ObjectVariable<TYPE : ValueVariableObject>(
         val ctor: (ValueObject) -> TYPE
     ) : JsonAdapter<TYPE> {
 
@@ -90,8 +99,7 @@ object JsonAdapters {
         }
     }
 
-
-    class SnowflakeId<TYPE : ValueVariableSnowflakeId>(
+    class SnowflakeIdVariable<TYPE : ValueVariableSnowflakeId>(
         val ctor: (ValueSnowflakeId) -> TYPE
     ) : JsonAdapter<TYPE> {
 
@@ -104,8 +112,7 @@ object JsonAdapters {
         }
     }
 
-
-    class String<TYPE : ValueVariableString>(
+    class StringVariable<TYPE : ValueVariableString>(
         val ctor: (ValueString) -> TYPE
     ) : JsonAdapter<TYPE> {
 

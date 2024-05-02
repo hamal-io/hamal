@@ -11,7 +11,7 @@ sealed class ApiObject {
 object ApiJsonModule : HotModule() {
     init {
         set(ApiRequested::class, ApiRequested.Adapter)
-        set(ApiState::class, JsonAdapters.Object(::ApiState))
+        set(ApiState::class, JsonAdapters.ObjectVariable(::ApiState))
         set(ApiTrigger::class, ApiTrigger.Adapter)
         set(ApiTriggerList.Trigger::class, ApiTriggerList.Trigger.Adapter)
         set(FeedbackCreateRequest::class, FeedbackCreateRequest.Adapter)
