@@ -7,7 +7,7 @@ import io.hamal.lib.common.serialization.json.SerdeModule
 import io.hamal.lib.common.serialization.SerializationModule
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.value.ValueJsonAdapters
-import io.hamal.lib.common.serialization.JsonFactoryBuilder
+import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import io.hamal.repository.api.DomainJsonModule
@@ -45,7 +45,7 @@ object RecordJsonModule : SerializationModule() {
 }
 
 val json = Json(
-    JsonFactoryBuilder()
+    GsonFactoryBuilder()
         .register(DomainJsonModule)
         .register(SerdeModule)
         .register(RecordJsonModule)

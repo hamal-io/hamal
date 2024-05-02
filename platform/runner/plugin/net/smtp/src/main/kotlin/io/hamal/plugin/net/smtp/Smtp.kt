@@ -1,12 +1,12 @@
 package io.hamal.plugin.net.smtp
 
+import io.hamal.lib.common.value.ValueBoolean
+import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.kua.function.Function1In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.lib.kua.value.*
-import io.hamal.lib.common.value.ValueBoolean
-import io.hamal.lib.common.value.ValueError
 
 class SmtpSendFunction(
     private val sender: Sender
@@ -27,7 +27,7 @@ class SmtpSendFunction(
                 protocol = arg1.getString("protocol"),
                 debug = arg1.getBoolean("debug"),
                 testConnection = arg1.getBoolean("test_connection"),
-                auth = ValueBoolean.of(arg1.findString("username") != null || arg1.findString("password") != null),
+                auth = ValueBoolean(arg1.findString("username") != null || arg1.findString("password") != null),
                 enableStarttls = arg1.getBoolean("enable_starttls"),
                 connectionTimeout = arg1.getNumber("connection_timeout"),
                 timeout = arg1.getNumber("timeout"),

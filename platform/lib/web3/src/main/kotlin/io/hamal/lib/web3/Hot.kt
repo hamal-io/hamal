@@ -1,7 +1,7 @@
 package io.hamal.lib.web3
 
 import io.hamal.lib.common.serialization.json.SerdeModule
-import io.hamal.lib.common.serialization.JsonFactoryBuilder
+import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import io.hamal.lib.web3.evm.EvmHotModule
@@ -10,7 +10,7 @@ import io.hamal.lib.web3.evm.chain.eth.EthHotModule
 
 
 val json = Json(
-    JsonFactoryBuilder()
+    GsonFactoryBuilder()
         .register(SerdeModule)
         .register(ValueVariableJsonModule)
         .register(EvmHotModule)

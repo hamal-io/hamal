@@ -342,7 +342,7 @@ class KuaTable(
 fun KuaTable.unset(key: String) = unset(ValueString(key))
 operator fun KuaTable.set(key: String, value: KuaValue) = set(ValueString(key), value)
 operator fun KuaTable.set(key: String, value: Value) = set(ValueString(key), value)
-operator fun KuaTable.set(key: String, value: Boolean) = set(ValueString(key), ValueBoolean.of(value))
+operator fun KuaTable.set(key: String, value: Boolean) = set(ValueString(key), ValueBoolean(value))
 operator fun KuaTable.set(key: String, value: Int) = set(ValueString(key), ValueNumber(value))
 operator fun KuaTable.set(key: String, value: Long) = set(ValueString(key), ValueNumber(value.toDouble()))
 operator fun KuaTable.set(key: String, value: Float) = set(ValueString(key), ValueNumber(value.toDouble()))

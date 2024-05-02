@@ -2,7 +2,7 @@ package io.hamal.core.config
 
 import com.google.gson.Gson
 import io.hamal.core.component.*
-import io.hamal.lib.common.serialization.JsonFactoryBuilder
+import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.common.serialization.json.SerdeModule
 import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import io.hamal.lib.sdk.api.ApiJsonModule
@@ -36,7 +36,7 @@ open class WebConfig : WebMvcConfigurer {
     }
 
     @Bean
-    open fun gson(): Gson = JsonFactoryBuilder()
+    open fun gson(): Gson = GsonFactoryBuilder()
         .register(SerdeModule)
         .register(ApiJsonModule)
         .register(DomainJsonModule)

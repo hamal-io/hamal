@@ -1,7 +1,7 @@
 package io.hamal.lib.sdk
 
 import io.hamal.lib.common.serialization.json.SerdeModule
-import io.hamal.lib.common.serialization.JsonFactoryBuilder
+import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.ExecToken
@@ -36,7 +36,7 @@ class ApiSdkImpl : ApiSdk {
         execToken: ExecToken
     ) {
         val json = Json(
-            JsonFactoryBuilder()
+            GsonFactoryBuilder()
                 .register(ApiJsonModule)
                 .register(SerdeModule)
                 .register(ValueVariableJsonModule)
@@ -56,7 +56,7 @@ class ApiSdkImpl : ApiSdk {
 
     constructor(apiHost: String, token: AuthToken) {
         val json = Json(
-            JsonFactoryBuilder()
+            GsonFactoryBuilder()
                 .register(ApiJsonModule)
                 .register(SerdeModule)
                 .register(ValueVariableJsonModule)

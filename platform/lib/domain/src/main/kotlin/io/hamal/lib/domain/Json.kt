@@ -2,14 +2,14 @@ package io.hamal.lib.domain
 
 import io.hamal.lib.common.compress.Compressor
 import io.hamal.lib.common.compress.NopCompressor
-import io.hamal.lib.common.serialization.JsonFactoryBuilder
+import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
 class Json(
-    factory: JsonFactoryBuilder,
+    factory: GsonFactoryBuilder,
     private val compressor: Compressor = NopCompressor
 ) {
     fun <TYPE : Any> serialize(src: TYPE): String {

@@ -2,7 +2,7 @@ package io.hamal.app.web3proxy.eth.repository
 
 import io.hamal.lib.common.compress.BzipCompressor
 import io.hamal.lib.common.serialization.json.SerdeModule
-import io.hamal.lib.common.serialization.JsonFactoryBuilder
+import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import io.hamal.lib.sqlite.Connection
@@ -111,7 +111,7 @@ internal class EthBlockRepositoryImpl(
     }
 
     private val json = Json(
-        factory = JsonFactoryBuilder()
+        factory = GsonFactoryBuilder()
             .register(EvmHotModule)
             .register(SerdeModule)
             .register(ValueVariableJsonModule),

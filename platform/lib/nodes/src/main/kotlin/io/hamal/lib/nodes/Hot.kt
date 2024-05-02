@@ -1,6 +1,6 @@
 package io.hamal.lib.nodes
 
-import io.hamal.lib.common.serialization.JsonFactoryBuilder
+import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.common.serialization.SerializationModule
 import io.hamal.lib.common.serialization.json.SerdeModule
 import io.hamal.lib.common.value.ValueJsonModule
@@ -32,7 +32,7 @@ object NodesHotModule : SerializationModule() {
 
 
 val json = Json(
-    JsonFactoryBuilder()
+    GsonFactoryBuilder()
         .register(SerdeModule)
         .register(ValueVariableJsonModule)
         .register(NodesHotModule)

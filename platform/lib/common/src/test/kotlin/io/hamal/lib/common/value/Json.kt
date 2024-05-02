@@ -1,7 +1,7 @@
 package io.hamal.lib.common.value
 
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.ValueJsonAdapters.BooleanVariable
 import io.hamal.lib.common.value.ValueJsonAdapters.InstantVariable
@@ -29,9 +29,9 @@ internal object ValueBooleanJsonAdapterTest {
         assertThat(result, equalTo(expectedBoolean))
     }
 
-    private val testDelegate: Gson = GsonBuilder()
-        .registerTypeAdapter(ValueBoolean::class.java, ValueJsonAdapters.Boolean)
-        .create()
+    private val testDelegate: Gson = GsonFactoryBuilder()
+        .register(ValueJsonModule)
+        .build()
 }
 
 internal object ValueBooleanVariableJsonAdapterTest {
@@ -50,10 +50,10 @@ internal object ValueBooleanVariableJsonAdapterTest {
         assertThat(result, equalTo(expectedBoolean))
     }
 
-    private val testDelegate: Gson = GsonBuilder()
-        .registerTypeAdapter(ValueBoolean::class.java, ValueJsonAdapters.Boolean)
-        .registerTypeAdapter(TestObject::class.java, BooleanVariable(::TestObject))
-        .create()
+    private val testDelegate: Gson = GsonFactoryBuilder()
+        .register(ValueJsonModule)
+        .register(TestObject::class, BooleanVariable(::TestObject))
+        .build()
 
     private class TestObject(override val value: ValueBoolean) : ValueVariableBoolean()
 }
@@ -69,13 +69,13 @@ internal object ValueDecimalJsonAdapterTest {
     @Test
     fun deserialize() {
         val expectedDecimal = ValueDecimal(42)
-        val result = testDelegate.fromJson("42.0", ValueDecimal::class.java)
+        val result = testDelegate.fromJson("\"42.0\"", ValueDecimal::class.java)
         assertThat(result, equalTo(expectedDecimal))
     }
 
-    private val testDelegate: Gson = GsonBuilder()
-        .registerTypeAdapter(ValueDecimal::class.java, ValueJsonAdapters.Decimal)
-        .create()
+    private val testDelegate: Gson = GsonFactoryBuilder()
+        .register(ValueJsonModule)
+        .build()
 }
 
 internal object ValueInstantJsonAdapterTest {
@@ -94,10 +94,9 @@ internal object ValueInstantJsonAdapterTest {
         assertThat(result, equalTo(expectedInstant))
     }
 
-    private val testDelegate: Gson = GsonBuilder()
-        .registerTypeAdapter(ValueInstant::class.java, ValueJsonAdapters.Instant)
-        .create()
-
+    private val testDelegate: Gson = GsonFactoryBuilder()
+        .register(ValueJsonModule)
+        .build()
 }
 
 internal object ValueInstantVariableJsonAdapterTest {
@@ -116,10 +115,10 @@ internal object ValueInstantVariableJsonAdapterTest {
         assertThat(result, equalTo(expectedInstant))
     }
 
-    private val testDelegate: Gson = GsonBuilder()
-        .registerTypeAdapter(ValueInstant::class.java, ValueJsonAdapters.Instant)
-        .registerTypeAdapter(TestObject::class.java, InstantVariable(::TestObject))
-        .create()
+    private val testDelegate: Gson = GsonFactoryBuilder()
+        .register(ValueJsonModule)
+        .register(TestObject::class, InstantVariable(::TestObject))
+        .build()
 
     private class TestObject(override val value: ValueInstant) : ValueVariableInstant()
 }
@@ -139,31 +138,32 @@ internal object ValueNumberJsonAdapterTest {
         assertThat(result, equalTo(expectedNumber))
     }
 
-    private val testDelegate: Gson = GsonBuilder()
-        .registerTypeAdapter(ValueNumber::class.java, ValueJsonAdapters.Number)
-        .create()
+    private val testDelegate: Gson = GsonFactoryBuilder()
+        .register(ValueJsonModule)
+        .build()
 }
 
 internal object ValueVariableNumberJsonAdapterTest {
 
     @Test
     fun serialize() {
-        val result = testDelegate.toJson(TestValueVariableNumber(ValueNumber(1337)))
+        val result = testDelegate.toJson(TestObject(ValueNumber(1337)))
         assertThat(result, equalTo("1337.0"))
     }
 
     @Test
     fun deserialize() {
-        val expected = TestValueVariableNumber(ValueNumber(1337))
-        val result = testDelegate.fromJson("1337", TestValueVariableNumber::class.java)
+        val expected = TestObject(ValueNumber(1337))
+        val result = testDelegate.fromJson("1337", TestObject::class.java)
         assertThat(result, equalTo(expected))
     }
 
-    private val testDelegate: Gson = GsonBuilder().registerTypeAdapter(
-        TestValueVariableNumber::class.java, NumberVariable(::TestValueVariableNumber)
-    ).create()
+    private val testDelegate: Gson = GsonFactoryBuilder()
+        .register(ValueJsonModule)
+        .register(TestObject::class, NumberVariable(::TestObject))
+        .build()
 
-    private class TestValueVariableNumber(override val value: ValueNumber) : ValueVariableNumber()
+    private class TestObject(override val value: ValueNumber) : ValueVariableNumber()
 }
 
 internal object ValueObjectJsonAdapterTest {
@@ -195,10 +195,10 @@ internal object ValueObjectJsonAdapterTest {
         assertThat(result, equalTo(expected))
     }
 
-    private val testDelegate: Gson =
-        GsonBuilder()
-            .registerTypeAdapter(ValueObject::class.java, ValueJsonAdapters.Object)
-            .create()
+    private val testDelegate: Gson = GsonFactoryBuilder()
+        .register(ValueJsonModule)
+        .build()
+
 }
 
 internal object ValueObjectVariableJsonAdapterTest {
@@ -206,7 +206,7 @@ internal object ValueObjectVariableJsonAdapterTest {
     @Test
     fun serialize() {
         val result = testDelegate.toJson(
-            TestHotObjectValueObject(
+            TestObject(
                 ValueObject.builder()
                     .set("some-string", "some-string-value")
                     .set("some-boolean", true)
@@ -219,7 +219,7 @@ internal object ValueObjectVariableJsonAdapterTest {
 
     @Test
     fun deserialize() {
-        val expected = TestHotObjectValueObject(
+        val expected = TestObject(
             ValueObject.builder()
                 .set("some-string", "some-string-value")
                 .set("some-boolean", true)
@@ -228,18 +228,17 @@ internal object ValueObjectVariableJsonAdapterTest {
         )
         val result = testDelegate.fromJson(
             """{"some-string":"some-string-value","some-boolean":true,"some-number":42.0}""",
-            TestHotObjectValueObject::class.java
+            TestObject::class.java
         )
         assertThat(result, equalTo(expected))
     }
 
-    private val testDelegate: Gson =
-        GsonBuilder()
-            .registerTypeAdapter(ValueObject::class.java, ValueJsonAdapters.Object)
-            .registerTypeAdapter(TestHotObjectValueObject::class.java, ObjectVariable(::TestHotObjectValueObject))
-            .create()
+    private val testDelegate: Gson = GsonFactoryBuilder()
+        .register(ValueJsonModule)
+        .register(TestObject::class, ObjectVariable(::TestObject))
+        .build()
 
-    private class TestHotObjectValueObject(override val value: ValueObject) : ValueVariableObject()
+    private class TestObject(override val value: ValueObject) : ValueVariableObject()
 }
 
 internal object ValueSnowflakeIdJsonAdapterTest {
@@ -257,31 +256,32 @@ internal object ValueSnowflakeIdJsonAdapterTest {
         assertThat(result, equalTo(expectedSnowflakeId))
     }
 
-    private val testDelegate: Gson = GsonBuilder()
-        .registerTypeAdapter(ValueSnowflakeId::class.java, ValueJsonAdapters.SnowflakeId)
-        .create()
+    private val testDelegate: Gson = GsonFactoryBuilder()
+        .register(ValueJsonModule)
+        .build()
 }
 
 internal object ValueSnowflakeIdVariableJsonAdapterTest {
 
     @Test
     fun serialize() {
-        val result = testDelegate.toJson(TestIdValueObject(ValueSnowflakeId(SnowflakeId(42))))
+        val result = testDelegate.toJson(TestObject(ValueSnowflakeId(SnowflakeId(42))))
         assertThat(result, equalTo("\"2a\""))
     }
 
     @Test
     fun deserialize() {
-        val expected = TestIdValueObject(ValueSnowflakeId(SnowflakeId(42)))
-        val result = testDelegate.fromJson("\"2a\"", TestIdValueObject::class.java)
+        val expected = TestObject(ValueSnowflakeId(SnowflakeId(42)))
+        val result = testDelegate.fromJson("\"2a\"", TestObject::class.java)
         assertThat(result, equalTo(expected))
     }
 
-    private val testDelegate: Gson = GsonBuilder().registerTypeAdapter(
-        TestIdValueObject::class.java, SnowflakeIdVariable(::TestIdValueObject)
-    ).create()
+    private val testDelegate: Gson = GsonFactoryBuilder()
+        .register(ValueJsonModule)
+        .register(TestObject::class, SnowflakeIdVariable(::TestObject))
+        .build()
 
-    private class TestIdValueObject(
+    private class TestObject(
         override val value: ValueSnowflakeId
     ) : ValueVariableSnowflakeId()
 }
@@ -301,9 +301,9 @@ internal object ValueStringJsonAdapterTest {
         assertThat(result, equalTo(expectedString))
     }
 
-    private val testDelegate: Gson = GsonBuilder()
-        .registerTypeAdapter(ValueString::class.java, ValueJsonAdapters.String)
-        .create()
+    private val testDelegate: Gson = GsonFactoryBuilder()
+        .register(ValueJsonModule)
+        .build()
 }
 
 internal object ValueStringVariableJsonAdapterTest {
@@ -322,10 +322,10 @@ internal object ValueStringVariableJsonAdapterTest {
         assertThat(result, equalTo(expectedString))
     }
 
-    private val testDelegate: Gson = GsonBuilder()
-        .registerTypeAdapter(ValueString::class.java, ValueJsonAdapters.String)
-        .registerTypeAdapter(TestObject::class.java, StringVariable(::TestObject))
-        .create()
+    private val testDelegate: Gson = GsonFactoryBuilder()
+        .register(ValueJsonModule)
+        .register(TestObject::class, StringVariable(::TestObject))
+        .build()
 
     private class TestObject(override val value: ValueString) : ValueVariableString()
 }

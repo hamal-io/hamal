@@ -105,7 +105,7 @@ open class StateImpl(val native: Native = Native()) : State {
 
 
     override fun booleanPush(value: ValueBoolean): StackTop = StackTop(native.booleanPush(value.booleanValue))
-    override fun booleanGet(idx: ValueNumber) = ValueBoolean.of(native.booleanGet(idx.intValue))
+    override fun booleanGet(idx: ValueNumber) = ValueBoolean(native.booleanGet(idx.intValue))
 
     override fun <T : Any> checkpoint(action: (State) -> T): T {
         // FIXME 254 - add Checkpoint as a State implementation to make sure the stack below can not be altered
@@ -192,7 +192,7 @@ open class StateImpl(val native: Native = Native()) : State {
         KuaTable(ValueNumber(native.tableGet(native.absIndex(idx.intValue))), this)
 
     override fun tableLength(idx: ValueNumber) = TableLength(native.tableLength(idx.intValue))
-    override fun tableNext(idx: ValueNumber) = ValueBoolean.of(native.tableNext(idx.intValue))
+    override fun tableNext(idx: ValueNumber) = ValueBoolean(native.tableNext(idx.intValue))
     override fun tablePush(value: KuaTable) = StackTop(native.topPush(value.index.intValue))
     override fun tableRawSet(idx: ValueNumber) = TableLength(native.tableRawSet(idx.intValue))
     override fun tableRawSetIdx(stackIdx: ValueNumber, tableIdx: ValueNumber) =

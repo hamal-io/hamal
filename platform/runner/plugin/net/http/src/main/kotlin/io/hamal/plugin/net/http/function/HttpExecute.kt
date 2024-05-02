@@ -54,8 +54,7 @@ class HttpExecuteFunction : Function1In2Out<KuaTable, ValueError, KuaTable>(
                     template.header(
                         key.stringValue, when (value) {
                             is ValueString -> value.stringValue
-                            is ValueFalse -> "false"
-                            is ValueTrue -> "true"
+                            is ValueBoolean -> value.booleanValue.toString()
                             is ValueCode -> value.stringValue
                             is ValueDecimal -> value.toString()
                             is ValueError -> value.stringValue

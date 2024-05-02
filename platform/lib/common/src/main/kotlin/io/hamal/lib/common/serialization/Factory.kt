@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder
 import io.hamal.lib.common.serialization.json.SerdeModule
 import kotlin.reflect.KClass
 
-class JsonFactoryBuilder {
+class GsonFactoryBuilder {
 
     private val builder = GsonBuilder()
 
@@ -13,7 +13,7 @@ class JsonFactoryBuilder {
         register(SerdeModule)
     }
 
-    fun register(module: SerializationModule): JsonFactoryBuilder {
+    fun register(module: SerializationModule): GsonFactoryBuilder {
         module.adapters.forEach { (clazz, adapter) ->
             builder.registerTypeAdapter(clazz.java, adapter)
         }
@@ -23,7 +23,7 @@ class JsonFactoryBuilder {
     fun <TYPE : Any, ADAPTER : JsonAdapter<TYPE>> register(
         clazz: KClass<TYPE>,
         adapter: ADAPTER
-    ): JsonFactoryBuilder {
+    ): GsonFactoryBuilder {
         builder.registerTypeAdapter(clazz.java, adapter)
         return this
     }

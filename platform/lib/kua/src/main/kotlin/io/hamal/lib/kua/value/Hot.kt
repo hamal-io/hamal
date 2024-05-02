@@ -1,7 +1,6 @@
 package io.hamal.lib.kua.value
 
 import io.hamal.lib.common.serialization.json.*
-import io.hamal.lib.common.serialization.json.JsonString
 import io.hamal.lib.common.util.StringUtils
 import io.hamal.lib.common.value.*
 import io.hamal.lib.kua.*
@@ -94,8 +93,7 @@ fun Value?.toKuaSnakeCase(state: State): Value {
 
 fun Value.toHotNode(): JsonNode<*> {
     return when (this) {
-        is ValueFalse -> JsonBoolean(false)
-        is ValueTrue -> JsonBoolean(true)
+        is ValueBoolean -> JsonBoolean(false)
         is ValueCode -> JsonString(stringValue)
         is ValueDecimal -> JsonString(value.toString())
         is ValueError -> toHotObject()
