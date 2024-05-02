@@ -57,18 +57,23 @@ data class ValueObject(
     val properties: List<Property>,
 ) : Value {
 
-    operator fun <T : Value> get(identifier: FieldIdentifier) = valuesByIdentifier[identifier] as T
+    fun stringValue(key: String): String = (get(key) as ValueString).stringValue
 
-    operator fun <T : Value> get(identifier: String) = get<T>(FieldIdentifier(ValueString(identifier)))
+    operator fun get(identifier: FieldIdentifier): Value = valuesByIdentifier[identifier] ?: ValueNil
+
+    operator fun get(identifier: String): Value = get(FieldIdentifier(ValueString(identifier)))
 
     override fun toString() = "${type.identifier}(${properties.joinToString(", ") { it.toString() }})"
 
     private val valuesByIdentifier = properties.associateBy { it.identifier }.mapValues { it.value.value }
 
     companion object {
+        val empty = ValueObject(TypeObjectUnknown, emptyList())
         fun builder(): ValueObjectBuilder = ValueObjectBuilder()
     }
 }
+
+abstract class ValueVariableObject : ValueVariable.BaseImpl<ValueObject>()
 
 fun <T : Value> ValueObject.forType(type: TypeObject, block: () -> T) =
     if (!this.implements(type.fields)) throw NotImplementedError()
@@ -80,8 +85,18 @@ class ValueObjectBuilder {
 
     val values = mutableMapOf<String, Value>()
 
+    operator fun set(key: String, value: Enum<*>): ValueObjectBuilder {
+        values[key] = ValueString(value.name)
+        return this
+    }
+
     operator fun set(key: String, value: Value): ValueObjectBuilder {
         values[key] = value
+        return this
+    }
+
+    operator fun set(key: String, value: ValueVariable<*>): ValueObjectBuilder {
+        values[key] = value.value
         return this
     }
 

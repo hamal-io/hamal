@@ -2,7 +2,6 @@ package io.hamal.lib.common.serialization
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import io.hamal.lib.common.domain.ValueObjectHotObject
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
@@ -168,13 +167,13 @@ internal object ValueVariableInstantAdapterTest {
 }
 
 
-internal object ValueObjectHotObjectAdapterTest {
+internal object ValueVariableObjectAdapterTest {
 
     @Test
     fun serialize() {
         val result = testDelegate.toJson(
             TestHotObjectValueObject(
-                HotObject.builder()
+                ValueObject.builder()
                     .set("some-string", "some-string-value")
                     .set("some-boolean", true)
                     .set("some-number", 42)
@@ -187,7 +186,7 @@ internal object ValueObjectHotObjectAdapterTest {
     @Test
     fun deserialize() {
         val expected = TestHotObjectValueObject(
-            HotObject.builder()
+            ValueObject.builder()
                 .set("some-string", "some-string-value")
                 .set("some-boolean", true)
                 .set("some-number", 42)
@@ -205,11 +204,11 @@ internal object ValueObjectHotObjectAdapterTest {
             .registerTypeAdapter(HotObject::class.java, HotObjectAdapter)
             .registerTypeAdapter(
                 TestHotObjectValueObject::class.java,
-                ValueObjectHotObjectAdapter(::TestHotObjectValueObject)
+                JsonAdapters.Object(::TestHotObjectValueObject)
             )
             .create()
 
     private class TestHotObjectValueObject(
-        override val value: HotObject
-    ) : ValueObjectHotObject()
+        override val value: ValueObject
+    ) : ValueVariableObject()
 }

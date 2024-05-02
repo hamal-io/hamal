@@ -1,9 +1,5 @@
 package io.hamal.lib.nodes.generator
 
-import io.hamal.lib.common.hot.HotBoolean
-import io.hamal.lib.common.hot.HotNull
-import io.hamal.lib.common.hot.HotNumber
-import io.hamal.lib.common.hot.HotString
 import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.NodeId.Companion.NodeId
@@ -21,7 +17,7 @@ internal class InitTest : AbstractIntegrationTest() {
     fun `Able to receive value with default selector`() {
         createTestRunner().run(
             unitOfWork(
-                initValue = HotString("Hamal Rocks"),
+                initValue = ValueString("Hamal Rocks"),
                 graph = NodesGraph(
                     nodes = listOf(
                         node(1, "Init", listOf(portOutput(20, TypeString))),
@@ -50,7 +46,7 @@ internal class InitTest : AbstractIntegrationTest() {
     fun `Boolean`() {
         createTestRunner().run(
             unitOfWork(
-                initValue = HotBoolean(true),
+                initValue = ValueTrue,
                 graph = NodesGraph(
                     nodes = listOf(
                         node(1, "Init", listOf(portOutput(20, TypeBoolean))),
@@ -74,7 +70,7 @@ internal class InitTest : AbstractIntegrationTest() {
     fun `String`() {
         createTestRunner().run(
             unitOfWork(
-                initValue = HotString("Hamal Rocks"),
+                initValue = ValueString("Hamal Rocks"),
                 graph = NodesGraph(
                     nodes = listOf(
                         node(1, "Init", listOf(portOutput(20, TypeString))),
@@ -103,7 +99,7 @@ internal class InitTest : AbstractIntegrationTest() {
     fun `Number`() {
         createTestRunner().run(
             unitOfWork(
-                initValue = HotNumber(13.37),
+                initValue = ValueNumber(13.37),
                 graph = NodesGraph(
                     nodes = listOf(
                         node(1, "Init", listOf(portOutput(20, TypeNumber))),
@@ -136,7 +132,7 @@ internal class InitTest : AbstractIntegrationTest() {
             }
         ).run(
             unitOfWork(
-                initValue = HotString("nyanNYANnyanNyan"),
+                initValue = ValueString("nyanNYANnyanNyan"),
                 graph = NodesGraph(
                     nodes = listOf(
                         node(1, "Init", listOf(portOutput(20, TypeString))),
@@ -170,7 +166,7 @@ internal class InitTest : AbstractIntegrationTest() {
             }
         ).run(
             unitOfWork(
-                initValue = HotNull,
+                initValue = ValueNil,
                 graph = NodesGraph(
                     nodes = listOf(
                         node(1, "Init", listOf(portOutput(20, TypeString))),

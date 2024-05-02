@@ -20,7 +20,7 @@ internal object ControlInvokeTest : AbstractIntegrationTest() {
     fun `A node can be invoked without exchanging any data`() {
         createTestRunner().run(
             unitOfWork(
-                initValue = HotString("This value will not passed into capture node"),
+                initValue = ValueString("This value will not passed into capture node"),
                 graph = NodesGraph(
                     nodes = listOf(
                         node(1, "Init", listOf(PortOutput(PortId(20), TypeString))),

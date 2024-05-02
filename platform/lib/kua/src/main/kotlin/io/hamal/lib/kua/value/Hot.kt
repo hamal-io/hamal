@@ -26,6 +26,28 @@ fun HotNode<*>?.toKua(state: State): Value {
     }
 }
 
+fun Value?.toKua(state: State): Value {
+    if (this == null) {
+        return ValueNil
+    }
+//    return when (this) {
+//        is HotObject -> state.tableCreate(nodes.map { (key, value) ->
+//            ValueString(key) to value.toKua(
+//                state
+//            )
+//        }.toMap())
+//
+//        is HotArray -> state.tableCreate(nodes.map { it.toKua(state) })
+//        is HotBoolean -> if (value) ValueTrue else ValueFalse
+//        is HotNull -> ValueNil
+//        is HotNumber -> ValueNumber(value.toDouble())
+//        is HotString -> ValueString(value)
+//        else -> TODO()
+//    }
+    TODO()
+}
+
+
 fun HotNode<*>?.toKuaSnakeCase(state: State): Value {
     if (this == null) {
         return ValueNil
@@ -44,6 +66,28 @@ fun HotNode<*>?.toKuaSnakeCase(state: State): Value {
         is HotString -> ValueString(value)
         else -> TODO()
     }
+}
+
+
+fun Value?.toKuaSnakeCase(state: State): Value {
+    if (this == null) {
+        return ValueNil
+    }
+//    return when (this) {
+//        is ValueObject -> state.tableCreate(nodes.map { (key, value) ->
+//            ValueString(StringUtils.snakeCase(key)) to value.toKuaSnakeCase(
+//                state
+//            )
+//        }.toMap())
+//
+//        is ValueArray -> state.tableCreate(nodes.map { it.toKuaSnakeCase(state) })
+////        is ValueBoolean -> if (value) ValueTrue else ValueFalse
+////        is ValueNil -> ValueNil
+////        is ValueNumber -> ValueNumber(value.toDouble())
+////        is ValueString -> ValueString(value)
+//        else -> TODO()
+//    }
+    TODO()
 }
 
 
@@ -112,6 +156,24 @@ fun KuaTable.toHotObject(): HotObject {
             val value = state.get(state.absIndex(-1))
 
             builder[key.stringValue] = value.toHotNode()
+
+            state.topPop(1)
+        }
+    }
+
+    return builder.build()
+}
+
+fun KuaTable.toValueObject(): ValueObject {
+    val builder = ValueObject.builder()
+
+    state.checkpoint {
+        state.nilPush()
+        while (state.tableNext(index).booleanValue) {
+            val key = state.stringGet(state.absIndex(-2))
+            val value = state.get(state.absIndex(-1))
+
+            builder[key.stringValue] = value
 
             state.topPop(1)
         }

@@ -2,11 +2,9 @@ package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
-import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Count.Companion.Count
-import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.Limit.Companion.Limit
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain._enum.TriggerStatus.Active
 import io.hamal.lib.domain._enum.TriggerStatus.Inactive
 import io.hamal.lib.domain._enum.TriggerType.Event
@@ -48,7 +46,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     workspaceId = WorkspaceId(4),
                     namespaceId = NamespaceId(5),
                     name = TriggerName("trigger-name"),
-                    inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
+                    inputs = TriggerInputs(ValueObject.builder().set("hamal", "rocks").build()),
                     duration = TriggerDuration("PT10S")
                 )
             )
@@ -58,7 +56,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(funcId, equalTo(FuncId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
-                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
                 assertThat(duration, equalTo(TriggerDuration("PT10S")))
                 assertThat(status, equalTo(Active))
             }
@@ -167,7 +165,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(workspaceId, equalTo(WorkspaceId(3)))
                     assertThat(namespaceId, equalTo(NamespaceId(2)))
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
-                    assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                    assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
                     assertThat(duration, equalTo(TriggerDuration("PT10S")))
                     assertThat(status, equalTo(Active))
                 }
@@ -188,7 +186,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     workspaceId = WorkspaceId(4),
                     namespaceId = NamespaceId(5),
                     name = TriggerName("trigger-name"),
-                    inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
+                    inputs = TriggerInputs(ValueObject.builder().set("hamal", "rocks").build()),
                     topicId = TopicId(9)
                 )
             )
@@ -198,7 +196,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(funcId, equalTo(FuncId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
-                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
                 assertThat(topicId, equalTo(TopicId(9)))
                 assertThat(status, equalTo(Active))
             }
@@ -307,7 +305,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(workspaceId, equalTo(WorkspaceId(3)))
                     assertThat(namespaceId, equalTo(NamespaceId(2)))
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
-                    assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                    assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
                     assertThat(topicId, equalTo(TopicId(9)))
                 }
 
@@ -327,7 +325,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     workspaceId = WorkspaceId(4),
                     namespaceId = NamespaceId(5),
                     name = TriggerName("trigger-name"),
-                    inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build())
+                    inputs = TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())
                 )
             )
 
@@ -336,7 +334,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(funcId, equalTo(FuncId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
-                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
                 assertThat(status, equalTo(Active))
             }
 
@@ -430,7 +428,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(workspaceId, equalTo(WorkspaceId(3)))
                     assertThat(namespaceId, equalTo(NamespaceId(2)))
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
-                    assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                    assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
                     assertThat(status, equalTo(Active))
                 }
 
@@ -451,7 +449,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     workspaceId = WorkspaceId(4),
                     namespaceId = NamespaceId(5),
                     name = TriggerName("trigger-name"),
-                    inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
+                    inputs = TriggerInputs(ValueObject.builder().set("hamal", "rocks").build()),
                     cron = CronPattern("0 0 * * * *")
                 )
             )
@@ -461,7 +459,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(funcId, equalTo(FuncId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
-                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
                 assertThat(cron, equalTo(CronPattern("0 0 * * * *")))
                 assertThat(status, equalTo(Active))
             }
@@ -537,7 +535,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(workspaceId, equalTo(WorkspaceId(3)))
                     assertThat(namespaceId, equalTo(NamespaceId(2)))
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
-                    assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                    assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
                     assertThat(cron, equalTo(CronPattern("0 0 * * * *")))
                     assertThat(status, equalTo(Active))
                 }
@@ -559,7 +557,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     workspaceId = WorkspaceId(4),
                     namespaceId = NamespaceId(5),
                     name = TriggerName("trigger-name"),
-                    inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build())
+                    inputs = TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())
                 )
             )
 
@@ -568,7 +566,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(funcId, equalTo(FuncId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
-                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
                 assertThat(status, equalTo(Active))
             }
 
@@ -639,7 +637,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     assertThat(workspaceId, equalTo(WorkspaceId(3)))
                     assertThat(namespaceId, equalTo(NamespaceId(2)))
                     assertThat(name, equalTo(TriggerName("first-trigger-name")))
-                    assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                    assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
                     assertThat(status, equalTo(Active))
                 }
 
@@ -693,7 +691,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     workspaceId = WorkspaceId(4),
                     namespaceId = NamespaceId(5),
                     name = TriggerName("trigger-name"),
-                    inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
+                    inputs = TriggerInputs(ValueObject.builder().set("hamal", "rocks").build()),
                     duration = TriggerDuration(10.seconds.toIsoString())
                 )
             )
@@ -705,7 +703,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(funcId, equalTo(FuncId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
-                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
                 assertThat(duration, equalTo(TriggerDuration("PT10S")))
                 assertThat(status, equalTo(Inactive))
             }
@@ -723,7 +721,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                     workspaceId = WorkspaceId(4),
                     namespaceId = NamespaceId(5),
                     name = TriggerName("trigger-name"),
-                    inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
+                    inputs = TriggerInputs(ValueObject.builder().set("hamal", "rocks").build()),
                     duration = TriggerDuration(10.seconds.toIsoString())
                 )
             )
@@ -739,7 +737,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
                 assertThat(namespaceId, equalTo(NamespaceId(5)))
                 assertThat(name, equalTo(TriggerName("trigger-name")))
-                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
                 assertThat(duration, equalTo(TriggerDuration("PT10S")))
                 assertThat(status, equalTo(Active))
             }
@@ -767,7 +765,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(TriggerName("SomeTrigger")))
-                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
                 assertThat(duration, equalTo(TriggerDuration("PT10S")))
                 assertThat(status, equalTo(Active))
             }
@@ -808,7 +806,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(TriggerName("SomeTrigger")))
-                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
                 assertThat(duration, equalTo(TriggerDuration("PT10S")))
                 assertThat(status, equalTo(Active))
             }
@@ -1106,7 +1104,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 workspaceId = workspaceId,
                 namespaceId = namespaceId,
                 name = name,
-                inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
+                inputs = TriggerInputs(ValueObject.builder().set("hamal", "rocks").build()),
                 funcId = funcId,
                 duration = TriggerDuration(10.seconds.toIsoString())
             )
@@ -1129,7 +1127,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 workspaceId = workspaceId,
                 namespaceId = namespaceId,
                 name = name,
-                inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
+                inputs = TriggerInputs(ValueObject.builder().set("hamal", "rocks").build()),
                 funcId = funcId,
                 topicId = topicId
             )
@@ -1151,7 +1149,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 workspaceId = workspaceId,
                 namespaceId = namespaceId,
                 name = name,
-                inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
+                inputs = TriggerInputs(ValueObject.builder().set("hamal", "rocks").build()),
                 funcId = funcId
             )
         )
@@ -1173,7 +1171,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 workspaceId = workspaceId,
                 namespaceId = namespaceId,
                 name = name,
-                inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
+                inputs = TriggerInputs(ValueObject.builder().set("hamal", "rocks").build()),
                 funcId = funcId,
                 cron = cron
             )
@@ -1195,7 +1193,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 workspaceId = workspaceId,
                 namespaceId = namespaceId,
                 name = name,
-                inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
+                inputs = TriggerInputs(ValueObject.builder().set("hamal", "rocks").build()),
                 funcId = funcId
             )
         )

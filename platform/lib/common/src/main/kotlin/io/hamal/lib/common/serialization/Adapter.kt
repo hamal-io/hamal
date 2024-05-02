@@ -1,7 +1,6 @@
 package io.hamal.lib.common.serialization
 
 import com.google.gson.*
-import io.hamal.lib.common.domain.ValueObjectHotObject
 import io.hamal.lib.common.hot.HotArray
 import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
@@ -76,6 +75,22 @@ object JsonAdapters {
         }
     }
 
+    class Object<TYPE : ValueVariableObject>(
+        val ctor: (ValueObject) -> TYPE
+    ) : JsonAdapter<TYPE> {
+
+        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {
+            TODO()
+//            return ctor(context.deserialize(json, HotObject::class.java))
+        }
+
+        override fun serialize(src: TYPE, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+            TODO()
+//            return context.serialize(src.value, HotObject::class.java)
+        }
+    }
+
+
     class SnowflakeId<TYPE : ValueVariableSnowflakeId>(
         val ctor: (ValueSnowflakeId) -> TYPE
     ) : JsonAdapter<TYPE> {
@@ -105,17 +120,4 @@ object JsonAdapters {
 
 }
 
-
-class ValueObjectHotObjectAdapter<TYPE : ValueObjectHotObject>(
-    val ctor: (HotObject) -> TYPE
-) : JsonAdapter<TYPE> {
-
-    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {
-        return ctor(context.deserialize(json, HotObject::class.java))
-    }
-
-    override fun serialize(src: TYPE, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-        return context.serialize(src.value, HotObject::class.java)
-    }
-}
 

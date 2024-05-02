@@ -2,7 +2,7 @@ package io.hamal.api.http.controller.trigger
 
 import io.hamal.api.http.controller.toApiRequested
 import io.hamal.core.adapter.trigger.TriggerInvokePort
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.request.TriggerInvokeRequest
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.InvocationInputs
@@ -37,7 +37,7 @@ internal class TriggerInvokeHookController(
             req = object : TriggerInvokeRequest {
                 override val correlationId = CorrelationId.default
                 override val inputs = InvocationInputs(
-                    HotObject.builder()
+                    ValueObject.builder()
                         .set("headers", req.headers())
                         .set("parameters", req.parameters())
                         .set("content", req.content())
@@ -46,25 +46,25 @@ internal class TriggerInvokeHookController(
             }).toApiRequested()
     }
 
-    private fun HttpServletRequest.headers(): HotObject {
-        val builder = HotObject.builder()
+    private fun HttpServletRequest.headers(): ValueObject {
+        val builder = ValueObject.builder()
         headerNames.asSequence().forEach { headerName ->
             builder[headerName] = getHeader(headerName)
         }
         return builder.build()
     }
 
-    private fun HttpServletRequest.parameters(): HotObject {
-        val builder = HotObject.builder()
+    private fun HttpServletRequest.parameters(): ValueObject {
+        val builder = ValueObject.builder()
         parameterMap.forEach { (key, value) ->
             builder[key] = value.joinToString(",")
         }
         return builder.build()
     }
 
-    private fun HttpServletRequest.content(): HotObject {
+    private fun HttpServletRequest.content(): ValueObject {
         require(contentType.startsWith("application/json")) { "Only application/json supported yet" }
         val content = reader.lines().reduce("", String::plus)
-        return json.deserialize(HotObject::class, content)
+        return json.deserialize(ValueObject::class, content)
     }
 }

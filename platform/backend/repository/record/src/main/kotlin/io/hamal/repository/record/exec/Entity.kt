@@ -1,7 +1,7 @@
 package io.hamal.repository.api.record.exec
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Exec
@@ -104,7 +104,7 @@ data class ExecEntity(
             namespaceId = namespaceId,
             workspaceId = workspaceId,
             correlation = correlation,
-            inputs = inputs ?: ExecInputs(HotObject.empty),
+            inputs = inputs ?: ExecInputs(ValueObject.empty),
             code = code ?: ExecCode()
         )
 

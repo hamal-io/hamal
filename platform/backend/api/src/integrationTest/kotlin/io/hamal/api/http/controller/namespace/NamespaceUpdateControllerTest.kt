@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.namespace
 
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain._enum.NamespaceFeature.*
 import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
@@ -36,7 +36,7 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
     @Test
     fun `Updates namespace name and features`() {
         val updatedFeatures = NamespaceFeatures(
-            HotObject.builder()
+            ValueObject.builder()
                 .set(schedule.name, 0)
                 .set(webhook.name, 0)
                 .build()

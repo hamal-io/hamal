@@ -9,7 +9,7 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput2Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.value.KuaTable
-import io.hamal.lib.kua.value.toHotObject
+import io.hamal.lib.kua.value.toValueObject
 import io.hamal.lib.sdk.ApiSdk
 
 class TopicEntryAppendFunction(
@@ -23,7 +23,7 @@ class TopicEntryAppendFunction(
         return try {
             val res = sdk.topic.append(
                 TopicId(arg1.stringValue),
-                TopicEventPayload(arg2.toHotObject())
+                TopicEventPayload(arg2.toValueObject())
             )
 
             null to ctx.tableCreate(

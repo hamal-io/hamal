@@ -7,8 +7,8 @@ import io.hamal.core.config.BackendBasePath
 import io.hamal.core.service.InternalEventService
 import io.hamal.extension.net.http.ExtensionHttpFactory
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
@@ -60,7 +60,7 @@ class TestSandboxConfig {
     fun envFactory(@Value("\${io.hamal.runner.api.host}") apiHost: String): EnvFactory =
         object : EnvFactory {
             override fun create() = RunnerEnv(
-                HotObject.builder()
+                ValueObject.builder()
                     .set("api_host", apiHost)
                     .build()
             )
@@ -310,7 +310,7 @@ abstract class BaseEndpointTest : AbstractRunnerTest() {
                             ExtensionHttpFactory
                         ),
                         env = RunnerEnv(
-                            HotObject.builder()
+                            ValueObject.builder()
                                 .set("api_host", sdk.template.baseUrl)
                                 .build()
                         )

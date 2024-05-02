@@ -1,12 +1,7 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.ValueObjectHotObject
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.common.value.ValueSnowflakeId
-import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.common.value.ValueVariableSnowflakeId
-import io.hamal.lib.common.value.ValueVariableString
+import io.hamal.lib.common.value.*
 import io.hamal.lib.domain._enum.NamespaceFeature
 import io.hamal.lib.domain._enum.NamespaceFeature.*
 
@@ -28,25 +23,25 @@ class NamespaceName(override val value: ValueString) : ValueVariableString() {
 }
 
 
-class NamespaceFeatures(override var value: HotObject = HotObject.empty) : ValueObjectHotObject() {
+class NamespaceFeatures(override var value: ValueObject = ValueObject.empty) : ValueVariableObject() {
 
     init {
-        value.nodes.forEach { feature ->
+        value.properties.forEach { prop ->
             require(
                 NamespaceFeature.entries.any { validFeatures ->
-                    validFeatures.name == feature.key
+                    validFeatures.name == prop.identifier.stringValue
                 }
-            ) { IllegalArgumentException("$feature is not a valid feature.") }
+            ) { IllegalArgumentException("${prop.identifier} is not a valid feature.") }
         }
     }
 
     fun hasFeature(feature: NamespaceFeature): Boolean {
-        return value.nodes.containsKey(feature.name)
+        return value.properties.map { it.identifier.stringValue }.contains(feature.name)
     }
 
     companion object {
         val default = NamespaceFeatures(
-            HotObject.builder()
+            ValueObject.builder()
                 .set(schedule.name, true)
                 .set(topic.name, false)
                 .set(webhook.name, false)

@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.trigger
 
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain._enum.TriggerType.*
 import io.hamal.lib.domain.vo.CronPattern.Companion.CronPattern
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
@@ -40,7 +40,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
                     type = FixedRate,
                     correlationId = null,
                     name = TriggerName("trigger-one"),
-                    inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
+                    inputs = TriggerInputs(ValueObject.builder().set("hamal", "rocks").build()),
                     funcId = someFuncId,
                     duration = TriggerDuration(10.seconds.toIsoString())
                 )
@@ -55,7 +55,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
         with(getTriggerResponse.result(ApiTrigger.FixedRate::class)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger-one")))
-            assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+            assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
             assertThat(duration, equalTo(TriggerDuration("PT10S")))
             assertThat(func.id, equalTo(someFuncId))
             assertThat(func.name, equalTo(FuncName("some-func-to-trigger")))
@@ -73,7 +73,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
                     type = Event,
                     correlationId = null,
                     name = TriggerName("trigger-one"),
-                    inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
+                    inputs = TriggerInputs(ValueObject.builder().set("hamal", "rocks").build()),
                     funcId = someFuncId,
                     topicId = someTopicId
                 )
@@ -88,7 +88,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
         with(getTriggerResponse.result(ApiTrigger.Event::class)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger-one")))
-            assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+            assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
             assertThat(func.id, equalTo(someFuncId))
             assertThat(func.name, equalTo(FuncName("some-func-to-trigger")))
             assertThat(topic.id, equalTo(someTopicId))
@@ -106,7 +106,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
                     type = Hook,
                     correlationId = null,
                     name = TriggerName("trigger-one"),
-                    inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
+                    inputs = TriggerInputs(ValueObject.builder().set("hamal", "rocks").build()),
                     funcId = funcId
                 )
             )
@@ -120,7 +120,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
         with(getTriggerResponse.result(ApiTrigger.Hook::class)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("trigger-one")))
-            assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+            assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
             assertThat(func.id, equalTo(funcId))
             assertThat(func.name, equalTo(FuncName("some-func-to-trigger")))
         }
@@ -136,7 +136,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
                     type = Cron,
                     name = TriggerName("cron-trigger"),
                     funcId = funcId,
-                    inputs = TriggerInputs(HotObject.builder().set("hamal", "rocks").build()),
+                    inputs = TriggerInputs(ValueObject.builder().set("hamal", "rocks").build()),
                     cron = CronPattern("0 0 9-17 * * MON-FRI")
                 )
             )
@@ -150,7 +150,7 @@ internal class TriggerGetControllerTest : TriggerBaseControllerTest() {
         with(getTriggerResponse.result(ApiTrigger.Cron::class)) {
             assertThat(id, equalTo(triggerId))
             assertThat(name, equalTo(TriggerName("cron-trigger")))
-            assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+            assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
             assertThat(func.id, equalTo(funcId))
             assertThat(func.name, equalTo(FuncName("some-func-to-trigger")))
             assertThat(cron, equalTo(CronPattern("0 0 9-17 * * MON-FRI")))

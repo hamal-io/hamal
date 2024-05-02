@@ -1,12 +1,8 @@
 package io.hamal.lib.nodes
 
 import io.hamal.extension.std.decimal.ExtensionDecimalFactory
-import io.hamal.lib.common.hot.HotNode
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.common.value.Type
-import io.hamal.lib.common.value.ValueCode
-import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.*
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
@@ -109,7 +105,7 @@ internal abstract class AbstractIntegrationTest {
         id: Long,
         type: String,
         outputs: List<PortOutput> = listOf(),
-        properties: HotObject = HotObject.empty,
+        properties: ValueObject = ValueObject.empty,
         title: NodeTitle = NodeTitle("Title of ${id.toString(16)}"),
         position: Position = Position(0, 0),
         size: Size = Size(200, 200)
@@ -154,7 +150,7 @@ internal abstract class AbstractIntegrationTest {
     ): PortOutput = PortOutput(PortId(SnowflakeId(id)), type)
 
     fun unitOfWork(
-        initValue: HotNode<*>,
+        initValue: Value,
         graph: NodesGraph
     ) = UnitOfWork(
         id = ExecId(1234),
@@ -162,7 +158,7 @@ internal abstract class AbstractIntegrationTest {
         namespaceId = NamespaceId(9876),
         workspaceId = WorkspaceId(5432),
         inputs = ExecInputs(
-            HotObject.builder()
+            ValueObject.builder()
                 .set("__nodes__init__", initValue)
                 .build()
         ),

@@ -1,7 +1,7 @@
 package io.hamal.core.request.handler.state
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
@@ -33,14 +33,14 @@ internal class StateSetHandlerTest : BaseRequestHandlerTest() {
                 requestedBy = AuthId(2),
                 state = CorrelatedState(
                     correlation = correlation,
-                    value = State(HotObject.builder().set("Hamal", "Rocks").build())
+                    value = State(ValueObject.builder().set("Hamal", "Rocks").build())
                 ),
                 workspaceId = WorkspaceId(4)
             )
         )
 
         with(stateQueryRepository.get(correlation)) {
-            assertThat(value, equalTo(State(HotObject.builder().set("Hamal", "Rocks").build())))
+            assertThat(value, equalTo(State(ValueObject.builder().set("Hamal", "Rocks").build())))
         }
 
     }

@@ -1,5 +1,6 @@
 package io.hamal.runner.test
 
+import io.hamal.lib.common.value.Value
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
@@ -42,7 +43,7 @@ class TestConnector(
         execId: ExecId,
         result: ExecResult
     ) {
-        fail { result.value["message"].toString() }
+        fail { result.value.get<Value>("message").toString() }
     }
 }
 

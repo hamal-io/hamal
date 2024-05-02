@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.topic
 
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.TopicEventId.Companion.TopicEventId
 import io.hamal.lib.domain.vo.TopicEventPayload
 import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
@@ -27,7 +27,7 @@ internal class TopicEventListControllerTest : TopicBaseControllerTest() {
         val topicId = awaitCompleted(createTopic(TopicName("test-topic"))).id
 
         awaitCompleted(
-            appendToTopic(topicId, TopicEventPayload(HotObject.builder().set("counter", 1).build()))
+            appendToTopic(topicId, TopicEventPayload(ValueObject.builder().set("counter", 1).build()))
         )
 
         with(listTopicEvents(topicId)) {
@@ -36,7 +36,7 @@ internal class TopicEventListControllerTest : TopicBaseControllerTest() {
 
             with(events.first()) {
                 assertThat(id, equalTo(TopicEventId(1)))
-                assertThat(payload, equalTo(TopicEventPayload(HotObject.builder().set("counter", 1).build())))
+                assertThat(payload, equalTo(TopicEventPayload(ValueObject.builder().set("counter", 1).build())))
             }
         }
     }
@@ -47,7 +47,7 @@ internal class TopicEventListControllerTest : TopicBaseControllerTest() {
 
         awaitCompleted(
             IntRange(1, 100).map {
-                appendToTopic(topicId, TopicEventPayload(HotObject.builder().set("counter", it).build()))
+                appendToTopic(topicId, TopicEventPayload(ValueObject.builder().set("counter", it).build()))
             }
         )
 
@@ -61,7 +61,7 @@ internal class TopicEventListControllerTest : TopicBaseControllerTest() {
         listResponse.events.forEachIndexed { idx, event ->
             assertThat(
                 event.payload, equalTo(
-                    TopicEventPayload(HotObject.builder().set("counter", idx + 1).build())
+                    TopicEventPayload(ValueObject.builder().set("counter", idx + 1).build())
                 )
             )
         }
@@ -73,7 +73,7 @@ internal class TopicEventListControllerTest : TopicBaseControllerTest() {
 
         awaitCompleted(
             IntRange(1, 100).map {
-                appendToTopic(topicId, TopicEventPayload(HotObject.builder().set("counter", it).build()))
+                appendToTopic(topicId, TopicEventPayload(ValueObject.builder().set("counter", it).build()))
             }
         )
 
@@ -87,7 +87,7 @@ internal class TopicEventListControllerTest : TopicBaseControllerTest() {
 
         val event = listResponse.events.first()
         assertThat(event.id, equalTo(TopicEventId(96)))
-        assertThat(event.payload, equalTo(TopicEventPayload(HotObject.builder().set("counter", 96).build())))
+        assertThat(event.payload, equalTo(TopicEventPayload(ValueObject.builder().set("counter", 96).build())))
     }
 
     @Test
@@ -96,7 +96,7 @@ internal class TopicEventListControllerTest : TopicBaseControllerTest() {
         val anotherTopicId = awaitCompleted(createTopic(TopicName("another-test-topic"))).id
 
         awaitCompleted(
-            appendToTopic(topicId, TopicEventPayload(HotObject.builder().set("counter", 1).build()))
+            appendToTopic(topicId, TopicEventPayload(ValueObject.builder().set("counter", 1).build()))
         )
 
         with(listTopicEvents(anotherTopicId)) {

@@ -1,10 +1,9 @@
 package io.hamal.api.http.controller.func
 
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain._enum.CodeType
-import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
@@ -61,7 +60,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                 namespaceId = createdNamespace.id,
                 req = ApiFuncCreateRequest(
                     name = FuncName("created-name"),
-                    inputs = FuncInputs(HotObject.builder().set("hamal", "createdInputs").build()),
+                    inputs = FuncInputs(ValueObject.builder().set("hamal", "createdInputs").build()),
                     code = ValueCode("createdCode"),
                     codeType = CodeType.Lua54
                 )
@@ -73,7 +72,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             .body(
                 ApiFuncUpdateRequest(
                     name = FuncName("updated-name"),
-                    inputs = FuncInputs(HotObject.builder().set("hamal", "updatedInputs").build()),
+                    inputs = FuncInputs(ValueObject.builder().set("hamal", "updatedInputs").build()),
                     code = ValueCode("updatedCode")
                 )
             )
@@ -91,7 +90,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             assertThat(id, equalTo(funcId))
             assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
             assertThat(name, equalTo(FuncName("updated-name")))
-            assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "updatedInputs").build())))
+            assertThat(inputs, equalTo(FuncInputs(ValueObject.builder().set("hamal", "updatedInputs").build())))
 
             assertThat(code.version, equalTo(CodeVersion(2)))
             assertThat(code.value, equalTo(ValueCode("updatedCode")))
@@ -129,7 +128,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             assertThat(id, equalTo(funcId))
             assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
             assertThat(name, equalTo(FuncName("created-name")))
-            assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "createdInputs").build())))
+            assertThat(inputs, equalTo(FuncInputs(ValueObject.builder().set("hamal", "createdInputs").build())))
 
             assertThat(code.version, equalTo(CodeVersion(1)))
             assertThat(code.value, equalTo(ValueCode("createdCode")))
@@ -183,7 +182,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             .body(
                 ApiFuncUpdateRequest(
                     name = FuncName("updated-name"),
-                    inputs = FuncInputs(HotObject.builder().set("hamal", "updatedInputs").build()),
+                    inputs = FuncInputs(ValueObject.builder().set("hamal", "updatedInputs").build()),
                     code = ValueCode("createdCode")
                 )
             )
@@ -198,7 +197,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         with(getFunc(funcId)) {
             assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
             assertThat(name, equalTo(FuncName("updated-name")))
-            assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "updatedInputs").build())))
+            assertThat(inputs, equalTo(FuncInputs(ValueObject.builder().set("hamal", "updatedInputs").build())))
 
             assertThat(code.version, equalTo(CodeVersion(1)))
             assertThat(code.value, equalTo(ValueCode("createdCode")))
@@ -224,7 +223,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                 namespaceId = createdNamespace.id,
                 req = ApiFuncCreateRequest(
                     name = name,
-                    inputs = FuncInputs(HotObject.builder().set("hamal", "createdInputs").build()),
+                    inputs = FuncInputs(ValueObject.builder().set("hamal", "createdInputs").build()),
                     code = code,
                     codeType = CodeType.Lua54
                 )

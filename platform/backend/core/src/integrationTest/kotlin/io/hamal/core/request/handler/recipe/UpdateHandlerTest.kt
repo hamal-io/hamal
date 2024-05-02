@@ -2,8 +2,8 @@ package io.hamal.core.request.handler.recipe
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.RecipeUpdateRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
@@ -28,7 +28,7 @@ internal class RecipeUpdateHandlerTest : BaseRequestHandlerTest() {
                 id = CmdId(1),
                 recipeId = RecipeId(123),
                 name = RecipeName("TestRecipe"),
-                inputs = RecipeInputs(HotObject.builder().set("hamal", "rocks").build()),
+                inputs = RecipeInputs(ValueObject.builder().set("hamal", "rocks").build()),
                 value = ValueCode("1 + 1"),
                 creatorId = testAccount.id,
                 description = RecipeDescription("TestDescription")
@@ -41,7 +41,7 @@ internal class RecipeUpdateHandlerTest : BaseRequestHandlerTest() {
             assertThat(id, equalTo(RecipeId(123)))
             assertThat(name, equalTo(RecipeName("UpdatedRecipe")))
             assertThat(value, equalTo(ValueCode("40 + 2")))
-            assertThat(inputs, equalTo(RecipeInputs(HotObject.builder().set("hamal", "updates").build())))
+            assertThat(inputs, equalTo(RecipeInputs(ValueObject.builder().set("hamal", "updates").build())))
             assertThat(description, equalTo(RecipeDescription("TestUpdateDescription")))
         }
     }
@@ -53,7 +53,7 @@ internal class RecipeUpdateHandlerTest : BaseRequestHandlerTest() {
             requestStatus = RequestStatus.Submitted,
             id = RecipeId(123),
             name = RecipeName("UpdatedRecipe"),
-            inputs = RecipeInputs(HotObject.builder().set("hamal", "updates").build()),
+            inputs = RecipeInputs(ValueObject.builder().set("hamal", "updates").build()),
             value = ValueCode("40 + 2"),
             description = RecipeDescription("TestUpdateDescription")
         )

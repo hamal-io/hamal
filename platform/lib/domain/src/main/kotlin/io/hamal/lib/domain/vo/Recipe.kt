@@ -1,12 +1,7 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.ValueObjectHotObject
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.common.value.ValueSnowflakeId
-import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.common.value.ValueVariableSnowflakeId
-import io.hamal.lib.common.value.ValueVariableString
+import io.hamal.lib.common.value.*
 
 
 class RecipeId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
@@ -30,4 +25,4 @@ class RecipeDescription(override val value: ValueString) : ValueVariableString()
     }
 }
 
-class RecipeInputs(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
+class RecipeInputs(override val value: ValueObject = ValueObject.empty) : ValueVariableObject()

@@ -22,7 +22,7 @@ class RunnerContext(
     }
 
     fun emit(evt: EventToSubmit) {
-        evt.payload.value.nodes.remove("topic")
+//        evt.payload.value.nodes.remove("topic") // FIXME
         eventsToSubmit.add(evt)
     }
 

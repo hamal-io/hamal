@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.state
 
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
@@ -32,7 +32,7 @@ internal class StateGetControllerTest : StateBaseControllerTest() {
             )
         ).id
 
-        awaitCompleted(completeExec(execId, ExecState(HotObject.builder().set("hamal", "rocks").build())).id)
+        awaitCompleted(completeExec(execId, ExecState(ValueObject.builder().set("hamal", "rocks").build())).id)
 
         val response = httpTemplate.get("/v1/funcs/{funcId}/states/__1__").path("funcId", funcId).execute()
 
@@ -43,7 +43,7 @@ internal class StateGetControllerTest : StateBaseControllerTest() {
         assertThat(correlatedState.correlation.func.id, equalTo(funcId))
         assertThat(correlatedState.correlation.func.name, equalTo(FuncName("SomeFunc")))
         assertThat(correlatedState.correlation.id, equalTo(CorrelationId("__1__")))
-        assertThat(correlatedState.state, equalTo(ApiState(HotObject.builder().set("hamal", "rocks").build())))
+        assertThat(correlatedState.state, equalTo(ApiState(ValueObject.builder().set("hamal", "rocks").build())))
     }
 
     @Test

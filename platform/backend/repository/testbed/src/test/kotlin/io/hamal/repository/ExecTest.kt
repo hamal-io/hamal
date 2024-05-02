@@ -4,8 +4,8 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.common.domain.Limit.Companion.Limit
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
@@ -45,7 +45,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                         id = CorrelationId("some-correlation-id"), funcId = FuncId(23)
                     ),
                     inputs = ExecInputs(
-                        HotObject.builder()
+                        ValueObject.builder()
                             .set("hamal", "rocks")
                             .build()
                     ),
@@ -229,15 +229,15 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 CompleteCmd(
                     CmdId(5),
                     ExecId(2),
-                    ExecResult(HotObject.builder().set("answer", 42).build()),
-                    ExecState(HotObject.builder().set("state", 1337).build())
+                    ExecResult(ValueObject.builder().set("answer", 42).build()),
+                    ExecState(ValueObject.builder().set("state", 1337).build())
                 )
             )
 
             assertBaseExec(result)
             assertThat(result.status, equalTo(Completed))
-            assertThat(result.result, equalTo(ExecResult(HotObject.builder().set("answer", 42).build())))
-            assertThat(result.state, equalTo(ExecState(HotObject.builder().set("state", 1337).build())))
+            assertThat(result.result, equalTo(ExecResult(ValueObject.builder().set("answer", 42).build())))
+            assertThat(result.state, equalTo(ExecState(ValueObject.builder().set("state", 1337).build())))
 
             verifyCount(1)
         }
@@ -288,10 +288,10 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             start(StartCmd(CmdId(4)))
 
             val result =
-                fail(FailCmd(CmdId(5), ExecId(2), ExecResult(HotObject.builder().set("message", "SomeError").build())))
+                fail(FailCmd(CmdId(5), ExecId(2), ExecResult(ValueObject.builder().set("message", "SomeError").build())))
             assertBaseExec(result)
             assertThat(result.status, equalTo(Failed))
-            assertThat(result.result, equalTo(ExecResult(HotObject.builder().set("message", "SomeError").build())))
+            assertThat(result.result, equalTo(ExecResult(ValueObject.builder().set("message", "SomeError").build())))
 
             verifyCount(1)
         }
@@ -363,7 +363,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 assertThat(workspaceId, equalTo(WorkspaceId(333)))
                 assertThat(correlation?.id, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation?.funcId, equalTo(FuncId(444)))
-                assertThat(inputs, equalTo(ExecInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(ExecInputs(ValueObject.builder().set("hamal", "rocks").build())))
                 assertThat(code, equalTo(ExecCode(value = ValueCode("'13'..'37'"))))
             }
         }
@@ -395,7 +395,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 assertThat(workspaceId, equalTo(WorkspaceId(333)))
                 assertThat(correlation?.id, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation?.funcId, equalTo(FuncId(444)))
-                assertThat(inputs, equalTo(ExecInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(ExecInputs(ValueObject.builder().set("hamal", "rocks").build())))
                 assertThat(code, equalTo(ExecCode(value = ValueCode("'13'..'37'"))))
             }
         }
@@ -617,7 +617,7 @@ private fun ExecRepository.planExec(
         correlation = Correlation(
             id = CorrelationId("some-correlation-id"), funcId = FuncId(23)
         ),
-        inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
+        inputs = ExecInputs(ValueObject.builder().set("hamal", "rocks").build()),
         code = ExecCode(value = ValueCode("40 + 2")),
     )
 )
@@ -647,7 +647,7 @@ fun ExecRepository.createExec(
             namespaceId = namespaceId,
             workspaceId = workspaceId,
             correlation = correlation,
-            inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
+            inputs = ExecInputs(ValueObject.builder().set("hamal", "rocks").build()),
             code = ExecCode(value = ValueCode("'13'..'37'")),
         )
     )
@@ -686,8 +686,8 @@ fun ExecRepository.createExec(
             CompleteCmd(
                 id = CmdId(104),
                 execId = startedExec.id,
-                result = ExecResult(HotObject.builder().set("answer", 42).build()),
-                state = ExecState(HotObject.builder().set("state", 1337).build())
+                result = ExecResult(ValueObject.builder().set("answer", 42).build()),
+                state = ExecState(ValueObject.builder().set("state", 1337).build())
             )
         )
 
@@ -695,7 +695,7 @@ fun ExecRepository.createExec(
             FailCmd(
                 id = CmdId(104),
                 execId = startedExec.id,
-                result = ExecResult(HotObject.builder().set("message", "ExecTest").build())
+                result = ExecResult(ValueObject.builder().set("message", "ExecTest").build())
             )
         )
 

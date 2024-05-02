@@ -1,8 +1,8 @@
 package io.hamal.runner.run.function
 
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.CodeType
@@ -51,7 +51,7 @@ internal class FailTest : AbstractExecuteTest() {
                     execResult,
                     equalTo(
                         ExecResult(
-                            HotObject.builder().set("message", "Sometimes an error can be a good thing").build()
+                            ValueObject.builder().set("message", "Sometimes an error can be a good thing").build()
                         )
                     )
                 )
@@ -73,7 +73,7 @@ internal class FailTest : AbstractExecuteTest() {
         val runner = createTestRunner(
             connector = TestFailConnector { execId, execResult ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(execResult, equalTo(ExecResult(HotObject.empty)))
+                assertThat(execResult, equalTo(ExecResult(ValueObject.empty)))
             }
         )
         runner.run(unitOfWork("context.fail()"))
@@ -85,7 +85,7 @@ internal class FailTest : AbstractExecuteTest() {
         val runner = createTestRunner(
             connector = TestFailConnector { execId, execResult ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(execResult, equalTo(ExecResult(HotObject.builder().set("message", "test").build())))
+                assertThat(execResult, equalTo(ExecResult(ValueObject.builder().set("message", "test").build())))
             }
         )
         runner.run(unitOfWork("context.fail('test')"))
@@ -96,7 +96,7 @@ internal class FailTest : AbstractExecuteTest() {
         val runner = createTestRunner(
             connector = TestFailConnector { execId, execResult ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(execResult, equalTo(ExecResult(HotObject.builder().set("value", 1337).build())))
+                assertThat(execResult, equalTo(ExecResult(ValueObject.builder().set("value", 1337).build())))
             }
         )
         runner.run(unitOfWork("context.fail(1337)"))
@@ -107,7 +107,7 @@ internal class FailTest : AbstractExecuteTest() {
         val runner = createTestRunner(
             connector = TestFailConnector { execId, execResult ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(execResult, equalTo(ExecResult(HotObject.builder().set("value", false).build())))
+                assertThat(execResult, equalTo(ExecResult(ValueObject.builder().set("value", false).build())))
             }
         )
         runner.run(unitOfWork("context.fail(false)"))
@@ -121,7 +121,7 @@ internal class FailTest : AbstractExecuteTest() {
                 assertThat(
                     execResult, equalTo(
                         ExecResult(
-                            HotObject.builder()
+                            ValueObject.builder()
                                 .set("reason", "undisclosed")
                                 .set("answer", 42)
                                 .build()

@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.recipe
 
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.RecipeInputs
 import io.hamal.lib.domain.vo.RecipeName.Companion.RecipeName
 import io.hamal.lib.http.HttpErrorResponse
@@ -23,7 +23,7 @@ internal class RecipeGetControllerTest : RecipeBaseControllerTest() {
             createRecipe(
                 ApiRecipeCreateRequest(
                     name = RecipeName("TestRecipe"),
-                    inputs = RecipeInputs(HotObject.builder().set("hamal", "rocks").build()),
+                    inputs = RecipeInputs(ValueObject.builder().set("hamal", "rocks").build()),
                     value = ValueCode("1 + 1")
                 )
             )
@@ -40,7 +40,7 @@ internal class RecipeGetControllerTest : RecipeBaseControllerTest() {
         with(getResponse.result(ApiRecipe::class)) {
             assertThat(id, equalTo(recipeId))
             assertThat(name, equalTo(RecipeName("TestRecipe")))
-            assertThat(inputs, equalTo(RecipeInputs(HotObject.builder().set("hamal", "rocks").build())))
+            assertThat(inputs, equalTo(RecipeInputs(ValueObject.builder().set("hamal", "rocks").build())))
             assertThat(value, equalTo(ValueCode("1 + 1")))
         }
     }

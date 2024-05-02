@@ -1,10 +1,13 @@
 package io.hamal.bridge.http.controller.exec
 
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
+import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
+import io.hamal.lib.domain.vo.ExecResult
+import io.hamal.lib.domain.vo.ExecStatus
+import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
@@ -71,7 +74,7 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
     @Test
     fun `Tries to fail exec which does not exist`() {
         val response = httpTemplate.post("/b1/execs/123456765432/fail")
-            .body(BridgeExecFailRequest(ExecResult(HotObject.builder().set("message", "SomeErrorValue").build())))
+            .body(BridgeExecFailRequest(ExecResult(ValueObject.builder().set("message", "SomeErrorValue").build())))
             .execute()
 
         assertThat(response.statusCode, equalTo(NotFound))
@@ -85,14 +88,14 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
         with(execQueryRepository.get(execId) as Exec.Failed) {
             assertThat(id, equalTo(execId))
             assertThat(status, equalTo(ExecStatus.Failed))
-            assertThat(result, equalTo(ExecResult(HotObject.builder().set("message", "SomeErrorCause").build())))
+            assertThat(result, equalTo(ExecResult(ValueObject.builder().set("message", "SomeErrorCause").build())))
         }
     }
 
     private fun requestFailure(execId: ExecId) =
         httpTemplate.post("/b1/execs/{execId}/fail")
             .path("execId", execId)
-            .body(BridgeExecFailRequest(ExecResult(HotObject.builder().set("message", "SomeErrorCause").build())))
+            .body(BridgeExecFailRequest(ExecResult(ValueObject.builder().set("message", "SomeErrorCause").build())))
             .execute()
 
 }

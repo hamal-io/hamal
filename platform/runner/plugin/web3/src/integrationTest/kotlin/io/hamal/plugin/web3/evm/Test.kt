@@ -2,11 +2,10 @@ package io.hamal.plugin.web3.evm
 
 import com.google.gson.Gson
 import io.hamal.lib.common.hot.HotArray
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.hot.HotObjectModule
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.RunnerEnv
-import io.hamal.lib.domain.vo.ValueObjectJsonModule
 import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.plugin.web3.evm.evm.PluginWeb3EvmFactory
@@ -50,7 +49,6 @@ internal open class TestWebConfig : WebMvcConfigurer {
     open fun gson(): Gson = JsonFactoryBuilder()
         .register(HotObjectModule)
         .register(ValueVariableJsonModule)
-        .register(ValueObjectJsonModule)
         .build()
 
     @Bean
@@ -113,7 +111,7 @@ internal class PluginWeb3EvmTest : AbstractRunnerTest() {
                     PluginWeb3EvmFactory(),
                 ),
                 env = RunnerEnv(
-                    HotObject.builder()
+                    ValueObject.builder()
                         .set("test_url", "http://localhost:${localPort}")
                         .build()
                 )

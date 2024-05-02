@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.recipe
 
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.RecipeDescription
 import io.hamal.lib.domain.vo.RecipeDescription.Companion.RecipeDescription
 import io.hamal.lib.domain.vo.RecipeInputs
@@ -38,7 +38,7 @@ internal class RecipeUpdateControllerTest : RecipeBaseControllerTest() {
                 ApiRecipeUpdateRequest(
                     name = RecipeName("Other"),
                     value = ValueCode("1 + 1"),
-                    inputs = RecipeInputs(HotObject.builder().set("hamal", "createdInputs").build()),
+                    inputs = RecipeInputs(ValueObject.builder().set("hamal", "createdInputs").build()),
                     description = RecipeDescription("updated description")
                 )
             )
@@ -55,7 +55,7 @@ internal class RecipeUpdateControllerTest : RecipeBaseControllerTest() {
             assertThat(id, equalTo(recipeId))
             assertThat(name, equalTo(RecipeName("Other")))
             assertThat(value, equalTo(ValueCode("1 + 1")))
-            assertThat(inputs, equalTo(RecipeInputs(HotObject.builder().set("hamal", "createdInputs").build())))
+            assertThat(inputs, equalTo(RecipeInputs(ValueObject.builder().set("hamal", "createdInputs").build())))
             assertThat(description, equalTo(RecipeDescription("updated description")))
         }
     }
@@ -67,7 +67,7 @@ internal class RecipeUpdateControllerTest : RecipeBaseControllerTest() {
                 ApiRecipeCreateRequest(
                     name = RecipeName("TestRecipe"),
                     value = ValueCode("40 + 2"),
-                    inputs = RecipeInputs(HotObject.builder().set("hamal", "createdInputs").build())
+                    inputs = RecipeInputs(ValueObject.builder().set("hamal", "createdInputs").build())
                 )
             )
         )
@@ -95,7 +95,7 @@ internal class RecipeUpdateControllerTest : RecipeBaseControllerTest() {
             assertThat(id, equalTo(bpId))
             assertThat(name, equalTo(RecipeName("TestRecipe")))
             assertThat(value, equalTo(ValueCode("40 + 2")))
-            assertThat(inputs, equalTo(RecipeInputs(HotObject.builder().set("hamal", "createdInputs").build())))
+            assertThat(inputs, equalTo(RecipeInputs(ValueObject.builder().set("hamal", "createdInputs").build())))
             assertThat(description, equalTo(RecipeDescription.empty))
         }
     }

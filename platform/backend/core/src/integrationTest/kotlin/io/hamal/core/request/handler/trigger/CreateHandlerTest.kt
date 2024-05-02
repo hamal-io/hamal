@@ -1,7 +1,7 @@
 package io.hamal.core.request.handler.trigger
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain._enum.TriggerType.*
 import io.hamal.lib.domain.request.TriggerCreateRequested
@@ -138,7 +138,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
                 assertThat(name, equalTo(TriggerName("FixedRateTrigger")))
                 assertThat(funcId, equalTo(FuncId(2222)))
                 assertThat(duration, equalTo(TriggerDuration("PT42S")))
-                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
             }
         }
     }
@@ -153,7 +153,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
                 assertThat(name, equalTo(TriggerName("EventTrigger")))
                 assertThat(funcId, equalTo(FuncId(2222)))
                 assertThat(topicId, equalTo(TopicId(1111)))
-                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
             }
         }
     }
@@ -167,7 +167,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
                 assertThat(id, equalTo(TriggerId(1234)))
                 assertThat(name, equalTo(TriggerName("HookTrigger")))
                 assertThat(funcId, equalTo(FuncId(2222)))
-                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
             }
         }
     }
@@ -182,7 +182,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
                 assertThat(name, equalTo(TriggerName("CronTrigger")))
                 assertThat(funcId, equalTo(FuncId(2222)))
                 assertThat(cron, equalTo(CronPattern("0 0 * * * *")))
-                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
             }
         }
     }
@@ -210,7 +210,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
             name = TriggerName("FixedRateTrigger"),
             duration = TriggerDuration(42.seconds.toIsoString()),
             inputs = TriggerInputs(
-                HotObject.builder().set("hamal", "rocks").build()
+                ValueObject.builder().set("hamal", "rocks").build()
             ),
         )
     }
@@ -228,7 +228,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
             topicId = TopicId(1111),
             name = TriggerName("EventTrigger"),
             inputs = TriggerInputs(
-                HotObject.builder().set("hamal", "rocks").build(),
+                ValueObject.builder().set("hamal", "rocks").build(),
             )
         )
     }
@@ -245,7 +245,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
             funcId = FuncId(2222),
             name = TriggerName("HookTrigger"),
             inputs = TriggerInputs(
-                HotObject.builder().set("hamal", "rocks").build(),
+                ValueObject.builder().set("hamal", "rocks").build(),
             )
         )
     }
@@ -263,7 +263,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
             name = TriggerName("CronTrigger"),
             cron = CronPattern("0 0 * * * *"),
             inputs = TriggerInputs(
-                HotObject.builder().set("hamal", "rocks").build()
+                ValueObject.builder().set("hamal", "rocks").build()
             ),
         )
     }

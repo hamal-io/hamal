@@ -1,7 +1,5 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.ValueObjectHotObject
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.common.value.*
@@ -22,7 +20,7 @@ class FuncName(override val value: ValueString) : ValueVariableString() {
     }
 }
 
-class FuncInputs(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
+class FuncInputs(override val value: ValueObject = ValueObject.empty) : ValueVariableObject()
 
 class DeployMessage(override val value: ValueString) : ValueVariableString() {
     companion object {

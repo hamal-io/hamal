@@ -1,7 +1,7 @@
 package io.hamal.runner.run.function
 
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.EventPayload
@@ -76,7 +76,7 @@ internal class EmitTest : AbstractExecuteTest() {
 
         with(eventsToEmit.first()) {
             assertThat(topicName, equalTo(TopicName("test-topic")))
-            assertThat(payload, equalTo(EventPayload(HotObject.builder().build())))
+            assertThat(payload, equalTo(EventPayload(ValueObject.builder().build())))
         }
     }
 
@@ -91,8 +91,8 @@ internal class EmitTest : AbstractExecuteTest() {
 
         with(eventsToEmit.first()) {
             assertThat(topicName, equalTo(TopicName("test-topic")))
-            assertThat(payload, equalTo(EventPayload(HotObject.builder().build())))
-            assertThat(payload, equalTo(EventPayload(HotObject.builder().build())))
+            assertThat(payload, equalTo(EventPayload(ValueObject.builder().build())))
+            assertThat(payload, equalTo(EventPayload(ValueObject.builder().build())))
         }
     }
 
@@ -109,7 +109,7 @@ internal class EmitTest : AbstractExecuteTest() {
             assertThat(
                 payload, equalTo(
                     EventPayload(
-                        HotObject.builder().set("hamal", "rocks").build()
+                        ValueObject.builder().set("hamal", "rocks").build()
                     )
                 )
             )
@@ -129,7 +129,7 @@ internal class EmitTest : AbstractExecuteTest() {
             assertThat(
                 payload, equalTo(
                     EventPayload(
-                        HotObject.builder().set("answer", 42.0).build()
+                        ValueObject.builder().set("answer", 42.0).build()
                     )
                 )
             )
@@ -149,7 +149,7 @@ internal class EmitTest : AbstractExecuteTest() {
             assertThat(
                 payload, equalTo(
                     EventPayload(
-                        HotObject.builder()
+                        ValueObject.builder()
                             .set("true_value", true)
                             .set("false_value", false)
                             .build()
@@ -172,8 +172,8 @@ internal class EmitTest : AbstractExecuteTest() {
             assertThat(
                 payload, equalTo(
                     EventPayload(
-                        HotObject.builder()
-                            .set("nested_table", HotObject.builder().set("value", 23).build())
+                        ValueObject.builder()
+                            .set("nested_table", ValueObject.builder().set("value", 23).build())
                             .build()
                     )
                 )

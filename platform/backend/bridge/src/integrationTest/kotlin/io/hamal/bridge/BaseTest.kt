@@ -2,9 +2,9 @@ package io.hamal.bridge
 
 import io.hamal.core.CoreConfig
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
@@ -240,10 +240,10 @@ internal abstract class BaseTest {
                     id = CmdId(5),
                     execId = startedExec.id,
                     result = ExecResult(
-                        HotObject.builder().set("hamal", "Great success").build()
+                        ValueObject.builder().set("hamal", "Great success").build()
                     ),
                     state = ExecState(
-                        HotObject.builder().set("persisted", "Instate").build()
+                        ValueObject.builder().set("persisted", "Instate").build()
                     )
                 )
             )
@@ -253,7 +253,7 @@ internal abstract class BaseTest {
                     id = CmdId(5),
                     execId = startedExec.id,
                     result = ExecResult(
-                        HotObject.builder().set("message", "BaseTest.kt").build()
+                        ValueObject.builder().set("message", "BaseTest.kt").build()
                     )
                 )
             )

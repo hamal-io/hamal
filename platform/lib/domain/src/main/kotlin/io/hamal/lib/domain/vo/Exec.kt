@@ -1,7 +1,5 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.ValueObjectHotObject
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.common.value.*
@@ -22,7 +20,7 @@ class ExecType(override val value: ValueString) : ValueVariableString() {
     }
 }
 
-class ExecInputs(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
+class ExecInputs(override val value: ValueObject = ValueObject.empty) : ValueVariableObject()
 
 data class ExecCode(
     val id: CodeId? = null,
@@ -54,9 +52,9 @@ class ExecToken(override val value: ValueString) : ValueVariableString() {
     }
 }
 
-class ExecResult(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
+class ExecResult(override val value: ValueObject = ValueObject.empty) : ValueVariableObject()
 
-class ExecState(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
+class ExecState(override val value: ValueObject = ValueObject.empty) : ValueVariableObject()
 
 class ExecScheduledAt(override val value: ValueInstant) : ValueVariableInstant() {
     companion object {

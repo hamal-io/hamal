@@ -1,12 +1,8 @@
 package io.hamal.runner.run
 
 import io.hamal.lib.common.hot.HotNumber
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.logger
-import io.hamal.lib.common.value.ValueCode
-import io.hamal.lib.common.value.ValueNil
-import io.hamal.lib.common.value.ValueNumber
-import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.*
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.kua.AssertionError
@@ -15,7 +11,7 @@ import io.hamal.lib.kua.ExtensionError
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.value.KuaFunction
 import io.hamal.lib.kua.value.KuaTable
-import io.hamal.lib.kua.value.toHotObject
+import io.hamal.lib.kua.value.toValueObject
 import io.hamal.lib.nodes.NodesGraph
 import io.hamal.lib.nodes.compiler.Compiler
 import io.hamal.lib.nodes.json
@@ -96,9 +92,9 @@ class CodeRunnerImpl(
 
                         // FIXME nodes can have state as well
                         val stateToSubmit = if (unitOfWork.codeType == CodeType.Lua54) {
-                            ctx.getTable(ValueString("state")).toHotObject()
+                            ctx.getTable(ValueString("state")).toValueObject()
                         } else {
-                            HotObject.empty
+                            ValueObject.empty
                         }
 
                         connector.complete(
@@ -114,7 +110,7 @@ class CodeRunnerImpl(
                             if (cause.status == HotNumber(0.0)) {
 
                                 val ctx = sandbox.globalGetTable(ValueString("context"))
-                                val stateToSubmit = ctx.getTable(ValueString("state")).toHotObject()
+                                val stateToSubmit = ctx.getTable(ValueString("state")).toValueObject()
 
                                 connector.complete(
                                     execId,
@@ -132,7 +128,7 @@ class CodeRunnerImpl(
                             e.printStackTrace()
                             connector.fail(
                                 execId,
-                                ExecResult(HotObject.builder().set("message", e.message ?: "Unknown reason").build())
+                                ExecResult(ValueObject.builder().set("message", e.message ?: "Unknown reason").build()) // FIXME use ValueError
                             )
                             log.debug("Failed exec: $execId")
                         }
@@ -142,14 +138,14 @@ class CodeRunnerImpl(
             a.printStackTrace()
             connector.fail(
                 execId,
-                ExecResult(HotObject.builder().set("message", a.message ?: "Unknown reason").build())
+                ExecResult(ValueObject.builder().set("message", a.message ?: "Unknown reason").build())
             )
             log.debug("Assertion error: $execId - ${a.message}")
         } catch (t: Throwable) {
             t.printStackTrace()
             connector.fail(
                 execId,
-                ExecResult(HotObject.builder().set("message", t.message ?: "Unknown reason").build())
+                ExecResult(ValueObject.builder().set("message", t.message ?: "Unknown reason").build())
             )
             log.debug("Failed exec: $execId")
         }

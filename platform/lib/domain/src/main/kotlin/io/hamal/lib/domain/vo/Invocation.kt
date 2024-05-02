@@ -1,6 +1,6 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.ValueObjectHotObject
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueObject
+import io.hamal.lib.common.value.ValueVariableObject
 
-class InvocationInputs(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
+class InvocationInputs(override val value: ValueObject = ValueObject.empty) : ValueVariableObject()

@@ -1,13 +1,13 @@
 package io.hamal.lib.kua
 
 import io.hamal.lib.common.hot.HotNumber
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueObject
 
 abstract class KuaError(message: String, throwable: Throwable? = null) : Error(message, throwable)
 
 class ExitError(
     val status: HotNumber,
-    val result: HotObject
+    val result: ValueObject
 ) : KuaError(status.toString())
 
 class AssertionError(message: String) : KuaError(message)

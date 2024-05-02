@@ -5,9 +5,9 @@ import io.hamal.core.component.DelayRetryFixedTime
 import io.hamal.core.component.SetupInternalTopics
 import io.hamal.core.config.BackendBasePath
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
@@ -232,7 +232,7 @@ class TestSetupConfig {
                         id = CorrelationId("correlationId"),
                         funcId = FuncId(id)
                     ),
-                    value = State(HotObject.builder().set("value", 1337).build())
+                    value = State(ValueObject.builder().set("value", 1337).build())
                 )
             )
         )

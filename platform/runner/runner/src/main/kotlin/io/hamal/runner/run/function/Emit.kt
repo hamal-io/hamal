@@ -8,7 +8,7 @@ import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.kua.value.getString
-import io.hamal.lib.kua.value.toHotObject
+import io.hamal.lib.kua.value.toValueObject
 import io.hamal.runner.run.RunnerContext
 
 internal class EmitFunction(
@@ -19,6 +19,6 @@ internal class EmitFunction(
 
     override fun invoke(ctx: FunctionContext, arg1: KuaTable) {
         val topic = TopicName(arg1.getString("topic"))
-        executionCtx.emit(EventToSubmit(topic, EventPayload(arg1.toHotObject())))
+        executionCtx.emit(EventToSubmit(topic, EventPayload(arg1.toValueObject())))
     }
 }

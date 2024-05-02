@@ -1,8 +1,8 @@
 package io.hamal.core.request.handler.recipe
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.RecipeCreateRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
@@ -38,7 +38,7 @@ internal class RecipeCreateHandlerTest : BaseRequestHandlerTest() {
             requestStatus = RequestStatus.Submitted,
             id = RecipeId(123),
             name = RecipeName("TestRecipe"),
-            inputs = RecipeInputs(HotObject.builder().set("hamal", "rocks").build()),
+            inputs = RecipeInputs(ValueObject.builder().set("hamal", "rocks").build()),
             value = ValueCode("1 + 1"),
             creatorId = testAccount.id,
             description = RecipeDescription("TestDescription")

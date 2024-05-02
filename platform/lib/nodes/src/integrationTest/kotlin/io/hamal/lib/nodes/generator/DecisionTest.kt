@@ -1,11 +1,6 @@
 package io.hamal.lib.nodes.generator
 
-import io.hamal.lib.common.hot.HotBoolean
-import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.common.hot.HotString
-import io.hamal.lib.common.value.TypeBoolean
-import io.hamal.lib.common.value.ValueFalse
-import io.hamal.lib.common.value.ValueTrue
+import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.NodeId.Companion.NodeId
 import io.hamal.lib.nodes.PortId.Companion.PortId
@@ -21,7 +16,7 @@ internal class DecisionTest : AbstractIntegrationTest() {
     fun `Boolean - happy path`() {
         createTestRunner().run(
             unitOfWork(
-                initValue = HotBoolean(true),
+                initValue = ValueTrue,
                 graph = NodesGraph(
                     nodes = listOf(
                         node(1, "Init", listOf(PortOutput(PortId(20), TypeBoolean))),
@@ -35,25 +30,25 @@ internal class DecisionTest : AbstractIntegrationTest() {
                             3,
                             "Test_Capture",
                             listOf(portOutput(23, TypeBoolean)),
-                            HotObject.builder().set("capture_fn", HotString("captureOne")).build()
+                            ValueObject.builder().set("capture_fn", ValueString("captureOne")).build()
                         ),
                         node(
                             4,
                             "Test_Invoked",
                             listOf(),
-                            HotObject.builder().set("invoke_fn", HotString("invokeOne")).build()
+                            ValueObject.builder().set("invoke_fn", ValueString("invokeOne")).build()
                         ),
                         node(
                             5,
                             "Test_Capture",
                             listOf(portOutput(25, TypeBoolean)),
-                            HotObject.builder().set("capture_fn", HotString("captureTwo")).build()
+                            ValueObject.builder().set("capture_fn", ValueString("captureTwo")).build()
                         ),
                         node(
                             6,
                             "Test_Invoked",
                             listOf(),
-                            HotObject.builder().set("invoke_fn", HotString("invokeTwo")).build()
+                            ValueObject.builder().set("invoke_fn", ValueString("invokeTwo")).build()
                         )
                     ),
                     connections = listOf(
@@ -84,7 +79,7 @@ internal class DecisionTest : AbstractIntegrationTest() {
     fun `Boolean - sad path`() {
         createTestRunner().run(
             unitOfWork(
-                initValue = HotBoolean(false),
+                initValue = ValueFalse,
                 graph = NodesGraph(
                     nodes = listOf(
                         node(1, "Init", listOf(PortOutput(PortId(20), TypeBoolean))),
@@ -98,25 +93,25 @@ internal class DecisionTest : AbstractIntegrationTest() {
                             3,
                             "Test_Capture",
                             listOf(portOutput(23, TypeBoolean)),
-                            HotObject.builder().set("capture_fn", HotString("captureOne")).build()
+                            ValueObject.builder().set("capture_fn", ValueString("captureOne")).build()
                         ),
                         node(
                             4,
                             "Test_Invoked",
                             listOf(),
-                            HotObject.builder().set("invoke_fn", HotString("invokeOne")).build()
+                            ValueObject.builder().set("invoke_fn", ValueString("invokeOne")).build()
                         ),
                         node(
                             5,
                             "Test_Capture",
                             listOf(portOutput(25, TypeBoolean)),
-                            HotObject.builder().set("capture_fn", HotString("captureTwo")).build()
+                            ValueObject.builder().set("capture_fn", ValueString("captureTwo")).build()
                         ),
                         node(
                             6,
                             "Test_Invoked",
                             listOf(),
-                            HotObject.builder().set("invoke_fn", HotString("invokeTwo")).build()
+                            ValueObject.builder().set("invoke_fn", ValueString("invokeTwo")).build()
                         )
                     ),
                     connections = listOf(

@@ -2,8 +2,8 @@ package io.hamal.core.request.handler.func
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.core.request.handler.NextCommandId
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.FuncUpdateRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
@@ -32,7 +32,7 @@ internal class FuncUpdateHandlerTest : BaseRequestHandlerTest() {
 
         with(funcQueryRepository.get(FuncId(1))) {
             assertThat(name, equalTo(FuncName("Func-update")))
-            assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
+            assertThat(inputs, equalTo(FuncInputs(ValueObject.builder().set("hamal", "rocks").build())))
             assertThat(
                 code, equalTo(
                     FuncCode(
@@ -57,7 +57,7 @@ internal class FuncUpdateHandlerTest : BaseRequestHandlerTest() {
             workspaceId = testWorkspace.id,
             id = FuncId(1),
             name = FuncName("Func-update"),
-            inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
+            inputs = FuncInputs(ValueObject.builder().set("hamal", "rocks").build()),
             code = ValueCode("some code")
         )
     }

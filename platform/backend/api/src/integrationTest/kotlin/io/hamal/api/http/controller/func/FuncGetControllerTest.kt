@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.func
 
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.domain.vo.FuncInputs
@@ -33,7 +33,7 @@ internal class FuncGetControllerTest : FuncBaseControllerTest() {
             createFunc(
                 ApiFuncCreateRequest(
                     name = FuncName("func-one"),
-                    inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
+                    inputs = FuncInputs(ValueObject.builder().set("hamal", "rocks").build()),
                     code = ValueCode("1+1"),
                     codeType = CodeType.Lua54
                 )
@@ -47,7 +47,7 @@ internal class FuncGetControllerTest : FuncBaseControllerTest() {
         with(getFuncResponse.result(ApiFunc::class)) {
             assertThat(id, equalTo(funcId))
             assertThat(name, equalTo(FuncName("func-one")))
-            assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
+            assertThat(inputs, equalTo(FuncInputs(ValueObject.builder().set("hamal", "rocks").build())))
 
             assertThat(code.version, equalTo(CodeVersion(1)))
             assertThat(code.value, equalTo(ValueCode("1+1")))

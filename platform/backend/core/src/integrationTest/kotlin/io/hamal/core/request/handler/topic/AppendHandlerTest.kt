@@ -2,8 +2,8 @@ package io.hamal.core.request.handler.topic
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.domain.Limit.Companion.Limit
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.TopicAppendEventRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
@@ -32,7 +32,7 @@ internal class TopicAppendHandlerTest : BaseRequestHandlerTest() {
                 requestedBy = AuthId(2),
                 requestStatus = Submitted,
                 id = TopicId(4444),
-                payload = TopicEventPayload(HotObject.builder().set("hamal", "rocks").build())
+                payload = TopicEventPayload(ValueObject.builder().set("hamal", "rocks").build())
             )
         )
 
@@ -43,7 +43,7 @@ internal class TopicAppendHandlerTest : BaseRequestHandlerTest() {
                 assertThat(id, equalTo(LogEventId(1)))
 
                 val payload = json.decompressAndDeserialize(TopicEventPayload::class, bytes)
-                assertThat(payload.value, equalTo(HotObject.builder().set("hamal", "rocks").build()))
+                assertThat(payload.value, equalTo(ValueObject.builder().set("hamal", "rocks").build()))
             }
         }
     }
@@ -57,7 +57,7 @@ internal class TopicAppendHandlerTest : BaseRequestHandlerTest() {
                     requestedBy = AuthId(2),
                     requestStatus = Submitted,
                     id = TopicId(123),
-                    payload = TopicEventPayload(HotObject.builder().set("hamal", "rocks").build())
+                    payload = TopicEventPayload(ValueObject.builder().set("hamal", "rocks").build())
                 )
             )
         }

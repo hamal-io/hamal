@@ -53,7 +53,7 @@ fun main() {
 //    val PupilList = TypeList("pupil_list", Pupil)
 
     fun ValueObject.fullname(): ValueString = forType(Pupil) {
-        ValueString("${get<ValueString>("last_name")}, ${get<ValueString>("first_name")}")
+        ValueString("${get("last_name")}, ${get("first_name")}")
     }
 
     val list = PupilArray(bob, suzy)

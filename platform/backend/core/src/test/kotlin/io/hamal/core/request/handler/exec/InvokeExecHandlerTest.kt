@@ -1,6 +1,6 @@
 package io.hamal.core.request.handler.exec
 
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.InvocationInputs
@@ -19,7 +19,7 @@ class ToExecInputsTest {
     @Test
     fun ok() {
         val invocationInputs = InvocationInputs(
-            HotObject.builder()
+            ValueObject.builder()
                 .set("key", 2810)
                 .set("invoke", "invoke")
                 .build()
@@ -28,7 +28,7 @@ class ToExecInputsTest {
         assertThat(
             result, equalTo(
                 ExecInputs(
-                    HotObject.builder()
+                    ValueObject.builder()
                         .set("key", 2810)
                         .set("invoke", "invoke")
                         .build()
@@ -50,13 +50,13 @@ class MergeTest {
     @Test
     fun `invocation inputs overrides func inputs`() {
         val funcInputs = FuncInputs(
-            HotObject.builder()
+            ValueObject.builder()
                 .set("key", 1)
                 .set("func", "func")
                 .build()
         )
         val invocationInputs = InvocationInputs(
-            HotObject.builder()
+            ValueObject.builder()
                 .set("key", 2810)
                 .set("invoke", "invoke")
                 .build()
@@ -65,7 +65,7 @@ class MergeTest {
         assertThat(
             result, equalTo(
                 ExecInputs(
-                    HotObject.builder()
+                    ValueObject.builder()
                         .set("key", 2810)
                         .set("invoke", "invoke")
                         .set("func", "func")

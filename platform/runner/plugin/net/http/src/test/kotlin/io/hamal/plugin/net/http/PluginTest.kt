@@ -1,7 +1,7 @@
 package io.hamal.plugin.net.http
 
 import io.hamal.extension.std.decimal.ExtensionDecimalFactory
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.plugin.net.http.endpoint.TestHeaderController
 import io.hamal.plugin.net.http.endpoint.TestJsonController
@@ -38,7 +38,7 @@ class PluginHttpTest(@LocalServerPort var localServerPort: Int) : AbstractRunner
                     pluginFactories = listOf(PluginHttpFactory()),
                     extensionFactories = listOf(ExtensionDecimalFactory),
                     env = RunnerEnv(
-                        HotObject.builder()
+                        ValueObject.builder()
                             .set("test_url", "http://localhost:$localServerPort")
                             .build()
                     )

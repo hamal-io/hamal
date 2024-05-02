@@ -1,8 +1,8 @@
 package io.hamal.api.http.controller.func
 
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.domain.vo.FuncInputs
@@ -29,7 +29,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
         val result = createFunc(
             ApiFuncCreateRequest(
                 name = FuncName("test-func"),
-                inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
+                inputs = FuncInputs(ValueObject.builder().set("hamal", "rocks").build()),
                 code = ValueCode("13 + 37"),
                 codeType = CodeType.Lua54
             )
@@ -39,7 +39,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
         val func = funcQueryRepository.get(result.id)
         with(func) {
             assertThat(name, equalTo(FuncName("test-func")))
-            assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
+            assertThat(inputs, equalTo(FuncInputs(ValueObject.builder().set("hamal", "rocks").build())))
 
             val namespace = namespaceQueryRepository.get(namespaceId)
             assertThat(namespace.name, equalTo(NamespaceName("hamal")))
@@ -69,7 +69,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
             namespaceId = namespace.id,
             req = ApiFuncCreateRequest(
                 name = FuncName("test-func"),
-                inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
+                inputs = FuncInputs(ValueObject.builder().set("hamal", "rocks").build()),
                 code = ValueCode("13 + 37"),
                 codeType = CodeType.Lua54
             )
@@ -80,7 +80,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
 
         with(func) {
             assertThat(name, equalTo(FuncName("test-func")))
-            assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
+            assertThat(inputs, equalTo(FuncInputs(ValueObject.builder().set("hamal", "rocks").build())))
 
             namespaceQueryRepository.get(namespaceId).let {
                 assertThat(it.id, equalTo(namespace.id))
@@ -102,7 +102,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
             .body(
                 ApiFuncCreateRequest(
                     name = FuncName("test-func"),
-                    inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
+                    inputs = FuncInputs(ValueObject.builder().set("hamal", "rocks").build()),
                     code = ValueCode("13 + 37"),
                     codeType = CodeType.Lua54
                 )

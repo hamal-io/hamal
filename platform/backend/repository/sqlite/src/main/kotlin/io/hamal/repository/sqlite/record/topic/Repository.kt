@@ -1,8 +1,8 @@
 package io.hamal.repository.sqlite.record.topic
 
 import io.hamal.lib.common.domain.Count
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Topic
 import io.hamal.repository.api.TopicCmdRepository.TopicCreateCmd
@@ -73,7 +73,7 @@ class TopicSqliteRepository(
         ).map { evt ->
             TopicEvent(
                 id = TopicEventId(evt.id.value),
-                payload = TopicEventPayload(json.decompressAndDeserialize(HotObject::class, evt.bytes))
+                payload = TopicEventPayload(json.decompressAndDeserialize(ValueObject::class, evt.bytes))
             )
         }
     }

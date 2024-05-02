@@ -1,7 +1,7 @@
 package io.hamal.core.request.handler.exec
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.ExecFailRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
@@ -66,7 +66,7 @@ internal class ExecFailHandlerTest : BaseRequestHandlerTest() {
             requestedBy = AuthId(20),
             requestStatus = Submitted,
             id = ExecId(1234),
-            result = ExecResult(HotObject.builder().set("message", "You have not tried hard enough").build())
+            result = ExecResult(ValueObject.builder().set("message", "You have not tried hard enough").build())
         )
     }
 
@@ -79,7 +79,7 @@ internal class ExecFailHandlerTest : BaseRequestHandlerTest() {
                 assertThat(status, equalTo(Failed))
                 assertThat(
                     result,
-                    equalTo(ExecResult(HotObject.builder().set("message", "You have not tried hard enough").build()))
+                    equalTo(ExecResult(ValueObject.builder().set("message", "You have not tried hard enough").build()))
                 )
             }
         }

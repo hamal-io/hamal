@@ -5,7 +5,6 @@ import io.hamal.lib.common.serialization.JsonFactoryBuilder
 import io.hamal.lib.domain.Json
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.ExecToken
-import io.hamal.lib.domain.vo.ValueObjectJsonModule
 import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.HttpTemplateImpl
@@ -40,7 +39,6 @@ class ApiSdkImpl : ApiSdk {
             JsonFactoryBuilder()
                 .register(ApiJsonModule)
                 .register(HotObjectModule)
-                .register(ValueObjectJsonModule)
                 .register(ValueVariableJsonModule)
         )
 
@@ -61,7 +59,6 @@ class ApiSdkImpl : ApiSdk {
             JsonFactoryBuilder()
                 .register(ApiJsonModule)
                 .register(HotObjectModule)
-                .register(ValueObjectJsonModule)
                 .register(ValueVariableJsonModule)
         )
 

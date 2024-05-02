@@ -1,7 +1,7 @@
 package io.hamal.core.request.handler.exec
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.ExecCompleteRequested
@@ -65,12 +65,12 @@ internal class ExecCompleteHandlerTest : BaseRequestHandlerTest() {
             requestedBy = AuthId(20),
             requestStatus = RequestStatus.Submitted,
             id = ExecId(1234),
-            result = ExecResult(HotObject.builder().set("hamal", "rocks").build()),
-            state = ExecState(HotObject.builder().set("counter", 1).build()),
+            result = ExecResult(ValueObject.builder().set("hamal", "rocks").build()),
+            state = ExecState(ValueObject.builder().set("counter", 1).build()),
             events = listOf(
                 EventToSubmit(
                     topicName = TopicName("test-completion"),
-                    payload = EventPayload(HotObject.builder().set("ich", "habFertsch").build())
+                    payload = EventPayload(ValueObject.builder().set("ich", "habFertsch").build())
                 )
             ),
         )
@@ -83,7 +83,7 @@ internal class ExecCompleteHandlerTest : BaseRequestHandlerTest() {
                 require(this is Exec.Completed)
                 assertThat(id, equalTo(ExecId(1234)))
                 assertThat(status, equalTo(Completed))
-                assertThat(result, equalTo(ExecResult(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(result, equalTo(ExecResult(ValueObject.builder().set("hamal", "rocks").build())))
             }
         }
     }

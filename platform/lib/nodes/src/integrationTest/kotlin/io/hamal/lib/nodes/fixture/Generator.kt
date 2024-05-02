@@ -1,6 +1,5 @@
 package io.hamal.lib.nodes.fixture
 
-import io.hamal.lib.common.hot.HotString
 import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.NodeId.Companion.NodeId
@@ -43,12 +42,13 @@ interface GeneratorCapture : Generator {
     }
 
     fun captureCode(node: Node, controls: List<Control>): kotlin.String {
-        val captureFunction = node.properties.value.find("capture_fn")?.stringValue ?: "captureOne"
-        return """
-            test = require_plugin('test')
-            test.$captureFunction(arg_1)
-            return arg_1
-        """.trimIndent()
+//        val captureFunction = node.properties.value.find("capture_fn")?.stringValue ?: "captureOne"
+//        return """
+//            test = require_plugin('test')
+//            test.$captureFunction(arg_1)
+//            return arg_1
+//        """.trimIndent()
+        TODO()
     }
 }
 
@@ -61,12 +61,13 @@ sealed interface GeneratorInvoked : Generator {
         override val outputTypes: List<Type> get() = listOf()
 
         override fun toCode(node: Node, controls: List<Control>): kotlin.String {
-            val invokeFunction = node.properties.value.find("invoke_fn")?.stringValue ?: "invokeOne"
-            return """
-            test = require_plugin('test')
-            test.$invokeFunction()
-            return 
-        """.trimIndent()
+//            val invokeFunction = node.properties.value.find("invoke_fn")?.stringValue ?: "invokeOne"
+//            return """
+//            test = require_plugin('test')
+//            test.$invokeFunction()
+//            return
+//        """.trimIndent()
+            TODO()
         }
     }
 
@@ -75,12 +76,13 @@ sealed interface GeneratorInvoked : Generator {
         override val outputTypes: List<Type> get() = listOf()
 
         override fun toCode(node: Node, controls: List<Control>): kotlin.String {
-            val invokeFunction = node.properties.value.find("invoke_fn")?.stringValue ?: "invokeOne"
-            return """
-            test = require_plugin('test')
-            test.$invokeFunction()
-            return 
-        """.trimIndent()
+//            val invokeFunction = node.properties.value.find("invoke_fn")?.stringValue ?: "invokeOne"
+//            return """
+//            test = require_plugin('test')
+//            test.$invokeFunction()
+//            return
+//        """.trimIndent()
+            TODO()
         }
     }
 
@@ -89,13 +91,14 @@ sealed interface GeneratorInvoked : Generator {
         override val outputTypes: List<Type> get() = listOf()
 
         override fun toCode(node: Node, controls: List<Control>): kotlin.String {
-            val invokeFunction = node.properties.value.find("invoke_fn")?.stringValue ?: "invokeOne"
-
-            return """
-            test = require_plugin('test')
-            test.$invokeFunction()
-            return 
-        """.trimIndent()
+//            val invokeFunction = node.properties.value.find("invoke_fn")?.stringValue ?: "invokeOne"
+//
+//            return """
+//            test = require_plugin('test')
+//            test.$invokeFunction()
+//            return
+//        """.trimIndent()
+            TODO()
         }
     }
 }
@@ -107,7 +110,7 @@ internal class TestInvokedTest : AbstractIntegrationTest() {
 
         createTestRunner().run(
             unitOfWork(
-                initValue = HotString("Hamal Rocks"),
+                initValue = ValueString("Hamal Rocks"),
                 graph = NodesGraph(
                     nodes = listOf(
                         node(1, "Init", listOf(portOutput(20, TypeString))),
@@ -135,7 +138,7 @@ internal class TestInvokedTest : AbstractIntegrationTest() {
     fun `Nodes invokes multiple nodes`() {
         createTestRunner().run(
             unitOfWork(
-                initValue = HotString("Hamal Rocks"),
+                initValue = ValueString("Hamal Rocks"),
                 graph = NodesGraph(
                     nodes = listOf(
                         node(1, "Init", listOf(portOutput(20, TypeString))),

@@ -5,7 +5,7 @@ import io.hamal.extension.net.http.endpoint.TestJsonController
 import io.hamal.extension.net.http.endpoint.TestStatusController
 import io.hamal.extension.net.http.fixture.TestWebConfig
 import io.hamal.extension.std.decimal.ExtensionDecimalFactory
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.plugin.net.http.PluginHttpFactory
 import io.hamal.runner.test.AbstractRunnerTest
@@ -42,7 +42,7 @@ class ExtensionHttpTest(@LocalServerPort var localServerPort: Int) : AbstractRun
                         ExtensionHttpFactory
                     ),
                     env = RunnerEnv(
-                        HotObject.builder()
+                        ValueObject.builder()
                             .set("test_url", "http://localhost:$localServerPort")
                             .build()
                     )

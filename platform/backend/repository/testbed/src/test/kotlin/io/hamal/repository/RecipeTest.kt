@@ -4,8 +4,8 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.common.domain.Limit.Companion.Limit
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.AccountId.Companion.AccountId
 import io.hamal.lib.domain.vo.RecipeDescription
 import io.hamal.lib.domain.vo.RecipeDescription.Companion.RecipeDescription
@@ -40,7 +40,7 @@ class RecipeRepositoryTest : AbstractUnitTest() {
                     recipeId = RecipeId(123),
                     creatorId = AccountId("123"),
                     name = RecipeName("TestRecipe"),
-                    inputs = RecipeInputs(HotObject.builder().set("hamal", "rocks").build()),
+                    inputs = RecipeInputs(ValueObject.builder().set("hamal", "rocks").build()),
                     value = ValueCode("1 + 1"),
                     description = RecipeDescription("Nice Recipe")
                 )
@@ -50,7 +50,7 @@ class RecipeRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(RecipeId(123)))
                 assertThat(creatorId, equalTo(AccountId("123")))
                 assertThat(name, equalTo(RecipeName("TestRecipe")))
-                assertThat(inputs, equalTo(RecipeInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(RecipeInputs(ValueObject.builder().set("hamal", "rocks").build())))
                 assertThat(value, equalTo(ValueCode("1 + 1")))
                 assertThat(description, equalTo(RecipeDescription("Nice Recipe")))
             }
@@ -104,7 +104,7 @@ class RecipeRepositoryTest : AbstractUnitTest() {
                     id = CmdId(2),
                     name = RecipeName("TestRecipe2"),
                     value = ValueCode("1 + 1"),
-                    inputs = RecipeInputs(HotObject.builder().set("answer", 42).build()),
+                    inputs = RecipeInputs(ValueObject.builder().set("answer", 42).build()),
                     description = RecipeDescription("Updated description")
                 )
             )
@@ -113,7 +113,7 @@ class RecipeRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(RecipeId(1)))
                 assertThat(name, equalTo(RecipeName("TestRecipe2")))
                 assertThat(value, equalTo(ValueCode("1 + 1")))
-                assertThat(inputs, equalTo(RecipeInputs(HotObject.builder().set("answer", 42).build())))
+                assertThat(inputs, equalTo(RecipeInputs(ValueObject.builder().set("answer", 42).build())))
                 assertThat(creatorId, equalTo(AccountId("123")))
                 assertThat(description, equalTo(RecipeDescription("Updated description")))
 
@@ -302,7 +302,7 @@ class RecipeRepositoryTest : AbstractUnitTest() {
                 recipeId = recipeId,
                 creatorId = AccountId("123"),
                 name = name,
-                inputs = RecipeInputs(HotObject.builder().set("hamal", "rocks").build()),
+                inputs = RecipeInputs(ValueObject.builder().set("hamal", "rocks").build()),
                 value = value,
                 description = RecipeDescription.empty
             )

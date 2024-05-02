@@ -2,11 +2,10 @@ package io.hamal.extension.web3.arbitrum
 
 import com.google.gson.Gson
 import io.hamal.lib.common.hot.HotArray
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.hot.HotObjectModule
 import io.hamal.lib.common.serialization.JsonFactoryBuilder
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.RunnerEnv
-import io.hamal.lib.domain.vo.ValueObjectJsonModule
 import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.plugin.web3.evm.evm.PluginWeb3EvmFactory
@@ -48,7 +47,6 @@ internal open class TestWebConfig : WebMvcConfigurer {
     @Bean
     open fun gson(): Gson = JsonFactoryBuilder()
         .register(HotObjectModule)
-        .register(ValueObjectJsonModule)
         .register(ValueVariableJsonModule)
         .build()
 
@@ -111,7 +109,7 @@ internal class ExtensionWeb3ArbitrumTest : AbstractRunnerTest() {
                 pluginFactories = listOf(PluginWeb3EvmFactory()),
                 extensionFactories = listOf(ExtensionWeb3ArbitrumFactory),
                 env = RunnerEnv(
-                    HotObject.builder()
+                    ValueObject.builder()
                         .set("test_url", "http://localhost:$localPort/arbitrum")
                         .build()
                 )
