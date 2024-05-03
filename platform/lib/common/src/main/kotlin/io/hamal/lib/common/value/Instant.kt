@@ -4,7 +4,7 @@ import io.hamal.lib.common.util.InstantUtils
 import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 import java.time.Instant
 
-data object TypeInstant : TypePrimitive() {
+data object TypeInstant : Type() {
     override val identifier = TypeIdentifier("Instant")
 }
 

@@ -1,26 +1,18 @@
 package io.hamal.lib.common.value
 
+import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.*
 
-data class TypeArray(
-    val valueType: Type,
-    override val identifier: TypeIdentifier
-) : Type() {
-    companion object {
-        fun TypeArray(valueType: Type, identifier: String) = TypeArray(valueType, TypeIdentifier(ValueString(identifier)))
-    }
-
-    operator fun invoke(vararg any: Any): ValueArray {
-        return ValueArray(this, any.map { v -> Property.mapTypeToValue(valueType, v) })
-    }
+data object TypeArray : Type() {
+    override val identifier = TypeIdentifier("Array")
 }
 
 data class ValueArray(
-    override val type: Type,
     val value: List<Value>
 ) : Value {
+    override val type get() = TypeArray
 
     operator fun get(idx: Int): Value = value[idx]
 
@@ -92,10 +84,7 @@ class ValueArrayBuilder {
         return this
     }
 
-    fun build(type: Type = TypeObjectUnknown): ValueArray {
-        // FIXME if type != Unknown validate fields
-        return ValueArray(type, values)
-    }
+    fun build() = ValueArray(values)
 
     private val values = LinkedList<Value>()
 }

@@ -2,7 +2,7 @@ package io.hamal.lib.common.value
 
 import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 
-data object TypeString : TypePrimitive() {
+data object TypeString : Type() {
     override val identifier = TypeIdentifier("String")
 }
 

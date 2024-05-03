@@ -7,7 +7,7 @@ import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
 
-data object TypeDecimal : TypePrimitive() {
+data object TypeDecimal : Type() {
     override val identifier = TypeIdentifier("Decimal")
 }
 

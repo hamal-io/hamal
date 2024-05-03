@@ -17,38 +17,44 @@ import java.time.Instant
 
 internal class ValueAdapterHonTest {
 
-//@Nested inner class ArrayTest {
-//
-//    @Test
-//    fun write() {
-//        val result = serde.write(
-//            ValueArray.builder()
-//                .append("some-string-value")
-//                .append(true)
-//                .append(42)
-//                .append(ValueDecimal(123))
-//                .build()
-//        )
-//        assertThat(result, equalTo("""["some-string-value",true,42.0,"123"]"""))
-//    }
-//
-//    @Test
-//    fun read() {
-//        val expected = ValueArray.builder()
-//            .append("some-string-value")
-//            .append(true)
-//            .append(42)
-//            .build()
-//
-//        val result = serde.read<ValueArray>("""["some-string-value",true,42.0]""")
-//        assertThat(result, equalTo(expected))
-//    }
-//
-//    private val serde = Serde.hon()
-//        .register(SerdeModuleValueHon)
-//
-//
-//}
+    @Nested
+    inner class ArrayTest {
+
+        @Test
+        fun write() {
+            val result = serde.write(
+                ValueArray.builder()
+                    .append("some-string-value")
+                    .append(true)
+                    .append(42)
+                    .append(ValueDecimal(123))
+                    .build()
+            )
+            assertThat(
+                result,
+                equalTo("""{"type":"Array","value":[{"type":"String","value":"some-string-value"},{"type":"Boolean","value":"true"},{"type":"Number","value":"42.0"},{"type":"Decimal","value":"123"}]}""")
+            )
+        }
+
+        @Test
+        fun read() {
+            val expected = ValueArray.builder()
+                .append("some-string-value")
+                .append(true)
+                .append(42)
+                .append(ValueDecimal(123))
+                .build()
+
+            val result =
+                serde.read<ValueArray>("""{"type":"Array","value":[{"type":"String","value":"some-string-value"},{"type":"Boolean","value":"true"},{"type":"Number","value":"42.0"},{"type":"Decimal","value":"123"}]}""")
+            assertThat(result, equalTo(expected))
+        }
+
+        private val serde = Serde.hon()
+            .register(SerdeModuleValueHon)
+
+
+    }
 
     @Nested
     inner class BooleanTest {
@@ -235,7 +241,7 @@ internal class ValueAdapterHonTest {
             )
             assertThat(
                 result,
-                equalTo("""{"type":"Unknown","value":{"some-string":{"type":"String","value":"some-string-value"},"some-boolean":{"type":"Boolean","value":"true"},"some-number":{"type":"Number","value":"42.0"},"some-decimal":{"type":"Decimal","value":"123"}}}""")
+                equalTo("""{"type":"Object","value":{"some-string":{"type":"String","value":"some-string-value"},"some-boolean":{"type":"Boolean","value":"true"},"some-number":{"type":"Number","value":"42.0"},"some-decimal":{"type":"Decimal","value":"123"}}}""")
             )
         }
 
@@ -249,7 +255,7 @@ internal class ValueAdapterHonTest {
                 .build()
 
             val result = serde.read<ValueObject>(
-                """{"type":"Unknown","value":{"some-string":{"type":"String","value":"some-string-value"},"some-boolean":{"type":"Boolean","value":"true"},"some-number":{"type":"Number","value":"42.0"},"some-decimal":{"type":"Decimal","value":"123"}}}"""
+                """{"type":"Object","value":{"some-string":{"type":"String","value":"some-string-value"},"some-boolean":{"type":"Boolean","value":"true"},"some-number":{"type":"Number","value":"42.0"},"some-decimal":{"type":"Decimal","value":"123"}}}"""
             )
             assertThat(result, equalTo(expected))
         }
@@ -273,7 +279,7 @@ internal class ValueAdapterHonTest {
 
             assertThat(
                 result,
-                equalTo("""{"type":"Unknown","value":{"some-string":{"type":"String","value":"some-string-value"},"some-boolean":{"type":"Boolean","value":"true"},"some-number":{"type":"Number","value":"42.0"},"some-decimal":{"type":"Decimal","value":"123"}}}""")
+                equalTo("""{"type":"Object","value":{"some-string":{"type":"String","value":"some-string-value"},"some-boolean":{"type":"Boolean","value":"true"},"some-number":{"type":"Number","value":"42.0"},"some-decimal":{"type":"Decimal","value":"123"}}}""")
             )
         }
 
@@ -288,7 +294,7 @@ internal class ValueAdapterHonTest {
                     .build()
             )
             val result = serde.read<TestObject>(
-                """{"type":"Unknown","value":{"some-string":{"type":"String","value":"some-string-value"},"some-boolean":{"type":"Boolean","value":"true"},"some-number":{"type":"Number","value":"42.0"},"some-decimal":{"type":"Decimal","value":"123"}}}"""
+                """{"type":"Object","value":{"some-string":{"type":"String","value":"some-string-value"},"some-boolean":{"type":"Boolean","value":"true"},"some-number":{"type":"Number","value":"42.0"},"some-decimal":{"type":"Decimal","value":"123"}}}"""
             )
             assertThat(result, equalTo(expected))
         }

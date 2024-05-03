@@ -28,7 +28,7 @@ abstract class BaseTest(private val apiUrl: String) : AbstractRunnerTest() {
                 extensionFactories = listOf(ExtensionHttpFactory),
                 env = RunnerEnv(
                     ValueObject.builder().also { builder ->
-                        testEnv.properties.forEach { (key, value) ->
+                        testEnv.values.forEach { (key, value) ->
                             builder[key.stringValue] = value
                         }
                     }

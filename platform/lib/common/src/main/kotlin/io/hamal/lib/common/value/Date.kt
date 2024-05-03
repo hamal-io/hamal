@@ -3,7 +3,7 @@ package io.hamal.lib.common.value
 import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 import java.time.LocalDate
 
-data object TypeDate : TypePrimitive() {
+data object TypeDate : Type() {
     override val identifier = TypeIdentifier("Date")
 }
 

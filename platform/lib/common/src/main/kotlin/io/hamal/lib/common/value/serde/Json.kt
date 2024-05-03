@@ -273,8 +273,8 @@ internal object ValueJsonTransform {
 
     private fun toObject(obj: ValueObject): JsonObject {
         val builder = JsonObject.builder()
-        obj.properties.forEach { property ->
-            builder[property.identifier.stringValue] = toJson(property.value)
+        obj.values.forEach { (key, value) ->
+            builder[key.stringValue] = toJson(value)
         }
         return builder.build()
     }

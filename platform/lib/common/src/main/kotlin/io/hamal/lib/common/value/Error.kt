@@ -2,7 +2,7 @@ package io.hamal.lib.common.value
 
 import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 
-data object TypeError : TypePrimitive() {
+data object TypeError : Type() {
     override val identifier = TypeIdentifier("Error")
 }
 

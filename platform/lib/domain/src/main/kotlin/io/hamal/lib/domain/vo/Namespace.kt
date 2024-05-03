@@ -26,17 +26,17 @@ class NamespaceName(override val value: ValueString) : ValueVariableString() {
 class NamespaceFeatures(override var value: ValueObject = ValueObject.empty) : ValueVariableObject() {
 
     init {
-        value.properties.forEach { prop ->
+        value.values.forEach { (key, value) ->
             require(
                 NamespaceFeature.entries.any { validFeatures ->
-                    validFeatures.name == prop.identifier.stringValue
+                    validFeatures.name == key.stringValue
                 }
-            ) { IllegalArgumentException("${prop.identifier} is not a valid feature.") }
+            ) { IllegalArgumentException("${key.stringValue} is not a valid feature.") }
         }
     }
 
     fun hasFeature(feature: NamespaceFeature): Boolean {
-        return value.properties.map { it.identifier.stringValue }.contains(feature.name)
+        return value.values.map { it.key.stringValue }.contains(feature.name)
     }
 
     companion object {

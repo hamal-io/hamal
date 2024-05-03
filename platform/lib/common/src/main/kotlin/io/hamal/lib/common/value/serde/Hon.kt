@@ -16,6 +16,7 @@ import java.lang.reflect.Type
 object SerdeModuleValueHon : SerdeModuleHon() {
 
     init {
+        this[ValueArray::class] = ValueHonAdapters.Array
         this[ValueBoolean::class] = ValueHonAdapters.Boolean
         this[ValueDecimal::class] = ValueHonAdapters.Decimal
         this[ValueInstant::class] = ValueHonAdapters.Instant
@@ -198,14 +199,16 @@ internal object ValueHonTransform {
         require(node is JsonObject)
         val type = TypeIdentifier(ValueString(node.stringValue("type")))
         return when (type) {
+            TypeArray.identifier -> fromArray(node.asArray("value"))
             TypeBoolean.identifier -> ValueBoolean(node.stringValue("value"))
             TypeDecimal.identifier -> ValueDecimal(node.stringValue("value"))
             TypeInstant.identifier -> ValueInstant(InstantUtils.parse(node.stringValue("value")))
             TypeNil.identifier -> ValueNil
             TypeNumber.identifier -> ValueNumber(node.stringValue("value"))
+            TypeObject.identifier -> fromObject(node.asObject("value"))
             TypeSnowflakeId.identifier -> ValueSnowflakeId(node.stringValue("value"))
             TypeString.identifier -> ValueString(node.stringValue("value"))
-            else -> fromObject(node.asObject("value"))
+            else -> TODO()
         }
     }
 
@@ -244,8 +247,8 @@ internal object ValueHonTransform {
 
     private fun toObject(obj: ValueObject): JsonObject {
         val builder = JsonObject.builder()
-        obj.properties.forEach { property ->
-            builder[property.identifier.stringValue] = toHon(property.value)
+        obj.values.forEach { (key, value) ->
+            builder[key.stringValue] = toHon(value)
         }
         return builder.build()
     }
