@@ -7,7 +7,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
 
-internal class JsonStringPushTest : StateBaseTest() {
+internal class SerdeStringPushTest : StateBaseTest() {
 
     @TestFactory
     fun `Pushes value on stack`() = runTest { testInstance ->

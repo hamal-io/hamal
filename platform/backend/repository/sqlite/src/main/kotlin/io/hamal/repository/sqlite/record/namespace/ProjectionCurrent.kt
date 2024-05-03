@@ -7,7 +7,7 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
-import io.hamal.repository.record.json
+import io.hamal.repository.record.serde
 import io.hamal.repository.record.namespace.NamespaceRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
@@ -29,7 +29,7 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceId, NamespaceRecor
                 set("id", namespaceId)
             }
             map { rs ->
-                json.decompressAndDeserialize(Namespace::class, rs.getBytes("data"))
+                serde.decompressAndRead(Namespace::class, rs.getBytes("data"))
             }
         }
     }
@@ -54,7 +54,7 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceId, NamespaceRecor
                 set("limit", query.limit)
             }
             map { rs ->
-                json.decompressAndDeserialize(Namespace::class, rs.getBytes("data"))
+                serde.decompressAndRead(Namespace::class, rs.getBytes("data"))
             }
         }
     }
@@ -94,7 +94,7 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceId, NamespaceRecor
         ) {
             set("id", obj.id)
             set("workspaceId", obj.workspaceId)
-            set("data", json.serializeAndCompress(obj))
+            set("data", serde.writeAndCompress(obj))
         }
     }
 

@@ -5,7 +5,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class JsonStringPushTest : NativeBaseTest() {
+internal class SerdeStringPushTest : NativeBaseTest() {
     @Test
     fun `Pushes value on stack`() {
         val result = testInstance.stringPush("hamal")

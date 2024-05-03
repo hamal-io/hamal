@@ -4,7 +4,7 @@ import io.hamal.lib.common.serialization.json.JsonArray
 import io.hamal.lib.common.serialization.json.JsonNode
 import io.hamal.lib.common.serialization.json.JsonObject
 import io.hamal.lib.common.serialization.json.JsonObjectBuilder
-import io.hamal.lib.domain.Json
+import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.web3.evm.domain.EvmResponse
@@ -12,7 +12,7 @@ import kotlin.reflect.KClass
 
 abstract class HttpBaseBatchService<out RESPONSE : EvmResponse>(
     private val httpTemplate: HttpTemplate,
-    private val json: Json
+    private val serde: Serde
 ) {
 
     fun execute(): List<RESPONSE> {
@@ -29,7 +29,7 @@ abstract class HttpBaseBatchService<out RESPONSE : EvmResponse>(
             return response.nodes.mapIndexed { index, hotNode ->
                 val result = hotNode.asObject()
                 // FIXME handle [{"id":"1","error":{"code":-32603,"message":"Unexpected error"},"jsonrpc":"2.0"}]
-                json.deserialize(resultClasses[index], json.serialize(result))
+                serde.read(resultClasses[index], serde.write(result))
             }
                 .also {
                     requests.clear()

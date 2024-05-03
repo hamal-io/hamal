@@ -1,7 +1,7 @@
 package io.hamal.core.http
 
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.repository.record.json
+import io.hamal.repository.record.serde
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.servlet.http.HttpServletResponse.*
@@ -33,7 +33,7 @@ internal class ErrorController {
             res.status = 400
             res.addHeader("Content-Type", "application/json;charset=UTF-8")
             res.writer.write(
-                json.serialize(
+                serde.write(
                     InvalidArgumentType(
                         message = "ArgumentTypeMismatch",
                         source = cause.sourceType?.toString() ?: "Unknown source type",
@@ -43,7 +43,7 @@ internal class ErrorController {
             )
         } else {
             res.addHeader("Content-Type", "application/json;charset=UTF-8")
-            res.writer.write(json.serialize(ApiError("Bad request")))
+            res.writer.write(serde.write(ApiError("Bad request")))
         }
     }
 
@@ -53,7 +53,7 @@ internal class ErrorController {
 
         res.status = 400
         res.addHeader("Content-Type", "application/json;charset=UTF-8")
-        res.writer.write(json.serialize(ApiError(t.cause?.message ?: "Bad request")))
+        res.writer.write(serde.write(ApiError(t.cause?.message ?: "Bad request")))
     }
 
     @ExceptionHandler(value = [NoHandlerFoundException::class])
@@ -62,7 +62,7 @@ internal class ErrorController {
 
         res.status = SC_NOT_FOUND
         res.addHeader("Content-Type", "application/json;charset=UTF-8")
-        res.writer.write(json.serialize(ApiError("Request handler not found")))
+        res.writer.write(serde.write(ApiError("Request handler not found")))
     }
 
 
@@ -72,7 +72,7 @@ internal class ErrorController {
 
         res.status = SC_FORBIDDEN
         res.addHeader("Content-Type", "application/json;charset=UTF-8")
-        res.writer.write(json.serialize(ApiError("FORBIDDEN")))
+        res.writer.write(serde.write(ApiError("FORBIDDEN")))
     }
 
     @ExceptionHandler(value = [Throwable::class])
@@ -94,7 +94,7 @@ internal class ErrorController {
 
         res.status = statusCode
         res.addHeader("Content-Type", "application/json;charset=UTF-8")
-        res.writer.write(json.serialize(ApiError(toHandle?.message ?: "Unknown error")))
+        res.writer.write(serde.write(ApiError(toHandle?.message ?: "Unknown error")))
     }
 
 }

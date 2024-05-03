@@ -14,10 +14,10 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 import java.time.Instant
 
-internal object ValueArrayJsonAdapterTest {
+internal object ValueArraySerdeAdapterTest {
 
     @Test
-    fun serialize() {
+    fun write() {
         val result = testDelegate.toJson(
             ValueArray.builder()
                 .append("some-string-value")
@@ -30,7 +30,7 @@ internal object ValueArrayJsonAdapterTest {
     }
 
     @Test
-    fun deserialize() {
+    fun read() {
         val expected = ValueArray.builder()
             .append("some-string-value")
             .append(true)
@@ -50,16 +50,16 @@ internal object ValueArrayJsonAdapterTest {
 
 }
 
-internal object ValueBooleanJsonAdapterTest {
+internal object ValueBooleanSerdeAdapterTest {
     @Test
-    fun serialize() {
+    fun write() {
         val someBoolean = ValueTrue
         val result = testDelegate.toJson(someBoolean)
         assertThat(result, equalTo("true"))
     }
 
     @Test
-    fun deserialize() {
+    fun read() {
         val expectedBoolean = ValueFalse
         val result = testDelegate.fromJson("false", ValueBoolean::class.java)
         assertThat(result, equalTo(expectedBoolean))
@@ -70,17 +70,17 @@ internal object ValueBooleanJsonAdapterTest {
         .build()
 }
 
-internal object ValueBooleanVariableJsonAdapterTest {
+internal object ValueBooleanVariableSerdeAdapterTest {
 
     @Test
-    fun serialize() {
+    fun write() {
         val someBoolean = TestObject(ValueBoolean(true))
         val result = testDelegate.toJson(someBoolean)
         assertThat(result, equalTo("true"))
     }
 
     @Test
-    fun deserialize() {
+    fun read() {
         val expectedBoolean = TestObject(ValueBoolean(false))
         val result = testDelegate.fromJson("false", TestObject::class.java)
         assertThat(result, equalTo(expectedBoolean))
@@ -94,16 +94,16 @@ internal object ValueBooleanVariableJsonAdapterTest {
     private class TestObject(override val value: ValueBoolean) : ValueVariableBoolean()
 }
 
-internal object ValueDecimalJsonAdapterTest {
+internal object ValueDecimalSerdeAdapterTest {
     @Test
-    fun serialize() {
+    fun write() {
         val someDecimal = ValueDecimal(42)
         val result = testDelegate.toJson(someDecimal)
         assertThat(result, equalTo("\"42\""))
     }
 
     @Test
-    fun deserialize() {
+    fun read() {
         val expectedDecimal = ValueDecimal(42)
         val result = testDelegate.fromJson("\"42.0\"", ValueDecimal::class.java)
         assertThat(result, equalTo(expectedDecimal))
@@ -114,17 +114,17 @@ internal object ValueDecimalJsonAdapterTest {
         .build()
 }
 
-internal object ValueInstantJsonAdapterTest {
+internal object ValueInstantSerdeAdapterTest {
 
     @Test
-    fun serialize() {
+    fun write() {
         val someInstant = ValueInstant(Instant.ofEpochSecond(1641454487))
         val result = testDelegate.toJson(someInstant)
         assertThat(result, equalTo("\"2022-01-06T07:34:47Z\""))
     }
 
     @Test
-    fun deserialize() {
+    fun read() {
         val expectedInstant = ValueInstant(Instant.ofEpochSecond(1641454487))
         val result = testDelegate.fromJson("\"2022-01-06T07:34:47Z\"", ValueInstant::class.java)
         assertThat(result, equalTo(expectedInstant))
@@ -135,17 +135,17 @@ internal object ValueInstantJsonAdapterTest {
         .build()
 }
 
-internal object ValueInstantVariableJsonAdapterTest {
+internal object ValueInstantVariableSerdeAdapterTest {
 
     @Test
-    fun serialize() {
+    fun write() {
         val someInstant = TestObject(ValueInstant(Instant.ofEpochSecond(1641454487)))
         val result = testDelegate.toJson(someInstant)
         assertThat(result, equalTo("\"2022-01-06T07:34:47Z\""))
     }
 
     @Test
-    fun deserialize() {
+    fun read() {
         val expectedInstant = TestObject(ValueInstant(Instant.ofEpochSecond(1641454487)))
         val result = testDelegate.fromJson("\"2022-01-06T07:34:47Z\"", TestObject::class.java)
         assertThat(result, equalTo(expectedInstant))
@@ -159,9 +159,9 @@ internal object ValueInstantVariableJsonAdapterTest {
     private class TestObject(override val value: ValueInstant) : ValueVariableInstant()
 }
 
-internal object ValueNilJsonAdapterTest {
+internal object ValueNilSerdeAdapterTest {
     @Test
-    fun serialize() {
+    fun write() {
         val someNil = ValueNil
         val result = testDelegate.toJson(someNil)
         assertThat(result, equalTo("null"))
@@ -172,16 +172,16 @@ internal object ValueNilJsonAdapterTest {
         .build()
 }
 
-internal object ValueNumberJsonAdapterTest {
+internal object ValueNumberSerdeAdapterTest {
     @Test
-    fun serialize() {
+    fun write() {
         val someNumber = ValueNumber(42)
         val result = testDelegate.toJson(someNumber)
         assertThat(result, equalTo("42.0"))
     }
 
     @Test
-    fun deserialize() {
+    fun read() {
         val expectedNumber = ValueNumber(42)
         val result = testDelegate.fromJson("42.0", ValueNumber::class.java)
         assertThat(result, equalTo(expectedNumber))
@@ -192,16 +192,16 @@ internal object ValueNumberJsonAdapterTest {
         .build()
 }
 
-internal object ValueVariableNumberJsonAdapterTest {
+internal object ValueVariableNumberSerdeAdapterTest {
 
     @Test
-    fun serialize() {
+    fun write() {
         val result = testDelegate.toJson(TestObject(ValueNumber(1337)))
         assertThat(result, equalTo("1337.0"))
     }
 
     @Test
-    fun deserialize() {
+    fun read() {
         val expected = TestObject(ValueNumber(1337))
         val result = testDelegate.fromJson("1337", TestObject::class.java)
         assertThat(result, equalTo(expected))
@@ -215,10 +215,10 @@ internal object ValueVariableNumberJsonAdapterTest {
     private class TestObject(override val value: ValueNumber) : ValueVariableNumber()
 }
 
-internal object ValueObjectJsonAdapterTest {
+internal object ValueObjectSerdeAdapterTest {
 
     @Test
-    fun serialize() {
+    fun write() {
         val result = testDelegate.toJson(
             ValueObject.builder()
                 .set("some-string", "some-string-value")
@@ -231,7 +231,7 @@ internal object ValueObjectJsonAdapterTest {
     }
 
     @Test
-    fun deserialize() {
+    fun read() {
         val expected = ValueObject.builder()
             .set("some-string", "some-string-value")
             .set("some-boolean", true)
@@ -251,10 +251,10 @@ internal object ValueObjectJsonAdapterTest {
 
 }
 
-internal object ValueObjectVariableJsonAdapterTest {
+internal object ValueObjectVariableSerdeAdapterTest {
 
     @Test
-    fun serialize() {
+    fun write() {
         val result = testDelegate.toJson(
             TestObject(
                 ValueObject.builder()
@@ -268,7 +268,7 @@ internal object ValueObjectVariableJsonAdapterTest {
     }
 
     @Test
-    fun deserialize() {
+    fun read() {
         val expected = TestObject(
             ValueObject.builder()
                 .set("some-string", "some-string-value")
@@ -291,16 +291,16 @@ internal object ValueObjectVariableJsonAdapterTest {
     private class TestObject(override val value: ValueObject) : ValueVariableObject()
 }
 
-internal object ValueSnowflakeIdJsonAdapterTest {
+internal object ValueSnowflakeIdSerdeAdapterTest {
     @Test
-    fun serialize() {
+    fun write() {
         val someSnowflakeId = ValueSnowflakeId(SnowflakeId(42))
         val result = testDelegate.toJson(someSnowflakeId)
         assertThat(result, equalTo("\"2a\""))
     }
 
     @Test
-    fun deserialize() {
+    fun read() {
         val expectedSnowflakeId = ValueSnowflakeId(SnowflakeId(42))
         val result = testDelegate.fromJson("\"2a\"", ValueSnowflakeId::class.java)
         assertThat(result, equalTo(expectedSnowflakeId))
@@ -311,16 +311,16 @@ internal object ValueSnowflakeIdJsonAdapterTest {
         .build()
 }
 
-internal object ValueSnowflakeIdVariableJsonAdapterTest {
+internal object ValueSnowflakeIdVariableSerdeAdapterTest {
 
     @Test
-    fun serialize() {
+    fun write() {
         val result = testDelegate.toJson(TestObject(ValueSnowflakeId(SnowflakeId(42))))
         assertThat(result, equalTo("\"2a\""))
     }
 
     @Test
-    fun deserialize() {
+    fun read() {
         val expected = TestObject(ValueSnowflakeId(SnowflakeId(42)))
         val result = testDelegate.fromJson("\"2a\"", TestObject::class.java)
         assertThat(result, equalTo(expected))
@@ -336,16 +336,16 @@ internal object ValueSnowflakeIdVariableJsonAdapterTest {
     ) : ValueVariableSnowflakeId()
 }
 
-internal object ValueStringJsonAdapterTest {
+internal object ValueStringSerdeAdapterTest {
     @Test
-    fun serialize() {
+    fun write() {
         val someString = ValueString("Hamal Rocks")
         val result = testDelegate.toJson(someString)
         assertThat(result, equalTo("\"Hamal Rocks\""))
     }
 
     @Test
-    fun deserialize() {
+    fun read() {
         val expectedString = ValueString("Hamal Rocks")
         val result = testDelegate.fromJson("\"Hamal Rocks\"", ValueString::class.java)
         assertThat(result, equalTo(expectedString))
@@ -356,17 +356,17 @@ internal object ValueStringJsonAdapterTest {
         .build()
 }
 
-internal object ValueStringVariableJsonAdapterTest {
+internal object ValueStringVariableSerdeAdapterTest {
 
     @Test
-    fun serialize() {
+    fun write() {
         val someString = TestObject(ValueString("Hamal Rocks"))
         val result = testDelegate.toJson(someString)
         assertThat(result, equalTo("\"Hamal Rocks\""))
     }
 
     @Test
-    fun deserialize() {
+    fun read() {
         val expectedString = TestObject(ValueString("Hamal Rocks"))
         val result = testDelegate.fromJson("\"Hamal Rocks\"", TestObject::class.java)
         assertThat(result, equalTo(expectedString))

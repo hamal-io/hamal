@@ -9,7 +9,7 @@ import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumGetBlockResponse
 import io.hamal.lib.web3.evm.chain.arbitrum.domain.parseArbitrumRequest
 import io.hamal.lib.web3.evm.domain.EvmRequest
 import io.hamal.lib.web3.evm.domain.EvmResponse
-import io.hamal.lib.web3.json
+import io.hamal.lib.web3.serde
 
 object TestHandler {
 
@@ -17,7 +17,7 @@ object TestHandler {
         val reqs = requests
             .filterIsInstance<JsonObject>()
             .map { request ->
-                val (err, req) = parseArbitrumRequest(json, request)
+                val (err, req) = parseArbitrumRequest(serde, request)
                 err ?: req
             }
 
@@ -25,7 +25,7 @@ object TestHandler {
             .map { req -> handle(req) }
             .plus(reqs.filterIsInstance<EvmResponse>())
             .let { responses ->
-                json.deserialize(JsonArray::class, json.serialize(responses))
+                serde.read(JsonArray::class, serde.write(responses))
             }
     }
 
@@ -45,5 +45,5 @@ object TestHandler {
 
     private fun getBlock(id: EvmUint64): ArbitrumBlockData? =
         this.javaClass.getResourceAsStream("/fixture/block_${id.value}_full.json")
-            ?.let { json.deserialize(ArbitrumBlockData::class, it) }
+            ?.let { serde.read(ArbitrumBlockData::class, it) }
 }

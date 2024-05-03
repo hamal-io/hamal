@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
 
-class EvmHexJsonStringVariableTest {
+class EvmHexSerdeStringVariableTest {
     @Nested
     inner class ConstructorTest {
         @TestFactory
@@ -34,7 +34,7 @@ class EvmHexJsonStringVariableTest {
     }
 }
 
-class EvmPrefixedHexJsonStringVariableTest {
+class EvmPrefixedHexSerdeStringVariableTest {
     @Nested
     inner class ConstructorTest {
         @TestFactory
@@ -62,7 +62,7 @@ class EvmPrefixedHexJsonStringVariableTest {
 }
 
 
-class ValidateHexJsonStringVariableTest {
+class ValidateHexSerdeStringVariableTest {
 
     @TestFactory
     fun `Valid hex string`() = listOf(

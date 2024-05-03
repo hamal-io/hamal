@@ -163,7 +163,7 @@ internal abstract class AbstractIntegrationTest {
                 .build()
         ),
         state = State(),
-        code = ValueCode(json.serialize(graph)),
+        code = ValueCode(serde.write(graph)),
         codeType = CodeType.Nodes,
         correlation = null
     )

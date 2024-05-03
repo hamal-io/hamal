@@ -30,7 +30,7 @@ class RecordTransactionSqlite<ID : ValueVariableSnowflakeId, RECORD : Record<ID>
         ) {
             set("cmdId", record.cmdId)
             set("entityId", record.entityId)
-            set("data", json.serializeAndCompress(record))
+            set("data", serde.writeAndCompress(record))
         }
 
         return record
@@ -46,7 +46,7 @@ class RecordTransactionSqlite<ID : ValueVariableSnowflakeId, RECORD : Record<ID>
                 set("entityId", id)
             }
             map {
-                json.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
+                serde.decompressAndRead(recordClass, it.getBytes("data")).also { record ->
                     record.recordSequence = RecordSequence(ValueNumber(it.getInt("sequence")))
                     record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }
@@ -64,7 +64,7 @@ class RecordTransactionSqlite<ID : ValueVariableSnowflakeId, RECORD : Record<ID>
                 set("entityId", id)
             }
             map {
-                json.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
+                serde.decompressAndRead(recordClass, it.getBytes("data")).also { record ->
                     record.recordSequence = RecordSequence(ValueNumber(it.getInt("sequence")))
                     record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }
@@ -93,7 +93,7 @@ class RecordTransactionSqlite<ID : ValueVariableSnowflakeId, RECORD : Record<ID>
                 set("sequence", sequence.intValue)
             }
             map {
-                json.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
+                serde.decompressAndRead(recordClass, it.getBytes("data")).also { record ->
                     record.recordSequence = RecordSequence(ValueNumber(it.getInt("sequence")))
                     record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }

@@ -5,7 +5,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class JsonBooleanGetTest : NativeBaseTest() {
+internal class SerdeBooleanGetTest : NativeBaseTest() {
 
     @Test
     fun `Tries to get boolean with 0 index`() {

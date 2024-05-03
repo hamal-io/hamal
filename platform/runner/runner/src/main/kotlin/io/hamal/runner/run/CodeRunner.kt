@@ -14,7 +14,7 @@ import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.kua.value.toValueObject
 import io.hamal.lib.nodes.NodesGraph
 import io.hamal.lib.nodes.compiler.Compiler
-import io.hamal.lib.nodes.json
+import io.hamal.lib.nodes.serde
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
@@ -81,7 +81,7 @@ class CodeRunnerImpl(
 
                             CodeType.Nodes -> {
                                 // FIXME load graph from code
-                                val graph = json.deserialize(NodesGraph::class, unitOfWork.code.stringValue)
+                                val graph = serde.read(NodesGraph::class, unitOfWork.code.stringValue)
                                 val compiledCode = Compiler(sandbox.generatorRegistry).compile(graph)
                                 sandbox.codeLoad(ValueCode(compiledCode))
                             }

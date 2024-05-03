@@ -10,7 +10,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
 
-internal class JsonBooleanGetTest : StateBaseTest() {
+internal class SerdeBooleanGetTest : StateBaseTest() {
 
     @TestFactory
     fun `Get value on stack without popping the value`() = runTest { testInstance ->

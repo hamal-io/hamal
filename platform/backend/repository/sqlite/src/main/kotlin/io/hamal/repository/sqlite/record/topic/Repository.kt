@@ -13,7 +13,7 @@ import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.repository.api.log.LogBrokerRepository.CreateTopicCmd
 import io.hamal.repository.api.log.LogEventId.Companion.LogEventId
-import io.hamal.repository.record.json
+import io.hamal.repository.record.serde
 import io.hamal.repository.record.topic.CreateTopicFromRecords
 import io.hamal.repository.record.topic.TopicRecord
 import io.hamal.repository.sqlite.record.RecordSqliteRepository
@@ -73,7 +73,7 @@ class TopicSqliteRepository(
         ).map { evt ->
             TopicEvent(
                 id = TopicEventId(evt.id.value),
-                payload = TopicEventPayload(json.decompressAndDeserialize(ValueObject::class, evt.bytes))
+                payload = TopicEventPayload(serde.decompressAndRead(ValueObject::class, evt.bytes))
             )
         }
     }

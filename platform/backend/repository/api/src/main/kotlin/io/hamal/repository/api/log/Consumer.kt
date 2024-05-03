@@ -48,7 +48,7 @@ class LogConsumerImpl<Value : Any>(
             fn(
                 index,
                 event.id,
-                json.decompressAndDeserialize(valueClass, event.bytes)
+                serde.decompressAndRead(valueClass, event.bytes)
             )
             repository.commit(consumerId, topicId, event.id)
         }
@@ -73,7 +73,7 @@ class LogConsumerBatchImpl<Value : Any>(
         }
 
         val batch = eventsToConsume.map { chunk ->
-            json.decompressAndDeserialize(valueClass, chunk.bytes)
+            serde.decompressAndRead(valueClass, chunk.bytes)
         }
 
         block(batch)
@@ -100,7 +100,7 @@ class TopicEventConsumerBatchImpl(
         val batch = eventsToConsume.map { evt ->
             TopicEvent(
                 id = TopicEventId(evt.id.value),
-                payload = json.decompressAndDeserialize(TopicEventPayload::class, evt.bytes)
+                payload = serde.decompressAndRead(TopicEventPayload::class, evt.bytes)
             )
         }
 

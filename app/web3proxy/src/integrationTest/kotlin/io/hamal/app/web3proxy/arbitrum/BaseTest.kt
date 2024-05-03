@@ -8,7 +8,7 @@ import io.hamal.lib.http.JsonHttpSerdeFactory
 import io.hamal.lib.web3.evm.abi.type.*
 import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumBlockData
 import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumTransactionData
-import io.hamal.lib.web3.json
+import io.hamal.lib.web3.serde
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -104,6 +104,6 @@ internal abstract class ArbitrumBaseTest {
     lateinit var localPort: Number
 
     protected val testTemplate by lazy {
-        HttpTemplateImpl(baseUrl = "", serdeFactory = JsonHttpSerdeFactory(json)).post("http://localhost:${localPort}/arbitrum")
+        HttpTemplateImpl(baseUrl = "", serdeFactory = JsonHttpSerdeFactory(serde)).post("http://localhost:${localPort}/arbitrum")
     }
 }

@@ -13,14 +13,14 @@ import io.hamal.lib.web3.evm.domain.EvmHotCallResponse
 import io.hamal.lib.web3.evm.domain.EvmHotGetBlockResponse
 import io.hamal.lib.web3.evm.domain.EvmHotResponse
 import io.hamal.lib.web3.evm.domain.EvmHotSendRawTransactionResponse
-import io.hamal.lib.web3.json
+import io.hamal.lib.web3.serde
 
 interface EvmHotBatchService<SERVICE : EvmBatchService<EvmHotResponse, SERVICE>> :
     EvmBatchService<EvmHotResponse, SERVICE>
 
 class EvmHotHttpBatchService(
     httpTemplate: HttpTemplate,
-) : EvmHotBatchService<EvmHotHttpBatchService>, HttpBaseBatchService<EvmHotResponse>(httpTemplate, json) {
+) : EvmHotBatchService<EvmHotHttpBatchService>, HttpBaseBatchService<EvmHotResponse>(httpTemplate, serde) {
 
     override fun getBlock(number: EvmUint64) = also {
         request(

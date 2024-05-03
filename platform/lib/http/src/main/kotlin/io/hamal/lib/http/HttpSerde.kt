@@ -4,7 +4,7 @@ import com.google.gson.reflect.TypeToken
 import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.common.serialization.json.SerdeModule
 import io.hamal.lib.common.value.ValueJsonModule
-import io.hamal.lib.domain.Json
+import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import java.io.InputStream
 import kotlin.reflect.KClass
@@ -21,23 +21,23 @@ object DefaultHttpSerdeFactory : HttpSerdeFactory {
     override var contentSerializer: HttpContentSerializer = JsonHttpContentSerializer
 }
 
-class JsonHttpSerdeFactory(private val json: Json) : HttpSerdeFactory {
+class JsonHttpSerdeFactory(private val serde: Serde) : HttpSerdeFactory {
     override var errorDeserializer = object : HttpErrorDeserializer {
-        override fun <ERROR : Any> deserialize(inputStream: InputStream, clazz: KClass<ERROR>) = json.deserialize(clazz, inputStream)
+        override fun <ERROR : Any> deserialize(inputStream: InputStream, clazz: KClass<ERROR>) = serde.read(clazz, inputStream)
     }
     override var contentDeserializer = object : HttpContentDeserializer {
-        override fun <VALUE : Any> deserialize(inputStream: InputStream, clazz: KClass<VALUE>) = json.deserialize(clazz, inputStream)
+        override fun <VALUE : Any> deserialize(inputStream: InputStream, clazz: KClass<VALUE>) = serde.read(clazz, inputStream)
         override fun <VALUE : Any> deserializeList(inputStream: InputStream, clazz: KClass<VALUE>) =
-             json.deserialize<Array<VALUE>>(TypeToken.getArray(clazz.java).type, inputStream).toList()
+             serde.read<Array<VALUE>>(TypeToken.getArray(clazz.java).type, inputStream).toList()
 
     }
     override var contentSerializer = object : HttpContentSerializer {
-        override fun <VALUE : Any> serialize(value: VALUE, clazz: KClass<VALUE>) = json.serialize(value)
+        override fun <VALUE : Any> serialize(value: VALUE, clazz: KClass<VALUE>) = serde.write(value)
     }
 }
 
 
-private val json = Json(
+private val serde = Serde(
     GsonFactoryBuilder()
         .register(SerdeModule)
         .register(ValueJsonModule)
@@ -50,7 +50,7 @@ interface HttpErrorDeserializer {
 
 object JsonErrorDeserializer : HttpErrorDeserializer {
     override fun <ERROR : Any> deserialize(inputStream: InputStream, clazz: KClass<ERROR>): ERROR {
-        return json.deserialize(clazz, inputStream)
+        return serde.read(clazz, inputStream)
     }
 }
 
@@ -61,11 +61,11 @@ interface HttpContentDeserializer {
 
 object JsonHttpContentDeserializer : HttpContentDeserializer {
     override fun <VALUE : Any> deserialize(inputStream: InputStream, clazz: KClass<VALUE>): VALUE {
-        return json.deserialize(clazz, inputStream)
+        return serde.read(clazz, inputStream)
     }
 
     override fun <VALUE : Any> deserializeList(inputStream: InputStream, clazz: KClass<VALUE>): List<VALUE> {
-        return json.deserialize<Array<VALUE>>(TypeToken.getArray(clazz.java).type, inputStream).toList()
+        return serde.read<Array<VALUE>>(TypeToken.getArray(clazz.java).type, inputStream).toList()
     }
 }
 
@@ -75,6 +75,6 @@ interface HttpContentSerializer {
 
 object JsonHttpContentSerializer : HttpContentSerializer {
     override fun <VALUE : Any> serialize(value: VALUE, clazz: KClass<VALUE>): String {
-        return json.serialize(value)
+        return serde.write(value)
     }
 }

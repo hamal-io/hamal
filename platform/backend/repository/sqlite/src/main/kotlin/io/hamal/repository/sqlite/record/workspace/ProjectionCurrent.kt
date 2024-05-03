@@ -8,7 +8,7 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Workspace
 import io.hamal.repository.api.WorkspaceQueryRepository.WorkspaceQuery
-import io.hamal.repository.record.json
+import io.hamal.repository.record.serde
 import io.hamal.repository.record.workspace.WorkspaceRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
@@ -28,7 +28,7 @@ internal object ProjectionCurrent : ProjectionSqlite<WorkspaceId, WorkspaceRecor
             ) {
                 set("id", obj.id)
                 set("creatorId", obj.creatorId)
-                set("data", json.serializeAndCompress(obj))
+                set("data", serde.writeAndCompress(obj))
             }
         } catch (e: SQLiteException) {
             if (e.message!!.contains("UNIQUE constraint failed: current.name)")) {
@@ -56,7 +56,7 @@ internal object ProjectionCurrent : ProjectionSqlite<WorkspaceId, WorkspaceRecor
                 set("name", workspaceName)
             }
             map { rs ->
-                json.decompressAndDeserialize(Workspace::class, rs.getBytes("data"))
+                serde.decompressAndRead(Workspace::class, rs.getBytes("data"))
             }
         }
     }
@@ -94,7 +94,7 @@ internal object ProjectionCurrent : ProjectionSqlite<WorkspaceId, WorkspaceRecor
                 set("id", workspaceId)
             }
             map { rs ->
-                json.decompressAndDeserialize(Workspace::class, rs.getBytes("data"))
+                serde.decompressAndRead(Workspace::class, rs.getBytes("data"))
             }
         }
     }
@@ -119,7 +119,7 @@ internal object ProjectionCurrent : ProjectionSqlite<WorkspaceId, WorkspaceRecor
                 set("limit", query.limit)
             }
             map { rs ->
-                json.decompressAndDeserialize(Workspace::class, rs.getBytes("data"))
+                serde.decompressAndRead(Workspace::class, rs.getBytes("data"))
             }
         }
     }

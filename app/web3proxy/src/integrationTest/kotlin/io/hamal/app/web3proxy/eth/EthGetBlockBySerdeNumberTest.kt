@@ -11,7 +11,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
 
-internal class EthGetBlockByJsonNumberTest : EthBaseTest() {
+internal class EthGetBlockBySerdeNumberTest : EthBaseTest() {
 
     @Test
     fun `Requests the same block multiple times`() {

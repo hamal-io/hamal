@@ -32,7 +32,7 @@ class Tuple0Test {
     }
 
     @Nested
-    inner class ToJsonStringTest {
+    inner class ToStringTest {
         @Test
         fun ok() {
             val testInstance = Tuple0()
@@ -93,7 +93,7 @@ class Tuple1Test {
     }
 
     @Nested
-    inner class ToJsonStringTest {
+    inner class ToStringTest {
         @Test
         fun ok() {
             val testInstance = Tuple1("ABC")
@@ -163,7 +163,7 @@ class Tuple2Test {
     }
 
     @Nested
-    inner class ToJsonStringTest {
+    inner class ToStringTest {
         @Test
         fun ok() {
             val testInstance = Tuple2("ABC", 42)
@@ -241,7 +241,7 @@ class Tuple3Test {
     }
 
     @Nested
-    inner class ToJsonStringTest {
+    inner class ToStringTest {
         @Test
         fun ok() {
             val testInstance = Tuple3("ABC", 43, true)
@@ -327,7 +327,7 @@ class Tuple4Test {
     }
 
     @Nested
-    inner class ToJsonStringTest {
+    inner class ToStringTest {
         @Test
         fun ok() {
             val testInstance = Tuple4("ABC", 43, true, 13.37)

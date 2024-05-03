@@ -3,7 +3,7 @@ package io.hamal.lib.sdk
 import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.common.serialization.json.SerdeModule
 import io.hamal.lib.common.value.ValueJsonModule
-import io.hamal.lib.domain.Json
+import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.lib.domain.vo.ValueVariableJsonModule
@@ -36,7 +36,7 @@ class ApiSdkImpl : ApiSdk {
         token: AuthToken,
         execToken: ExecToken
     ) {
-        val json = Json(
+        val serde = Serde(
             GsonFactoryBuilder()
                 .register(ApiJsonModule)
                 .register(SerdeModule)
@@ -51,13 +51,13 @@ class ApiSdkImpl : ApiSdk {
                 this["authorization"] = "Bearer ${token.value}"
                 this["x-exec-token"] = execToken.stringValue
             },
-            serdeFactory = JsonHttpSerdeFactory(json)
+            serdeFactory = JsonHttpSerdeFactory(serde)
         )
     }
 
 
     constructor(apiHost: String, token: AuthToken) {
-        val json = Json(
+        val serde = Serde(
             GsonFactoryBuilder()
                 .register(ApiJsonModule)
                 .register(SerdeModule)
@@ -71,7 +71,7 @@ class ApiSdkImpl : ApiSdk {
                 this["accept"] = "application/json"
                 this["authorization"] = "Bearer ${token.value}"
             },
-            serdeFactory = JsonHttpSerdeFactory(json)
+            serdeFactory = JsonHttpSerdeFactory(serde)
         )
     }
 

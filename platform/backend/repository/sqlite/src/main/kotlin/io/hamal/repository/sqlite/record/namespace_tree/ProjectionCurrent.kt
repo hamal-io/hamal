@@ -8,7 +8,7 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.NamespaceTree
 import io.hamal.repository.api.NamespaceTreeQueryRepository
-import io.hamal.repository.record.json
+import io.hamal.repository.record.serde
 import io.hamal.repository.record.namespace_tree.NamespaceTreeRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
@@ -32,7 +32,7 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceTreeId, NamespaceT
                 set("namespaceId", namespaceId)
             }
             map { rs ->
-                json.decompressAndDeserialize(NamespaceTree::class, rs.getBytes("data"))
+                serde.decompressAndRead(NamespaceTree::class, rs.getBytes("data"))
             }
         }
     }
@@ -58,7 +58,7 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceTreeId, NamespaceT
                 set("limit", query.limit)
             }
             map { rs ->
-                json.decompressAndDeserialize(NamespaceTree::class, rs.getBytes("data"))
+                serde.decompressAndRead(NamespaceTree::class, rs.getBytes("data"))
             }
         }
     }
@@ -102,7 +102,7 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceTreeId, NamespaceT
         ) {
             set("id", obj.id)
             set("workspaceId", obj.workspaceId)
-            set("data", json.serializeAndCompress(obj))
+            set("data", serde.writeAndCompress(obj))
         }
 
         obj.root.preorder().forEach { namespaceId ->

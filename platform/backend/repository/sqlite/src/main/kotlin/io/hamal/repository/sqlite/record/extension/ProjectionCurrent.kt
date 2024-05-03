@@ -8,7 +8,7 @@ import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Extension
 import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
 import io.hamal.repository.record.extension.ExtensionRecord
-import io.hamal.repository.record.json
+import io.hamal.repository.record.serde
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 import org.sqlite.SQLiteException
@@ -29,7 +29,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
                 set("id", obj.id)
                 set("workspaceId", obj.workspaceId)
                 set("name", obj.name)
-                set("data", json.serializeAndCompress(obj))
+                set("data", serde.writeAndCompress(obj))
             }
         } catch (e: SQLiteException) {
             if (e.message!!.contains("(UNIQUE constraint failed: current.workspace_id, current.name)")) {
@@ -73,7 +73,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
                 set("id", extensionId)
             }
             map { rs ->
-                json.decompressAndDeserialize(Extension::class, rs.getBytes("data"))
+                serde.decompressAndRead(Extension::class, rs.getBytes("data"))
             }
         }
     }
@@ -98,7 +98,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
                 set("limit", query.limit)
             }
             map { rs ->
-                json.decompressAndDeserialize(Extension::class, rs.getBytes("data"))
+                serde.decompressAndRead(Extension::class, rs.getBytes("data"))
             }
         }
     }

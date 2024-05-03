@@ -7,7 +7,7 @@ import io.hamal.lib.common.serialization.json.JsonObject
 import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumRequest
 import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumResponse
 import io.hamal.lib.web3.evm.chain.arbitrum.domain.parseArbitrumRequest
-import io.hamal.lib.web3.json
+import io.hamal.lib.web3.serde
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -31,7 +31,7 @@ internal class ArbitrumController(
         val reqs = requests
             .filterIsInstance<JsonObject>()
             .map { request ->
-                val (err, req) = parseArbitrumRequest(json, request)
+                val (err, req) = parseArbitrumRequest(serde, request)
                 if (err != null) {
                     err
                 } else {
@@ -46,7 +46,7 @@ internal class ArbitrumController(
     }
 
     private fun handleObject(request: JsonObject): ResponseEntity<ArbitrumResponse> {
-        val (err, req) = parseArbitrumRequest(json, request)
+        val (err, req) = parseArbitrumRequest(serde, request)
         if (err != null) {
             return ResponseEntity.ok(err)
         }

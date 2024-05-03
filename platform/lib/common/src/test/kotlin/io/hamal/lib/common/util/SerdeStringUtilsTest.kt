@@ -5,7 +5,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
 
-internal class JsonStringUtilsTest {
+internal class SerdeStringUtilsTest {
 
     @TestFactory
     fun snakeCase() = listOf(

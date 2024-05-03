@@ -9,7 +9,7 @@ import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Exec
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.repository.record.exec.ExecRecord
-import io.hamal.repository.record.json
+import io.hamal.repository.record.serde
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
@@ -29,7 +29,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
                 set("id", execId)
             }
             map { rs ->
-                json.decompressAndDeserialize(Exec::class, rs.getBytes("data"))
+                serde.decompressAndRead(Exec::class, rs.getBytes("data"))
             }
         }
     }
@@ -56,7 +56,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
                 set("limit", query.limit)
             }
             map { rs ->
-                json.decompressAndDeserialize(Exec::class, rs.getBytes("data"))
+                serde.decompressAndRead(Exec::class, rs.getBytes("data"))
             }
         }
     }
@@ -104,7 +104,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
             set("namespaceId", obj.namespaceId)
             set("workspaceId", obj.workspaceId)
             set("funcId", obj.correlation?.funcId ?: FuncId(0))
-            set("data", json.serializeAndCompress(obj))
+            set("data", serde.writeAndCompress(obj))
         }
     }
 

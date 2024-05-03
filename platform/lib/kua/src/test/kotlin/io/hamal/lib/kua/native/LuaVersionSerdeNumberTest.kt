@@ -4,7 +4,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class LuaVersionJsonNumberTest : NativeBaseTest() {
+internal class LuaVersionSerdeNumberTest : NativeBaseTest() {
     @Test
     fun `Loads current lua version number`() {
         val result = testInstance.luaVersionNumber()

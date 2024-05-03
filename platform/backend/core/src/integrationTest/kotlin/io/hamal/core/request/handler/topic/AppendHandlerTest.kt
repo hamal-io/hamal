@@ -12,7 +12,7 @@ import io.hamal.lib.domain.vo.TopicEventPayload
 import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import io.hamal.repository.api.log.LogEventId.Companion.LogEventId
-import io.hamal.repository.record.json
+import io.hamal.repository.record.serde
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -42,7 +42,7 @@ internal class TopicAppendHandlerTest : BaseRequestHandlerTest() {
             with(payloads.first()) {
                 assertThat(id, equalTo(LogEventId(1)))
 
-                val payload = json.decompressAndDeserialize(TopicEventPayload::class, bytes)
+                val payload = serde.decompressAndRead(TopicEventPayload::class, bytes)
                 assertThat(payload.value, equalTo(ValueObject.builder().set("hamal", "rocks").build()))
             }
         }

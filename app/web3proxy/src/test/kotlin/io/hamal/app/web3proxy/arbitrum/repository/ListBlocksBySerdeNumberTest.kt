@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import kotlin.io.path.createTempDirectory
 
-internal class ListBlocksByJsonNumberTest {
+internal class ListBlocksBySerdeNumberTest {
 
     @Test
     fun `Does nothing on empty block number list`() {

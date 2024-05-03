@@ -13,13 +13,13 @@ import io.hamal.lib.web3.evm.chain.eth.domain.EthCallResponse
 import io.hamal.lib.web3.evm.chain.eth.domain.EthGetBlockResponse
 import io.hamal.lib.web3.evm.chain.eth.domain.EthResponse
 import io.hamal.lib.web3.evm.http.HttpBaseBatchService
-import io.hamal.lib.web3.json
+import io.hamal.lib.web3.serde
 
 interface EthBatchService<SERVICE : EvmBatchService<EthResponse, SERVICE>> : EvmBatchService<EthResponse, SERVICE>
 
 class EthHttpBatchService(
     httpTemplate: HttpTemplate,
-) : EthBatchService<EthHttpBatchService>, HttpBaseBatchService<EthResponse>(httpTemplate, json) {
+) : EthBatchService<EthHttpBatchService>, HttpBaseBatchService<EthResponse>(httpTemplate, serde) {
 
     override fun getBlock(number: EvmUint64) = also {
         request(

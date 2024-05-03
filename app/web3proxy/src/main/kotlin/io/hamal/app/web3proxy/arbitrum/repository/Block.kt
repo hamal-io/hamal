@@ -4,7 +4,7 @@ import io.hamal.lib.common.compress.CompressorBzip
 import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.common.serialization.json.SerdeModule
 import io.hamal.lib.common.value.ValueJsonModule
-import io.hamal.lib.domain.Json
+import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.domain.vo.ValueVariableJsonModule
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
@@ -68,7 +68,7 @@ internal class ArbitrumBlockRepositoryImpl(
                 query {
                     set("number", blockNumber.value)
                 }
-                map { rs -> json.decompressAndDeserialize(BlockEntity::class, rs.getBytes("data")) }
+                map { rs -> serde.decompressAndRead(BlockEntity::class, rs.getBytes("data")) }
             }
         }
     }
@@ -79,7 +79,7 @@ internal class ArbitrumBlockRepositoryImpl(
                 execute("INSERT OR REPLACE INTO block(number, hash, data) VALUES( :number, :hash, :data )") {
                     set("number", block.number.value)
                     set("hash", block.hash.toPrefixedHexString().value)
-                    set("data", json.serializeAndCompress(block))
+                    set("data", serde.writeAndCompress(block))
                 }
             }
         }
@@ -111,7 +111,7 @@ internal class ArbitrumBlockRepositoryImpl(
         connection.execute("DELETE FROM block")
     }
 
-    private val json = Json(
+    private val serde = Serde(
         factory = GsonFactoryBuilder()
             .register(EvmHotModule)
             .register(SerdeModule)

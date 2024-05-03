@@ -8,7 +8,7 @@ import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.record.func.FuncRecord
-import io.hamal.repository.record.json
+import io.hamal.repository.record.serde
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
@@ -29,7 +29,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
                 set("id", funcId)
             }
             map { rs ->
-                json.decompressAndDeserialize(Func::class, rs.getBytes("data"))
+                serde.decompressAndRead(Func::class, rs.getBytes("data"))
             }
         }
     }
@@ -55,7 +55,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
                 set("limit", query.limit)
             }
             map { rs ->
-                json.decompressAndDeserialize(Func::class, rs.getBytes("data"))
+                serde.decompressAndRead(Func::class, rs.getBytes("data"))
             }
         }
     }
@@ -97,7 +97,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
             set("id", obj.id)
             set("workspaceId", obj.workspaceId)
             set("namespaceId", obj.namespaceId)
-            set("data", json.serializeAndCompress(obj))
+            set("data", serde.writeAndCompress(obj))
         }
     }
 

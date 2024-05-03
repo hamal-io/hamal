@@ -8,7 +8,7 @@ import io.hamal.lib.common.serialization.json.JsonObject
 import io.hamal.lib.common.serialization.json.JsonString
 import io.hamal.lib.common.serialization.GsonTransform
 import io.hamal.lib.common.serialization.JsonAdapter
-import io.hamal.lib.domain.Json
+import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.domain.EvmMethod
@@ -92,9 +92,9 @@ data class ArbitrumGetBlockByNumberRequest(
     }
 }
 
-fun parseArbitrumRequest(json: Json, request: JsonObject): Pair<ArbitrumErrorResponse?, ArbitrumRequest?> {
+fun parseArbitrumRequest(serde: Serde, request: JsonObject): Pair<ArbitrumErrorResponse?, ArbitrumRequest?> {
     return try {
-        val ethRequest = json.deserialize(ArbitrumRequest::class, json.serialize(request))
+        val ethRequest = serde.read(ArbitrumRequest::class, serde.write(request))
         null to ethRequest
     } catch (e: Throwable) {
         e.printStackTrace()

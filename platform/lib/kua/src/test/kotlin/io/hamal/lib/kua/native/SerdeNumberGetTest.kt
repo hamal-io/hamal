@@ -5,7 +5,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class JsonNumberGetTest : NativeBaseTest() {
+internal class SerdeNumberGetTest : NativeBaseTest() {
     @Test
     fun `Get value on stack without popping the value`() {
         testInstance.numberPush(99.88)

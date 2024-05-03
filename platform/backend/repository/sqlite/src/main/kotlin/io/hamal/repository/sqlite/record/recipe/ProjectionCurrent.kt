@@ -7,7 +7,7 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Recipe
 import io.hamal.repository.api.RecipeQueryRepository.RecipeQuery
-import io.hamal.repository.record.json
+import io.hamal.repository.record.serde
 import io.hamal.repository.record.recipe.RecipeRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
@@ -25,7 +25,7 @@ object ProjectionCurrent : ProjectionSqlite<RecipeId, RecipeRecord, Recipe> {
             """.trimIndent()
         ) {
             set("id", obj.id)
-            set("data", json.serializeAndCompress(obj))
+            set("data", serde.writeAndCompress(obj))
         }
     }
 
@@ -60,7 +60,7 @@ object ProjectionCurrent : ProjectionSqlite<RecipeId, RecipeRecord, Recipe> {
                 set("id", recipeId)
             }
             map { rs ->
-                json.decompressAndDeserialize(Recipe::class, rs.getBytes("data"))
+                serde.decompressAndRead(Recipe::class, rs.getBytes("data"))
             }
         }
     }
@@ -84,7 +84,7 @@ object ProjectionCurrent : ProjectionSqlite<RecipeId, RecipeRecord, Recipe> {
                 set("limit", query.limit)
             }
             map { rs ->
-                json.decompressAndDeserialize(Recipe::class, rs.getBytes("data"))
+                serde.decompressAndRead(Recipe::class, rs.getBytes("data"))
             }
         }
     }

@@ -11,7 +11,7 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.RequestQueryRepository.RequestQuery
 import io.hamal.repository.api.RequestRepository
-import io.hamal.repository.record.json
+import io.hamal.repository.record.serde
 import java.lang.reflect.Field
 import java.nio.file.Path
 import kotlin.reflect.KClass
@@ -53,7 +53,7 @@ class RequestSqliteRepository(
             execute("INSERT INTO requests (id,status,data) VALUES (:id,:status,:data)") {
                 set("id", req.requestId)
                 set("status", req.requestStatus.value)
-                set("data", json.serialize(req))
+                set("data", serde.write(req))
             }
         }
     }
@@ -81,7 +81,7 @@ class RequestSqliteRepository(
                     set("limit", limit)
                 }
                 map { rs ->
-                    json.decompressAndDeserialize(Requested::class, rs.getBytes("data")).apply {
+                    serde.decompressAndRead(Requested::class, rs.getBytes("data")).apply {
                         statusField(this::class).also { field -> field.set(this, RequestStatus.fromInt(rs.getInt("status"))) }
                     }
                 }
@@ -133,7 +133,7 @@ class RequestSqliteRepository(
                 set("id", reqId)
             }
             map { rs ->
-                json.decompressAndDeserialize(Requested::class, rs.getBytes("data")).apply {
+                serde.decompressAndRead(Requested::class, rs.getBytes("data")).apply {
                     statusField(this::class).also { field -> field.set(this, RequestStatus.fromInt(rs.getInt("status"))) }
                 }
             }
@@ -159,7 +159,7 @@ class RequestSqliteRepository(
                 set("limit", query.limit)
             }
             map { rs ->
-                json.decompressAndDeserialize(Requested::class, rs.getBytes("data")).apply {
+                serde.decompressAndRead(Requested::class, rs.getBytes("data")).apply {
                     statusField(this::class).also { field -> field.set(this, RequestStatus.fromInt(rs.getInt("status"))) }
                 }
             }

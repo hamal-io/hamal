@@ -13,14 +13,14 @@ import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumCallResponse
 import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumGetBlockResponse
 import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumResponse
 import io.hamal.lib.web3.evm.http.HttpBaseBatchService
-import io.hamal.lib.web3.json
+import io.hamal.lib.web3.serde
 
 interface ArbitrumBatchService<SERVICE : EvmBatchService<ArbitrumResponse, SERVICE>> :
     EvmBatchService<ArbitrumResponse, SERVICE>
 
 class ArbitrumHttpBatchService(
     httpTemplate: HttpTemplate,
-) : ArbitrumBatchService<ArbitrumHttpBatchService>, HttpBaseBatchService<ArbitrumResponse>(httpTemplate, json) {
+) : ArbitrumBatchService<ArbitrumHttpBatchService>, HttpBaseBatchService<ArbitrumResponse>(httpTemplate, serde) {
 
     override fun getBlock(number: EvmUint64) = also {
         request(
