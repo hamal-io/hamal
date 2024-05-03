@@ -1,6 +1,6 @@
 package io.hamal.lib.common.compress
 
-object NopCompressor : Compressor {
+object CompressorNop : Compressor {
 
     override fun compress(uncompressed: ByteArray) = uncompressed
 

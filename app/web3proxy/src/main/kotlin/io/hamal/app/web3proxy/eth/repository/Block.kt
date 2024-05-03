@@ -1,6 +1,6 @@
 package io.hamal.app.web3proxy.eth.repository
 
-import io.hamal.lib.common.compress.BzipCompressor
+import io.hamal.lib.common.compress.CompressorBzip
 import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.common.serialization.json.SerdeModule
 import io.hamal.lib.common.value.ValueJsonModule
@@ -117,7 +117,7 @@ internal class EthBlockRepositoryImpl(
             .register(SerdeModule)
             .register(ValueJsonModule)
             .register(ValueVariableJsonModule),
-        compressor = BzipCompressor
+        compressor = CompressorBzip
     )
 }
 

@@ -1,7 +1,7 @@
 package io.hamal.lib.domain
 
 import io.hamal.lib.common.compress.Compressor
-import io.hamal.lib.common.compress.NopCompressor
+import io.hamal.lib.common.compress.CompressorNop
 import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -10,7 +10,7 @@ import kotlin.reflect.KClass
 
 class Json(
     factory: GsonFactoryBuilder,
-    private val compressor: Compressor = NopCompressor
+    private val compressor: Compressor = CompressorNop
 ) {
     fun <TYPE : Any> serialize(src: TYPE): String {
         return gsonInstance.toJson(src)
