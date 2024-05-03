@@ -3,9 +3,9 @@ package io.hamal.lib.http
 import com.google.gson.reflect.TypeToken
 import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.common.serialization.json.SerdeModule
-import io.hamal.lib.common.value.ValueJsonModule
+import io.hamal.lib.common.value.SerdeModuleJsonValue
 import io.hamal.lib.common.serialization.Serde
-import io.hamal.lib.domain.vo.ValueVariableJsonModule
+import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
 import java.io.InputStream
 import kotlin.reflect.KClass
 
@@ -40,8 +40,8 @@ class JsonHttpSerdeFactory(private val serde: Serde) : HttpSerdeFactory {
 private val serde = Serde(
     GsonFactoryBuilder()
         .register(SerdeModule)
-        .register(ValueJsonModule)
-        .register(ValueVariableJsonModule)
+        .register(SerdeModuleJsonValue)
+        .register(SerdeModuleJsonValueVariable)
 )
 
 interface HttpErrorDeserializer {

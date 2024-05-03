@@ -5,13 +5,13 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.common.serialization.JsonAdapter
-import io.hamal.lib.common.serialization.SerializationModule
-import io.hamal.lib.common.serialization.json.SerdeModule
-import io.hamal.lib.common.value.ValueJsonAdapters
-import io.hamal.lib.common.value.ValueJsonModule
 import io.hamal.lib.common.serialization.Serde
-import io.hamal.lib.domain.vo.ValueVariableJsonModule
-import io.hamal.repository.api.DomainJsonModule
+import io.hamal.lib.common.serialization.SerdeModuleJson
+import io.hamal.lib.common.serialization.json.SerdeModule
+import io.hamal.lib.common.value.SerdeModuleJsonValue
+import io.hamal.lib.common.value.ValueJsonAdapters
+import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
+import io.hamal.repository.api.SerdeModuleDomain
 import io.hamal.repository.record.account.AccountRecord
 import io.hamal.repository.record.code.CodeRecord
 import io.hamal.repository.record.exec.ExecRecord
@@ -27,7 +27,7 @@ import io.hamal.repository.record.workspace.WorkspaceRecord
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
-object RecordJsonModule : SerializationModule() {
+object SerdeModuleJsonRecord : SerdeModuleJson() {
     init {
         this[RecordClass::class] = ValueJsonAdapters.StringVariable(::RecordClass)
         this[RecordedAt::class] = ValueJsonAdapters.InstantVariable(::RecordedAt)
@@ -48,12 +48,11 @@ object RecordJsonModule : SerializationModule() {
 
 val serde = Serde(
     GsonFactoryBuilder()
-        .register(DomainJsonModule)
         .register(SerdeModule)
-        .register(RecordJsonModule)
-        .register(ValueJsonModule)
-        .register(ValueVariableJsonModule)
-
+        .register(SerdeModuleDomain)
+        .register(SerdeModuleJsonRecord)
+        .register(SerdeModuleJsonValue)
+        .register(SerdeModuleJsonValueVariable)
 )
 
 abstract class RecordAdapter<BASE_TYPE : Record<*>>(

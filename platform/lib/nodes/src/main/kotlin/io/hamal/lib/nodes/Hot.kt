@@ -1,19 +1,19 @@
 package io.hamal.lib.nodes
 
 import io.hamal.lib.common.serialization.GsonFactoryBuilder
-import io.hamal.lib.common.serialization.SerializationModule
+import io.hamal.lib.common.serialization.Serde
+import io.hamal.lib.common.serialization.SerdeModuleJson
 import io.hamal.lib.common.serialization.json.SerdeModule
 import io.hamal.lib.common.value.ValueJsonAdapters
-import io.hamal.lib.common.value.ValueJsonModule
-import io.hamal.lib.common.serialization.Serde
-import io.hamal.lib.domain.vo.ValueVariableJsonModule
+import io.hamal.lib.common.value.SerdeModuleJsonValue
+import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.control.ControlExtension
 import io.hamal.lib.nodes.control.ControlIdentifier
 import io.hamal.lib.nodes.control.ControlType
 
 
-object NodesHotModule : SerializationModule() {
+object NodesHotModule : SerdeModuleJson() {
     init {
         this[ConnectionId::class] = ValueJsonAdapters.SnowflakeIdVariable(::ConnectionId)
 
@@ -34,7 +34,7 @@ object NodesHotModule : SerializationModule() {
 val serde = Serde(
     GsonFactoryBuilder()
         .register(SerdeModule)
-        .register(ValueJsonModule)
-        .register(ValueVariableJsonModule)
+        .register(SerdeModuleJsonValue)
+        .register(SerdeModuleJsonValueVariable)
         .register(NodesHotModule)
 )

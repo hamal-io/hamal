@@ -1,12 +1,12 @@
 package io.hamal.lib.sdk
 
 import io.hamal.lib.common.serialization.GsonFactoryBuilder
-import io.hamal.lib.common.serialization.json.SerdeModule
-import io.hamal.lib.common.value.ValueJsonModule
 import io.hamal.lib.common.serialization.Serde
+import io.hamal.lib.common.serialization.json.SerdeModule
+import io.hamal.lib.common.value.SerdeModuleJsonValue
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.ExecToken
-import io.hamal.lib.domain.vo.ValueVariableJsonModule
+import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.http.JsonHttpSerdeFactory
@@ -38,10 +38,10 @@ class ApiSdkImpl : ApiSdk {
     ) {
         val serde = Serde(
             GsonFactoryBuilder()
-                .register(ApiJsonModule)
+                .register(SerdeModuleJsonApi)
                 .register(SerdeModule)
-                .register(ValueJsonModule)
-                .register(ValueVariableJsonModule)
+                .register(SerdeModuleJsonValue)
+                .register(SerdeModuleJsonValueVariable)
         )
 
         template = HttpTemplateImpl(
@@ -59,10 +59,10 @@ class ApiSdkImpl : ApiSdk {
     constructor(apiHost: String, token: AuthToken) {
         val serde = Serde(
             GsonFactoryBuilder()
-                .register(ApiJsonModule)
+                .register(SerdeModuleJsonApi)
                 .register(SerdeModule)
-                .register(ValueJsonModule)
-                .register(ValueVariableJsonModule)
+                .register(SerdeModuleJsonValue)
+                .register(SerdeModuleJsonValueVariable)
         )
 
         template = HttpTemplateImpl(

@@ -45,7 +45,7 @@ internal object ValueArraySerdeAdapterTest {
     }
 
     private val testDelegate: Gson = GsonFactoryBuilder()
-        .register(ValueJsonModule)
+        .register(SerdeModuleJsonValue)
         .build()
 
 }
@@ -66,7 +66,7 @@ internal object ValueBooleanSerdeAdapterTest {
     }
 
     private val testDelegate: Gson = GsonFactoryBuilder()
-        .register(ValueJsonModule)
+        .register(SerdeModuleJsonValue)
         .build()
 }
 
@@ -87,7 +87,7 @@ internal object ValueBooleanVariableSerdeAdapterTest {
     }
 
     private val testDelegate: Gson = GsonFactoryBuilder()
-        .register(ValueJsonModule)
+        .register(SerdeModuleJsonValue)
         .register(TestObject::class, BooleanVariable(::TestObject))
         .build()
 
@@ -110,7 +110,7 @@ internal object ValueDecimalSerdeAdapterTest {
     }
 
     private val testDelegate: Gson = GsonFactoryBuilder()
-        .register(ValueJsonModule)
+        .register(SerdeModuleJsonValue)
         .build()
 }
 
@@ -131,7 +131,7 @@ internal object ValueInstantSerdeAdapterTest {
     }
 
     private val testDelegate: Gson = GsonFactoryBuilder()
-        .register(ValueJsonModule)
+        .register(SerdeModuleJsonValue)
         .build()
 }
 
@@ -152,7 +152,7 @@ internal object ValueInstantVariableSerdeAdapterTest {
     }
 
     private val testDelegate: Gson = GsonFactoryBuilder()
-        .register(ValueJsonModule)
+        .register(SerdeModuleJsonValue)
         .register(TestObject::class, InstantVariable(::TestObject))
         .build()
 
@@ -168,7 +168,7 @@ internal object ValueNilSerdeAdapterTest {
     }
 
     private val testDelegate: Gson = GsonFactoryBuilder()
-        .register(ValueJsonModule)
+        .register(SerdeModuleJsonValue)
         .build()
 }
 
@@ -188,7 +188,7 @@ internal object ValueNumberSerdeAdapterTest {
     }
 
     private val testDelegate: Gson = GsonFactoryBuilder()
-        .register(ValueJsonModule)
+        .register(SerdeModuleJsonValue)
         .build()
 }
 
@@ -208,7 +208,7 @@ internal object ValueVariableNumberSerdeAdapterTest {
     }
 
     private val testDelegate: Gson = GsonFactoryBuilder()
-        .register(ValueJsonModule)
+        .register(SerdeModuleJsonValue)
         .register(TestObject::class, NumberVariable(::TestObject))
         .build()
 
@@ -246,7 +246,7 @@ internal object ValueObjectSerdeAdapterTest {
     }
 
     private val testDelegate: Gson = GsonFactoryBuilder()
-        .register(ValueJsonModule)
+        .register(SerdeModuleJsonValue)
         .build()
 
 }
@@ -284,7 +284,7 @@ internal object ValueObjectVariableSerdeAdapterTest {
     }
 
     private val testDelegate: Gson = GsonFactoryBuilder()
-        .register(ValueJsonModule)
+        .register(SerdeModuleJsonValue)
         .register(TestObject::class, ObjectVariable(::TestObject))
         .build()
 
@@ -307,7 +307,7 @@ internal object ValueSnowflakeIdSerdeAdapterTest {
     }
 
     private val testDelegate: Gson = GsonFactoryBuilder()
-        .register(ValueJsonModule)
+        .register(SerdeModuleJsonValue)
         .build()
 }
 
@@ -327,7 +327,7 @@ internal object ValueSnowflakeIdVariableSerdeAdapterTest {
     }
 
     private val testDelegate: Gson = GsonFactoryBuilder()
-        .register(ValueJsonModule)
+        .register(SerdeModuleJsonValue)
         .register(TestObject::class, SnowflakeIdVariable(::TestObject))
         .build()
 
@@ -352,7 +352,7 @@ internal object ValueStringSerdeAdapterTest {
     }
 
     private val testDelegate: Gson = GsonFactoryBuilder()
-        .register(ValueJsonModule)
+        .register(SerdeModuleJsonValue)
         .build()
 }
 
@@ -373,7 +373,7 @@ internal object ValueStringVariableSerdeAdapterTest {
     }
 
     private val testDelegate: Gson = GsonFactoryBuilder()
-        .register(ValueJsonModule)
+        .register(SerdeModuleJsonValue)
         .register(TestObject::class, StringVariable(::TestObject))
         .build()
 

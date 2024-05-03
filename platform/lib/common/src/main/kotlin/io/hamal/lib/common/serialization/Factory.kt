@@ -13,7 +13,7 @@ class GsonFactoryBuilder {
         register(SerdeModule)
     }
 
-    fun register(module: SerializationModule): GsonFactoryBuilder {
+    fun register(module: SerdeModuleJson): GsonFactoryBuilder {
         module.adapters.forEach { (clazz, adapter) ->
             builder.registerTypeAdapter(clazz.java, adapter)
         }

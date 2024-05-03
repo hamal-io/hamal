@@ -6,7 +6,7 @@ import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.GsonTransform
 import io.hamal.lib.common.serialization.JsonAdapter
-import io.hamal.lib.common.serialization.SerializationModule
+import io.hamal.lib.common.serialization.SerdeModuleJson
 import io.hamal.lib.common.serialization.json.*
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
@@ -14,7 +14,7 @@ import java.lang.reflect.Type
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-object ValueJsonModule : SerializationModule() {
+object SerdeModuleJsonValue : SerdeModuleJson() {
 
     init {
         this[FieldIdentifier::class] = ValueJsonAdapters.StringVariable(::FieldIdentifier)

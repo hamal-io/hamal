@@ -3,10 +3,10 @@ package io.hamal.extension.web3.eth
 import com.google.gson.Gson
 import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.common.serialization.json.JsonArray
-import io.hamal.lib.common.value.ValueJsonModule
+import io.hamal.lib.common.value.SerdeModuleJsonValue
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.RunnerEnv
-import io.hamal.lib.domain.vo.ValueVariableJsonModule
+import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.plugin.web3.evm.evm.PluginWeb3EvmFactory
 import io.hamal.runner.test.AbstractRunnerTest
@@ -46,8 +46,8 @@ internal open class TestWebConfig : WebMvcConfigurer {
 
     @Bean
     open fun gson(): Gson = GsonFactoryBuilder()
-        .register(ValueJsonModule)
-        .register(ValueVariableJsonModule)
+        .register(SerdeModuleJsonValue)
+        .register(SerdeModuleJsonValueVariable)
         .build()
 
     @Bean

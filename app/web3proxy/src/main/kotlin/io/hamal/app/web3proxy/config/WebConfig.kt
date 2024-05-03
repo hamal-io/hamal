@@ -3,9 +3,9 @@ package io.hamal.app.web3proxy.config
 import com.google.gson.Gson
 import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.common.serialization.json.SerdeModule
-import io.hamal.lib.common.value.ValueJsonModule
-import io.hamal.lib.domain.vo.ValueVariableJsonModule
-import io.hamal.lib.web3.evm.EvmHotModule
+import io.hamal.lib.common.value.SerdeModuleJsonValue
+import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
+import io.hamal.lib.web3.evm.SerdeModuleJsonEvm
 import org.apache.coyote.ProtocolHandler
 import org.springframework.boot.web.embedded.tomcat.TomcatProtocolHandlerCustomizer
 import org.springframework.context.annotation.Bean
@@ -31,10 +31,10 @@ class WebConfig : WebMvcConfigurer {
 
     @Bean
     fun gson(): Gson = GsonFactoryBuilder()
-        .register(EvmHotModule)
+        .register(SerdeModuleJsonEvm)
         .register(SerdeModule)
-        .register(ValueJsonModule)
-        .register(ValueVariableJsonModule)
+        .register(SerdeModuleJsonValue)
+        .register(SerdeModuleJsonValueVariable)
         .build()
 
     @Bean
@@ -42,9 +42,7 @@ class WebConfig : WebMvcConfigurer {
         val result = GsonHttpMessageConverter()
         result.gson = gson
         result.defaultCharset = StandardCharsets.UTF_8
-        result.supportedMediaTypes = listOf(
-            MediaType("application", "json", StandardCharsets.UTF_8)
-        )
+        result.supportedMediaTypes = listOf(MediaType("application", "json", StandardCharsets.UTF_8))
         return result
     }
 

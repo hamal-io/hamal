@@ -3,12 +3,12 @@ package io.hamal.app.web3proxy.eth.repository
 import io.hamal.lib.common.compress.CompressorBzip
 import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.common.serialization.json.SerdeModule
-import io.hamal.lib.common.value.ValueJsonModule
+import io.hamal.lib.common.value.SerdeModuleJsonValue
 import io.hamal.lib.common.serialization.Serde
-import io.hamal.lib.domain.vo.ValueVariableJsonModule
+import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
-import io.hamal.lib.web3.evm.EvmHotModule
+import io.hamal.lib.web3.evm.SerdeModuleJsonEvm
 import io.hamal.lib.web3.evm.abi.type.EvmAddress
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.chain.eth.domain.EthBlockData
@@ -113,10 +113,10 @@ internal class EthBlockRepositoryImpl(
 
     private val serde = Serde(
         factory = GsonFactoryBuilder()
-            .register(EvmHotModule)
+            .register(SerdeModuleJsonEvm)
             .register(SerdeModule)
-            .register(ValueJsonModule)
-            .register(ValueVariableJsonModule),
+            .register(SerdeModuleJsonValue)
+            .register(SerdeModuleJsonValueVariable),
         compressor = CompressorBzip
     )
 }
