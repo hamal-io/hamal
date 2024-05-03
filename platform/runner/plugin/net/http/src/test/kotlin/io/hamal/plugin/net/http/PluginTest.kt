@@ -4,6 +4,7 @@ import io.hamal.extension.std.decimal.ExtensionDecimalFactory
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.plugin.net.http.endpoint.TestHeaderController
+import io.hamal.plugin.net.http.endpoint.TestHonController
 import io.hamal.plugin.net.http.endpoint.TestJsonController
 import io.hamal.plugin.net.http.endpoint.TestStatusController
 import io.hamal.plugin.net.http.fixture.TestWebConfig
@@ -25,6 +26,7 @@ import kotlin.io.path.name
         TestWebConfig::class,
         TestHeaderController::class,
         TestJsonController::class,
+        TestHonController::class,
         TestStatusController::class
     ], webEnvironment = RANDOM_PORT
 )

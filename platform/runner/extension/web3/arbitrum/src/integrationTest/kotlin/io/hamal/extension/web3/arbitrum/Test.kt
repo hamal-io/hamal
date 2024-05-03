@@ -3,10 +3,10 @@ package io.hamal.extension.web3.arbitrum
 import com.google.gson.Gson
 import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.json.JsonArray
-import io.hamal.lib.common.value.serde.SerdeModuleJsonValue
+import io.hamal.lib.common.value.serde.SerdeModuleValueJson
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.RunnerEnv
-import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
+import io.hamal.lib.domain.vo.SerdeModuleValueVariableJson
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.plugin.web3.evm.evm.PluginWeb3EvmFactory
 import io.hamal.runner.test.AbstractRunnerTest
@@ -45,13 +45,13 @@ internal open class TestProxy
 internal open class TestWebConfig : WebMvcConfigurer {
 
     @Bean
-    open fun gson(): Gson = Serde.json()
-        .register(SerdeModuleJsonValue)
-        .register(SerdeModuleJsonValueVariable)
+    open fun gsonJson(): Gson = Serde.json()
+        .register(SerdeModuleValueJson)
+        .register(SerdeModuleValueVariableJson)
         .gson
 
     @Bean
-    open fun gsonHttpMessageConverter(gson: Gson): GsonHttpMessageConverter {
+    open fun httpMessageJsonConverter(gson: Gson): GsonHttpMessageConverter {
         val result = GsonHttpMessageConverter()
         result.gson = gson
         result.defaultCharset = StandardCharsets.UTF_8
@@ -64,7 +64,7 @@ internal open class TestWebConfig : WebMvcConfigurer {
 
     override fun configureMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {
         converters.add(SourceHttpMessageConverter<Source>())
-        converters.add(gsonHttpMessageConverter(gson()))
+        converters.add(httpMessageJsonConverter(gsonJson()))
     }
 }
 

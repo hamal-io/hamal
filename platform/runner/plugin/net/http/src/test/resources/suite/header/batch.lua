@@ -11,11 +11,11 @@ req_headers['b'] = true
 local url = context.env.test_url .. '/v1/headers'
 
 res = fail_on_error(http.execute({
-    http.requests.get({ url = url, headers = req_headers }),
-    http.requests.post({ url = url, headers = req_headers }),
-    http.requests.patch({ url = url, headers = req_headers }),
-    http.requests.put({ url = url, headers = req_headers }),
-    http.requests.delete({ url = url, headers = req_headers })
+    http.requests.get({ url = url, headers = req_headers, produces = "JSON", consumes = "JSON" }),
+    http.requests.post({ url = url, headers = req_headers, produces = "JSON", consumes = "JSON" }),
+    http.requests.patch({ url = url, headers = req_headers, produces = "JSON", consumes = "JSON" }),
+    http.requests.put({ url = url, headers = req_headers, produces = "JSON", consumes = "JSON" }),
+    http.requests.delete({ url = url, headers = req_headers, produces = "JSON", consumes = "JSON" })
 }))
 
 assert(err == nil)
@@ -25,9 +25,7 @@ assert(#res == 5)
 for idx = 1, 5 do
     headers = res[idx].headers
 
-    assert(headers['accept'] == 'application/json')
     assert(headers['auth-ori-zation'] == 'Bearer ey.SecretToken')
-
     assert(headers['s'] == 'HamalRocks')
     assert(headers['d'] == '12.21')
     assert(headers['n'] == '24.0')

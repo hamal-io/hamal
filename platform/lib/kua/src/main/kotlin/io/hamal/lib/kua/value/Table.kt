@@ -15,6 +15,16 @@ class KuaTable(
 
     fun append(value: Value): TableLength {
         return when (value) {
+
+            is ValueArray -> {
+                state.checkpoint {
+                    it.tableCreate(value.value).let { table ->
+                        state.tablePush(table)
+                        state.tableAppend(index)
+                    }
+                }
+            }
+
             is ValueBoolean -> {
                 state.booleanPush(value)
                 state.tableAppend(index)
@@ -141,6 +151,17 @@ class KuaTable(
 
     operator fun set(key: ValueString, value: Value): TableLength {
         return when (value) {
+
+            is ValueArray -> {
+                state.checkpoint {
+                    it.tableCreate(value.value).let { table ->
+                        state.stringPush(key)
+                        state.tablePush(table)
+                        state.tableRawSet(index)
+                    }
+                }
+            }
+
             is ValueBoolean -> {
                 state.stringPush(key)
                 state.booleanPush(if (value.booleanValue) ValueTrue else ValueFalse)

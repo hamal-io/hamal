@@ -1,10 +1,10 @@
 package io.hamal.lib.sdk
 
 import io.hamal.lib.common.serialization.Serde
-import io.hamal.lib.common.value.serde.SerdeModuleJsonValue
+import io.hamal.lib.common.value.serde.SerdeModuleValueJson
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.ExecToken
-import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
+import io.hamal.lib.domain.vo.SerdeModuleValueVariableJson
 import io.hamal.lib.http.HttpSerdeJsonFactory
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.HttpTemplateImpl
@@ -36,8 +36,8 @@ class ApiSdkImpl : ApiSdk {
     ) {
         val serde = Serde.json()
             .register(SerdeModuleJsonApi)
-            .register(SerdeModuleJsonValue)
-            .register(SerdeModuleJsonValueVariable)
+            .register(SerdeModuleValueJson)
+            .register(SerdeModuleValueVariableJson)
 
         template = HttpTemplateImpl(
             baseUrl = apiHost,
@@ -53,8 +53,8 @@ class ApiSdkImpl : ApiSdk {
     constructor(apiHost: String, token: AuthToken) {
         val serde = Serde.json()
             .register(SerdeModuleJsonApi)
-            .register(SerdeModuleJsonValue)
-            .register(SerdeModuleJsonValueVariable)
+            .register(SerdeModuleValueJson)
+            .register(SerdeModuleValueVariableJson)
 
         template = HttpTemplateImpl(
             baseUrl = apiHost,

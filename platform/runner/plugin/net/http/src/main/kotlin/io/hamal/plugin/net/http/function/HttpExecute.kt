@@ -3,6 +3,7 @@ package io.hamal.plugin.net.http.function
 import io.hamal.lib.common.serialization.json.JsonNode
 import io.hamal.lib.common.value.*
 import io.hamal.lib.http.*
+import io.hamal.lib.http.serde.*
 import io.hamal.lib.kua.absIndex
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -30,27 +31,59 @@ class HttpExecuteFunction : Function1In2Out<KuaTable, ValueError, KuaTable>(
 
                 val method = request.getString("method")
 
-                val json = request.get("json")
+
+                val produces = request.getString("produces")
+                val consumes = request.getString("consumes")
+                val consumesError = request.getString("consumes_error")
+
+                val baseTemplate = HttpTemplateImpl(
+                    serdeFactory = object : HttpSerdeFactory {
+                        override var contentSerializer: HttpContentSerializer = when (produces) {
+                            ValueString("JSON") -> HttpContentJsonSerializer
+                            ValueString("HON") -> HttpContentHonSerializer
+                            else -> TODO()
+                        }
+                        override var contentDeserializer: HttpContentDeserializer = when (consumes) {
+                            ValueString("JSON") -> HttpContentJsonDeserializer
+                            ValueString("HON") -> HttpContentHonDeserializer
+                            else -> TODO()
+                        }
+                        override var errorDeserializer: HttpErrorDeserializer = when (consumesError) {
+                            ValueString("JSON") -> HttpErrorJsonDeserializer
+                            ValueString("HON") -> HttpErrorHonDeserializer
+                            else -> TODO()
+                        }
+                    }
+                )
+
+                val body = request.get("body")
 
                 val template = when (method) {
-                    ValueString("GET") -> HttpTemplateImpl().get(url.stringValue)
-                    ValueString("PATCH") -> HttpTemplateImpl().patch(url.stringValue)
-                    ValueString("POST") -> HttpTemplateImpl().post(url.stringValue)
-                    ValueString("PUT") -> HttpTemplateImpl().put(url.stringValue)
-                    ValueString("DELETE") -> HttpTemplateImpl().delete(url.stringValue)
+                    ValueString("GET") -> baseTemplate.get(url.stringValue)
+                    ValueString("PATCH") -> baseTemplate.patch(url.stringValue)
+                    ValueString("POST") -> baseTemplate.post(url.stringValue)
+                    ValueString("PUT") -> baseTemplate.put(url.stringValue)
+                    ValueString("DELETE") -> baseTemplate.delete(url.stringValue)
                     else -> TODO()
                 }
 
-                if (json !is ValueNil) {
+                if (body !is ValueNil) {
                     if (template is HttpRequestWithBody) {
-                        ctx.checkpoint { template.body(json.toHotNode()) }
+                        ctx.checkpoint { template.body(body.toHotNode()) }
                     }
                 }
 
-                template.header("accept", "application/json")
+                when (produces) {
+                    ValueString("JSON") -> template.header("content-type", "application/json;charset=UTF-8")
+                    ValueString("HON") -> template.header("content-type", "application/hon;charset=UTF-8")
+                }
+
+                when (consumes) {
+                    ValueString("JSON") -> template.header("accept", "application/json;charset=UTF-8")
+                    ValueString("HON") -> template.header("accept", "application/hon;charset=UTF-8")
+                }
 
                 headers.asEntries().forEach { (key, value) ->
-//                println("$key $value")
                     template.header(
                         key.stringValue, when (value) {
                             is ValueString -> value.stringValue
@@ -66,7 +99,6 @@ class HttpExecuteFunction : Function1In2Out<KuaTable, ValueError, KuaTable>(
                         }
                     )
                 }
-
 
                 val response = template.execute()
                 results.add(response.toMap(ctx))
@@ -105,7 +137,12 @@ private fun HttpResponse.toMap(ctx: FunctionContext): KuaReference {
 private fun HttpResponse.content(ctx: FunctionContext) = when (this) {
     is HttpSuccessResponse -> {
         if (isNotEmpty) {
-            result(JsonNode::class).toKua(ctx)
+            val contentType = headers.find("content-type")
+            if (contentType?.startsWith("application/hon") == true) {
+                result(ValueArray::class)
+            } else {
+                result(JsonNode::class).toKua(ctx)
+            }
         } else {
             ctx.tableCreate()
         }

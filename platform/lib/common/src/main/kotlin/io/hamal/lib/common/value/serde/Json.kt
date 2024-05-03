@@ -13,7 +13,7 @@ import io.hamal.lib.common.value.*
 import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 import java.lang.reflect.Type
 
-object SerdeModuleJsonValue : SerdeModuleJson() {
+object SerdeModuleValueJson : SerdeModuleJson() {
 
     init {
         this[FieldIdentifier::class] = ValueJsonAdapters.StringVariable(::FieldIdentifier)

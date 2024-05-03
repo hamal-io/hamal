@@ -22,6 +22,7 @@ data class ValueArray(
 
     companion object {
         fun builder(): ValueArrayBuilder = ValueArrayBuilder()
+        val empty = ValueArray(listOf())
     }
 }
 

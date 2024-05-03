@@ -11,6 +11,9 @@ function plugin_create(internal)
         return {
             method = "GET",
             url = req.url or error('url not set'),
+            produces = req.produces or error('produces not set'),
+            consumes = req.consumes or error('consumes not set'),
+            consumes_error = req.consumes_error or req.consumes,
             headers = req.headers or {}
         }
     end
@@ -19,8 +22,11 @@ function plugin_create(internal)
         return {
             method = "POST",
             url = req.url or error('url not set'),
+            produces = req.produces or error('produces not set'),
+            consumes = req.consumes or error('consumes not set'),
+            consumes_error = req.consumes_error or req.consumes,
             headers = req.headers or {},
-            json = req.json
+            body = req.body
         }
     end
 
@@ -28,8 +34,11 @@ function plugin_create(internal)
         return {
             method = "PATCH",
             url = req.url or error('url not set'),
+            produces = req.produces or error('produces not set'),
+            consumes = req.consumes or error('consumes not set'),
+            consumes_error = req.consumes_error or req.consumes,
             headers = req.headers or {},
-            json = req.json
+            body = req.body
         }
     end
 
@@ -37,8 +46,11 @@ function plugin_create(internal)
         return {
             method = "PUT",
             url = req.url or error('url not set'),
+            produces = req.produces or error('produces not set'),
+            consumes = req.consumes or error('consumes not set'),
+            consumes_error = req.consumes_error or req.consumes,
             headers = req.headers or {},
-            json = req.json
+            body = req.body
         }
     end
 
@@ -46,6 +58,9 @@ function plugin_create(internal)
         return {
             method = "DELETE",
             url = req.url or error('url not set'),
+            produces = req.produces or error('produces not set'),
+            consumes = req.consumes or error('consumes not set'),
+            consumes_error = req.consumes_error or req.consumes,
             headers = req.headers or {}
         }
     end

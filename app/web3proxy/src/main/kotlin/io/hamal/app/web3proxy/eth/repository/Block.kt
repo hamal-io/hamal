@@ -2,8 +2,8 @@ package io.hamal.app.web3proxy.eth.repository
 
 import io.hamal.lib.common.compress.CompressorBzip
 import io.hamal.lib.common.serialization.Serde
-import io.hamal.lib.common.value.serde.SerdeModuleJsonValue
-import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
+import io.hamal.lib.common.value.serde.SerdeModuleValueJson
+import io.hamal.lib.domain.vo.SerdeModuleValueVariableJson
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.lib.web3.evm.SerdeModuleJsonEvm
@@ -111,8 +111,8 @@ internal class EthBlockRepositoryImpl(
 
     private val serde = Serde.json(CompressorBzip)
         .register(SerdeModuleJsonEvm)
-        .register(SerdeModuleJsonValue)
-        .register(SerdeModuleJsonValueVariable)
+        .register(SerdeModuleValueJson)
+        .register(SerdeModuleValueVariableJson)
 }
 
 private fun collectEthAddresses(blocks: List<EthBlockData>): Set<EvmAddress> {

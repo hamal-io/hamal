@@ -6,9 +6,9 @@ import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.AdapterJson
 import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.SerdeModuleJson
-import io.hamal.lib.common.value.serde.SerdeModuleJsonValue
+import io.hamal.lib.common.value.serde.SerdeModuleValueJson
 import io.hamal.lib.common.value.serde.ValueJsonAdapters
-import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
+import io.hamal.lib.domain.vo.SerdeModuleValueVariableJson
 import io.hamal.repository.api.SerdeModuleJsonDomain
 import io.hamal.repository.record.account.AccountRecord
 import io.hamal.repository.record.code.CodeRecord
@@ -47,8 +47,8 @@ object SerdeModuleJsonRecord : SerdeModuleJson() {
 val serde = Serde.json()
     .register(SerdeModuleJsonDomain)
     .register(SerdeModuleJsonRecord)
-    .register(SerdeModuleJsonValue)
-    .register(SerdeModuleJsonValueVariable)
+    .register(SerdeModuleValueJson)
+    .register(SerdeModuleValueVariableJson)
 
 abstract class RecordAdapter<BASE_TYPE : Record<*>>(
     recordClasses: List<KClass<out BASE_TYPE>>

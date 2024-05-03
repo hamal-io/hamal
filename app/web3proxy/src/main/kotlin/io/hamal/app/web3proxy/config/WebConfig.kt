@@ -2,8 +2,8 @@ package io.hamal.app.web3proxy.config
 
 import com.google.gson.Gson
 import io.hamal.lib.common.serialization.Serde
-import io.hamal.lib.common.value.serde.SerdeModuleJsonValue
-import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
+import io.hamal.lib.common.value.serde.SerdeModuleValueJson
+import io.hamal.lib.domain.vo.SerdeModuleValueVariableJson
 import io.hamal.lib.web3.evm.SerdeModuleJsonEvm
 import org.apache.coyote.ProtocolHandler
 import org.springframework.boot.web.embedded.tomcat.TomcatProtocolHandlerCustomizer
@@ -29,14 +29,14 @@ class WebConfig : WebMvcConfigurer {
     }
 
     @Bean
-    fun gson(): Gson = Serde.json()
+    fun gsonJson(): Gson = Serde.json()
         .register(SerdeModuleJsonEvm)
-        .register(SerdeModuleJsonValue)
-        .register(SerdeModuleJsonValueVariable)
+        .register(SerdeModuleValueJson)
+        .register(SerdeModuleValueVariableJson)
         .gson
 
     @Bean
-    fun gsonHttpMessageConverter(gson: Gson): GsonHttpMessageConverter {
+    fun httpMessageJsonConverter(gson: Gson): GsonHttpMessageConverter {
         val result = GsonHttpMessageConverter()
         result.gson = gson
         result.defaultCharset = StandardCharsets.UTF_8
@@ -47,6 +47,6 @@ class WebConfig : WebMvcConfigurer {
 
     override fun configureMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {
         converters.add(SourceHttpMessageConverter<Source>())
-        converters.add(gsonHttpMessageConverter(gson()))
+        converters.add(httpMessageJsonConverter(gsonJson()))
     }
 }

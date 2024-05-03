@@ -9,7 +9,7 @@ import io.hamal.lib.common.value.serde.ValueJsonAdapters.SnowflakeIdVariable
 import io.hamal.lib.common.value.serde.ValueJsonAdapters.StringVariable
 import io.hamal.lib.domain.State
 
-object SerdeModuleJsonValueVariable : SerdeModuleJson() {
+object SerdeModuleValueVariableJson : SerdeModuleJson() {
     init {
         this[CreatedAt::class] = InstantVariable(::CreatedAt)
         this[UpdatedAt::class] = InstantVariable(::UpdatedAt)

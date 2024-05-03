@@ -1,10 +1,10 @@
 package io.hamal.lib.http
 
 import com.google.gson.reflect.TypeToken
-import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.SerdeJson
-import io.hamal.lib.common.value.serde.SerdeModuleJsonValue
-import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
+import io.hamal.lib.http.serde.HttpErrorJsonDeserializer
+import io.hamal.lib.http.serde.HttpContentJsonDeserializer
+import io.hamal.lib.http.serde.HttpContentJsonSerializer
 import java.io.InputStream
 import kotlin.reflect.KClass
 
@@ -15,9 +15,24 @@ interface HttpSerdeFactory {
 }
 
 object DefaultHttpSerdeFactory : HttpSerdeFactory {
-    override var errorDeserializer: HttpErrorDeserializer = ErrorJsonDeserializer
+    override var errorDeserializer: HttpErrorDeserializer = HttpErrorJsonDeserializer
     override var contentDeserializer: HttpContentDeserializer = HttpContentJsonDeserializer
     override var contentSerializer: HttpContentSerializer = HttpContentJsonSerializer
+}
+
+interface HttpErrorDeserializer {
+    fun <ERROR : Any> deserialize(inputStream: InputStream, clazz: KClass<ERROR>): ERROR
+}
+
+
+interface HttpContentDeserializer {
+    fun <VALUE : Any> deserialize(inputStream: InputStream, clazz: KClass<VALUE>): VALUE
+    fun <VALUE : Any> deserializeList(inputStream: InputStream, clazz: KClass<VALUE>): List<VALUE>
+}
+
+
+interface HttpContentSerializer {
+    fun <VALUE : Any> serialize(value: VALUE, clazz: KClass<VALUE>): String
 }
 
 class HttpSerdeJsonFactory(private val serde: SerdeJson) : HttpSerdeFactory {
@@ -36,41 +51,5 @@ class HttpSerdeJsonFactory(private val serde: SerdeJson) : HttpSerdeFactory {
 }
 
 
-private val serde = Serde.json()
-    .register(SerdeModuleJsonValue)
-    .register(SerdeModuleJsonValueVariable)
-
-interface HttpErrorDeserializer {
-    fun <ERROR : Any> deserialize(inputStream: InputStream, clazz: KClass<ERROR>): ERROR
-}
-
-object ErrorJsonDeserializer : HttpErrorDeserializer {
-    override fun <ERROR : Any> deserialize(inputStream: InputStream, clazz: KClass<ERROR>): ERROR {
-        return serde.read(clazz, inputStream)
-    }
-}
-
-interface HttpContentDeserializer {
-    fun <VALUE : Any> deserialize(inputStream: InputStream, clazz: KClass<VALUE>): VALUE
-    fun <VALUE : Any> deserializeList(inputStream: InputStream, clazz: KClass<VALUE>): List<VALUE>
-}
-
-object HttpContentJsonDeserializer : HttpContentDeserializer {
-    override fun <VALUE : Any> deserialize(inputStream: InputStream, clazz: KClass<VALUE>): VALUE {
-        return serde.read(clazz, inputStream)
-    }
-
-    override fun <VALUE : Any> deserializeList(inputStream: InputStream, clazz: KClass<VALUE>): List<VALUE> {
-        return serde.read<Array<VALUE>>(TypeToken.getArray(clazz.java).type, inputStream).toList()
-    }
-}
-
-interface HttpContentSerializer {
-    fun <VALUE : Any> serialize(value: VALUE, clazz: KClass<VALUE>): String
-}
-
-object HttpContentJsonSerializer : HttpContentSerializer {
-    override fun <VALUE : Any> serialize(value: VALUE, clazz: KClass<VALUE>): String {
-        return serde.write(value)
-    }
-}
+//private val honSerde = Serde.hon()
+//    .register(SerdeModuleValueHon)

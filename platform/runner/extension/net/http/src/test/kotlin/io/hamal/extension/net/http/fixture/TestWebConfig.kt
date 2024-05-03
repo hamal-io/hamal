@@ -2,8 +2,8 @@ package io.hamal.extension.net.http.fixture
 
 import com.google.gson.Gson
 import io.hamal.lib.common.serialization.Serde
-import io.hamal.lib.common.value.serde.SerdeModuleJsonValue
-import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
+import io.hamal.lib.common.value.serde.SerdeModuleValueJson
+import io.hamal.lib.domain.vo.SerdeModuleValueVariableJson
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
@@ -23,13 +23,13 @@ import java.util.*
 open class TestWebConfig : WebMvcConfigurer {
 
     @Bean
-    open fun gson(): Gson = Serde.json()
-        .register(SerdeModuleJsonValue)
-        .register(SerdeModuleJsonValueVariable)
+    open fun gsonJson(): Gson = Serde.json()
+        .register(SerdeModuleValueJson)
+        .register(SerdeModuleValueVariableJson)
         .gson
 
     @Bean
-    open fun gsonHttpMessageConverter(gson: Gson): GsonHttpMessageConverter {
+    open fun httpMessageJsonConverter(gson: Gson): GsonHttpMessageConverter {
         val result = GsonHttpMessageConverter()
         result.gson = gson
         result.supportedMediaTypes = Arrays.asList(
@@ -41,7 +41,7 @@ open class TestWebConfig : WebMvcConfigurer {
 
 
     override fun configureMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {
-        converters.add(gsonHttpMessageConverter(gson()))
+        converters.add(httpMessageJsonConverter(gsonJson()))
     }
 
 }

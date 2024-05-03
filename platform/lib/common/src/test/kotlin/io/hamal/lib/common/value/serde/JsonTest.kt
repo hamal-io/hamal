@@ -46,7 +46,7 @@ internal class ValueAdapterJsonTest {
         }
 
         private val serde = Serde.json()
-            .register(SerdeModuleJsonValue)
+            .register(SerdeModuleValueJson)
 
 
     }
@@ -68,7 +68,7 @@ internal class ValueAdapterJsonTest {
         }
 
         private val serde = Serde.json()
-            .register(SerdeModuleJsonValue)
+            .register(SerdeModuleValueJson)
 
     }
 
@@ -90,7 +90,7 @@ internal class ValueAdapterJsonTest {
         }
 
         private val serde = Serde.json()
-            .register(SerdeModuleJsonValue)
+            .register(SerdeModuleValueJson)
             .register(TestObject::class, BooleanVariable(::TestObject))
 
 
@@ -113,7 +113,7 @@ internal class ValueAdapterJsonTest {
             assertThat(result, equalTo(expected))
         }
 
-        private val serde = Serde.json().register(SerdeModuleJsonValue)
+        private val serde = Serde.json().register(SerdeModuleValueJson)
     }
 
     @Nested
@@ -133,7 +133,7 @@ internal class ValueAdapterJsonTest {
             assertThat(result, equalTo(expected))
         }
 
-        private val serde = Serde.json().register(SerdeModuleJsonValue)
+        private val serde = Serde.json().register(SerdeModuleValueJson)
     }
 
     @Nested
@@ -154,7 +154,7 @@ internal class ValueAdapterJsonTest {
         }
 
         private val serde = Serde.json()
-            .register(SerdeModuleJsonValue)
+            .register(SerdeModuleValueJson)
             .register(TestObject::class, InstantVariable(::TestObject))
 
 
@@ -170,7 +170,7 @@ internal class ValueAdapterJsonTest {
             assertThat(result, equalTo("null"))
         }
 
-        private val serde = Serde.json().register(SerdeModuleJsonValue)
+        private val serde = Serde.json().register(SerdeModuleValueJson)
     }
 
     @Nested
@@ -189,7 +189,7 @@ internal class ValueAdapterJsonTest {
             assertThat(result, equalTo(expected))
         }
 
-        private val serde = Serde.json().register(SerdeModuleJsonValue)
+        private val serde = Serde.json().register(SerdeModuleValueJson)
     }
 
     @Nested
@@ -209,7 +209,7 @@ internal class ValueAdapterJsonTest {
         }
 
         private val serde = Serde.json()
-            .register(SerdeModuleJsonValue)
+            .register(SerdeModuleValueJson)
             .register(TestObject::class, NumberVariable(::TestObject))
 
 
@@ -244,7 +244,7 @@ internal class ValueAdapterJsonTest {
             assertThat(result, equalTo(expected))
         }
 
-        private val serde = Serde.json().register(SerdeModuleJsonValue)
+        private val serde = Serde.json().register(SerdeModuleValueJson)
     }
 
     @Nested
@@ -278,7 +278,7 @@ internal class ValueAdapterJsonTest {
         }
 
         private val serde = Serde.json()
-            .register(SerdeModuleJsonValue)
+            .register(SerdeModuleValueJson)
             .register(TestObject::class, ObjectVariable(::TestObject))
 
 
@@ -301,7 +301,7 @@ internal class ValueAdapterJsonTest {
             assertThat(result, equalTo(expected))
         }
 
-        private val serde = Serde.json().register(SerdeModuleJsonValue)
+        private val serde = Serde.json().register(SerdeModuleValueJson)
     }
 
     @Nested
@@ -321,7 +321,7 @@ internal class ValueAdapterJsonTest {
         }
 
         private val serde = Serde.json()
-            .register(SerdeModuleJsonValue)
+            .register(SerdeModuleValueJson)
             .register(TestObject::class, SnowflakeIdVariable(::TestObject))
 
 
@@ -344,7 +344,7 @@ internal class ValueAdapterJsonTest {
             assertThat(result, equalTo(expected))
         }
 
-        private val serde = Serde.json().register(SerdeModuleJsonValue)
+        private val serde = Serde.json().register(SerdeModuleValueJson)
     }
 
     @Nested
@@ -365,7 +365,7 @@ internal class ValueAdapterJsonTest {
         }
 
         private val serde = Serde.json()
-            .register(SerdeModuleJsonValue)
+            .register(SerdeModuleValueJson)
             .register(TestObject::class, StringVariable(::TestObject))
 
 
