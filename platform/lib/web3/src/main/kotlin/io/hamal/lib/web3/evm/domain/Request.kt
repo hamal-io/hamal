@@ -4,11 +4,11 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.serialization.JsonAdapter
+import io.hamal.lib.common.serialization.AdapterJson
 import java.lang.reflect.Type
 
 data class EvmRequestId(val value: String) {
-    object Adapter : JsonAdapter<EvmRequestId> {
+    object Adapter : AdapterJson<EvmRequestId> {
 
         override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): EvmRequestId {
             return EvmRequestId(json.asString)

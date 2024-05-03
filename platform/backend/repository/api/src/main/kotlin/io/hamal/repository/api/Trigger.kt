@@ -5,7 +5,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.domain.Limit.Companion.Limit
-import io.hamal.lib.common.serialization.JsonAdapter
+import io.hamal.lib.common.serialization.AdapterJson
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
@@ -121,7 +121,7 @@ sealed interface Trigger : DomainObject<TriggerId>, HasNamespaceId, HasWorkspace
     val type: TriggerType
     val status: TriggerStatus
 
-    object Adapter : JsonAdapter<Trigger> {
+    object Adapter : AdapterJson<Trigger> {
         override fun serialize(
             src: Trigger,
             typeOfSrc: Type,

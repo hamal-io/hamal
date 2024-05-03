@@ -4,7 +4,7 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.serialization.JsonAdapter
+import io.hamal.lib.common.serialization.AdapterJson
 import io.hamal.lib.domain._enum.FeedbackMood
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.*
@@ -17,7 +17,7 @@ data class FeedbackCreateRequest(
     val message: FeedbackMessage,
     val accountId: AccountId?
 ) {
-    object Adapter : JsonAdapter<FeedbackCreateRequest> {
+    object Adapter : AdapterJson<FeedbackCreateRequest> {
         override fun serialize(
             src: FeedbackCreateRequest,
             typeOfSrc: Type,

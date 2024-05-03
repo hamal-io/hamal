@@ -4,7 +4,7 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.GsonTransform
-import io.hamal.lib.common.serialization.JsonAdapter
+import io.hamal.lib.common.serialization.AdapterJson
 import io.hamal.lib.common.serialization.SerdeJson
 import io.hamal.lib.common.serialization.json.JsonArray
 import io.hamal.lib.common.serialization.json.JsonNull
@@ -26,7 +26,7 @@ sealed interface EthRequest : EvmRequest {
     override val id: EvmRequestId
     override val method: EvmMethod
 
-    object Adapter : JsonAdapter<EthRequest> {
+    object Adapter : AdapterJson<EthRequest> {
         override fun serialize(request: EthRequest, type: Type, ctx: JsonSerializationContext): JsonElement {
             return when (request) {
                 is EthGetBlockByNumberRequest -> GsonTransform.fromNode(
@@ -70,7 +70,7 @@ data class EthCallRequest(
 ) : EthRequest {
     override val method: EvmMethod = Call
 
-    object Adapter : JsonAdapter<EthCallRequest> {
+    object Adapter : AdapterJson<EthCallRequest> {
         override fun serialize(request: EthCallRequest, typeOfSrc: Type, ctx: JsonSerializationContext): JsonElement {
             return GsonTransform.fromNode(
                 JsonObject.builder()
@@ -113,7 +113,7 @@ data class EthGetBlockByNumberRequest(
 ) : EthRequest {
     override val method: EvmMethod = GetBlockByNumber
 
-    object Adapter : JsonAdapter<EthGetBlockByNumberRequest> {
+    object Adapter : AdapterJson<EthGetBlockByNumberRequest> {
         override fun serialize(request: EthGetBlockByNumberRequest, type: Type, ctx: JsonSerializationContext): JsonElement {
             return GsonTransform.fromNode(
                 JsonObject.builder()

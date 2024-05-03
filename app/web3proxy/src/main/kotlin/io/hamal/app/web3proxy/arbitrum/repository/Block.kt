@@ -1,7 +1,7 @@
 package io.hamal.app.web3proxy.arbitrum.repository
 
 import io.hamal.lib.common.serialization.Serde
-import io.hamal.lib.common.serialization.json.SerdeModule
+import io.hamal.lib.common.serialization.json.SerdeModuleJsonDefault
 import io.hamal.lib.common.value.SerdeModuleJsonValue
 import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
 import io.hamal.lib.sqlite.Connection
@@ -111,7 +111,7 @@ internal class ArbitrumBlockRepositoryImpl(
 
     private val serde = Serde.json()
         .register(SerdeModuleJsonEvm)
-        .register(SerdeModule)
+        .register(SerdeModuleJsonDefault)
         .register(SerdeModuleJsonValue)
         .register(SerdeModuleJsonValueVariable)
 }

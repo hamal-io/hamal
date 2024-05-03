@@ -3,7 +3,7 @@ package io.hamal.lib.sdk.api
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.serialization.JsonAdapter
+import io.hamal.lib.common.serialization.AdapterJson
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.RequestClass
 import io.hamal.lib.domain.vo.RequestClass.Companion.RequestClass
@@ -18,7 +18,7 @@ sealed class ApiRequested {
     abstract val requestStatus: RequestStatus
     val `class`: RequestClass = RequestClass(this::class.java.simpleName)
 
-    object Adapter : JsonAdapter<ApiRequested> {
+    object Adapter : AdapterJson<ApiRequested> {
         override fun serialize(
             src: ApiRequested,
             typeOfSrc: java.lang.reflect.Type,

@@ -2,7 +2,7 @@ package io.hamal.lib.common.serialization.json
 
 import io.hamal.lib.common.serialization.SerdeModuleJson
 
-object SerdeModule : SerdeModuleJson() {
+object SerdeModuleJsonDefault : SerdeModuleJson() {
     init {
         set(JsonArray::class, JsonAdapters.Array)
         set(JsonBoolean::class, JsonAdapters.Boolean)

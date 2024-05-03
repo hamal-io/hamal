@@ -1,7 +1,7 @@
 package io.hamal.lib.sdk
 
 import io.hamal.lib.common.serialization.Serde
-import io.hamal.lib.common.serialization.json.SerdeModule
+import io.hamal.lib.common.serialization.json.SerdeModuleJsonDefault
 import io.hamal.lib.common.value.SerdeModuleJsonValue
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.ExecToken
@@ -37,7 +37,7 @@ class ApiSdkImpl : ApiSdk {
     ) {
         val serde = Serde.json()
             .register(SerdeModuleJsonApi)
-            .register(SerdeModule)
+            .register(SerdeModuleJsonDefault)
             .register(SerdeModuleJsonValue)
             .register(SerdeModuleJsonValueVariable)
 
@@ -55,7 +55,7 @@ class ApiSdkImpl : ApiSdk {
     constructor(apiHost: String, token: AuthToken) {
         val serde = Serde.json()
             .register(SerdeModuleJsonApi)
-            .register(SerdeModule)
+            .register(SerdeModuleJsonDefault)
             .register(SerdeModuleJsonValue)
             .register(SerdeModuleJsonValueVariable)
 

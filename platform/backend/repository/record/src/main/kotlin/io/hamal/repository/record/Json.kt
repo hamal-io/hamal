@@ -3,10 +3,10 @@ package io.hamal.repository.record
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.serialization.JsonAdapter
+import io.hamal.lib.common.serialization.AdapterJson
 import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.SerdeModuleJson
-import io.hamal.lib.common.serialization.json.SerdeModule
+import io.hamal.lib.common.serialization.json.SerdeModuleJsonDefault
 import io.hamal.lib.common.value.SerdeModuleJsonValue
 import io.hamal.lib.common.value.ValueJsonAdapters
 import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
@@ -46,7 +46,7 @@ object SerdeModuleJsonRecord : SerdeModuleJson() {
 }
 
 val serde = Serde.json()
-    .register(SerdeModule)
+    .register(SerdeModuleJsonDefault)
     .register(SerdeModuleJsonDomain)
     .register(SerdeModuleJsonRecord)
     .register(SerdeModuleJsonValue)
@@ -54,7 +54,7 @@ val serde = Serde.json()
 
 abstract class RecordAdapter<BASE_TYPE : Record<*>>(
     recordClasses: List<KClass<out BASE_TYPE>>
-) : JsonAdapter<BASE_TYPE> {
+) : AdapterJson<BASE_TYPE> {
     override fun serialize(src: BASE_TYPE, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
         return context.serialize(src)
     }

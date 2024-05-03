@@ -4,12 +4,12 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.GsonTransform
-import io.hamal.lib.common.serialization.JsonAdapter
+import io.hamal.lib.common.serialization.AdapterJson
 import java.lang.reflect.Type
 
 internal object JsonAdapters {
 
-    object Array : JsonAdapter<JsonArray> {
+    object Array : AdapterJson<JsonArray> {
         override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): JsonArray {
             return GsonTransform.toNode(json).asArray()
         }
@@ -19,7 +19,7 @@ internal object JsonAdapters {
         }
     }
 
-    object Boolean : JsonAdapter<JsonBoolean> {
+    object Boolean : AdapterJson<JsonBoolean> {
         override fun serialize(src: JsonBoolean, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
             return GsonTransform.fromNode(src)
         }
@@ -29,7 +29,7 @@ internal object JsonAdapters {
         }
     }
 
-    object Node : JsonAdapter<JsonNode<*>> {
+    object Node : AdapterJson<JsonNode<*>> {
         override fun serialize(src: JsonNode<*>, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
             return GsonTransform.fromNode(src)
         }
@@ -39,7 +39,7 @@ internal object JsonAdapters {
         }
     }
 
-    object Null : JsonAdapter<JsonNull> {
+    object Null : AdapterJson<JsonNull> {
         override fun serialize(src: JsonNull, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
             return GsonTransform.fromNode(src)
         }
@@ -49,7 +49,7 @@ internal object JsonAdapters {
         }
     }
 
-    object Number : JsonAdapter<JsonNumber> {
+    object Number : AdapterJson<JsonNumber> {
         override fun serialize(src: JsonNumber, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
             return GsonTransform.fromNode(src)
         }
@@ -59,7 +59,7 @@ internal object JsonAdapters {
         }
     }
 
-    object String : JsonAdapter<JsonString> {
+    object String : AdapterJson<JsonString> {
         override fun serialize(src: JsonString, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
             return GsonTransform.fromNode(src)
         }
@@ -69,7 +69,7 @@ internal object JsonAdapters {
         }
     }
 
-    object Object : JsonAdapter<JsonObject> {
+    object Object : AdapterJson<JsonObject> {
         override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): JsonObject {
             return GsonTransform.toNode(json).asObject()
         }
@@ -79,7 +79,7 @@ internal object JsonAdapters {
         }
     }
 
-    object Primitive : JsonAdapter<JsonPrimitive<*>> {
+    object Primitive : AdapterJson<JsonPrimitive<*>> {
         override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): JsonPrimitive<*> {
             return GsonTransform.toNode(json).asPrimitive()
         }

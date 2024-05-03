@@ -4,7 +4,7 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.serialization.JsonAdapter
+import io.hamal.lib.common.serialization.AdapterJson
 import io.hamal.lib.common.serialization.SerdeModuleJson
 import io.hamal.lib.web3.evm.abi.type.*
 import io.hamal.lib.web3.evm.domain.EvmMethod
@@ -16,7 +16,7 @@ object SerdeModuleJsonEvm : SerdeModuleJson() {
     init {
         set(EvmRequestId::class, EvmRequestId.Adapter)
         set(EvmMethod::class, EvmMethod.Adapter)
-        set(EvmUint8::class, object : JsonAdapter<EvmUint8> {
+        set(EvmUint8::class, object : AdapterJson<EvmUint8> {
             override fun serialize(p0: EvmUint8?, p1: Type?, p2: JsonSerializationContext?): JsonElement {
                 return JsonPrimitive(p0!!.toPrefixedHexString().toString())
             }
@@ -26,7 +26,7 @@ object SerdeModuleJsonEvm : SerdeModuleJson() {
             }
 
         })
-        set(EvmUint32::class, object : JsonAdapter<EvmUint32> {
+        set(EvmUint32::class, object : AdapterJson<EvmUint32> {
             override fun serialize(p0: EvmUint32?, p1: Type?, p2: JsonSerializationContext?): JsonElement {
                 return JsonPrimitive(p0!!.toPrefixedHexString().toString())
             }
@@ -36,7 +36,7 @@ object SerdeModuleJsonEvm : SerdeModuleJson() {
             }
 
         })
-        set(EvmUint64::class, object : JsonAdapter<EvmUint64> {
+        set(EvmUint64::class, object : AdapterJson<EvmUint64> {
             override fun serialize(p0: EvmUint64?, p1: Type?, p2: JsonSerializationContext?): JsonElement {
                 return JsonPrimitive(p0!!.toPrefixedHexString().toString())
             }
@@ -46,7 +46,7 @@ object SerdeModuleJsonEvm : SerdeModuleJson() {
             }
 
         })
-        set(EvmUint256::class, object : JsonAdapter<EvmUint256> {
+        set(EvmUint256::class, object : AdapterJson<EvmUint256> {
             override fun serialize(p0: EvmUint256?, p1: Type?, p2: JsonSerializationContext?): JsonElement {
                 return JsonPrimitive(p0!!.toPrefixedHexString().toString())
             }
@@ -56,7 +56,7 @@ object SerdeModuleJsonEvm : SerdeModuleJson() {
             }
 
         })
-        set(EvmHash::class, object : JsonAdapter<EvmHash> {
+        set(EvmHash::class, object : AdapterJson<EvmHash> {
             override fun serialize(p0: EvmHash?, p1: Type?, p2: JsonSerializationContext?): JsonElement {
                 return JsonPrimitive(p0!!.toPrefixedHexString().toString())
             }
@@ -66,7 +66,7 @@ object SerdeModuleJsonEvm : SerdeModuleJson() {
             }
 
         })
-        set(EvmPrefixedHexString::class, object : JsonAdapter<EvmPrefixedHexString> {
+        set(EvmPrefixedHexString::class, object : AdapterJson<EvmPrefixedHexString> {
             override fun serialize(p0: EvmPrefixedHexString?, p1: Type?, p2: JsonSerializationContext?): JsonElement {
                 return JsonPrimitive(p0!!.toString())
             }
@@ -80,7 +80,7 @@ object SerdeModuleJsonEvm : SerdeModuleJson() {
             }
 
         })
-        set(EvmBytes32::class, object : JsonAdapter<EvmBytes32> {
+        set(EvmBytes32::class, object : AdapterJson<EvmBytes32> {
             override fun serialize(p0: EvmBytes32?, p1: Type?, p2: JsonSerializationContext?): JsonElement {
                 return JsonPrimitive(p0!!.toPrefixedHexString().toString())
             }
@@ -90,7 +90,7 @@ object SerdeModuleJsonEvm : SerdeModuleJson() {
             }
 
         })
-        set(EvmAddress::class, object : JsonAdapter<EvmAddress> {
+        set(EvmAddress::class, object : AdapterJson<EvmAddress> {
             override fun serialize(p0: EvmAddress?, p1: Type?, p2: JsonSerializationContext?): JsonElement {
                 return JsonPrimitive(p0!!.toPrefixedHexString().toString())
             }

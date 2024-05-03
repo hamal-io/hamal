@@ -3,7 +3,7 @@ package io.hamal.lib.nodes.control
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.serialization.JsonAdapter
+import io.hamal.lib.common.serialization.AdapterJson
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.common.value.ValueVariableString
 import io.hamal.lib.nodes.*
@@ -29,7 +29,7 @@ interface Control {
     val type: ControlType
     val nodeId: NodeId
 
-    object Adapter : JsonAdapter<Control> {
+    object Adapter : AdapterJson<Control> {
 
         override fun serialize(
             src: Control,
@@ -73,7 +73,7 @@ sealed interface ControlExtension {
 
     val type: ControlType
 
-    object Adapter : JsonAdapter<ControlExtension> {
+    object Adapter : AdapterJson<ControlExtension> {
 
         override fun serialize(
             src: ControlExtension,

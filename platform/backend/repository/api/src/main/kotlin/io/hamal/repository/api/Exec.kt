@@ -5,7 +5,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.domain.Limit.Companion.Limit
-import io.hamal.lib.common.serialization.JsonAdapter
+import io.hamal.lib.common.serialization.AdapterJson
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.vo.*
@@ -116,7 +116,7 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
         return result
     }
 
-    object Adapter : JsonAdapter<Exec> {
+    object Adapter : AdapterJson<Exec> {
         override fun serialize(
             src: Exec,
             typeOfSrc: java.lang.reflect.Type,

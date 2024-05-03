@@ -3,7 +3,7 @@ package io.hamal.repository.api.event
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.serialization.JsonAdapter
+import io.hamal.lib.common.serialization.AdapterJson
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.common.value.ValueVariableString
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
@@ -48,7 +48,7 @@ sealed class InternalEvent {
     val `class`: InternalEventClass = InternalEventClass(this::class.simpleName!!)
     val topicName get() = this::class.topicName()
 
-    object Adapter : JsonAdapter<InternalEvent> {
+    object Adapter : AdapterJson<InternalEvent> {
         override fun serialize(
             src: InternalEvent,
             typeOfSrc: java.lang.reflect.Type,

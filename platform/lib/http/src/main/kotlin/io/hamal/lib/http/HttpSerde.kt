@@ -3,7 +3,7 @@ package io.hamal.lib.http
 import com.google.gson.reflect.TypeToken
 import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.SerdeJson
-import io.hamal.lib.common.serialization.json.SerdeModule
+import io.hamal.lib.common.serialization.json.SerdeModuleJsonDefault
 import io.hamal.lib.common.value.SerdeModuleJsonValue
 import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
 import java.io.InputStream
@@ -38,7 +38,7 @@ class HttpSerdeJsonFactory(private val serde: SerdeJson) : HttpSerdeFactory {
 
 
 private val serde = Serde.json()
-    .register(SerdeModule)
+    .register(SerdeModuleJsonDefault)
     .register(SerdeModuleJsonValue)
     .register(SerdeModuleJsonValueVariable)
 

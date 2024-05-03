@@ -5,7 +5,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.Limit.Companion.Limit
-import io.hamal.lib.common.serialization.JsonAdapter
+import io.hamal.lib.common.serialization.AdapterJson
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain._enum.TriggerStatus
@@ -68,7 +68,7 @@ data class ApiTriggerList(
             val name: NamespaceName
         )
 
-        object Adapter : JsonAdapter<Trigger> {
+        object Adapter : AdapterJson<Trigger> {
             override fun serialize(
                 src: Trigger,
                 typeOfSrc: java.lang.reflect.Type,
@@ -178,7 +178,7 @@ sealed class ApiTrigger : ApiObject() {
         val name: NamespaceName
     )
 
-    object Adapter : JsonAdapter<ApiTrigger> {
+    object Adapter : AdapterJson<ApiTrigger> {
         override fun serialize(
             src: ApiTrigger,
             typeOfSrc: java.lang.reflect.Type,
