@@ -3,7 +3,6 @@ package io.hamal.extension.web3.arbitrum
 import com.google.gson.Gson
 import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.json.JsonArray
-import io.hamal.lib.common.serialization.json.SerdeModuleJsonDefault
 import io.hamal.lib.common.value.SerdeModuleJsonValue
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.RunnerEnv
@@ -47,7 +46,6 @@ internal open class TestWebConfig : WebMvcConfigurer {
 
     @Bean
     open fun gson(): Gson = Serde.json()
-        .register(SerdeModuleJsonDefault)
         .register(SerdeModuleJsonValue)
         .register(SerdeModuleJsonValueVariable)
         .gson

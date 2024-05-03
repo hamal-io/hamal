@@ -4,7 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import io.hamal.lib.common.compress.Compressor
 import io.hamal.lib.common.compress.CompressorNop
-import io.hamal.lib.common.serialization.json.SerdeModuleJsonDefault
+import io.hamal.lib.common.serialization.json.*
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.lang.reflect.Type
@@ -76,7 +76,13 @@ class SerdeJson(
     val gson: Gson by lazy { builder.create() }
 
     init {
-        register(SerdeModuleJsonDefault)
+        builder.registerTypeAdapter(JsonArray::class.java, JsonAdapters.Array)
+        builder.registerTypeAdapter(JsonBoolean::class.java, JsonAdapters.Boolean)
+        builder.registerTypeAdapter(JsonNode::class.java, JsonAdapters.Node)
+        builder.registerTypeAdapter(JsonNumber::class.java, JsonAdapters.Number)
+        builder.registerTypeAdapter(JsonNull::class.java, JsonAdapters.Null)
+        builder.registerTypeAdapter(JsonObject::class.java, JsonAdapters.Object)
+        builder.registerTypeAdapter(JsonPrimitive::class.java, JsonAdapters.Primitive)
     }
 }
 
@@ -140,6 +146,12 @@ class SerdeHon(
     val gson: Gson by lazy { builder.create() }
 
     init {
-        register(SerdeModuleJsonDefault)
+        builder.registerTypeAdapter(JsonArray::class.java, JsonAdapters.Array)
+        builder.registerTypeAdapter(JsonBoolean::class.java, JsonAdapters.Boolean)
+        builder.registerTypeAdapter(JsonNode::class.java, JsonAdapters.Node)
+        builder.registerTypeAdapter(JsonNumber::class.java, JsonAdapters.Number)
+        builder.registerTypeAdapter(JsonNull::class.java, JsonAdapters.Null)
+        builder.registerTypeAdapter(JsonObject::class.java, JsonAdapters.Object)
+        builder.registerTypeAdapter(JsonPrimitive::class.java, JsonAdapters.Primitive)
     }
 }

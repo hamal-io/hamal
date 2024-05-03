@@ -6,7 +6,6 @@ import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.AdapterJson
 import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.SerdeModuleJson
-import io.hamal.lib.common.serialization.json.SerdeModuleJsonDefault
 import io.hamal.lib.common.value.SerdeModuleJsonValue
 import io.hamal.lib.common.value.ValueJsonAdapters
 import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
@@ -46,7 +45,6 @@ object SerdeModuleJsonRecord : SerdeModuleJson() {
 }
 
 val serde = Serde.json()
-    .register(SerdeModuleJsonDefault)
     .register(SerdeModuleJsonDomain)
     .register(SerdeModuleJsonRecord)
     .register(SerdeModuleJsonValue)
