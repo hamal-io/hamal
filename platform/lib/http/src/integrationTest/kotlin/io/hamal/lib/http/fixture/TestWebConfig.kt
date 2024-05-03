@@ -1,7 +1,7 @@
 package io.hamal.lib.http.fixture
 
 import com.google.gson.Gson
-import io.hamal.lib.common.serialization.GsonFactoryBuilder
+import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.json.SerdeModule
 import io.hamal.lib.common.value.SerdeModuleJsonValue
 import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
@@ -23,11 +23,11 @@ import java.nio.charset.StandardCharsets
 open class TestWebConfig : WebMvcConfigurer {
 
     @Bean
-    open fun gson(): Gson = GsonFactoryBuilder()
+    open fun gson(): Gson = Serde.json()
         .register(SerdeModule)
         .register(SerdeModuleJsonValue)
         .register(SerdeModuleJsonValueVariable)
-        .build()
+        .gson
 
     @Bean
     open fun gsonHttpMessageConverter(gson: Gson): GsonHttpMessageConverter {

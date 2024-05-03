@@ -3,8 +3,8 @@ package io.hamal.app.web3proxy.arbitrum
 import io.hamal.app.web3proxy.TestConfig
 import io.hamal.app.web3proxy.Web3Proxy
 import io.hamal.app.web3proxy.config.WebConfig
+import io.hamal.lib.http.HttpSerdeJsonFactory
 import io.hamal.lib.http.HttpTemplateImpl
-import io.hamal.lib.http.JsonHttpSerdeFactory
 import io.hamal.lib.web3.evm.abi.type.*
 import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumBlockData
 import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumTransactionData
@@ -104,6 +104,6 @@ internal abstract class ArbitrumBaseTest {
     lateinit var localPort: Number
 
     protected val testTemplate by lazy {
-        HttpTemplateImpl(baseUrl = "", serdeFactory = JsonHttpSerdeFactory(serde)).post("http://localhost:${localPort}/arbitrum")
+        HttpTemplateImpl(baseUrl = "", serdeFactory = HttpSerdeJsonFactory(serde)).post("http://localhost:${localPort}/arbitrum")
     }
 }

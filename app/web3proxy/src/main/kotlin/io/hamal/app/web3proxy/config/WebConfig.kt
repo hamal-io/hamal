@@ -1,7 +1,7 @@
 package io.hamal.app.web3proxy.config
 
 import com.google.gson.Gson
-import io.hamal.lib.common.serialization.GsonFactoryBuilder
+import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.json.SerdeModule
 import io.hamal.lib.common.value.SerdeModuleJsonValue
 import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
@@ -30,12 +30,12 @@ class WebConfig : WebMvcConfigurer {
     }
 
     @Bean
-    fun gson(): Gson = GsonFactoryBuilder()
+    fun gson(): Gson = Serde.json()
         .register(SerdeModuleJsonEvm)
         .register(SerdeModule)
         .register(SerdeModuleJsonValue)
         .register(SerdeModuleJsonValueVariable)
-        .build()
+        .gson
 
     @Bean
     fun gsonHttpMessageConverter(gson: Gson): GsonHttpMessageConverter {

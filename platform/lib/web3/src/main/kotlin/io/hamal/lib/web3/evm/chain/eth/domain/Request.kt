@@ -5,11 +5,11 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.GsonTransform
 import io.hamal.lib.common.serialization.JsonAdapter
+import io.hamal.lib.common.serialization.SerdeJson
 import io.hamal.lib.common.serialization.json.JsonArray
 import io.hamal.lib.common.serialization.json.JsonNull
 import io.hamal.lib.common.serialization.json.JsonObject
 import io.hamal.lib.common.serialization.json.JsonString
-import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.web3.evm.abi.type.EvmAddress
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
@@ -140,7 +140,7 @@ data class EthGetBlockByNumberRequest(
     }
 }
 
-fun parseEthRequest(serde: Serde, request: JsonObject): Pair<EthErrorResponse?, EthRequest?> {
+fun parseEthRequest(serde: SerdeJson, request: JsonObject): Pair<EthErrorResponse?, EthRequest?> {
     return try {
         val ethRequest = serde.read(EthRequest::class, serde.write(request))
         null to ethRequest

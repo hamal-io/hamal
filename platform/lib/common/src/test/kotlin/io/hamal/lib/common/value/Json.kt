@@ -1,7 +1,7 @@
 package io.hamal.lib.common.value
 
 import com.google.gson.Gson
-import io.hamal.lib.common.serialization.GsonFactoryBuilder
+import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.ValueJsonAdapters.BooleanVariable
 import io.hamal.lib.common.value.ValueJsonAdapters.InstantVariable
@@ -44,9 +44,9 @@ internal object ValueArraySerdeAdapterTest {
         assertThat(result, equalTo(expected))
     }
 
-    private val testDelegate: Gson = GsonFactoryBuilder()
+    private val testDelegate: Gson = Serde.json()
         .register(SerdeModuleJsonValue)
-        .build()
+        .gson
 
 }
 
@@ -65,9 +65,9 @@ internal object ValueBooleanSerdeAdapterTest {
         assertThat(result, equalTo(expectedBoolean))
     }
 
-    private val testDelegate: Gson = GsonFactoryBuilder()
+    private val testDelegate: Gson = Serde.json()
         .register(SerdeModuleJsonValue)
-        .build()
+        .gson
 }
 
 internal object ValueBooleanVariableSerdeAdapterTest {
@@ -86,10 +86,10 @@ internal object ValueBooleanVariableSerdeAdapterTest {
         assertThat(result, equalTo(expectedBoolean))
     }
 
-    private val testDelegate: Gson = GsonFactoryBuilder()
+    private val testDelegate: Gson = Serde.json()
         .register(SerdeModuleJsonValue)
         .register(TestObject::class, BooleanVariable(::TestObject))
-        .build()
+        .gson
 
     private class TestObject(override val value: ValueBoolean) : ValueVariableBoolean()
 }
@@ -109,9 +109,9 @@ internal object ValueDecimalSerdeAdapterTest {
         assertThat(result, equalTo(expectedDecimal))
     }
 
-    private val testDelegate: Gson = GsonFactoryBuilder()
+    private val testDelegate: Gson = Serde.json()
         .register(SerdeModuleJsonValue)
-        .build()
+        .gson
 }
 
 internal object ValueInstantSerdeAdapterTest {
@@ -130,9 +130,9 @@ internal object ValueInstantSerdeAdapterTest {
         assertThat(result, equalTo(expectedInstant))
     }
 
-    private val testDelegate: Gson = GsonFactoryBuilder()
+    private val testDelegate: Gson = Serde.json()
         .register(SerdeModuleJsonValue)
-        .build()
+        .gson
 }
 
 internal object ValueInstantVariableSerdeAdapterTest {
@@ -151,10 +151,10 @@ internal object ValueInstantVariableSerdeAdapterTest {
         assertThat(result, equalTo(expectedInstant))
     }
 
-    private val testDelegate: Gson = GsonFactoryBuilder()
+    private val testDelegate: Gson = Serde.json()
         .register(SerdeModuleJsonValue)
         .register(TestObject::class, InstantVariable(::TestObject))
-        .build()
+        .gson
 
     private class TestObject(override val value: ValueInstant) : ValueVariableInstant()
 }
@@ -167,9 +167,9 @@ internal object ValueNilSerdeAdapterTest {
         assertThat(result, equalTo("null"))
     }
 
-    private val testDelegate: Gson = GsonFactoryBuilder()
+    private val testDelegate: Gson = Serde.json()
         .register(SerdeModuleJsonValue)
-        .build()
+        .gson
 }
 
 internal object ValueNumberSerdeAdapterTest {
@@ -187,9 +187,9 @@ internal object ValueNumberSerdeAdapterTest {
         assertThat(result, equalTo(expectedNumber))
     }
 
-    private val testDelegate: Gson = GsonFactoryBuilder()
+    private val testDelegate: Gson = Serde.json()
         .register(SerdeModuleJsonValue)
-        .build()
+        .gson
 }
 
 internal object ValueVariableNumberSerdeAdapterTest {
@@ -207,10 +207,10 @@ internal object ValueVariableNumberSerdeAdapterTest {
         assertThat(result, equalTo(expected))
     }
 
-    private val testDelegate: Gson = GsonFactoryBuilder()
+    private val testDelegate: Gson = Serde.json()
         .register(SerdeModuleJsonValue)
         .register(TestObject::class, NumberVariable(::TestObject))
-        .build()
+        .gson
 
     private class TestObject(override val value: ValueNumber) : ValueVariableNumber()
 }
@@ -245,9 +245,9 @@ internal object ValueObjectSerdeAdapterTest {
         assertThat(result, equalTo(expected))
     }
 
-    private val testDelegate: Gson = GsonFactoryBuilder()
+    private val testDelegate: Gson = Serde.json()
         .register(SerdeModuleJsonValue)
-        .build()
+        .gson
 
 }
 
@@ -283,10 +283,10 @@ internal object ValueObjectVariableSerdeAdapterTest {
         assertThat(result, equalTo(expected))
     }
 
-    private val testDelegate: Gson = GsonFactoryBuilder()
+    private val testDelegate: Gson = Serde.json()
         .register(SerdeModuleJsonValue)
         .register(TestObject::class, ObjectVariable(::TestObject))
-        .build()
+        .gson
 
     private class TestObject(override val value: ValueObject) : ValueVariableObject()
 }
@@ -306,9 +306,9 @@ internal object ValueSnowflakeIdSerdeAdapterTest {
         assertThat(result, equalTo(expectedSnowflakeId))
     }
 
-    private val testDelegate: Gson = GsonFactoryBuilder()
+    private val testDelegate: Gson = Serde.json()
         .register(SerdeModuleJsonValue)
-        .build()
+        .gson
 }
 
 internal object ValueSnowflakeIdVariableSerdeAdapterTest {
@@ -326,10 +326,10 @@ internal object ValueSnowflakeIdVariableSerdeAdapterTest {
         assertThat(result, equalTo(expected))
     }
 
-    private val testDelegate: Gson = GsonFactoryBuilder()
+    private val testDelegate: Gson = Serde.json()
         .register(SerdeModuleJsonValue)
         .register(TestObject::class, SnowflakeIdVariable(::TestObject))
-        .build()
+        .gson
 
     private class TestObject(
         override val value: ValueSnowflakeId
@@ -351,9 +351,9 @@ internal object ValueStringSerdeAdapterTest {
         assertThat(result, equalTo(expectedString))
     }
 
-    private val testDelegate: Gson = GsonFactoryBuilder()
+    private val testDelegate: Gson = Serde.json()
         .register(SerdeModuleJsonValue)
-        .build()
+        .gson
 }
 
 internal object ValueStringVariableSerdeAdapterTest {
@@ -372,10 +372,10 @@ internal object ValueStringVariableSerdeAdapterTest {
         assertThat(result, equalTo(expectedString))
     }
 
-    private val testDelegate: Gson = GsonFactoryBuilder()
+    private val testDelegate: Gson = Serde.json()
         .register(SerdeModuleJsonValue)
         .register(TestObject::class, StringVariable(::TestObject))
-        .build()
+        .gson
 
     private class TestObject(override val value: ValueString) : ValueVariableString()
 }

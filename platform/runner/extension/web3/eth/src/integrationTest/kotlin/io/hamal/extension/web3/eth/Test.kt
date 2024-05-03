@@ -1,7 +1,7 @@
 package io.hamal.extension.web3.eth
 
 import com.google.gson.Gson
-import io.hamal.lib.common.serialization.GsonFactoryBuilder
+import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.json.JsonArray
 import io.hamal.lib.common.value.SerdeModuleJsonValue
 import io.hamal.lib.common.value.ValueObject
@@ -45,10 +45,10 @@ internal open class TestProxy
 internal open class TestWebConfig : WebMvcConfigurer {
 
     @Bean
-    open fun gson(): Gson = GsonFactoryBuilder()
+    open fun gson(): Gson = Serde.json()
         .register(SerdeModuleJsonValue)
         .register(SerdeModuleJsonValueVariable)
-        .build()
+        .gson
 
     @Bean
     open fun gsonHttpMessageConverter(gson: Gson): GsonHttpMessageConverter {

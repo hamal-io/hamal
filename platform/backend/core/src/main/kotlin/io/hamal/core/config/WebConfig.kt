@@ -2,13 +2,12 @@ package io.hamal.core.config
 
 import com.google.gson.Gson
 import io.hamal.core.component.*
-import io.hamal.lib.common.serialization.GsonFactoryBuilder
+import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.json.SerdeModule
 import io.hamal.lib.common.value.SerdeModuleJsonValue
 import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
 import io.hamal.lib.sdk.api.SerdeModuleJsonApi
-import io.hamal.repository.api.SerdeModuleDomain
-import io.hamal.repository.api.event.InternalEventJsonModule
+import io.hamal.repository.api.event.SerdeModuleJsonInternalEvent
 import org.apache.coyote.ProtocolHandler
 import org.springframework.boot.web.embedded.tomcat.TomcatProtocolHandlerCustomizer
 import org.springframework.context.annotation.Bean
@@ -37,14 +36,13 @@ open class WebConfig : WebMvcConfigurer {
     }
 
     @Bean
-    open fun gson(): Gson = GsonFactoryBuilder()
+    open fun gson(): Gson = Serde.json()
         .register(SerdeModule)
         .register(SerdeModuleJsonApi)
-        .register(SerdeModuleDomain)
-        .register(InternalEventJsonModule)
+        .register(SerdeModuleJsonInternalEvent)
         .register(SerdeModuleJsonValue)
         .register(SerdeModuleJsonValueVariable)
-        .build()
+        .gson
 
 
     @Bean

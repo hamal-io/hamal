@@ -3,7 +3,6 @@ package io.hamal.repository.record
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.common.serialization.JsonAdapter
 import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.SerdeModuleJson
@@ -11,7 +10,7 @@ import io.hamal.lib.common.serialization.json.SerdeModule
 import io.hamal.lib.common.value.SerdeModuleJsonValue
 import io.hamal.lib.common.value.ValueJsonAdapters
 import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
-import io.hamal.repository.api.SerdeModuleDomain
+import io.hamal.repository.api.SerdeModuleJsonDomain
 import io.hamal.repository.record.account.AccountRecord
 import io.hamal.repository.record.code.CodeRecord
 import io.hamal.repository.record.exec.ExecRecord
@@ -46,14 +45,12 @@ object SerdeModuleJsonRecord : SerdeModuleJson() {
     }
 }
 
-val serde = Serde(
-    GsonFactoryBuilder()
-        .register(SerdeModule)
-        .register(SerdeModuleDomain)
-        .register(SerdeModuleJsonRecord)
-        .register(SerdeModuleJsonValue)
-        .register(SerdeModuleJsonValueVariable)
-)
+val serde = Serde.json()
+    .register(SerdeModule)
+    .register(SerdeModuleJsonDomain)
+    .register(SerdeModuleJsonRecord)
+    .register(SerdeModuleJsonValue)
+    .register(SerdeModuleJsonValueVariable)
 
 abstract class RecordAdapter<BASE_TYPE : Record<*>>(
     recordClasses: List<KClass<out BASE_TYPE>>

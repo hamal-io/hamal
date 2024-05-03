@@ -1,10 +1,9 @@
 package io.hamal.app.web3proxy.eth.repository
 
 import io.hamal.lib.common.compress.CompressorBzip
-import io.hamal.lib.common.serialization.GsonFactoryBuilder
+import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.json.SerdeModule
 import io.hamal.lib.common.value.SerdeModuleJsonValue
-import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
@@ -111,14 +110,11 @@ internal class EthBlockRepositoryImpl(
         connection.execute("DELETE FROM block")
     }
 
-    private val serde = Serde(
-        factory = GsonFactoryBuilder()
-            .register(SerdeModuleJsonEvm)
-            .register(SerdeModule)
-            .register(SerdeModuleJsonValue)
-            .register(SerdeModuleJsonValueVariable),
-        compressor = CompressorBzip
-    )
+    private val serde = Serde.json(CompressorBzip)
+        .register(SerdeModuleJsonEvm)
+        .register(SerdeModule)
+        .register(SerdeModuleJsonValue)
+        .register(SerdeModuleJsonValueVariable)
 }
 
 private fun collectEthAddresses(blocks: List<EthBlockData>): Set<EvmAddress> {

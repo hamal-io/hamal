@@ -1,10 +1,10 @@
 package io.hamal.lib.web3.evm.http
 
+import io.hamal.lib.common.serialization.SerdeJson
 import io.hamal.lib.common.serialization.json.JsonArray
 import io.hamal.lib.common.serialization.json.JsonNode
 import io.hamal.lib.common.serialization.json.JsonObject
 import io.hamal.lib.common.serialization.json.JsonObjectBuilder
-import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
 import io.hamal.lib.web3.evm.domain.EvmResponse
@@ -12,7 +12,7 @@ import kotlin.reflect.KClass
 
 abstract class HttpBaseBatchService<out RESPONSE : EvmResponse>(
     private val httpTemplate: HttpTemplate,
-    private val serde: Serde
+    private val serde: SerdeJson
 ) {
 
     fun execute(): List<RESPONSE> {

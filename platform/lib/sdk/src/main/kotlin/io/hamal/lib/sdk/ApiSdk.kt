@@ -1,15 +1,14 @@
 package io.hamal.lib.sdk
 
-import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.json.SerdeModule
 import io.hamal.lib.common.value.SerdeModuleJsonValue
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
+import io.hamal.lib.http.HttpSerdeJsonFactory
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.HttpTemplateImpl
-import io.hamal.lib.http.JsonHttpSerdeFactory
 import io.hamal.lib.sdk.api.*
 
 interface ApiSdk {
@@ -36,13 +35,11 @@ class ApiSdkImpl : ApiSdk {
         token: AuthToken,
         execToken: ExecToken
     ) {
-        val serde = Serde(
-            GsonFactoryBuilder()
-                .register(SerdeModuleJsonApi)
-                .register(SerdeModule)
-                .register(SerdeModuleJsonValue)
-                .register(SerdeModuleJsonValueVariable)
-        )
+        val serde = Serde.json()
+            .register(SerdeModuleJsonApi)
+            .register(SerdeModule)
+            .register(SerdeModuleJsonValue)
+            .register(SerdeModuleJsonValueVariable)
 
         template = HttpTemplateImpl(
             baseUrl = apiHost,
@@ -51,19 +48,16 @@ class ApiSdkImpl : ApiSdk {
                 this["authorization"] = "Bearer ${token.value}"
                 this["x-exec-token"] = execToken.stringValue
             },
-            serdeFactory = JsonHttpSerdeFactory(serde)
+            serdeFactory = HttpSerdeJsonFactory(serde)
         )
     }
 
-
     constructor(apiHost: String, token: AuthToken) {
-        val serde = Serde(
-            GsonFactoryBuilder()
-                .register(SerdeModuleJsonApi)
-                .register(SerdeModule)
-                .register(SerdeModuleJsonValue)
-                .register(SerdeModuleJsonValueVariable)
-        )
+        val serde = Serde.json()
+            .register(SerdeModuleJsonApi)
+            .register(SerdeModule)
+            .register(SerdeModuleJsonValue)
+            .register(SerdeModuleJsonValueVariable)
 
         template = HttpTemplateImpl(
             baseUrl = apiHost,
@@ -71,7 +65,7 @@ class ApiSdkImpl : ApiSdk {
                 this["accept"] = "application/json"
                 this["authorization"] = "Bearer ${token.value}"
             },
-            serdeFactory = JsonHttpSerdeFactory(serde)
+            serdeFactory = HttpSerdeJsonFactory(serde)
         )
     }
 

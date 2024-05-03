@@ -3,12 +3,12 @@ package io.hamal.lib.web3.evm.chain.arbitrum.domain
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
+import io.hamal.lib.common.serialization.GsonTransform
+import io.hamal.lib.common.serialization.JsonAdapter
+import io.hamal.lib.common.serialization.SerdeJson
 import io.hamal.lib.common.serialization.json.JsonArray
 import io.hamal.lib.common.serialization.json.JsonObject
 import io.hamal.lib.common.serialization.json.JsonString
-import io.hamal.lib.common.serialization.GsonTransform
-import io.hamal.lib.common.serialization.JsonAdapter
-import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.domain.EvmMethod
@@ -19,7 +19,7 @@ import java.lang.reflect.Type
 
 
 sealed interface ArbitrumRequest : EvmRequest {
-    
+
     override val id: EvmRequestId
     override val method: EvmMethod
 
@@ -92,7 +92,7 @@ data class ArbitrumGetBlockByNumberRequest(
     }
 }
 
-fun parseArbitrumRequest(serde: Serde, request: JsonObject): Pair<ArbitrumErrorResponse?, ArbitrumRequest?> {
+fun parseArbitrumRequest(serde: SerdeJson, request: JsonObject): Pair<ArbitrumErrorResponse?, ArbitrumRequest?> {
     return try {
         val ethRequest = serde.read(ArbitrumRequest::class, serde.write(request))
         null to ethRequest

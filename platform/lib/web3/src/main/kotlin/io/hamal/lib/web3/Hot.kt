@@ -1,6 +1,5 @@
 package io.hamal.lib.web3
 
-import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.json.SerdeModule
 import io.hamal.lib.common.value.SerdeModuleJsonValue
@@ -10,12 +9,10 @@ import io.hamal.lib.web3.evm.chain.arbitrum.SerdeModuleJsonArbitrum
 import io.hamal.lib.web3.evm.chain.eth.SerdeModuleJsonEth
 
 
-val serde = Serde(
-    GsonFactoryBuilder()
-        .register(SerdeModule)
-        .register(SerdeModuleJsonValue)
-        .register(SerdeModuleJsonValueVariable)
-        .register(SerdeModuleJsonEvm)
-        .register(SerdeModuleJsonEth)
-        .register(SerdeModuleJsonArbitrum)
-)
+val serde = Serde.json()
+    .register(SerdeModule)
+    .register(SerdeModuleJsonValue)
+    .register(SerdeModuleJsonValueVariable)
+    .register(SerdeModuleJsonEvm)
+    .register(SerdeModuleJsonEth)
+    .register(SerdeModuleJsonArbitrum)

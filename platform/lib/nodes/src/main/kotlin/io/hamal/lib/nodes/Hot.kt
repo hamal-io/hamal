@@ -1,11 +1,10 @@
 package io.hamal.lib.nodes
 
-import io.hamal.lib.common.serialization.GsonFactoryBuilder
 import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.SerdeModuleJson
 import io.hamal.lib.common.serialization.json.SerdeModule
-import io.hamal.lib.common.value.ValueJsonAdapters
 import io.hamal.lib.common.value.SerdeModuleJsonValue
+import io.hamal.lib.common.value.ValueJsonAdapters
 import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.control.ControlExtension
@@ -31,10 +30,8 @@ object NodesHotModule : SerdeModuleJson() {
 }
 
 
-val serde = Serde(
-    GsonFactoryBuilder()
-        .register(SerdeModule)
-        .register(SerdeModuleJsonValue)
-        .register(SerdeModuleJsonValueVariable)
-        .register(NodesHotModule)
-)
+val serde = Serde.json()
+    .register(SerdeModule)
+    .register(SerdeModuleJsonValue)
+    .register(SerdeModuleJsonValueVariable)
+    .register(NodesHotModule)
