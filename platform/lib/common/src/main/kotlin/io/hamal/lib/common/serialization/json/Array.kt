@@ -32,19 +32,19 @@ value class JsonArray(
     override fun asArray(): JsonArray = this
     fun asArray(idx: Int): JsonArray = find(idx)
         ?.let { if (it.isArray) it as JsonArray else null }
-        ?: throw IllegalStateException("Not HotArray")
+        ?: throw IllegalStateException("Not JsonArray")
 
     fun isBoolean(idx: Int): Boolean = find(idx)?.isBoolean ?: false
     fun asBoolean(idx: Int): JsonBoolean = find(idx)
         ?.let { if (it.isBoolean) it as JsonBoolean else null }
-        ?: throw IllegalStateException("Not HotBoolean")
+        ?: throw IllegalStateException("Not JsonBoolean")
 
     fun booleanValue(idx: Int): Boolean = asBoolean(idx).value
 
     fun isNumber(idx: Int): Boolean = find(idx)?.isNumber ?: false
     fun asNumber(idx: Int): JsonNumber = find(idx)
         ?.let { if (it.isNumber) it as JsonNumber else null }
-        ?: throw IllegalStateException("Not HotNumber")
+        ?: throw IllegalStateException("Not JsonNumber")
 
     fun decimalValue(idx: Int): Decimal = asNumber(idx).decimalValue
     fun byteValue(idx: Int): Byte = asNumber(idx).byteValue
@@ -56,25 +56,25 @@ value class JsonArray(
 
     fun isNull(idx: Int): Boolean = find(idx)?.isNull ?: true
     fun asNull(idx: Int): JsonNull = find(idx)
-        ?.let { if (it.isNull) it as JsonNull else throw IllegalStateException("Not HotNull") }
+        ?.let { if (it.isNull) it as JsonNull else throw IllegalStateException("Not JsonNull") }
         ?: JsonNull
 
     fun isObject(idx: Int): Boolean = find(idx)?.isObject ?: false
     fun asObject(idx: Int): JsonObject = find(idx)
         ?.let { if (it.isObject) it as JsonObject else null }
-        ?: throw IllegalStateException("Not HotObject")
+        ?: throw IllegalStateException("Not JsonObject")
 
     fun isString(idx: Int): Boolean = find(idx)?.isString ?: false
     fun asString(idx: Int): JsonString = find(idx)
         ?.let { if (it.isString) it as JsonString else null }
-        ?: throw IllegalStateException("Not HotString")
+        ?: throw IllegalStateException("Not JsonString")
 
     fun stringValue(idx: Int): String = asString(idx).stringValue
 
     fun isPrimitive(idx: Int): Boolean = find(idx)?.isPrimitive ?: false
     fun asPrimitive(idx: Int): JsonPrimitive<*> = find(idx)
         ?.let { if (it.isPrimitive) it as JsonPrimitive else null }
-        ?: throw IllegalStateException("Not HotTerminal")
+        ?: throw IllegalStateException("Not JsonPrimitive")
 
     override fun deepCopy(): JsonArray {
         val builder = builder()

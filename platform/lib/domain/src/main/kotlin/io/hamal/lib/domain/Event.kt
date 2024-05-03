@@ -23,10 +23,10 @@ data class EventTopic(
 )
 
 
-//fun Event.toHot() = HotObject.builder()
+//fun Event.toHot() = JsonObject.builder()
 //    .set("id", id.stringValue)
 //    .set(
-//        "topic", HotObject.builder()
+//        "topic", JsonObject.builder()
 //            .set("id", topic.id.stringValue)
 //            .set("name", topic.name.stringValue)
 //            .build()
@@ -34,4 +34,4 @@ data class EventTopic(
 //    .set("payload", payload.value)
 //    .build()
 //
-//fun List<Event>.toHot() = HotArray(this.map { it.toHot() })
+//fun List<Event>.toHot() = JsonArray(this.map { it.toHot() })

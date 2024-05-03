@@ -37,11 +37,11 @@ internal object JsonNullTest {
 
     @TestFactory
     fun `as invalid`() = listOf(
-        Tuple3("asArray", JsonNull::asArray, "Not HotArray"),
-        Tuple3("asBoolean", JsonNull::asBoolean, "Not HotBoolean"),
-        Tuple3("asNumber", JsonNull::asNumber, "Not HotNumber"),
-        Tuple3("asObject", JsonNull::asObject, "Not HotObject"),
-        Tuple3("asString", JsonNull::asString, "Not HotString")
+        Tuple3("asArray", JsonNull::asArray, "Not JsonArray"),
+        Tuple3("asBoolean", JsonNull::asBoolean, "Not JsonBoolean"),
+        Tuple3("asNumber", JsonNull::asNumber, "Not JsonNumber"),
+        Tuple3("asObject", JsonNull::asObject, "Not JsonObject"),
+        Tuple3("asString", JsonNull::asString, "Not JsonString")
     ).map { (testName, func, expectedMessage) ->
         dynamicTest(testName) {
             assertThrows<IllegalStateException> {

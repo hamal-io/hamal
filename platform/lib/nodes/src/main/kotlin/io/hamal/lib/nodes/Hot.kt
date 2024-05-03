@@ -2,8 +2,8 @@ package io.hamal.lib.nodes
 
 import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.SerdeModuleJson
-import io.hamal.lib.common.value.SerdeModuleJsonValue
-import io.hamal.lib.common.value.ValueJsonAdapters
+import io.hamal.lib.common.value.serde.SerdeModuleJsonValue
+import io.hamal.lib.common.value.serde.ValueJsonAdapters
 import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.control.ControlExtension

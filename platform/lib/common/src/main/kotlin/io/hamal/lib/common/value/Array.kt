@@ -4,7 +4,7 @@ import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.*
 
-class TypeArray(
+data class TypeArray(
     val valueType: Type,
     override val identifier: TypeIdentifier
 ) : Type() {

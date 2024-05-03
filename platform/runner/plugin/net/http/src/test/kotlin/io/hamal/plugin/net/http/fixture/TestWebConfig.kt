@@ -2,7 +2,7 @@ package io.hamal.plugin.net.http.fixture
 
 import com.google.gson.Gson
 import io.hamal.lib.common.serialization.Serde
-import io.hamal.lib.common.value.SerdeModuleJsonValue
+import io.hamal.lib.common.value.serde.SerdeModuleJsonValue
 import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.Bean

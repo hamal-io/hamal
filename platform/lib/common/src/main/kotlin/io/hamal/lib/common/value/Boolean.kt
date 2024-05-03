@@ -7,10 +7,12 @@ data object TypeBoolean : TypePrimitive() {
 }
 
 data class ValueBoolean(private val value: Boolean) : Value {
+    constructor(value: String) : this(value.toBoolean())
 
     override val type get() = TypeBoolean
 
     val booleanValue: Boolean get() = value
+    val stringValue: String get() = value.toString()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

@@ -1,7 +1,7 @@
 package io.hamal.repository.api.event
 
 import io.hamal.lib.common.serialization.SerdeModuleJson
-import io.hamal.lib.common.value.ValueJsonAdapters.StringVariable
+import io.hamal.lib.common.value.serde.ValueJsonAdapters.StringVariable
 
 object SerdeModuleJsonInternalEvent : SerdeModuleJson() {
     init {

@@ -42,10 +42,10 @@ internal object JsonBooleanTest {
 
     @TestFactory
     fun `as invalid`() = listOf(
-        Tuple3("asArray", JsonBoolean(true)::asArray, "Not HotArray"),
-        Tuple3("asNull", JsonBoolean(true)::asNull, "Not HotNull"),
-        Tuple3("asNumber", JsonBoolean(true)::asNumber, "Not HotNumber"),
-        Tuple3("asObject", JsonBoolean(true)::asObject, "Not HotObject"),
+        Tuple3("asArray", JsonBoolean(true)::asArray, "Not JsonArray"),
+        Tuple3("asNull", JsonBoolean(true)::asNull, "Not JsonNull"),
+        Tuple3("asNumber", JsonBoolean(true)::asNumber, "Not JsonNumber"),
+        Tuple3("asObject", JsonBoolean(true)::asObject, "Not JsonObject"),
     ).map { (testName, func, expectedMessage) ->
         dynamicTest(testName) {
             assertThrows<IllegalStateException> {

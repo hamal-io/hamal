@@ -1,17 +1,23 @@
 package io.hamal.lib.common.serialization
 
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
+import com.google.gson.*
 import io.hamal.lib.common.compress.Compressor
 import io.hamal.lib.common.compress.CompressorNop
 import io.hamal.lib.common.serialization.json.*
+import io.hamal.lib.common.serialization.json.JsonArray
+import io.hamal.lib.common.serialization.json.JsonNull
+import io.hamal.lib.common.serialization.json.JsonObject
+import io.hamal.lib.common.serialization.json.JsonPrimitive
+import io.hamal.lib.common.util.InstantUtils
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.lang.reflect.Type
+import java.time.Instant
 import kotlin.reflect.KClass
 
 sealed class Serde {
     companion object {
+        fun hon(compressor: Compressor = CompressorNop): SerdeHon = SerdeHon(compressor)
         fun json(compressor: Compressor = CompressorNop): SerdeJson = SerdeJson(compressor)
     }
 }
@@ -28,6 +34,10 @@ class SerdeJson(
     fun <TYPE : Any> writeAndCompress(src: TYPE): ByteArray {
         val json = write(src)
         return compressor.compress(json)
+    }
+
+    inline fun <reified TYPE : Any> read(content: String): TYPE {
+        return gson.fromJson(content, TYPE::class.java)
     }
 
     fun <TYPE : Any> read(clazz: KClass<TYPE>, content: String): TYPE {
@@ -76,6 +86,7 @@ class SerdeJson(
     val gson: Gson by lazy { builder.create() }
 
     init {
+        builder.registerTypeAdapter(Instant::class.java, AdapterInstant)
         builder.registerTypeAdapter(JsonArray::class.java, JsonAdapters.Array)
         builder.registerTypeAdapter(JsonBoolean::class.java, JsonAdapters.Boolean)
         builder.registerTypeAdapter(JsonNode::class.java, JsonAdapters.Node)
@@ -98,6 +109,10 @@ class SerdeHon(
     fun <TYPE : Any> writeAndCompress(src: TYPE): ByteArray {
         val json = write(src)
         return compressor.compress(json)
+    }
+
+    inline fun <reified TYPE : Any> read(content: String): TYPE {
+        return gson.fromJson(content, TYPE::class.java)
     }
 
     fun <TYPE : Any> read(clazz: KClass<TYPE>, content: String): TYPE {
@@ -146,6 +161,7 @@ class SerdeHon(
     val gson: Gson by lazy { builder.create() }
 
     init {
+        builder.registerTypeAdapter(Instant::class.java, AdapterInstant)
         builder.registerTypeAdapter(JsonArray::class.java, JsonAdapters.Array)
         builder.registerTypeAdapter(JsonBoolean::class.java, JsonAdapters.Boolean)
         builder.registerTypeAdapter(JsonNode::class.java, JsonAdapters.Node)
@@ -153,5 +169,15 @@ class SerdeHon(
         builder.registerTypeAdapter(JsonNull::class.java, JsonAdapters.Null)
         builder.registerTypeAdapter(JsonObject::class.java, JsonAdapters.Object)
         builder.registerTypeAdapter(JsonPrimitive::class.java, JsonAdapters.Primitive)
+    }
+}
+
+private data object AdapterInstant : Adapter<Instant> {
+    override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): Instant {
+        return InstantUtils.parse(json.asString)
+    }
+
+    override fun serialize(src: Instant, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+        return com.google.gson.JsonPrimitive(InstantUtils.format(src))
     }
 }

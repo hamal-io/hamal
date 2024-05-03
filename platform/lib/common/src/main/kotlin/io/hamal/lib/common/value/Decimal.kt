@@ -18,6 +18,8 @@ value class ValueDecimal(
 
     override val type get() = TypeDecimal
 
+    val stringValue: String get() = value.toString()
+
     companion object {
         val Zero = ValueDecimal(0)
         val One = ValueDecimal(1)

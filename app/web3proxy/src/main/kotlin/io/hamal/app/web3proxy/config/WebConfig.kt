@@ -2,7 +2,7 @@ package io.hamal.app.web3proxy.config
 
 import com.google.gson.Gson
 import io.hamal.lib.common.serialization.Serde
-import io.hamal.lib.common.value.SerdeModuleJsonValue
+import io.hamal.lib.common.value.serde.SerdeModuleJsonValue
 import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
 import io.hamal.lib.web3.evm.SerdeModuleJsonEvm
 import org.apache.coyote.ProtocolHandler

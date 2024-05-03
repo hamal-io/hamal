@@ -3,7 +3,7 @@ package io.hamal.extension.web3.eth
 import com.google.gson.Gson
 import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.json.JsonArray
-import io.hamal.lib.common.value.SerdeModuleJsonValue
+import io.hamal.lib.common.value.serde.SerdeModuleJsonValue
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable

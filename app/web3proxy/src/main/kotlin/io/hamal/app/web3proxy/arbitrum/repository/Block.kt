@@ -1,7 +1,7 @@
 package io.hamal.app.web3proxy.arbitrum.repository
 
 import io.hamal.lib.common.serialization.Serde
-import io.hamal.lib.common.value.SerdeModuleJsonValue
+import io.hamal.lib.common.value.serde.SerdeModuleJsonValue
 import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository

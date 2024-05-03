@@ -1,7 +1,7 @@
 package io.hamal.lib.sdk
 
 import io.hamal.lib.common.serialization.Serde
-import io.hamal.lib.common.value.SerdeModuleJsonValue
+import io.hamal.lib.common.value.serde.SerdeModuleJsonValue
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.ExecToken
 import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable

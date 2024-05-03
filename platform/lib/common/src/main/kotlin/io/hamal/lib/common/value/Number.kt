@@ -18,6 +18,7 @@ value class ValueNumber(private val value: Double) : ValueComparable<ValueNumber
     constructor(value: Float) : this(value.toDouble())
     constructor(value: Number) : this(value.toDouble())
     constructor(value: BigInteger) : this(value.toDouble())
+    constructor(value: String) : this(value.toDouble())
 
     operator fun times(value: Int) = ValueNumber(this.value * value)
     operator fun times(value: Double) = ValueNumber(this.value * value)
@@ -30,6 +31,7 @@ value class ValueNumber(private val value: Double) : ValueComparable<ValueNumber
     val longValue: Long get() = value.toLong()
     val floatValue: Float get() = value.toFloat()
     val doubleValue: Double get() = value
+    val stringValue: String get() = value.toString()
 }
 
 abstract class ValueVariableNumber : ValueVariable.ComparableImpl<ValueNumber>() {

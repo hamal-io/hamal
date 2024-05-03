@@ -1,18 +1,17 @@
-package io.hamal.lib.common.value
+package io.hamal.lib.common.value.serde
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.serialization.GsonTransform
 import io.hamal.lib.common.serialization.AdapterJson
+import io.hamal.lib.common.serialization.GsonTransform
 import io.hamal.lib.common.serialization.SerdeModuleJson
 import io.hamal.lib.common.serialization.json.*
-import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.util.InstantUtils
+import io.hamal.lib.common.value.*
 import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 import java.lang.reflect.Type
-import java.time.ZoneOffset
-import java.time.format.DateTimeFormatter
 
 object SerdeModuleJsonValue : SerdeModuleJson() {
 
@@ -60,7 +59,7 @@ object ValueJsonAdapters {
     internal data object Array : AdapterJson<ValueArray> {
 
         override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ValueArray {
-            return ValueJsonTransform.fromJson(GsonTransform.toNode(json)) as ValueArray
+            return ValueJsonTransform.fromJson(GsonTransform.toNode(json), ValueArray::class.java) as ValueArray
         }
 
         override fun serialize(src: ValueArray, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
@@ -70,7 +69,7 @@ object ValueJsonAdapters {
 
     internal data object Boolean : AdapterJson<ValueBoolean> {
         override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ValueBoolean {
-            return ValueJsonTransform.fromJson(GsonTransform.toNode(json)) as ValueBoolean
+            return ValueJsonTransform.fromJson(GsonTransform.toNode(json), ValueBoolean::class.java) as ValueBoolean
         }
 
         override fun serialize(src: ValueBoolean, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
@@ -92,7 +91,7 @@ object ValueJsonAdapters {
     internal data object Decimal : AdapterJson<ValueDecimal> {
 
         override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ValueDecimal {
-            return ValueDecimal(json.asString)
+            return ValueJsonTransform.fromJson(GsonTransform.toNode(json), ValueDecimal::class.java) as ValueDecimal
         }
 
         override fun serialize(src: ValueDecimal, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
@@ -102,14 +101,12 @@ object ValueJsonAdapters {
 
     internal data object Instant : AdapterJson<ValueInstant> {
         override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ValueInstant {
-            return ValueInstant(java.time.Instant.from(formatter.parse(json.asString)))
+            return ValueJsonTransform.fromJson(GsonTransform.toNode(json), ValueInstant::class.java) as ValueInstant
         }
 
         override fun serialize(src: ValueInstant, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-            return JsonPrimitive(formatter.format(src.instantValue))
+            return GsonTransform.fromNode(ValueJsonTransform.toJson(src))
         }
-
-        private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'").withZone(ZoneOffset.UTC)
     }
 
     class InstantVariable<TYPE : ValueVariableInstant>(val ctor: (ValueInstant) -> TYPE) : AdapterJson<TYPE> {
@@ -126,7 +123,7 @@ object ValueJsonAdapters {
     internal data object Nil : AdapterJson<ValueNil> {
 
         override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ValueNil {
-            return ValueJsonTransform.fromJson(GsonTransform.toNode(json)) as ValueNil
+            return ValueJsonTransform.fromJson(GsonTransform.toNode(json), ValueNil::class.java) as ValueNil
         }
 
         override fun serialize(src: ValueNil, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
@@ -137,7 +134,7 @@ object ValueJsonAdapters {
     internal data object Number : AdapterJson<ValueNumber> {
 
         override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ValueNumber {
-            return ValueJsonTransform.fromJson(GsonTransform.toNode(json)) as ValueNumber
+            return ValueJsonTransform.fromJson(GsonTransform.toNode(json), ValueNumber::class.java) as ValueNumber
         }
 
         override fun serialize(src: ValueNumber, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
@@ -148,19 +145,18 @@ object ValueJsonAdapters {
     class NumberVariable<TYPE : ValueVariableNumber>(val ctor: (ValueNumber) -> TYPE) : AdapterJson<TYPE> {
 
         override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {
-            return ctor(ValueNumber(json.asDouble))
+            return ctor(context.deserialize(json, ValueNumber::class.java))
         }
 
         override fun serialize(src: TYPE, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
-            return JsonPrimitive(src.value.doubleValue)
+            return context.serialize(src.value)
         }
     }
-
 
     internal data object Object : AdapterJson<ValueObject> {
 
         override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ValueObject {
-            return ValueJsonTransform.fromJson(GsonTransform.toNode(json)) as ValueObject
+            return ValueJsonTransform.fromJson(GsonTransform.toNode(json), ValueObject::class.java) as ValueObject
         }
 
         override fun serialize(src: ValueObject, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
@@ -181,7 +177,7 @@ object ValueJsonAdapters {
 
     internal data object SnowflakeId : AdapterJson<ValueSnowflakeId> {
         override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ValueSnowflakeId {
-            return ValueSnowflakeId(SnowflakeId(json.asString))
+            return ValueJsonTransform.fromJson(GsonTransform.toNode(json), ValueSnowflakeId::class.java) as ValueSnowflakeId
         }
 
         override fun serialize(src: ValueSnowflakeId, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
@@ -202,7 +198,7 @@ object ValueJsonAdapters {
 
     internal data object String : AdapterJson<ValueString> {
         override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ValueString {
-            return ValueJsonTransform.fromJson(GsonTransform.toNode(json)) as ValueString
+            return ValueJsonTransform.fromJson(GsonTransform.toNode(json), ValueString::class.java) as ValueString
         }
 
         override fun serialize(src: ValueString, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
@@ -225,29 +221,37 @@ object ValueJsonAdapters {
 
 internal object ValueJsonTransform {
 
-    fun fromJson(node: JsonNode<*>): Value {
+    fun fromJson(node: JsonNode<*>, type: Type?): Value {
         return when (node) {
             is JsonArray -> fromArray(node.asArray())
             is JsonBoolean -> ValueBoolean(node.booleanValue)
             is JsonNull -> ValueNil
             is JsonNumber -> ValueNumber(node.doubleValue)
             is JsonObject -> fromObject(node)
-            is JsonString -> ValueString(node.stringValue)
+            is JsonString -> {
+                when (type) {
+                    null -> ValueString(node.stringValue)
+                    ValueString::class.java -> ValueString(node.stringValue)
+                    ValueSnowflakeId::class.java -> ValueSnowflakeId(node.stringValue)
+                    ValueDecimal::class.java -> ValueDecimal(node.stringValue)
+                    ValueInstant::class.java -> ValueInstant(InstantUtils.parse(node.stringValue))
+                    ValueNumber::class.java -> ValueNumber(node.stringValue)
+                    else -> TODO()
+                }
+            }
         }
     }
 
     private fun fromObject(obj: JsonObject): ValueObject {
         val builder = ValueObject.builder()
-        obj.nodes.forEach { node ->
-            builder[node.key] = fromJson(node.value)
-        }
+        obj.nodes.forEach { node -> builder[node.key] = fromJson(node.value, null) }
         return builder.build()
     }
 
     private fun fromArray(array: JsonArray): ValueArray {
         val builder = ValueArray.builder()
         array.nodes.forEach { node ->
-            builder.append(fromJson(node))
+            builder.append(fromJson(node, null))
         }
         return builder.build()
     }
@@ -257,6 +261,7 @@ internal object ValueJsonTransform {
             is ValueArray -> toArray(value)
             is ValueBoolean -> JsonBoolean(value.booleanValue)
             is ValueDecimal -> JsonString(value.toString())
+            is ValueInstant -> JsonString(value.stringValue)
             is ValueNil -> JsonNull
             is ValueNumber -> JsonNumber(value.doubleValue)
             is ValueObject -> toObject(value)

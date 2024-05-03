@@ -32,17 +32,17 @@ fun Value?.toKua(state: State): Value {
         return ValueNil
     }
 //    return when (this) {
-//        is HotObject -> state.tableCreate(nodes.map { (key, value) ->
+//        is JsonObject -> state.tableCreate(nodes.map { (key, value) ->
 //            ValueString(key) to value.toKua(
 //                state
 //            )
 //        }.toMap())
 //
-//        is HotArray -> state.tableCreate(nodes.map { it.toKua(state) })
-//        is HotBoolean -> if (value) ValueTrue else ValueFalse
-//        is HotNull -> ValueNil
-//        is HotNumber -> ValueNumber(value.toDouble())
-//        is HotString -> ValueString(value)
+//        is JsonArray -> state.tableCreate(nodes.map { it.toKua(state) })
+//        is JsonBoolean -> if (value) ValueTrue else ValueFalse
+//        is JsonNull -> ValueNil
+//        is JsonNumber -> ValueNumber(value.toDouble())
+//        is JsonString -> ValueString(value)
 //        else -> TODO()
 //    }
     return when (this) {
@@ -102,16 +102,16 @@ fun Value.toHotNode(): JsonNode<*> {
         is ValueBoolean -> JsonBoolean(booleanValue)
         is ValueCode -> JsonString(stringValue)
         is ValueDecimal -> JsonString(value.toString())
-        is ValueError -> toHotObject()
+        is ValueError -> toJsonObject()
         is KuaFunction<*, *, *, *> -> TODO()
         is ValueNil -> JsonNull
         is ValueNumber -> JsonNumber(doubleValue)
         is ValueString -> JsonString(stringValue)
         is KuaTable -> {
             if (isArray()) {
-                toHotArray()
+                toJsonArray()
             } else {
-                toHotObject()
+                toJsonObject()
             }
         }
 
@@ -121,7 +121,7 @@ fun Value.toHotNode(): JsonNode<*> {
 }
 
 @Deprecated("Remove me")
-fun ValueError.toHotObject(): JsonObject = JsonObject.builder().set("message", stringValue).build()
+fun ValueError.toJsonObject(): JsonObject = JsonObject.builder().set("message", stringValue).build()
 
 fun KuaTable.isArray(): Boolean {
     return state.checkpoint {
@@ -136,7 +136,7 @@ fun KuaTable.isArray(): Boolean {
 }
 
 @Deprecated("Remove me")
-fun KuaTable.toHotArray(): JsonArray {
+fun KuaTable.toJsonArray(): JsonArray {
     val builder = JsonArray.builder()
 
     state.checkpoint {
@@ -154,7 +154,7 @@ fun KuaTable.toHotArray(): JsonArray {
 }
 
 @Deprecated("Remove me")
-fun KuaTable.toHotObject(): JsonObject {
+fun KuaTable.toJsonObject(): JsonObject {
     val builder = JsonObject.builder()
 
     state.checkpoint {

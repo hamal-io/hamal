@@ -3,7 +3,7 @@ package io.hamal.lib.http
 import com.google.gson.reflect.TypeToken
 import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.SerdeJson
-import io.hamal.lib.common.value.SerdeModuleJsonValue
+import io.hamal.lib.common.value.serde.SerdeModuleJsonValue
 import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
 import java.io.InputStream
 import kotlin.reflect.KClass

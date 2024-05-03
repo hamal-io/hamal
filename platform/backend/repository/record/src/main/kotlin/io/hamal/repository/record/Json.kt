@@ -6,8 +6,8 @@ import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.AdapterJson
 import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.SerdeModuleJson
-import io.hamal.lib.common.value.SerdeModuleJsonValue
-import io.hamal.lib.common.value.ValueJsonAdapters
+import io.hamal.lib.common.value.serde.SerdeModuleJsonValue
+import io.hamal.lib.common.value.serde.ValueJsonAdapters
 import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
 import io.hamal.repository.api.SerdeModuleJsonDomain
 import io.hamal.repository.record.account.AccountRecord

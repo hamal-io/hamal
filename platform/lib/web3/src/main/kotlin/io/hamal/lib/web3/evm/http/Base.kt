@@ -83,17 +83,17 @@ abstract class HttpBaseBatchService<out RESPONSE : EvmResponse>(
 //) : DepEthBatchService<DepEthHttpBatchService> {
 //
 //    private val resultClasses = mutableListOf<KClass<*>>()
-//    private val requests = mutableListOf<HotObject>()
+//    private val requests = mutableListOf<JsonObject>()
 //
 //    override fun getBlockNumber() = request(
 //        method = "eth_blockNumber",
-//        params = HotArray.empty,
+//        params = JsonArray.empty,
 //        resultClass = EthGetBlockNumberResponse::class
 //    )
 //
 //    override fun getBlock(number: EvmUint64) = request(
 //        method = "eth_getBlockByNumber",
-//        params = HotArray.builder()
+//        params = JsonArray.builder()
 //            .append(number.toPrefixedHexString().value)
 //            .append(true)
 //            .build(),
@@ -102,7 +102,7 @@ abstract class HttpBaseBatchService<out RESPONSE : EvmResponse>(
 //
 //    override fun getLiteBlock(number: EvmUint64) = request(
 //        method = "eth_getBlockByNumber",
-//        params = HotArray.builder()
+//        params = JsonArray.builder()
 //            .append(number.toPrefixedHexString().value)
 //            .append(false)
 //            .build(),
@@ -111,9 +111,9 @@ abstract class HttpBaseBatchService<out RESPONSE : EvmResponse>(
 //
 //    override fun call(callRequest: DepEthBatchService.EthCallRequest) = request(
 //        method = "eth_call",
-//        params = HotArray.builder()
+//        params = JsonArray.builder()
 //            .append(
-//                HotObject.builder()
+//                JsonObject.builder()
 //                    .set("to", callRequest.to.toPrefixedHexString().value)
 //                    .set("data", callRequest.data.value)
 //                    .build()
@@ -134,8 +134,8 @@ abstract class HttpBaseBatchService<out RESPONSE : EvmResponse>(
 //
 //        val response = httpTemplate
 //            .post()
-//            .body(HotArray.builder().also { builder -> requests.forEach { request -> builder.append(request) } }.build())
-//            .execute(HotArray::class)
+//            .body(JsonArray.builder().also { builder -> requests.forEach { request -> builder.append(request) } }.build())
+//            .execute(JsonArray::class)
 //
 //        return response.nodes.mapIndexed { index, hotNode ->
 //            val response = hotNode.asObject()
@@ -151,17 +151,17 @@ abstract class HttpBaseBatchService<out RESPONSE : EvmResponse>(
 //    internal val json = Json(
 //        JsonFactoryBuilder()
 //            .register(EvmHotModule)
-//            .register(HotObjectModule)
+//            .register(JsonObjectModule)
 //    )
 //
 //    private fun <RESPONSE : EthResponse> request(
 //        method: String,
-//        params: HotArray,
+//        params: JsonArray,
 //        resultClass: KClass<RESPONSE>
 //    ): DepEthHttpBatchService {
 //        addRequest(
 //            createReq = { id ->
-//                HotObjectBuilder()
+//                JsonObjectBuilder()
 //                    .set("jsonrpc", "2.0")
 //                    .set("id", id.toString())
 //                    .set("method", method)
@@ -174,7 +174,7 @@ abstract class HttpBaseBatchService<out RESPONSE : EvmResponse>(
 //        return this
 //    }
 //
-//    private fun <RESPONSE : EthResponse> addRequest(createReq: (Int) -> HotObject, resultClass: KClass<RESPONSE>) {
+//    private fun <RESPONSE : EthResponse> addRequest(createReq: (Int) -> JsonObject, resultClass: KClass<RESPONSE>) {
 //        val reqId = requests.size + 1
 //        resultClasses.add(resultClass)
 //        requests.add(createReq(reqId))

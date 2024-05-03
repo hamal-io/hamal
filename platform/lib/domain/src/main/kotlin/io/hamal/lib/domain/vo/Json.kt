@@ -2,11 +2,11 @@ package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.serialization.SerdeModuleJson
-import io.hamal.lib.common.value.ValueJsonAdapters.InstantVariable
-import io.hamal.lib.common.value.ValueJsonAdapters.NumberVariable
-import io.hamal.lib.common.value.ValueJsonAdapters.ObjectVariable
-import io.hamal.lib.common.value.ValueJsonAdapters.SnowflakeIdVariable
-import io.hamal.lib.common.value.ValueJsonAdapters.StringVariable
+import io.hamal.lib.common.value.serde.ValueJsonAdapters.InstantVariable
+import io.hamal.lib.common.value.serde.ValueJsonAdapters.NumberVariable
+import io.hamal.lib.common.value.serde.ValueJsonAdapters.ObjectVariable
+import io.hamal.lib.common.value.serde.ValueJsonAdapters.SnowflakeIdVariable
+import io.hamal.lib.common.value.serde.ValueJsonAdapters.StringVariable
 import io.hamal.lib.domain.State
 
 object SerdeModuleJsonValueVariable : SerdeModuleJson() {

@@ -3,7 +3,7 @@ package io.hamal.core.config
 import com.google.gson.Gson
 import io.hamal.core.component.*
 import io.hamal.lib.common.serialization.Serde
-import io.hamal.lib.common.value.SerdeModuleJsonValue
+import io.hamal.lib.common.value.serde.SerdeModuleJsonValue
 import io.hamal.lib.domain.vo.SerdeModuleJsonValueVariable
 import io.hamal.lib.sdk.api.SerdeModuleJsonApi
 import io.hamal.repository.api.event.SerdeModuleJsonInternalEvent

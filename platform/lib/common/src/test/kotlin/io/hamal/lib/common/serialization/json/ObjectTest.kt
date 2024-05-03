@@ -133,12 +133,12 @@ internal class JsonObjectTest {
 
         @TestFactory
         fun `as - not found`() = listOf<Tuple3<kotlin.String, (kotlin.String) -> Any, kotlin.String>>(
-            Tuple3("asArray", testInstance::asArray, "Not HotArray"),
-            Tuple3("asBoolean", testInstance::asBoolean, "Not HotBoolean"),
-            Tuple3("asNumber", testInstance::asNumber, "Not HotNumber"),
-            Tuple3("asObject", testInstance::asObject, "Not HotObject"),
-            Tuple3("asString", testInstance::asString, "Not HotString"),
-            Tuple3("asPrimitive", testInstance::asPrimitive, "Not HotTerminal"),
+            Tuple3("asArray", testInstance::asArray, "Not JsonArray"),
+            Tuple3("asBoolean", testInstance::asBoolean, "Not JsonBoolean"),
+            Tuple3("asNumber", testInstance::asNumber, "Not JsonNumber"),
+            Tuple3("asObject", testInstance::asObject, "Not JsonObject"),
+            Tuple3("asString", testInstance::asString, "Not JsonString"),
+            Tuple3("asPrimitive", testInstance::asPrimitive, "Not JsonPrimitive"),
         ).map { (testName, fn, expectedErrorMessage) ->
             dynamicTest(testName) {
                 assertThrows<IllegalStateException> {
@@ -151,12 +151,12 @@ internal class JsonObjectTest {
 
         @TestFactory
         fun `as - wrong type`() = listOf<Tuple4<kotlin.String, kotlin.String, (kotlin.String) -> Any, kotlin.String>>(
-            Tuple4("asArray", "object", testInstance::asArray, "Not HotArray"),
-            Tuple4("asBoolean", "string", testInstance::asBoolean, "Not HotBoolean"),
-            Tuple4("asNumber", "boolean", testInstance::asNumber, "Not HotNumber"),
-            Tuple4("asObject", "array", testInstance::asObject, "Not HotObject"),
-            Tuple4("asString", "number", testInstance::asString, "Not HotString"),
-            Tuple4("asPrimitive", "array", testInstance::asPrimitive, "Not HotTerminal"),
+            Tuple4("asArray", "object", testInstance::asArray, "Not JsonArray"),
+            Tuple4("asBoolean", "string", testInstance::asBoolean, "Not JsonBoolean"),
+            Tuple4("asNumber", "boolean", testInstance::asNumber, "Not JsonNumber"),
+            Tuple4("asObject", "array", testInstance::asObject, "Not JsonObject"),
+            Tuple4("asString", "number", testInstance::asString, "Not JsonString"),
+            Tuple4("asPrimitive", "array", testInstance::asPrimitive, "Not JsonPrimitive"),
         ).map { (testName, key, fn, expectedErrorMessage) ->
             dynamicTest(testName) {
                 assertThrows<IllegalStateException> {
@@ -191,15 +191,15 @@ internal class JsonObjectTest {
 
         @TestFactory
         fun `value - not found`() = listOf<Tuple3<kotlin.String, (kotlin.String) -> Any, kotlin.String>>(
-            Tuple3("booleanValue", testInstance::booleanValue, "Not HotBoolean"),
-            Tuple3("byteValue", testInstance::byteValue, "Not HotNumber"),
-            Tuple3("decimalValue", testInstance::decimalValue, "Not HotNumber"),
-            Tuple3("doubleValue", testInstance::doubleValue, "Not HotNumber"),
-            Tuple3("floatValue", testInstance::floatValue, "Not HotNumber"),
-            Tuple3("intValue", testInstance::intValue, "Not HotNumber"),
-            Tuple3("longValue", testInstance::longValue, "Not HotNumber"),
-            Tuple3("shortValue", testInstance::shortValue, "Not HotNumber"),
-            Tuple3("stringValue", testInstance::stringValue, "Not HotString")
+            Tuple3("booleanValue", testInstance::booleanValue, "Not JsonBoolean"),
+            Tuple3("byteValue", testInstance::byteValue, "Not JsonNumber"),
+            Tuple3("decimalValue", testInstance::decimalValue, "Not JsonNumber"),
+            Tuple3("doubleValue", testInstance::doubleValue, "Not JsonNumber"),
+            Tuple3("floatValue", testInstance::floatValue, "Not JsonNumber"),
+            Tuple3("intValue", testInstance::intValue, "Not JsonNumber"),
+            Tuple3("longValue", testInstance::longValue, "Not JsonNumber"),
+            Tuple3("shortValue", testInstance::shortValue, "Not JsonNumber"),
+            Tuple3("stringValue", testInstance::stringValue, "Not JsonString")
         ).map { (testName, fn, expectedErrorMessage) ->
             dynamicTest(testName) {
                 assertThrows<IllegalStateException> {
@@ -212,15 +212,15 @@ internal class JsonObjectTest {
 
         @TestFactory
         fun `value - wrong type`() = listOf<Tuple4<kotlin.String, kotlin.String, (kotlin.String) -> Any, kotlin.String>>(
-            Tuple4("booleanValue", "string", testInstance::booleanValue, "Not HotBoolean"),
-            Tuple4("byteValue", "boolean", testInstance::byteValue, "Not HotNumber"),
-            Tuple4("decimalValue", "boolean", testInstance::decimalValue, "Not HotNumber"),
-            Tuple4("doubleValue", "boolean", testInstance::doubleValue, "Not HotNumber"),
-            Tuple4("floatValue", "boolean", testInstance::floatValue, "Not HotNumber"),
-            Tuple4("intValue", "boolean", testInstance::intValue, "Not HotNumber"),
-            Tuple4("longValue", "boolean", testInstance::longValue, "Not HotNumber"),
-            Tuple4("shortValue", "boolean", testInstance::shortValue, "Not HotNumber"),
-            Tuple4("stringValue", "number", testInstance::stringValue, "Not HotString")
+            Tuple4("booleanValue", "string", testInstance::booleanValue, "Not JsonBoolean"),
+            Tuple4("byteValue", "boolean", testInstance::byteValue, "Not JsonNumber"),
+            Tuple4("decimalValue", "boolean", testInstance::decimalValue, "Not JsonNumber"),
+            Tuple4("doubleValue", "boolean", testInstance::doubleValue, "Not JsonNumber"),
+            Tuple4("floatValue", "boolean", testInstance::floatValue, "Not JsonNumber"),
+            Tuple4("intValue", "boolean", testInstance::intValue, "Not JsonNumber"),
+            Tuple4("longValue", "boolean", testInstance::longValue, "Not JsonNumber"),
+            Tuple4("shortValue", "boolean", testInstance::shortValue, "Not JsonNumber"),
+            Tuple4("stringValue", "number", testInstance::stringValue, "Not JsonString")
         ).map { (testName, key, fn, expectedErrorMessage) ->
             dynamicTest(testName) {
                 assertThrows<IllegalStateException> {

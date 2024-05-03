@@ -40,11 +40,11 @@ internal object JsonStringTest {
 
     @TestFactory
     fun `as invalid`() = listOf(
-        Tuple3("asArray", JsonString("hamal")::asArray, "Not HotArray"),
-        Tuple3("asBoolean", JsonString("hamal")::asBoolean, "Not HotBoolean"),
-        Tuple3("asNull", JsonString("hamal")::asNull, "Not HotNull"),
-        Tuple3("asNumber", JsonString("hamal")::asNumber, "Not HotNumber"),
-        Tuple3("asObject", JsonString("hamal")::asObject, "Not HotObject")
+        Tuple3("asArray", JsonString("hamal")::asArray, "Not JsonArray"),
+        Tuple3("asBoolean", JsonString("hamal")::asBoolean, "Not JsonBoolean"),
+        Tuple3("asNull", JsonString("hamal")::asNull, "Not JsonNull"),
+        Tuple3("asNumber", JsonString("hamal")::asNumber, "Not JsonNumber"),
+        Tuple3("asObject", JsonString("hamal")::asObject, "Not JsonObject")
     ).map { (testName, func, expectedMessage) ->
         dynamicTest(testName) {
             assertThrows<IllegalStateException> {
