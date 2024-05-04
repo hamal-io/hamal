@@ -3,7 +3,7 @@ package io.hamal.lib.http.fixture
 import com.google.gson.Gson
 import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.value.serde.SerdeModuleValueJson
-import io.hamal.lib.domain.vo.SerdeModuleValueVariableJson
+import io.hamal.lib.domain.vo.SerdeModuleValueVariable
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
@@ -24,7 +24,7 @@ open class TestWebConfig : WebMvcConfigurer {
     @Bean
     open fun gsonJson(): Gson = Serde.json()
         .register(SerdeModuleValueJson)
-        .register(SerdeModuleValueVariableJson)
+        .register(SerdeModuleValueVariable)
         .gson
 
     @Bean

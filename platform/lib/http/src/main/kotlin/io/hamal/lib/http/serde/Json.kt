@@ -3,7 +3,7 @@ package io.hamal.lib.http.serde
 import com.google.gson.reflect.TypeToken
 import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.value.serde.SerdeModuleValueJson
-import io.hamal.lib.domain.vo.SerdeModuleValueVariableJson
+import io.hamal.lib.domain.vo.SerdeModuleValueVariable
 import io.hamal.lib.http.HttpContentDeserializer
 import io.hamal.lib.http.HttpContentSerializer
 import io.hamal.lib.http.HttpErrorDeserializer
@@ -35,4 +35,4 @@ object HttpContentJsonSerializer : HttpContentSerializer {
 
 private val jsonSerde = Serde.json()
     .register(SerdeModuleValueJson)
-    .register(SerdeModuleValueVariableJson)
+    .register(SerdeModuleValueVariable)

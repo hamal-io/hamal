@@ -4,7 +4,7 @@ import com.google.gson.Gson
 import io.hamal.core.component.*
 import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.value.serde.SerdeModuleValueJson
-import io.hamal.lib.domain.vo.SerdeModuleValueVariableJson
+import io.hamal.lib.domain.vo.SerdeModuleValueVariable
 import io.hamal.lib.sdk.api.SerdeModuleJsonApi
 import io.hamal.repository.api.event.SerdeModuleJsonInternalEvent
 import org.apache.coyote.ProtocolHandler
@@ -39,7 +39,7 @@ open class WebConfig : WebMvcConfigurer {
         .register(SerdeModuleJsonApi)
         .register(SerdeModuleJsonInternalEvent)
         .register(SerdeModuleValueJson)
-        .register(SerdeModuleValueVariableJson)
+        .register(SerdeModuleValueVariable)
         .gson
 
 

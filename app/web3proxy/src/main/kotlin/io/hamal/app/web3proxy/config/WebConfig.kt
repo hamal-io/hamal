@@ -3,7 +3,7 @@ package io.hamal.app.web3proxy.config
 import com.google.gson.Gson
 import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.value.serde.SerdeModuleValueJson
-import io.hamal.lib.domain.vo.SerdeModuleValueVariableJson
+import io.hamal.lib.domain.vo.SerdeModuleValueVariable
 import io.hamal.lib.web3.evm.SerdeModuleJsonEvm
 import org.apache.coyote.ProtocolHandler
 import org.springframework.boot.web.embedded.tomcat.TomcatProtocolHandlerCustomizer
@@ -32,7 +32,7 @@ class WebConfig : WebMvcConfigurer {
     fun gsonJson(): Gson = Serde.json()
         .register(SerdeModuleJsonEvm)
         .register(SerdeModuleValueJson)
-        .register(SerdeModuleValueVariableJson)
+        .register(SerdeModuleValueVariable)
         .gson
 
     @Bean

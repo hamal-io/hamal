@@ -82,6 +82,15 @@ class SerdeJson(
         return this
     }
 
+    fun <TYPE : Any, ADAPTER : AdapterGeneric<TYPE>> register(
+        clazz: KClass<TYPE>,
+        adapter: ADAPTER
+    ): SerdeJson {
+        builder.registerTypeAdapter(clazz.java, adapter)
+        return this
+    }
+
+
     private val builder = GsonBuilder()
     val gson: Gson by lazy { builder.create() }
 
@@ -156,6 +165,16 @@ class SerdeHon(
         builder.registerTypeAdapter(clazz.java, adapter)
         return this
     }
+
+
+    fun <TYPE : Any, ADAPTER : AdapterGeneric<TYPE>> register(
+        clazz: KClass<TYPE>,
+        adapter: ADAPTER
+    ): SerdeHon {
+        builder.registerTypeAdapter(clazz.java, adapter)
+        return this
+    }
+
 
     private val builder = GsonBuilder()
     val gson: Gson by lazy { builder.create() }

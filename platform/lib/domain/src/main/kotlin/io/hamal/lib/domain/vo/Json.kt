@@ -2,115 +2,115 @@ package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.serialization.SerdeModuleJson
-import io.hamal.lib.common.value.serde.ValueJsonAdapters.InstantVariable
-import io.hamal.lib.common.value.serde.ValueJsonAdapters.NumberVariable
-import io.hamal.lib.common.value.serde.ValueJsonAdapters.ObjectVariable
-import io.hamal.lib.common.value.serde.ValueJsonAdapters.SnowflakeIdVariable
-import io.hamal.lib.common.value.serde.ValueJsonAdapters.StringVariable
+import io.hamal.lib.common.value.serde.ValueVariableAdapters.Instant
+import io.hamal.lib.common.value.serde.ValueVariableAdapters.Number
+import io.hamal.lib.common.value.serde.ValueVariableAdapters.Object
+import io.hamal.lib.common.value.serde.ValueVariableAdapters.SnowflakeId
+import io.hamal.lib.common.value.serde.ValueVariableAdapters.String
 import io.hamal.lib.domain.State
 
-object SerdeModuleValueVariableJson : SerdeModuleJson() {
+object SerdeModuleValueVariable : SerdeModuleJson() {
     init {
-        this[CreatedAt::class] = InstantVariable(::CreatedAt)
-        this[UpdatedAt::class] = InstantVariable(::UpdatedAt)
+        this[CreatedAt::class] = Instant(::CreatedAt)
+        this[UpdatedAt::class] = Instant(::UpdatedAt)
 
-        this[AccountId::class] = SnowflakeIdVariable(::AccountId)
+        this[AccountId::class] = SnowflakeId(::AccountId)
 
-        this[Email::class] = StringVariable(::Email)
+        this[Email::class] = String(::Email)
 
-        this[AuthId::class] = SnowflakeIdVariable(::AuthId)
-        this[AuthToken::class] = StringVariable(::AuthToken)
-        this[Password::class] = StringVariable(::Password)
-        this[PasswordHash::class] = StringVariable(::PasswordHash)
-        this[PasswordSalt::class] = StringVariable(::PasswordSalt)
+        this[AuthId::class] = SnowflakeId(::AuthId)
+        this[AuthToken::class] = String(::AuthToken)
+        this[Password::class] = String(::Password)
+        this[PasswordHash::class] = String(::PasswordHash)
+        this[PasswordSalt::class] = String(::PasswordSalt)
 
-        this[RecipeId::class] = SnowflakeIdVariable(::RecipeId)
-        this[RecipeName::class] = StringVariable(::RecipeName)
-        this[RecipeInputs::class] = ObjectVariable(::RecipeInputs)
-        this[RecipeDescription::class] = StringVariable(::RecipeDescription)
+        this[RecipeId::class] = SnowflakeId(::RecipeId)
+        this[RecipeName::class] = String(::RecipeName)
+        this[RecipeInputs::class] = Object(::RecipeInputs)
+        this[RecipeDescription::class] = String(::RecipeDescription)
 
-        this[CmdId::class] = SnowflakeIdVariable(::CmdId)
+        this[CmdId::class] = SnowflakeId(::CmdId)
 
-        this[CodeId::class] = SnowflakeIdVariable(::CodeId)
-        this[CodeVersion::class] = NumberVariable(::CodeVersion)
+        this[CodeId::class] = SnowflakeId(::CodeId)
+        this[CodeVersion::class] = Number(::CodeVersion)
 
-        this[CorrelationId::class] = StringVariable(::CorrelationId)
+        this[CorrelationId::class] = String(::CorrelationId)
 
-        this[CronPattern::class] = StringVariable(::CronPattern)
+        this[CronPattern::class] = String(::CronPattern)
 
-        this[ExecId::class] = SnowflakeIdVariable(::ExecId)
-        this[ExecType::class] = StringVariable(::ExecType)
-        this[ExecInputs::class] = ObjectVariable(::ExecInputs)
-        this[ExecResult::class] = ObjectVariable(::ExecResult)
-        this[ExecState::class] = ObjectVariable(::ExecState)
-        this[ExecScheduledAt::class] = InstantVariable(::ExecScheduledAt)
-        this[ExecQueuedAt::class] = InstantVariable(::ExecQueuedAt)
-        this[ExecCompletedAt::class] = InstantVariable(::ExecCompletedAt)
-        this[ExecFailedAt::class] = InstantVariable(::ExecFailedAt)
+        this[ExecId::class] = SnowflakeId(::ExecId)
+        this[ExecType::class] = String(::ExecType)
+        this[ExecInputs::class] = Object(::ExecInputs)
+        this[ExecResult::class] = Object(::ExecResult)
+        this[ExecState::class] = Object(::ExecState)
+        this[ExecScheduledAt::class] = Instant(::ExecScheduledAt)
+        this[ExecQueuedAt::class] = Instant(::ExecQueuedAt)
+        this[ExecCompletedAt::class] = Instant(::ExecCompletedAt)
+        this[ExecFailedAt::class] = Instant(::ExecFailedAt)
 
-        this[ExecToken::class] = StringVariable(::ExecToken)
-        this[ExecLogId::class] = SnowflakeIdVariable(::ExecLogId)
-        this[ExecLogMessage::class] = StringVariable(::ExecLogMessage)
-        this[ExecLogTimestamp::class] = InstantVariable(::ExecLogTimestamp)
+        this[ExecToken::class] = String(::ExecToken)
+        this[ExecLogId::class] = SnowflakeId(::ExecLogId)
+        this[ExecLogMessage::class] = String(::ExecLogMessage)
+        this[ExecLogTimestamp::class] = Instant(::ExecLogTimestamp)
 
-        this[EndpointHeaders::class] = ObjectVariable(::EndpointHeaders)
-        this[EndpointParameters::class] = ObjectVariable(::EndpointParameters)
-        this[EndpointContent::class] = ObjectVariable(::EndpointContent)
+        this[EndpointHeaders::class] = Object(::EndpointHeaders)
+        this[EndpointParameters::class] = Object(::EndpointParameters)
+        this[EndpointContent::class] = Object(::EndpointContent)
 
-        this[EventPayload::class] = ObjectVariable(::EventPayload)
+        this[EventPayload::class] = Object(::EventPayload)
 
-        this[ExpiresAt::class] = InstantVariable(::ExpiresAt)
+        this[ExpiresAt::class] = Instant(::ExpiresAt)
 
-        this[ExtensionId::class] = SnowflakeIdVariable(::ExtensionId)
-        this[ExtensionName::class] = StringVariable(::ExtensionName)
+        this[ExtensionId::class] = SnowflakeId(::ExtensionId)
+        this[ExtensionName::class] = String(::ExtensionName)
 
-        this[FeedbackId::class] = SnowflakeIdVariable(::FeedbackId)
-        this[FeedbackMessage::class] = StringVariable(::FeedbackMessage)
+        this[FeedbackId::class] = SnowflakeId(::FeedbackId)
+        this[FeedbackMessage::class] = String(::FeedbackMessage)
 
-        this[NamespaceId::class] = SnowflakeIdVariable(::NamespaceId)
-        this[NamespaceTreeId::class] = SnowflakeIdVariable(::NamespaceTreeId)
-        this[NamespaceName::class] = StringVariable(::NamespaceName)
-        this[NamespaceFeatures::class] = ObjectVariable(::NamespaceFeatures)
+        this[NamespaceId::class] = SnowflakeId(::NamespaceId)
+        this[NamespaceTreeId::class] = SnowflakeId(::NamespaceTreeId)
+        this[NamespaceName::class] = String(::NamespaceName)
+        this[NamespaceFeatures::class] = Object(::NamespaceFeatures)
 
 
-        this[FuncId::class] = SnowflakeIdVariable(::FuncId)
-        this[FuncName::class] = StringVariable(::FuncName)
-        this[FuncInputs::class] = ObjectVariable(::FuncInputs)
+        this[FuncId::class] = SnowflakeId(::FuncId)
+        this[FuncName::class] = String(::FuncName)
+        this[FuncInputs::class] = Object(::FuncInputs)
 
-        this[DeployedAt::class] = InstantVariable(::DeployedAt)
-        this[DeployMessage::class] = StringVariable(::DeployMessage)
+        this[DeployedAt::class] = Instant(::DeployedAt)
+        this[DeployMessage::class] = String(::DeployMessage)
 
-        this[Limit::class] = NumberVariable(::Limit)
-        this[Count::class] = NumberVariable(::Count)
+        this[Limit::class] = Number(::Limit)
+        this[Count::class] = Number(::Count)
 
-        this[HookHeaders::class] = ObjectVariable(::HookHeaders)
-        this[HookParameters::class] = ObjectVariable(::HookParameters)
-        this[HookContent::class] = ObjectVariable(::HookContent)
-        this[InvocationInputs::class] = ObjectVariable(::InvocationInputs)
+        this[HookHeaders::class] = Object(::HookHeaders)
+        this[HookParameters::class] = Object(::HookParameters)
+        this[HookContent::class] = Object(::HookContent)
+        this[InvocationInputs::class] = Object(::InvocationInputs)
 
-        this[RequestId::class] = SnowflakeIdVariable(::RequestId)
-        this[RequestClass::class] = StringVariable(::RequestClass)
+        this[RequestId::class] = SnowflakeId(::RequestId)
+        this[RequestClass::class] = String(::RequestClass)
 
-        this[RunnerId::class] = SnowflakeIdVariable(::RunnerId)
+        this[RunnerId::class] = SnowflakeId(::RunnerId)
 
-        this[RunnerEnv::class] = ObjectVariable(::RunnerEnv)
-        this[State::class] = ObjectVariable(::State)
+        this[RunnerEnv::class] = Object(::RunnerEnv)
+        this[State::class] = Object(::State)
 
-        this[TopicId::class] = SnowflakeIdVariable(::TopicId)
-        this[TopicName::class] = StringVariable(::TopicName)
-        this[TopicEventId::class] = SnowflakeIdVariable(::TopicEventId)
-        this[TopicEventPayload::class] = ObjectVariable(::TopicEventPayload)
+        this[TopicId::class] = SnowflakeId(::TopicId)
+        this[TopicName::class] = String(::TopicName)
+        this[TopicEventId::class] = SnowflakeId(::TopicEventId)
+        this[TopicEventPayload::class] = Object(::TopicEventPayload)
 
-        this[TriggerId::class] = SnowflakeIdVariable(::TriggerId)
-        this[TriggerDuration::class] = StringVariable(::TriggerDuration)
-        this[TriggerName::class] = StringVariable(::TriggerName)
-        this[TriggerInputs::class] = ObjectVariable(::TriggerInputs)
+        this[TriggerId::class] = SnowflakeId(::TriggerId)
+        this[TriggerDuration::class] = String(::TriggerDuration)
+        this[TriggerName::class] = String(::TriggerName)
+        this[TriggerInputs::class] = Object(::TriggerInputs)
 
-        this[Web3Address::class] = StringVariable(::Web3Address)
-        this[Web3Challenge::class] = StringVariable(::Web3Challenge)
-        this[Web3Signature::class] = StringVariable(::Web3Signature)
+        this[Web3Address::class] = String(::Web3Address)
+        this[Web3Challenge::class] = String(::Web3Challenge)
+        this[Web3Signature::class] = String(::Web3Signature)
 
-        this[WorkspaceId::class] = SnowflakeIdVariable(::WorkspaceId)
-        this[WorkspaceName::class] = StringVariable(::WorkspaceName)
+        this[WorkspaceId::class] = SnowflakeId(::WorkspaceId)
+        this[WorkspaceName::class] = String(::WorkspaceName)
     }
 }

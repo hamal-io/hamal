@@ -7,8 +7,8 @@ import io.hamal.lib.common.serialization.AdapterJson
 import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.SerdeModuleJson
 import io.hamal.lib.common.value.serde.SerdeModuleValueJson
-import io.hamal.lib.common.value.serde.ValueJsonAdapters
-import io.hamal.lib.domain.vo.SerdeModuleValueVariableJson
+import io.hamal.lib.common.value.serde.ValueVariableAdapters
+import io.hamal.lib.domain.vo.SerdeModuleValueVariable
 import io.hamal.repository.api.SerdeModuleJsonDomain
 import io.hamal.repository.record.account.AccountRecord
 import io.hamal.repository.record.code.CodeRecord
@@ -27,10 +27,9 @@ import kotlin.reflect.KClass
 
 object SerdeModuleJsonRecord : SerdeModuleJson() {
     init {
-        this[RecordClass::class] = ValueJsonAdapters.StringVariable(::RecordClass)
-        this[RecordedAt::class] = ValueJsonAdapters.InstantVariable(::RecordedAt)
+        this[RecordClass::class] = ValueVariableAdapters.String(::RecordClass)
+        this[RecordedAt::class] = ValueVariableAdapters.Instant(::RecordedAt)
         this[AccountRecord::class] = AccountRecord.Adapter
-        this[RecipeRecord::class] = RecipeRecord.Adapter
         this[CodeRecord::class] = CodeRecord.Adapter
         this[ExecRecord::class] = ExecRecord.Adapter
         this[ExtensionRecord::class] = ExtensionRecord.Adapter
@@ -38,6 +37,7 @@ object SerdeModuleJsonRecord : SerdeModuleJson() {
         this[NamespaceRecord::class] = NamespaceRecord.Adapter
         this[NamespaceTreeRecord::class] = NamespaceTreeRecord.Adapter
         this[FuncRecord::class] = FuncRecord.Adapter
+        this[RecipeRecord::class] = RecipeRecord.Adapter
         this[WorkspaceRecord::class] = WorkspaceRecord.Adapter
         this[TopicRecord::class] = TopicRecord.Adapter
         this[TriggerRecord::class] = TriggerRecord.Adapter
@@ -48,7 +48,7 @@ val serde = Serde.json()
     .register(SerdeModuleJsonDomain)
     .register(SerdeModuleJsonRecord)
     .register(SerdeModuleValueJson)
-    .register(SerdeModuleValueVariableJson)
+    .register(SerdeModuleValueVariable)
 
 abstract class RecordAdapter<BASE_TYPE : Record<*>>(
     recordClasses: List<KClass<out BASE_TYPE>>

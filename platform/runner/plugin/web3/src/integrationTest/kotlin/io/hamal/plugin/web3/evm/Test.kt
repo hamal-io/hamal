@@ -6,7 +6,7 @@ import io.hamal.lib.common.serialization.json.JsonArray
 import io.hamal.lib.common.value.serde.SerdeModuleValueJson
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.RunnerEnv
-import io.hamal.lib.domain.vo.SerdeModuleValueVariableJson
+import io.hamal.lib.domain.vo.SerdeModuleValueVariable
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.plugin.web3.evm.evm.PluginWeb3EvmFactory
 import io.hamal.runner.test.AbstractRunnerTest
@@ -48,7 +48,7 @@ internal open class TestWebConfig : WebMvcConfigurer {
     @Bean
     open fun gsonJson(): Gson = Serde.json()
         .register(SerdeModuleValueJson)
-        .register(SerdeModuleValueVariableJson)
+        .register(SerdeModuleValueVariable)
         .gson
 
     @Bean

@@ -11,7 +11,13 @@ abstract class SerdeModuleJson : SerdeModule {
         return this
     }
 
-    internal val adapters = mutableMapOf<KClass<*>, AdapterJson<*>>()
+    protected operator fun <TYPE : Any, ADAPTER : AdapterGeneric<TYPE>> set(clazz: KClass<TYPE>, adapter: ADAPTER): SerdeModuleJson {
+        adapters[clazz] = adapter
+        return this
+    }
+
+
+    internal val adapters = mutableMapOf<KClass<*>, Adapter<*>>()
 }
 
 abstract class SerdeModuleHon : SerdeModule {
@@ -21,5 +27,11 @@ abstract class SerdeModuleHon : SerdeModule {
         return this
     }
 
-    internal val adapters = mutableMapOf<KClass<*>, AdapterHon<*>>()
+    protected operator fun <TYPE : Any, ADAPTER : AdapterGeneric<TYPE>> set(clazz: KClass<TYPE>, adapter: ADAPTER): SerdeModuleHon {
+        adapters[clazz] = adapter
+        return this
+    }
+
+
+    internal val adapters = mutableMapOf<KClass<*>, Adapter<*>>()
 }

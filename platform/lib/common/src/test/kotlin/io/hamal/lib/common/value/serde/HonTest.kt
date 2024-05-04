@@ -3,12 +3,6 @@ package io.hamal.lib.common.value.serde
 import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.*
-import io.hamal.lib.common.value.serde.ValueHonAdapters.BooleanVariable
-import io.hamal.lib.common.value.serde.ValueHonAdapters.InstantVariable
-import io.hamal.lib.common.value.serde.ValueHonAdapters.NumberVariable
-import io.hamal.lib.common.value.serde.ValueHonAdapters.ObjectVariable
-import io.hamal.lib.common.value.serde.ValueHonAdapters.SnowflakeIdVariable
-import io.hamal.lib.common.value.serde.ValueHonAdapters.StringVariable
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Nested
@@ -94,7 +88,7 @@ internal class ValueAdapterHonTest {
 
         private val serde = Serde.hon()
             .register(SerdeModuleValueHon)
-            .register(TestObject::class, BooleanVariable(::TestObject))
+            .register(TestObject::class, ValueVariableAdapters.Boolean(::TestObject))
 
 
         inner class TestObject(override val value: ValueBoolean) : ValueVariableBoolean()
@@ -158,7 +152,7 @@ internal class ValueAdapterHonTest {
 
         private val serde = Serde.hon()
             .register(SerdeModuleValueHon)
-            .register(TestObject::class, InstantVariable(::TestObject))
+            .register(TestObject::class, ValueVariableAdapters.Instant(::TestObject))
 
         inner class TestObject(override val value: ValueInstant) : ValueVariableInstant()
     }
@@ -220,7 +214,7 @@ internal class ValueAdapterHonTest {
 
         private val serde = Serde.hon()
             .register(SerdeModuleValueHon)
-            .register(TestObject::class, NumberVariable(::TestObject))
+            .register(TestObject::class, ValueVariableAdapters.Number(::TestObject))
 
 
         inner class TestObject(override val value: ValueNumber) : ValueVariableNumber()
@@ -301,7 +295,7 @@ internal class ValueAdapterHonTest {
 
         private val serde = Serde.hon()
             .register(SerdeModuleValueHon)
-            .register(TestObject::class, ObjectVariable(::TestObject))
+            .register(TestObject::class, ValueVariableAdapters.Object(::TestObject))
 
 
         inner class TestObject(override val value: ValueObject) : ValueVariableObject()
@@ -345,7 +339,7 @@ internal class ValueAdapterHonTest {
 
         private val serde = Serde.hon()
             .register(SerdeModuleValueHon)
-            .register(TestObject::class, SnowflakeIdVariable(::TestObject))
+            .register(TestObject::class, ValueVariableAdapters.SnowflakeId(::TestObject))
 
 
         inner class TestObject(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId()
@@ -389,7 +383,7 @@ internal class ValueAdapterHonTest {
 
         private val serde = Serde.hon()
             .register(SerdeModuleValueHon)
-            .register(TestObject::class, StringVariable(::TestObject))
+            .register(TestObject::class, ValueVariableAdapters.String(::TestObject))
 
 
         inner class TestObject(override val value: ValueString) : ValueVariableString()
