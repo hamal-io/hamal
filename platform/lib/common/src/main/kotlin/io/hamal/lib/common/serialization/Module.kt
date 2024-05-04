@@ -35,3 +35,14 @@ abstract class SerdeModuleHon : SerdeModule {
 
     internal val adapters = mutableMapOf<KClass<*>, Adapter<*>>()
 }
+
+abstract class SerdeModuleGeneric : SerdeModule {
+
+    protected operator fun <TYPE : Any, ADAPTER : AdapterGeneric<TYPE>> set(clazz: KClass<TYPE>, adapter: ADAPTER): SerdeModuleGeneric {
+        adapters[clazz] = adapter
+        return this
+    }
+
+
+    internal val adapters = mutableMapOf<KClass<*>, Adapter<*>>()
+}

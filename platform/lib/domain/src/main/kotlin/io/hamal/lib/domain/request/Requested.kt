@@ -3,7 +3,7 @@ package io.hamal.lib.domain.request
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.serialization.AdapterJson
+import io.hamal.lib.common.serialization.AdapterGeneric
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.AuthId
 import io.hamal.lib.domain.vo.RequestClass
@@ -18,7 +18,7 @@ sealed class Requested {
     abstract val requestStatus: RequestStatus
     val `class`: RequestClass = RequestClass(this::class.java.simpleName)
 
-    object Adapter : AdapterJson<Requested> {
+    object Adapter : AdapterGeneric<Requested> {
         override fun serialize(
             src: Requested,
             typeOfSrc: Type,
@@ -32,7 +32,11 @@ sealed class Requested {
             typeOfT: Type,
             context: JsonDeserializationContext
         ): Requested {
-            val requestClass = json.asJsonObject.get("class").asString
+
+            val requestClass = context.deserialize<RequestClass>(
+                json.asJsonObject.get("class"), RequestClass::class.java
+            )
+
             return context.deserialize(json, classMapping[requestClass]!!.java)
         }
 
@@ -64,6 +68,6 @@ sealed class Requested {
             TopicCreateRequested::class,
             TriggerCreateRequested::class,
             TriggerStatusRequested::class,
-        ).associateBy { it.simpleName }
+        ).associateBy { RequestClass(it.simpleName!!) }
     }
 }

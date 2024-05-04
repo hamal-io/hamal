@@ -1,7 +1,7 @@
 package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.domain.*
-import io.hamal.lib.common.serialization.SerdeModuleJson
+import io.hamal.lib.common.serialization.SerdeModuleGeneric
 import io.hamal.lib.common.value.serde.ValueVariableAdapters.Instant
 import io.hamal.lib.common.value.serde.ValueVariableAdapters.Number
 import io.hamal.lib.common.value.serde.ValueVariableAdapters.Object
@@ -9,7 +9,7 @@ import io.hamal.lib.common.value.serde.ValueVariableAdapters.SnowflakeId
 import io.hamal.lib.common.value.serde.ValueVariableAdapters.String
 import io.hamal.lib.domain.State
 
-object SerdeModuleValueVariable : SerdeModuleJson() {
+object SerdeModuleValueVariable : SerdeModuleGeneric() {
     init {
         this[CreatedAt::class] = Instant(::CreatedAt)
         this[UpdatedAt::class] = Instant(::UpdatedAt)

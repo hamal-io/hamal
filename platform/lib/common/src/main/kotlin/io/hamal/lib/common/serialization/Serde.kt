@@ -66,8 +66,14 @@ class SerdeJson(
         return gson.fromJson(compressor.toString(bytes), clazz.java)!!
     }
 
-
     fun register(module: SerdeModuleJson): SerdeJson {
+        module.adapters.forEach { (clazz, adapter) ->
+            builder.registerTypeAdapter(clazz.java, adapter)
+        }
+        return this
+    }
+
+    fun register(module: SerdeModuleGeneric): SerdeJson {
         module.adapters.forEach { (clazz, adapter) ->
             builder.registerTypeAdapter(clazz.java, adapter)
         }
@@ -158,6 +164,13 @@ class SerdeHon(
         return this
     }
 
+    fun register(module: SerdeModuleGeneric): SerdeHon {
+        module.adapters.forEach { (clazz, adapter) ->
+            builder.registerTypeAdapter(clazz.java, adapter)
+        }
+        return this
+    }
+
     fun <TYPE : Any, ADAPTER : AdapterHon<TYPE>> register(
         clazz: KClass<TYPE>,
         adapter: ADAPTER
@@ -174,7 +187,6 @@ class SerdeHon(
         builder.registerTypeAdapter(clazz.java, adapter)
         return this
     }
-
 
     private val builder = GsonBuilder()
     val gson: Gson by lazy { builder.create() }

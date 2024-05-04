@@ -3,13 +3,14 @@ package io.hamal.repository.record
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.serialization.AdapterJson
+import io.hamal.lib.common.serialization.AdapterGeneric
 import io.hamal.lib.common.serialization.Serde
-import io.hamal.lib.common.serialization.SerdeModuleJson
-import io.hamal.lib.common.value.serde.SerdeModuleValueJson
+import io.hamal.lib.common.serialization.SerdeModuleGeneric
+import io.hamal.lib.common.value.serde.SerdeModuleValueHon
 import io.hamal.lib.common.value.serde.ValueVariableAdapters
 import io.hamal.lib.domain.vo.SerdeModuleValueVariable
-import io.hamal.repository.api.SerdeModuleJsonDomain
+import io.hamal.repository.api.SerdeModuleDomain
+import io.hamal.repository.record.RecordClass.Companion.RecordClass
 import io.hamal.repository.record.account.AccountRecord
 import io.hamal.repository.record.code.CodeRecord
 import io.hamal.repository.record.exec.ExecRecord
@@ -25,7 +26,7 @@ import io.hamal.repository.record.workspace.WorkspaceRecord
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
-object SerdeModuleJsonRecord : SerdeModuleJson() {
+private object SerdeModuleRecord : SerdeModuleGeneric() {
     init {
         this[RecordClass::class] = ValueVariableAdapters.String(::RecordClass)
         this[RecordedAt::class] = ValueVariableAdapters.Instant(::RecordedAt)
@@ -44,26 +45,26 @@ object SerdeModuleJsonRecord : SerdeModuleJson() {
     }
 }
 
-val serde = Serde.json()
-    .register(SerdeModuleJsonDomain)
-    .register(SerdeModuleJsonRecord)
-    .register(SerdeModuleValueJson)
+val serde = Serde.hon()
+    .register(SerdeModuleDomain)
+    .register(SerdeModuleRecord)
+    .register(SerdeModuleValueHon)
     .register(SerdeModuleValueVariable)
 
 abstract class RecordAdapter<BASE_TYPE : Record<*>>(
     recordClasses: List<KClass<out BASE_TYPE>>
-) : AdapterJson<BASE_TYPE> {
+) : AdapterGeneric<BASE_TYPE> {
     override fun serialize(src: BASE_TYPE, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
         return context.serialize(src)
     }
 
     override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): BASE_TYPE {
-        val recordClass = json.asJsonObject.get("recordClass").asString
-        return context.deserialize(
-            json, (classMapping[recordClass]
-                ?: throw NotImplementedError("$recordClass not supported")).java
+        val recordClass = context.deserialize<RecordClass>(
+            json.asJsonObject.get("recordClass"), RecordClass::class.java
         )
+
+        return context.deserialize(json, (classMapping[recordClass] ?: throw NotImplementedError("$recordClass not supported")).java)
     }
 
-    private val classMapping = recordClasses.associateBy { it.simpleName }
+    private val classMapping = recordClasses.associateBy { RecordClass(it.simpleName!!) }
 }

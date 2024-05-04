@@ -5,7 +5,7 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.domain.Limit.Companion.Limit
-import io.hamal.lib.common.serialization.AdapterJson
+import io.hamal.lib.common.serialization.AdapterGeneric
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain.vo.*
@@ -19,7 +19,7 @@ sealed class Topic : DomainObject<TopicId>, HasNamespaceId, HasWorkspaceId {
     abstract val logTopicId: LogTopicId
     abstract val type: TopicType
 
-    object Adapter : AdapterJson<Topic> {
+    object Adapter : AdapterGeneric<Topic> {
         override fun serialize(
             src: Topic,
             typeOfSrc: Type,
