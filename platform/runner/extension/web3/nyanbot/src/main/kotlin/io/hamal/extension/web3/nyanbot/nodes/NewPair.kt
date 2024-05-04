@@ -1,12 +1,12 @@
 package io.hamal.extension.web3.nyanbot.nodes
 
 import io.hamal.lib.common.value.TypeObject
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueType
-import io.hamal.lib.nodes.Control
 import io.hamal.lib.nodes.ControlInit
-import io.hamal.lib.nodes.Node
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.compiler.node.NodeCompiler
+import io.hamal.lib.nodes.compiler.node.NodeCompiler.Context
 
 
 internal data object NewPair : NodeCompiler {
@@ -14,11 +14,12 @@ internal data object NewPair : NodeCompiler {
     override val inputTypes = emptyList<ValueType>()
     override val outputTypes: List<ValueType> = listOf(TypeObject)
 
-    override fun toCode(node: Node, controls: List<Control>): String {
-        val config = controls.filterIsInstance<ControlInit>().firstOrNull()?.config ?: throw IllegalArgumentException("Config not found")
+    override fun toCode(ctx: Context): ValueCode {
+        val config = ctx.controls.filterIsInstance<ControlInit>().firstOrNull()?.config ?: throw IllegalArgumentException("Config not found")
         println(config)
 
-        return """
+        return ValueCode(
+            """
                 address = context.exec.inputs.event.address
                 
                 print(address)
@@ -34,6 +35,7 @@ internal data object NewPair : NodeCompiler {
                 decimals = require('std.decimal')
                 return resp.content.result
             """.trimIndent()
+        )
     }
 
 }

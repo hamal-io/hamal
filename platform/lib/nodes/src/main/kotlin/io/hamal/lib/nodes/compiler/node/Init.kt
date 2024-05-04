@@ -1,14 +1,10 @@
 package io.hamal.lib.nodes.compiler.node
 
-import io.hamal.lib.common.value.TypeBoolean
-import io.hamal.lib.common.value.TypeNumber
-import io.hamal.lib.common.value.TypeString
-import io.hamal.lib.common.value.ValueType
-import io.hamal.lib.nodes.Control
+import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.ControlInit
-import io.hamal.lib.nodes.Node
 import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
+import io.hamal.lib.nodes.compiler.node.NodeCompiler.Context
 
 
 sealed interface Init : NodeCompiler {
@@ -19,52 +15,58 @@ sealed interface Init : NodeCompiler {
     data object Boolean : Init {
         override val outputTypes: List<ValueType> get() = listOf(TypeBoolean)
 
-        override fun toCode(node: Node, controls: List<Control>): kotlin.String {
-            val selector = controls.filterIsInstance<ControlInit>().firstOrNull()?.config?.findString("selector") ?: "__nodes__init__"
+        override fun toCode(ctx: Context): ValueCode {
+            val selector = ctx.controls.filterIsInstance<ControlInit>().firstOrNull()?.config?.findString("selector") ?: "__nodes__init__"
             if (selector == "No_Value") {
-                return "return nil"
+                return ValueCode("return nil")
             }
-            return """
+            return ValueCode(
+                """
                 initial_value = context.exec.inputs.${selector}
                 if initial_value == nil then
                     error('No initial value was found')
                 end
                 return initial_value 
             """.trimIndent()
+            )
         }
     }
 
     data object Number : Init {
         override val outputTypes: List<ValueType> get() = listOf(TypeNumber)
-        override fun toCode(node: Node, controls: List<Control>): kotlin.String {
-            val selector = controls.filterIsInstance<ControlInit>().firstOrNull()?.config?.findString("selector") ?: "__nodes__init__"
+        override fun toCode(ctx: Context): ValueCode {
+            val selector = ctx.controls.filterIsInstance<ControlInit>().firstOrNull()?.config?.findString("selector") ?: "__nodes__init__"
             if (selector == "No_Value") {
-                return "return nil"
+                return ValueCode("return nil")
             }
-            return """
+            return ValueCode(
+                """
                 initial_value = context.exec.inputs.${selector}
                 if initial_value == nil then
                     error('No initial value was found')
                 end
                 return initial_value 
             """.trimIndent()
+            )
         }
     }
 
     data object String : Init {
         override val outputTypes: List<ValueType> get() = listOf(TypeString)
-        override fun toCode(node: Node, controls: List<Control>): kotlin.String {
-            val selector = controls.filterIsInstance<ControlInit>().firstOrNull()?.config?.findString("selector") ?: "__nodes__init__"
+        override fun toCode(ctx: Context): ValueCode {
+            val selector = ctx.controls.filterIsInstance<ControlInit>().firstOrNull()?.config?.findString("selector") ?: "__nodes__init__"
             if (selector == "No_Value") {
-                return "return nil"
+                return ValueCode("return nil")
             }
-            return """
+            return ValueCode(
+                """
                 initial_value = context.exec.inputs.${selector}
                 if initial_value == nil then
                     error('No initial value was found')
                 end
                 return initial_value 
             """.trimIndent()
+            )
         }
     }
 

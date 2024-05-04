@@ -40,11 +40,7 @@ class GraphCompiler(
 
             builder.append("""function n_${node.id.stringValue}(${args})""")
             builder.append("\n")
-            builder.append(generator.toCode(node, controls.filter {
-                it.nodeId == node.id
-
-
-            }))
+            builder.append(generator.toCode(NodeCompiler.Context(node, controls.filter { it.nodeId == node.id })))
             builder.append("\n")
             builder.append("""end""")
             builder.append("\n")

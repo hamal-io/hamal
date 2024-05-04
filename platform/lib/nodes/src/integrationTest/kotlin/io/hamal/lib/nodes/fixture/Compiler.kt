@@ -1,10 +1,14 @@
 package io.hamal.lib.nodes.fixture
 
 import io.hamal.lib.common.value.*
-import io.hamal.lib.nodes.*
+import io.hamal.lib.nodes.AbstractIntegrationTest
+import io.hamal.lib.nodes.ControlTextArea
 import io.hamal.lib.nodes.NodeId.Companion.NodeId
+import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
+import io.hamal.lib.nodes.NodesGraph
 import io.hamal.lib.nodes.compiler.node.NodeCompiler
+import io.hamal.lib.nodes.compiler.node.NodeCompiler.Context
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
@@ -16,37 +20,39 @@ interface Capture : NodeCompiler {
     object Boolean : Capture {
         override val inputTypes: List<ValueType> get() = listOf(TypeBoolean)
         override val outputTypes: List<ValueType> get() = listOf(TypeBoolean)
-        override fun toCode(node: Node, controls: List<Control>) = captureCode(node, controls)
+        override fun toCode(ctx: Context) = captureCode(ctx)
 
     }
 
     object Decimal : Capture {
         override val inputTypes: List<ValueType> get() = listOf(TypeDecimal)
         override val outputTypes: List<ValueType> get() = listOf(TypeDecimal)
-        override fun toCode(node: Node, controls: List<Control>) = captureCode(node, controls)
+        override fun toCode(ctx: Context) = captureCode(ctx)
 
     }
 
     object Number : Capture {
         override val inputTypes: List<ValueType> get() = listOf(TypeNumber)
         override val outputTypes: List<ValueType> get() = listOf(TypeNumber)
-        override fun toCode(node: Node, controls: List<Control>) = captureCode(node, controls)
+        override fun toCode(ctx: Context) = captureCode(ctx)
 
     }
 
     object String : Capture {
         override val inputTypes: List<ValueType> get() = listOf(TypeString)
         override val outputTypes: List<ValueType> get() = listOf(TypeString)
-        override fun toCode(node: Node, controls: List<Control>) = captureCode(node, controls)
+        override fun toCode(ctx: Context) = captureCode(ctx)
     }
 
-    fun captureCode(node: Node, controls: List<Control>): kotlin.String {
-        val captureFunction = node.properties.value.findString("capture_fn")?.stringValue ?: "captureOne"
-        return """
+    fun captureCode(ctx: Context): ValueCode {
+        val captureFunction = ctx.node.properties.value.findString("capture_fn")?.stringValue ?: "captureOne"
+        return ValueCode(
+            """
             test = require_plugin('test')
             test.$captureFunction(arg_1)
             return arg_1
         """.trimIndent()
+        )
     }
 }
 
@@ -58,13 +64,15 @@ sealed interface Invoked : NodeCompiler {
         override val inputTypes: List<ValueType> get() = listOf()
         override val outputTypes: List<ValueType> get() = listOf()
 
-        override fun toCode(node: Node, controls: List<Control>): kotlin.String {
-            val invokeFunction = node.properties.value.findString("invoke_fn")?.stringValue ?: "invokeOne"
-            return """
+        override fun toCode(ctx: Context): ValueCode {
+            val invokeFunction = ctx.node.properties.value.findString("invoke_fn")?.stringValue ?: "invokeOne"
+            return ValueCode(
+                """
             test = require_plugin('test')
             test.$invokeFunction()
             return
         """.trimIndent()
+            )
         }
     }
 
@@ -72,13 +80,15 @@ sealed interface Invoked : NodeCompiler {
         override val inputTypes: List<ValueType> get() = listOf(TypeBoolean)
         override val outputTypes: List<ValueType> get() = listOf()
 
-        override fun toCode(node: Node, controls: List<Control>): kotlin.String {
-            val invokeFunction = node.properties.value.findString("invoke_fn")?.stringValue ?: "invokeOne"
-            return """
+        override fun toCode(ctx: Context): ValueCode {
+            val invokeFunction = ctx.node.properties.value.findString("invoke_fn")?.stringValue ?: "invokeOne"
+            return ValueCode(
+                """
             test = require_plugin('test')
             test.$invokeFunction()
             return
         """.trimIndent()
+            )
         }
     }
 
@@ -86,13 +96,15 @@ sealed interface Invoked : NodeCompiler {
         override val inputTypes: List<ValueType> get() = listOf(TypeString)
         override val outputTypes: List<ValueType> get() = listOf()
 
-        override fun toCode(node: Node, controls: List<Control>): kotlin.String {
-            val invokeFunction = node.properties.value.findString("invoke_fn")?.stringValue ?: "invokeOne"
-            return """
+        override fun toCode(ctx: Context): ValueCode {
+            val invokeFunction = ctx.node.properties.value.findString("invoke_fn")?.stringValue ?: "invokeOne"
+            return ValueCode(
+                """
             test = require_plugin('test')
             test.$invokeFunction()
             return
         """.trimIndent()
+            )
         }
     }
 }

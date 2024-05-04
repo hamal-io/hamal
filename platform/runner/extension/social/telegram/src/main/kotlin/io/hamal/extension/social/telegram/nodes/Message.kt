@@ -1,11 +1,15 @@
 package io.hamal.extension.social.telegram.nodes
 
 import io.hamal.lib.common.value.TypeString
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueType
-import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.NodeTitle.Companion.NodeTitle
+import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
+import io.hamal.lib.nodes.Size
+import io.hamal.lib.nodes.TemplateNode
 import io.hamal.lib.nodes.compiler.node.NodeCompiler
+import io.hamal.lib.nodes.compiler.node.NodeCompiler.Context
 
 val SendMessageNode = TemplateNode(
     type = NodeType("Telegram_Send_Message"),
@@ -25,8 +29,9 @@ internal object SendMessage : NodeCompiler {
     override val inputTypes: List<ValueType> get() = listOf(TypeString, TypeString)
     override val outputTypes: List<ValueType> get() = listOf()
 
-    override fun toCode(node: Node, controls: List<Control>): String {
-        return """
+    override fun toCode(ctx: Context): ValueCode {
+        return ValueCode(
+            """
            -- print('Sending message ' .. arg_2 .. ' to chat ' .. arg_1)
            
            tg = require('social.telegram').create({
@@ -49,6 +54,7 @@ internal object SendMessage : NodeCompiler {
            for k,v in pairs(result) do print(k,v) end
            
         """.trimIndent()
+        )
     }
 
 }

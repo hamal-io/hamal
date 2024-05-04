@@ -1,13 +1,9 @@
 package io.hamal.lib.nodes.compiler.node
 
-import io.hamal.lib.common.value.TypeDecimal
-import io.hamal.lib.common.value.TypeNumber
-import io.hamal.lib.common.value.TypeString
-import io.hamal.lib.common.value.ValueType
-import io.hamal.lib.nodes.Control
-import io.hamal.lib.nodes.Node
+import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
+import io.hamal.lib.nodes.compiler.node.NodeCompiler.Context
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
@@ -79,7 +75,7 @@ internal class RegistryTest {
         override val type: NodeType get() = NodeType("SOME_TYPE")
         override val inputTypes: List<ValueType> = listOf(TypeString)
         override val outputTypes: List<ValueType> get() = listOf()
-        override fun toCode(node: Node, controls: List<Control>): String {
+        override fun toCode(ctx: Context): ValueCode {
             TODO("Not yet implemented")
         }
     }
@@ -87,7 +83,7 @@ internal class RegistryTest {
         override val type: NodeType get() = NodeType("SOME_TYPE")
         override val inputTypes: List<ValueType> = listOf(TypeNumber)
         override val outputTypes: List<ValueType> get() = listOf()
-        override fun toCode(node: Node, controls: List<Control>): String {
+        override fun toCode(ctx: Context): ValueCode {
             TODO("Not yet implemented")
         }
     }
@@ -96,7 +92,7 @@ internal class RegistryTest {
         override val type: NodeType get() = NodeType("ANOTHER_TYPE")
         override val inputTypes: List<ValueType> = listOf()
         override val outputTypes: List<ValueType> get() = listOf(TypeString)
-        override fun toCode(node: Node, controls: List<Control>): String {
+        override fun toCode(ctx: Context): ValueCode {
             TODO("Not yet implemented")
         }
     }
@@ -105,7 +101,7 @@ internal class RegistryTest {
         override val type: NodeType get() = NodeType("ANOTHER_TYPE")
         override val inputTypes: List<ValueType> = listOf()
         override val outputTypes: List<ValueType> = listOf(TypeDecimal)
-        override fun toCode(node: Node, controls: List<Control>): String {
+        override fun toCode(ctx: Context): ValueCode {
             TODO("Not yet implemented")
         }
     }
@@ -114,7 +110,7 @@ internal class RegistryTest {
         override val type: NodeType get() = NodeType("NO_TYPE")
         override val inputTypes: List<ValueType> = listOf()
         override val outputTypes: List<ValueType> = listOf()
-        override fun toCode(node: Node, controls: List<Control>): String {
+        override fun toCode(ctx: Context): ValueCode {
             TODO("Not yet implemented")
         }
     }
@@ -123,7 +119,7 @@ internal class RegistryTest {
         override val type: NodeType get() = NodeType("STRING_PASS_THROUGH")
         override val inputTypes: List<ValueType> = listOf(TypeString)
         override val outputTypes: List<ValueType> = listOf(TypeString)
-        override fun toCode(node: Node, controls: List<Control>): String {
+        override fun toCode(ctx: Context): ValueCode {
             TODO("Not yet implemented")
         }
     }
