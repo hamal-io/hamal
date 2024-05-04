@@ -4,7 +4,7 @@ plugins {
 
 
 tasks.jar {
-    archiveFileName.set("extension-telegram.jar")
+    archiveFileName.set("extension-social-telegram.jar")
 }
 
 distributions {

@@ -1,4 +1,4 @@
-package io.hamal.extension.telegram.nodes
+package io.hamal.extension.social.telegram.nodes
 
 import io.hamal.lib.common.value.TypeString
 import io.hamal.lib.common.value.ValueType
@@ -29,7 +29,7 @@ val SendMessageNodeCompiler = object : NodeCompiler {
         return """
            -- print('Sending message ' .. arg_2 .. ' to chat ' .. arg_1)
            
-           tg = require('telegram').create({
+           tg = require('social.telegram').create({
                bot_token = '7084966112:AAElNk5M1t0hTXTQPruNszHVD0SB0OCJjKY'
            })
 
