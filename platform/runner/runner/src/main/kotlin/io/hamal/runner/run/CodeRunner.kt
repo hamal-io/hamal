@@ -1,7 +1,7 @@
 package io.hamal.runner.run
 
-import io.hamal.lib.common.serialization.json.JsonNumber
 import io.hamal.lib.common.logger
+import io.hamal.lib.common.serialization.json.JsonNumber
 import io.hamal.lib.common.value.*
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.*
@@ -83,7 +83,7 @@ class CodeRunnerImpl(
                                 // FIXME load graph from code
                                 val graph = serde.read(NodesGraph::class, unitOfWork.code.stringValue)
                                 val compiledCode = Compiler(sandbox.generatorRegistry).compile(graph)
-                                sandbox.codeLoad(ValueCode(compiledCode))
+                                sandbox.codeLoad(compiledCode)
                             }
                         }
 

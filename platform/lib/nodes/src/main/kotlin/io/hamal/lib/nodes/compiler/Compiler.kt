@@ -1,5 +1,6 @@
 package io.hamal.lib.nodes.compiler
 
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueType
 import io.hamal.lib.nodes.ControlTextArea
 import io.hamal.lib.nodes.NodeId
@@ -17,7 +18,7 @@ class Compiler(
     private val generatorRegistry: GeneratorRegistry
 ) {
 
-    fun compile(graph: NodesGraph): String {
+    fun compile(graph: NodesGraph): ValueCode {
         val code = StringBuilder()
 
         val nodeCodeGenerators = mutableMapOf<NodeId, Generator>()
@@ -211,7 +212,7 @@ class Compiler(
 
 //        println(code)
 
-        return code.toString()
+        return ValueCode(code.toString())
     }
 
 
