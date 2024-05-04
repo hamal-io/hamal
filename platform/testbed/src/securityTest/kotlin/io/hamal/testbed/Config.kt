@@ -13,7 +13,8 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.ExecLogLevel
 import io.hamal.lib.domain._enum.TopicType
-import io.hamal.lib.domain._enum.TriggerStatus
+import io.hamal.lib.domain._enum.TriggerStatuses.Active
+import io.hamal.lib.domain._enum.TriggerStatuses.Inactive
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountId.Companion.AccountId
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
@@ -41,6 +42,7 @@ import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import io.hamal.lib.domain.vo.TriggerDuration.Companion.TriggerDuration
 import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import io.hamal.lib.domain.vo.TriggerName.Companion.TriggerName
+import io.hamal.lib.domain.vo.TriggerStatus.Companion.TriggerStatus
 import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.lib.domain.vo.WorkspaceName.Companion.WorkspaceName
 import io.hamal.repository.api.*
@@ -282,7 +284,7 @@ class TestSetupConfig {
                 workspaceId = WorkspaceId(id),
                 namespaceId = NamespaceId(id),
                 inputs = TriggerInputs(),
-                status = TriggerStatus.Active,
+                status = TriggerStatus(Active),
                 duration = TriggerDuration("PT10S")
             )
         )
@@ -296,7 +298,7 @@ class TestSetupConfig {
                 workspaceId = WorkspaceId(id),
                 namespaceId = NamespaceId(id),
                 inputs = TriggerInputs(),
-                status = TriggerStatus.Active,
+                status = TriggerStatus(Active),
                 topicId = TopicId(id)
             )
         )
@@ -310,7 +312,7 @@ class TestSetupConfig {
                 workspaceId = WorkspaceId(id),
                 namespaceId = NamespaceId(id),
                 inputs = TriggerInputs(),
-                status = TriggerStatus.Inactive
+                status = TriggerStatus(Inactive)
             )
         )
 
@@ -323,7 +325,7 @@ class TestSetupConfig {
                 workspaceId = WorkspaceId(id),
                 namespaceId = NamespaceId(id),
                 inputs = TriggerInputs(),
-                status = TriggerStatus.Active,
+                status = TriggerStatus(Active),
                 cron = CronPattern("0 0 * * * *")
             )
         )

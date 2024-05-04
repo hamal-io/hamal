@@ -1,5 +1,5 @@
 package io.hamal.lib.domain._enum
 
-enum class TriggerStatus {
+enum class TriggerStatuses {
     Active, Inactive;
 }

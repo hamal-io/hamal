@@ -2,6 +2,7 @@ package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.serialization.SerdeModuleGeneric
+import io.hamal.lib.common.value.serde.ValueVariableAdapters.Enum
 import io.hamal.lib.common.value.serde.ValueVariableAdapters.Instant
 import io.hamal.lib.common.value.serde.ValueVariableAdapters.Number
 import io.hamal.lib.common.value.serde.ValueVariableAdapters.Object
@@ -105,6 +106,7 @@ object SerdeModuleValueVariable : SerdeModuleGeneric() {
         this[TriggerDuration::class] = String(::TriggerDuration)
         this[TriggerName::class] = String(::TriggerName)
         this[TriggerInputs::class] = Object(::TriggerInputs)
+        this[TriggerStatus::class] = Enum(::TriggerStatus)
 
         this[Web3Address::class] = String(::Web3Address)
         this[Web3Challenge::class] = String(::Web3Challenge)

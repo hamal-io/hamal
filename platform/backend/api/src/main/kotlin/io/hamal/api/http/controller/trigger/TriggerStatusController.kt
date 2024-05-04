@@ -3,9 +3,10 @@ package io.hamal.api.http.controller.trigger
 import io.hamal.api.http.controller.accepted
 import io.hamal.core.adapter.trigger.TriggerSetStatusPort
 import io.hamal.core.component.Retry
-import io.hamal.lib.domain._enum.TriggerStatus.Active
-import io.hamal.lib.domain._enum.TriggerStatus.Inactive
+import io.hamal.lib.domain._enum.TriggerStatuses.Active
+import io.hamal.lib.domain._enum.TriggerStatuses.Inactive
 import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.domain.vo.TriggerStatus.Companion.TriggerStatus
 import io.hamal.lib.sdk.api.ApiRequested
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PathVariable
@@ -21,7 +22,7 @@ internal class TriggerStatusController(
     fun activate(
         @PathVariable triggerId: TriggerId
     ): ResponseEntity<ApiRequested> = retry {
-        triggerSetStatus(triggerId, Active).accepted()
+        triggerSetStatus(triggerId, TriggerStatus(Active)).accepted()
     }
 
 
@@ -29,6 +30,6 @@ internal class TriggerStatusController(
     fun deactivate(
         @PathVariable triggerId: TriggerId
     ): ResponseEntity<ApiRequested> = retry {
-        triggerSetStatus(triggerId, Inactive).accepted()
+        triggerSetStatus(triggerId, TriggerStatus(Inactive)).accepted()
     }
 }

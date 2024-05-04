@@ -8,7 +8,6 @@ import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.serialization.AdapterJson
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.request.TriggerCreateRequest
 import io.hamal.lib.domain.vo.*

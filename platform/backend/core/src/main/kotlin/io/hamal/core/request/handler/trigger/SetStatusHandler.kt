@@ -4,8 +4,9 @@ import io.hamal.core.event.InternalEventEmitter
 import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain._enum.TriggerStatus
+import io.hamal.lib.domain._enum.TriggerStatuses.Active
 import io.hamal.lib.domain.request.TriggerStatusRequested
+import io.hamal.lib.domain.vo.TriggerStatus.Companion.TriggerStatus
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerCmdRepository
 import io.hamal.repository.api.event.TriggerActivatedEvent
@@ -33,7 +34,7 @@ class TriggerSetStatusHandler(
     }
 
     private fun emitEvent(cmdId: CmdId, trigger: Trigger) {
-        if (trigger.status == TriggerStatus.Active) {
+        if (trigger.status == TriggerStatus(Active)) {
             eventEmitter.emit(cmdId, TriggerActivatedEvent(trigger))
         } else {
             eventEmitter.emit(cmdId, TriggerDeactivatedEvent(trigger))

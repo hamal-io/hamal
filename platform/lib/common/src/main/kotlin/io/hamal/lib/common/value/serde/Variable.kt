@@ -20,7 +20,7 @@ object ValueVariableAdapters {
         }
     }
 
-    class Enum<TYPE : ValueVariableEnum>(val ctor: (ValueEnum) -> TYPE) : AdapterGeneric<TYPE> {
+    class Enum<TYPE : ValueVariableEnum<*>>(val ctor: (ValueEnum) -> TYPE) : AdapterGeneric<TYPE> {
 
         override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {
             return ctor(context.deserialize(json, ValueEnum::class.java))

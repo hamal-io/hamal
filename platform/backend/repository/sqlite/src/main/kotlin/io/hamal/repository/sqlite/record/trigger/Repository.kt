@@ -1,8 +1,9 @@
 package io.hamal.repository.sqlite.record.trigger
 
 import io.hamal.lib.common.domain.Count
-import io.hamal.lib.domain._enum.TriggerStatus
+import io.hamal.lib.domain._enum.TriggerStatuses.Active
 import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.domain.vo.TriggerStatus.Companion.TriggerStatus
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerCmdRepository.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
@@ -193,7 +194,7 @@ class TriggerSqliteRepository(
             if (commandAlreadyApplied(cmd.id, triggerId)) {
                 versionOf(triggerId, cmd.id)
             } else {
-                if (cmd.status == TriggerStatus.Active) {
+                if (cmd.status == TriggerStatus(Active)) {
                     store(
                         TriggerRecord.SetActive(
                             cmdId = cmd.id, entityId = triggerId

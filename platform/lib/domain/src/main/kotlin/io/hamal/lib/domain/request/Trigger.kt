@@ -1,7 +1,6 @@
 package io.hamal.lib.domain.request
 
 import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 

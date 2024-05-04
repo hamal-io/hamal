@@ -7,11 +7,12 @@ import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain._enum.TriggerStatus
+import io.hamal.lib.domain._enum.TriggerStatuses.Active
 import io.hamal.lib.domain.request.TriggerInvokeRequest
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
+import io.hamal.lib.domain.vo.TriggerStatus.Companion.TriggerStatus
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.Trigger
@@ -44,7 +45,7 @@ internal class FixedRateTriggerService(
                 limit = Limit(10),
                 workspaceIds = listOf()
             )
-        ).filter { it.status == TriggerStatus.Active }.filterIsInstance<Trigger.FixedRate>()
+        ).filter { it.status == TriggerStatus(Active) }.filterIsInstance<Trigger.FixedRate>()
             .forEach { trigger -> triggerAdded(trigger) }
     }
 

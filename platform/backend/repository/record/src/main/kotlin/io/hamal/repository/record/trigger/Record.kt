@@ -1,7 +1,6 @@
 package io.hamal.repository.record.trigger
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordAdapter

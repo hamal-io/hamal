@@ -150,7 +150,7 @@ internal class ValueAdapterHonTest {
             val result = serde.read<TestObject>("""{"type":"Enum","value":"Off"}""")
             assertThat(result, equalTo(expected))
 
-            assertThat(result.enumValue<TestEnum>(), equalTo(TestEnum.Off))
+            assertThat(result.enumValue, equalTo(TestEnum.Off))
         }
 
         private val serde = Serde.hon()
@@ -158,7 +158,7 @@ internal class ValueAdapterHonTest {
             .register(TestObject::class, ValueVariableAdapters.Enum(::TestObject))
 
 
-        inner class TestObject(override val value: ValueEnum) : ValueVariableEnum()
+        private inner class TestObject(override val value: ValueEnum) : ValueVariableEnum<TestEnum>(TestEnum::class)
     }
 
 

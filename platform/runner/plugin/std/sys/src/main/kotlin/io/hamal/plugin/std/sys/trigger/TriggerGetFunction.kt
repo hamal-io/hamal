@@ -36,7 +36,7 @@ class TriggerGetFunction(
                                     "name" to trigger.func.name.value
                                 ),
                                 "duration" to trigger.duration,
-                                "status" to ValueString(trigger.status.name),
+                                "status" to trigger.status,
                             )
 
                         is ApiTrigger.Event -> {
@@ -56,7 +56,7 @@ class TriggerGetFunction(
                                     "id" to ValueString(trigger.topic.id.stringValue),
                                     "name" to trigger.topic.name
                                 ),
-                                "status" to ValueString(trigger.status.name),
+                                "status" to trigger.status,
                             )
                         }
 
@@ -73,7 +73,7 @@ class TriggerGetFunction(
                                     "id" to ValueString(trigger.func.id.stringValue),
                                     "name" to trigger.func.name
                                 ),
-                                "status" to ValueString(trigger.status.name),
+                                "status" to trigger.status,
                             )
                         }
 
@@ -90,7 +90,7 @@ class TriggerGetFunction(
                                 "name" to trigger.func.name
                             ),
                             "cron" to trigger.cron,
-                            "status" to ValueString(trigger.status.name)
+                            "status" to trigger.status
                         )
 
                         is ApiTrigger.Endpoint -> {
@@ -106,7 +106,7 @@ class TriggerGetFunction(
                                     "id" to ValueString(trigger.func.id.stringValue),
                                     "name" to trigger.func.name
                                 ),
-                                "status" to ValueString(trigger.status.name),
+                                "status" to trigger.status,
                             )
                         }
                     }

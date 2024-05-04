@@ -5,8 +5,8 @@ import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.value.ValueObject
-import io.hamal.lib.domain._enum.TriggerStatus.Active
-import io.hamal.lib.domain._enum.TriggerStatus.Inactive
+import io.hamal.lib.domain._enum.TriggerStatuses.Active
+import io.hamal.lib.domain._enum.TriggerStatuses.Inactive
 import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.CronPattern.Companion.CronPattern
@@ -16,6 +16,7 @@ import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
 import io.hamal.lib.domain.vo.TriggerDuration.Companion.TriggerDuration
 import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import io.hamal.lib.domain.vo.TriggerName.Companion.TriggerName
+import io.hamal.lib.domain.vo.TriggerStatus.Companion.TriggerStatus
 import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerCmdRepository.*
@@ -696,7 +697,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 )
             )
 
-            set(TriggerId(2), SetTriggerStatusCmd(CmdGen(), Inactive))
+            set(TriggerId(2), SetTriggerStatusCmd(CmdGen(), TriggerStatus(Inactive)))
 
             with(get(TriggerId(2)) as Trigger.FixedRate) {
                 assertThat(id, equalTo(TriggerId(2)))
@@ -727,7 +728,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             )
 
             repeat(5) {
-                set(TriggerId(2), SetTriggerStatusCmd(CmdGen(), Active))
+                set(TriggerId(2), SetTriggerStatusCmd(CmdGen(), TriggerStatus(Active)))
             }
 
             with(get(TriggerId(2)) as Trigger.FixedRate) {

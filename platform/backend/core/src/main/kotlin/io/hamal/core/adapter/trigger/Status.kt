@@ -4,10 +4,10 @@ import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain.request.TriggerStatusRequested
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.domain.vo.TriggerStatus
 import org.springframework.stereotype.Component
 
 fun interface TriggerSetStatusPort {

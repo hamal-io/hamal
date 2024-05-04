@@ -1,6 +1,8 @@
 package io.hamal.lib.common.value
 
 import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
+import io.hamal.lib.common.value.ValueVariable.BaseImpl
+import kotlin.reflect.KClass
 
 data object TypeEnum : Type() {
     override val identifier = TypeIdentifier("Enum")
@@ -29,7 +31,24 @@ data class ValueEnum(val value: String) : Value {
 }
 
 
-abstract class ValueVariableEnum : ValueVariable.BaseImpl<ValueEnum>() {
-    inline fun <reified T : Enum<T>> enumValue(): T = value.enumValue()
+abstract class ValueVariableEnum<T : Enum<T>>(private val enumClass: KClass<T>) : BaseImpl<ValueEnum>() {
+    val enumValue get() = checkNotNull(enumClass.java.enumConstants.find { it.name == value.value })
     val stringValue: String get() = value.stringValue
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other?.javaClass == enumClass.java) {
+            require(other is Enum<*>)
+            return value.value == other.name
+        }
+
+        if (javaClass != other?.javaClass) return false
+        other as BaseImpl<*>
+        return value == other.value
+    }
+
+    override fun hashCode(): Int {
+        return value.hashCode()
+    }
+
 }

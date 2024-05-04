@@ -7,10 +7,11 @@ import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.serialization.AdapterGeneric
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain._enum.TriggerStatus
+import io.hamal.lib.domain._enum.TriggerStatuses.Active
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
+import io.hamal.lib.domain.vo.TriggerStatus.Companion.TriggerStatus
 import java.lang.reflect.Type
 
 interface TriggerRepository : TriggerCmdRepository, TriggerQueryRepository
@@ -33,7 +34,7 @@ interface TriggerCmdRepository : CmdRepository {
         val inputs: TriggerInputs,
         val duration: TriggerDuration,
         val correlationId: CorrelationId? = null,
-        val status: TriggerStatus = TriggerStatus.Active
+        val status: TriggerStatus = TriggerStatus(Active)
     )
 
     data class CreateEventCmd(
@@ -46,7 +47,7 @@ interface TriggerCmdRepository : CmdRepository {
         val inputs: TriggerInputs,
         val topicId: TopicId,
         val correlationId: CorrelationId? = null,
-        val status: TriggerStatus = TriggerStatus.Active
+        val status: TriggerStatus = TriggerStatus(Active)
     )
 
     data class CreateHookCmd(
@@ -58,7 +59,7 @@ interface TriggerCmdRepository : CmdRepository {
         val namespaceId: NamespaceId,
         val inputs: TriggerInputs,
         val correlationId: CorrelationId? = null,
-        val status: TriggerStatus = TriggerStatus.Active
+        val status: TriggerStatus = TriggerStatus(Active)
     )
 
     data class CreateCronCmd(
@@ -71,7 +72,7 @@ interface TriggerCmdRepository : CmdRepository {
         val inputs: TriggerInputs,
         val cron: CronPattern,
         val correlationId: CorrelationId? = null,
-        val status: TriggerStatus = TriggerStatus.Active
+        val status: TriggerStatus = TriggerStatus(Active)
     )
 
     data class CreateEndpointCmd(
@@ -83,7 +84,7 @@ interface TriggerCmdRepository : CmdRepository {
         val namespaceId: NamespaceId,
         val inputs: TriggerInputs,
         val correlationId: CorrelationId? = null,
-        val status: TriggerStatus = TriggerStatus.Active
+        val status: TriggerStatus = TriggerStatus(Active)
     )
 
     data class SetTriggerStatusCmd(
