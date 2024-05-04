@@ -1,11 +1,11 @@
-package io.hamal.lib.nodes.compiler
+package io.hamal.lib.nodes.compiler.graph
 
 import io.hamal.lib.common.value.TypeString
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.NodeId.Companion.NodeId
 import io.hamal.lib.nodes.PortId.Companion.PortId
-import io.hamal.lib.nodes.compiler.ComputationGraph.Companion.ComputationGraph
+import io.hamal.lib.nodes.compiler.graph.ComputationGraph.Companion.ComputationGraph
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test

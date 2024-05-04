@@ -4,38 +4,38 @@ import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.NodeId.Companion.NodeId
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
+import io.hamal.lib.nodes.compiler.node.NodeCompiler
 import io.hamal.lib.nodes.control.Control
-import io.hamal.lib.nodes.generator.Generator
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 
 
-interface GeneratorCapture : Generator {
+interface Capture : NodeCompiler {
     override val type: NodeType get() = NodeType("Test_Capture")
 
-    object Boolean : GeneratorCapture {
+    object Boolean : Capture {
         override val inputTypes: List<ValueType> get() = listOf(TypeBoolean)
         override val outputTypes: List<ValueType> get() = listOf(TypeBoolean)
         override fun toCode(node: Node, controls: List<Control>) = captureCode(node, controls)
 
     }
 
-    object Decimal : GeneratorCapture {
+    object Decimal : Capture {
         override val inputTypes: List<ValueType> get() = listOf(TypeDecimal)
         override val outputTypes: List<ValueType> get() = listOf(TypeDecimal)
         override fun toCode(node: Node, controls: List<Control>) = captureCode(node, controls)
 
     }
 
-    object Number : GeneratorCapture {
+    object Number : Capture {
         override val inputTypes: List<ValueType> get() = listOf(TypeNumber)
         override val outputTypes: List<ValueType> get() = listOf(TypeNumber)
         override fun toCode(node: Node, controls: List<Control>) = captureCode(node, controls)
 
     }
 
-    object String : GeneratorCapture {
+    object String : Capture {
         override val inputTypes: List<ValueType> get() = listOf(TypeString)
         override val outputTypes: List<ValueType> get() = listOf(TypeString)
         override fun toCode(node: Node, controls: List<Control>) = captureCode(node, controls)
@@ -52,10 +52,10 @@ interface GeneratorCapture : Generator {
 }
 
 
-sealed interface GeneratorInvoked : Generator {
+sealed interface Invoked : NodeCompiler {
     override val type: NodeType get() = NodeType("Test_Invoked")
 
-    data object Empty : GeneratorInvoked {
+    data object Empty : Invoked {
         override val inputTypes: List<ValueType> get() = listOf()
         override val outputTypes: List<ValueType> get() = listOf()
 
@@ -69,7 +69,7 @@ sealed interface GeneratorInvoked : Generator {
         }
     }
 
-    data object Boolean : GeneratorInvoked {
+    data object Boolean : Invoked {
         override val inputTypes: List<ValueType> get() = listOf(TypeBoolean)
         override val outputTypes: List<ValueType> get() = listOf()
 
@@ -83,7 +83,7 @@ sealed interface GeneratorInvoked : Generator {
         }
     }
 
-    data object String : GeneratorInvoked {
+    data object String : Invoked {
         override val inputTypes: List<ValueType> get() = listOf(TypeString)
         override val outputTypes: List<ValueType> get() = listOf()
 

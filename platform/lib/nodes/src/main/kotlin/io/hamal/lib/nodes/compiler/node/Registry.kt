@@ -1,14 +1,14 @@
-package io.hamal.lib.nodes.generator
+package io.hamal.lib.nodes.compiler.node
 
-import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.common.value.ValueType
+import io.hamal.lib.nodes.NodeType
 
-class GeneratorRegistry(generators: List<Generator>) {
+class GeneratorRegistry(nodeCompilers: List<NodeCompiler>) {
 
-    fun register(generator: Generator): GeneratorRegistry {
-        generators.putIfAbsent(generator.type, mutableListOf())
-        if (find(generator) == null) {
-            generators[generator.type]?.add(generator)
+    fun register(nodeCompiler: NodeCompiler): GeneratorRegistry {
+        generators.putIfAbsent(nodeCompiler.type, mutableListOf())
+        if (find(nodeCompiler) == null) {
+            generators[nodeCompiler.type]?.add(nodeCompiler)
         }
         return this
     }
@@ -27,28 +27,28 @@ class GeneratorRegistry(generators: List<Generator>) {
                 }]"
             )
 
-    fun find(type: NodeType, inputTypes: List<ValueType>, outputTypes: List<ValueType>): Generator? {
+    fun find(type: NodeType, inputTypes: List<ValueType>, outputTypes: List<ValueType>): NodeCompiler? {
         return generators[type]?.find {
             it.inputTypes == inputTypes && it.outputTypes == outputTypes
         }
     }
 
-    private fun find(generator: Generator): Generator? {
-        return find(generator.type, generator.inputTypes, generator.outputTypes)
+    private fun find(nodeCompiler: NodeCompiler): NodeCompiler? {
+        return find(nodeCompiler.type, nodeCompiler.inputTypes, nodeCompiler.outputTypes)
     }
 
-    private val generators = mutableMapOf<NodeType, MutableList<Generator>>()
+    private val generators = mutableMapOf<NodeType, MutableList<NodeCompiler>>()
 
     init {
-        generators.forEach(::register)
+        nodeCompilers.forEach(::register)
     }
 }
 
 val defaultGeneratorRegistry = GeneratorRegistry(
     listOf(
-        GeneratorDecision.Boolean,
-        GeneratorInit.Boolean,
-        GeneratorInit.Number,
-        GeneratorInit.String,
+        DecisionAnd.Boolean,
+        Init.Boolean,
+        Init.Number,
+        Init.String,
     )
 )

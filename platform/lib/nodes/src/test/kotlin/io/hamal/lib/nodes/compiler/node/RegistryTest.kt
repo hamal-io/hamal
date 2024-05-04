@@ -1,4 +1,4 @@
-package io.hamal.lib.nodes.generator
+package io.hamal.lib.nodes.compiler.node
 
 import io.hamal.lib.common.value.ValueType
 import io.hamal.lib.common.value.TypeDecimal
@@ -13,30 +13,30 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class GeneratorRegistryTest {
+internal class NodeCompilerRegistryTest {
 
     @Test
     fun `get - Gets generator with no input and output types`() {
         val result = testInstance[NodeType("NO_TYPE"), listOf(), listOf()]
-        assertThat(result, equalTo(noTypeGenerator))
+        assertThat(result, equalTo(noTypeNodeCompiler))
     }
 
     @Test
     fun `get - Gets pass through generator`() {
         val result = testInstance[NodeType("STRING_PASS_THROUGH"), listOf(TypeString), listOf(TypeString)]
-        assertThat(result, equalTo(stringPassThroughGenerator))
+        assertThat(result, equalTo(stringPassThroughNodeCompiler))
     }
 
     @Test
     fun `get - Gets generator with input types and not output types`() {
         val result = testInstance[NodeType("SOME_TYPE"), listOf(TypeNumber), listOf()]
-        assertThat(result, equalTo(someGeneratorTwo))
+        assertThat(result, equalTo(someNodeCompilerTwo))
     }
 
     @Test
     fun `get - Gets generator with output types and not input types`() {
         val result = testInstance[NodeType("ANOTHER_TYPE"), listOf(), listOf(TypeDecimal)]
-        assertThat(result, equalTo(anotherGeneratorTwo))
+        assertThat(result, equalTo(anotherNodeCompilerTwo))
     }
 
     @Test
@@ -75,7 +75,7 @@ internal class GeneratorRegistryTest {
         }
     }
 
-    private val someGeneratorOne = object : Generator {
+    private val someNodeCompilerOne = object : NodeCompiler {
         override val type: NodeType get() = NodeType("SOME_TYPE")
         override val inputTypes: List<ValueType> = listOf(TypeString)
         override val outputTypes: List<ValueType> get() = listOf()
@@ -83,7 +83,7 @@ internal class GeneratorRegistryTest {
             TODO("Not yet implemented")
         }
     }
-    private val someGeneratorTwo = object : Generator {
+    private val someNodeCompilerTwo = object : NodeCompiler {
         override val type: NodeType get() = NodeType("SOME_TYPE")
         override val inputTypes: List<ValueType> = listOf(TypeNumber)
         override val outputTypes: List<ValueType> get() = listOf()
@@ -92,7 +92,7 @@ internal class GeneratorRegistryTest {
         }
     }
 
-    private val anotherGeneratorOne = object : Generator {
+    private val anotherNodeCompilerOne = object : NodeCompiler {
         override val type: NodeType get() = NodeType("ANOTHER_TYPE")
         override val inputTypes: List<ValueType> = listOf()
         override val outputTypes: List<ValueType> get() = listOf(TypeString)
@@ -101,7 +101,7 @@ internal class GeneratorRegistryTest {
         }
     }
 
-    private val anotherGeneratorTwo = object : Generator {
+    private val anotherNodeCompilerTwo = object : NodeCompiler {
         override val type: NodeType get() = NodeType("ANOTHER_TYPE")
         override val inputTypes: List<ValueType> = listOf()
         override val outputTypes: List<ValueType> = listOf(TypeDecimal)
@@ -110,7 +110,7 @@ internal class GeneratorRegistryTest {
         }
     }
 
-    private val noTypeGenerator = object : Generator {
+    private val noTypeNodeCompiler = object : NodeCompiler {
         override val type: NodeType get() = NodeType("NO_TYPE")
         override val inputTypes: List<ValueType> = listOf()
         override val outputTypes: List<ValueType> = listOf()
@@ -119,7 +119,7 @@ internal class GeneratorRegistryTest {
         }
     }
 
-    private val stringPassThroughGenerator = object : Generator {
+    private val stringPassThroughNodeCompiler = object : NodeCompiler {
         override val type: NodeType get() = NodeType("STRING_PASS_THROUGH")
         override val inputTypes: List<ValueType> = listOf(TypeString)
         override val outputTypes: List<ValueType> = listOf(TypeString)
@@ -130,12 +130,12 @@ internal class GeneratorRegistryTest {
 
     private val testInstance = GeneratorRegistry(
         listOf(
-            someGeneratorOne,
-            someGeneratorTwo,
-            anotherGeneratorOne,
-            anotherGeneratorTwo,
-            noTypeGenerator,
-            stringPassThroughGenerator
+            someNodeCompilerOne,
+            someNodeCompilerTwo,
+            anotherNodeCompilerOne,
+            anotherNodeCompilerTwo,
+            noTypeNodeCompiler,
+            stringPassThroughNodeCompiler
         )
     )
 

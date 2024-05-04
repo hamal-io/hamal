@@ -1,17 +1,17 @@
-package io.hamal.lib.nodes.generator
+package io.hamal.lib.nodes.compiler.node
 
-import io.hamal.lib.common.value.ValueType
 import io.hamal.lib.common.value.TypeNumber
 import io.hamal.lib.common.value.TypeString
+import io.hamal.lib.common.value.ValueType
 import io.hamal.lib.nodes.Node
 import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.control.Control
 
-interface GeneratorPrint : Generator {
+sealed interface Print : NodeCompiler {
     override val type: NodeType get() = NodeType("Print")
 
-    object Number : GeneratorPrint {
+    object Number : Print {
         override val inputTypes: List<ValueType> get() = listOf(TypeNumber)
         override val outputTypes: List<ValueType> get() = listOf()
 
@@ -25,7 +25,7 @@ interface GeneratorPrint : Generator {
 
     }
 
-    object String : GeneratorPrint {
+    object String : Print {
         override val inputTypes: List<ValueType> get() = listOf(TypeString)
         override val outputTypes: List<ValueType> get() = listOf()
 

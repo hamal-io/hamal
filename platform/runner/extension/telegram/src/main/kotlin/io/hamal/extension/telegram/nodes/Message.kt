@@ -1,14 +1,14 @@
 package io.hamal.extension.telegram.nodes
 
-import io.hamal.lib.common.value.ValueType
 import io.hamal.lib.common.value.TypeString
 import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueType
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.NodeTitle.Companion.NodeTitle
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
+import io.hamal.lib.nodes.compiler.node.NodeCompiler
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.control.ControlExtensionTextArea
-import io.hamal.lib.nodes.generator.Generator
 
 val SendMessageNode = NodeExtension(
     type = NodeType("Telegram_Send_Message"),
@@ -23,7 +23,7 @@ val SendMessageNode = NodeExtension(
     outputs = listOf()
 )
 
-val SendMessageNodeGenerator = object : Generator {
+val SendMessageNodeCompiler = object : NodeCompiler {
     override val type: NodeType get() = NodeType("Telegram_Send_Message")
     override val inputTypes: List<ValueType> get() = listOf(TypeString, TypeString)
     override val outputTypes: List<ValueType> get() = listOf()

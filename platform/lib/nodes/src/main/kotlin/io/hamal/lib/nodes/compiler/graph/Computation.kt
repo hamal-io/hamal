@@ -1,4 +1,4 @@
-package io.hamal.lib.nodes.compiler
+package io.hamal.lib.nodes.compiler.graph
 
 import io.hamal.lib.nodes.NodeId
 import io.hamal.lib.nodes.NodesGraph

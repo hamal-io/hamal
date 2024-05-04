@@ -26,11 +26,11 @@ import io.hamal.lib.nodes.PortId.Companion.PortId
 import io.hamal.lib.nodes.control.ControlIdentifier
 import io.hamal.lib.nodes.control.ControlIdentifier.Companion.ControlIdentifier
 import io.hamal.lib.nodes.fixture.CaptureFunction
-import io.hamal.lib.nodes.fixture.GeneratorCapture
-import io.hamal.lib.nodes.fixture.GeneratorInvoked
+import io.hamal.lib.nodes.fixture.Capture
+import io.hamal.lib.nodes.fixture.Invoked
 import io.hamal.lib.nodes.fixture.InvokeFunction
-import io.hamal.lib.nodes.generator.GeneratorRegistry
-import io.hamal.lib.nodes.generator.defaultGeneratorRegistry
+import io.hamal.lib.nodes.compiler.node.GeneratorRegistry
+import io.hamal.lib.nodes.compiler.node.defaultGeneratorRegistry
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
@@ -83,13 +83,13 @@ internal abstract class AbstractIntegrationTest {
                         sandbox.generatorRegistry.register(
                             GeneratorRegistry(
                                 listOf(
-                                    GeneratorCapture.Boolean,
-                                    GeneratorCapture.Decimal,
-                                    GeneratorCapture.Number,
-                                    GeneratorCapture.String,
-                                    GeneratorInvoked.Boolean,
-                                    GeneratorInvoked.Empty,
-                                    GeneratorInvoked.String,
+                                    Capture.Boolean,
+                                    Capture.Decimal,
+                                    Capture.Number,
+                                    Capture.String,
+                                    Invoked.Boolean,
+                                    Invoked.Empty,
+                                    Invoked.String,
                                 )
                             )
                         )

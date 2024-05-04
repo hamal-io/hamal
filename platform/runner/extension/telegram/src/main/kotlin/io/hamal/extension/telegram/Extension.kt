@@ -1,11 +1,11 @@
 package io.hamal.extension.telegram
 
 import io.hamal.extension.telegram.nodes.SendMessageNode
-import io.hamal.extension.telegram.nodes.SendMessageNodeGenerator
+import io.hamal.extension.telegram.nodes.SendMessageNodeCompiler
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.extension.RunnerExtensionFactory
-import io.hamal.lib.common.value.ValueString
 
 
 object ExtensionTelegramFactory : RunnerExtensionFactory {
@@ -13,7 +13,7 @@ object ExtensionTelegramFactory : RunnerExtensionFactory {
         return RunnerExtension(
             name = ValueString("telegram"),
             nodes = listOf(SendMessageNode),
-            generators = listOf(SendMessageNodeGenerator)
+            nodeCompilers = listOf(SendMessageNodeCompiler)
         )
     }
 }

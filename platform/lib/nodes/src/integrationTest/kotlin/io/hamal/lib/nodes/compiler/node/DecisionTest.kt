@@ -1,4 +1,4 @@
-package io.hamal.lib.nodes.generator
+package io.hamal.lib.nodes.compiler.node
 
 import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.*

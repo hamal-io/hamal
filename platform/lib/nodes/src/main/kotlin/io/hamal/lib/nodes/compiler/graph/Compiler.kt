@@ -1,4 +1,4 @@
-package io.hamal.lib.nodes.compiler
+package io.hamal.lib.nodes.compiler.graph
 
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueType
@@ -7,21 +7,21 @@ import io.hamal.lib.nodes.NodeId
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.NodesGraph
 import io.hamal.lib.nodes.PortId
-import io.hamal.lib.nodes.compiler.ComputationGraph.Companion.ComputationGraph
+import io.hamal.lib.nodes.compiler.graph.ComputationGraph.Companion.ComputationGraph
+import io.hamal.lib.nodes.compiler.node.GeneratorRegistry
+import io.hamal.lib.nodes.compiler.node.NodeCompiler
 import io.hamal.lib.nodes.control.ControlInput
 import io.hamal.lib.nodes.control.ControlInvoke
 import io.hamal.lib.nodes.control.ControlType.Companion.ControlType
-import io.hamal.lib.nodes.generator.Generator
-import io.hamal.lib.nodes.generator.GeneratorRegistry
 
-class Compiler(
+class GraphCompiler(
     private val generatorRegistry: GeneratorRegistry
 ) {
 
     fun compile(graph: NodesGraph): ValueCode {
         val code = StringBuilder()
 
-        val nodeCodeGenerators = mutableMapOf<NodeId, Generator>()
+        val nodeCodeGenerators = mutableMapOf<NodeId, NodeCompiler>()
         val outputPortMapping = mutableMapOf<PortId, Pair<String, ValueType>>()
 
         val nodes = graph.nodes
