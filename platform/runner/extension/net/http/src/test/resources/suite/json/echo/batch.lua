@@ -4,7 +4,7 @@ http = require('net.http').create({
 
 decimal = require('std.decimal')
 
-local json = {
+local body = {
     s = 'hamal',
     d = decimal.new('12.21'),
     n = 24,
@@ -15,9 +15,9 @@ local json = {
 }
 
 local err, response = http.execute({
-    http.requests.post({ url = '/v1/json-echo', json = json }),
-    http.requests.patch({ url = '/v1/json-echo', json = json }),
-    http.requests.put({ url = '/v1/json-echo', json = json }),
+    http.requests.post({ url = '/v1/json-echo', body = body }),
+    http.requests.patch({ url = '/v1/json-echo', body = body }),
+    http.requests.put({ url = '/v1/json-echo', body = body }),
 })
 
 assert(err == nil)

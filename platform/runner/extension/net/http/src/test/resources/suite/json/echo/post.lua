@@ -4,18 +4,19 @@ http = require('net.http').create({
 
 decimal = require('std.decimal')
 
-res = fail_on_error(http.post({ url = '/v1/json-echo', json = {} }))
+res = fail_on_error(http.post({ url = '/v1/json-echo', body = {} }))
 assert(res.content ~= nil)
+
 assert(table_length(res.content) == 0)
 
-res = fail_on_error(http.post({ url = '/v1/json-echo', json = { 3, 2, { m = 1 } } }))
+res = fail_on_error(http.post({ url = '/v1/json-echo', body = { 3, 2, { m = 1 } } }))
 
 assert(table_length(res.content) == 3)
 assert(res.content[1] == 3)
 assert(res.content[2] == 2)
 assert(res.content[3].m == 1)
 
-res = fail_on_error(http.post({ url = '/v1/json-echo', json = {
+res = fail_on_error(http.post({ url = '/v1/json-echo', body = {
     s = 'hamal',
     d = decimal.new('12.21'),
     n = 24,

@@ -17,7 +17,6 @@ res = fail_on_error(http.delete({
 }))
 
 headers = res.headers
-assert(headers['accept'] == 'application/json')
 assert(headers['auth-ori-zation'] == 'Bearer ey.SecretToken')
 
 assert(headers['s'] == 'HamalRocks')

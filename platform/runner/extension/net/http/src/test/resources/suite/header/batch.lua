@@ -26,7 +26,6 @@ assert(#res == 5)
 for idx = 1, 5 do
     headers = res[idx].headers
 
-    assert(headers['accept'] == 'application/json')
     assert(headers['auth-ori-zation'] == 'Bearer ey.SecretToken')
 
     assert(headers['s'] == 'HamalRocks')

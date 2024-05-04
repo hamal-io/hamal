@@ -13,7 +13,7 @@ function extension_create()
             cmd = cmd or {}
             local err, resp = http.post({
                 url = '/bot' .. bot_token .. '/sendMessage',
-                json = {
+                body =  {
                     ['chat_id'] = cmd.chat_id,
                     ['text'] = cmd.text,
                     ['disable_notification'] = true,
@@ -38,7 +38,7 @@ function extension_create()
         --    cmd = cmd or {}
         --    local err, resp = http.post({
         --        url = base_url .. '/bot' .. bot_token .. '/setWebhook',
-        --        json = {
+        --        body =  {
         --            ['url'] = cmd.url
         --        }
         --    })

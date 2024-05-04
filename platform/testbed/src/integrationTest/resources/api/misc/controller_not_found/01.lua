@@ -3,7 +3,7 @@ http = require('net.http').create({})
 
 res = fail_on_error(http.post({
     url = context.env.api_host .. '/v1/anonymous-accounts',
-    json = { }
+    body =  { }
 }))
 
 debug.sleep(100)
