@@ -6,11 +6,12 @@ import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.domain.BatchSize.Companion.BatchSize
 import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain._enum.TriggerTypes.Event
 import io.hamal.lib.domain.request.TriggerInvokeRequest
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.domain.vo.TriggerType.Companion.TriggerType
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.Trigger
@@ -42,8 +43,7 @@ internal class EventTriggerService(
 
         triggerQueryRepository.list(
             TriggerQuery(
-//                            afterId = TriggerId(SnowflakeId(Long.MAX_VALUE)),
-                types = listOf(TriggerType.Event),
+                types = listOf(TriggerType(Event)),
                 limit = Limit(1000),
                 workspaceIds = listOf()
             )

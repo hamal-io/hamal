@@ -6,10 +6,11 @@ import io.hamal.core.adapter.namespace_tree.NamespaceTreeGetSubTreePort
 import io.hamal.core.adapter.topic.TopicListPort
 import io.hamal.core.adapter.trigger.TriggerListPort
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain._enum.TriggerTypes
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.domain.vo.TriggerType.Companion.TriggerType
 import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.sdk.api.ApiTriggerList
 import io.hamal.lib.sdk.api.ApiTriggerList.Event.Topic
@@ -42,7 +43,7 @@ class TriggerListController(
         @RequestParam(required = false, name = "after_id", defaultValue = "7FFFFFFFFFFFFFFF") afterId: TriggerId,
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
         @RequestParam(required = false, name = "func_ids", defaultValue = "") funcIds: List<FuncId> = listOf(),
-        @RequestParam(required = false, name = "types", defaultValue = "") types: List<TriggerType> = listOf(),
+        @RequestParam(required = false, name = "types", defaultValue = "") types: List<TriggerTypes> = listOf(),
     ): ResponseEntity<ApiTriggerList> {
         return list(
             afterId = afterId,
@@ -63,7 +64,7 @@ class TriggerListController(
         @RequestParam(required = false, name = "func_ids", defaultValue = "") funcIds: List<FuncId>,
         @RequestParam(required = false, name = "workspace_ids", defaultValue = "") workspaceIds: List<WorkspaceId>,
         @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId>,
-        @RequestParam(required = false, name = "types", defaultValue = "") types: List<TriggerType>
+        @RequestParam(required = false, name = "types", defaultValue = "") types: List<TriggerTypes>
     ): ResponseEntity<ApiTriggerList> {
         val allNamespaceIds = namespaceIds.flatMap { namespaceId ->
             namespaceTreeGetSubTree(namespaceId).values
@@ -71,7 +72,7 @@ class TriggerListController(
         return triggerList(
             TriggerQuery(
                 afterId = afterId,
-                types = types,
+                types = types.map(::TriggerType),
                 limit = limit,
                 triggerIds = ids,
                 workspaceIds = workspaceIds,

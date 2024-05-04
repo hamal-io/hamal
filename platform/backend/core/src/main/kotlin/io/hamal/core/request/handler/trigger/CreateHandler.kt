@@ -4,7 +4,7 @@ import io.hamal.core.event.InternalEventEmitter
 import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain._enum.TriggerType.*
+import io.hamal.lib.domain._enum.TriggerTypes.*
 import io.hamal.lib.domain.request.TriggerCreateRequested
 import io.hamal.repository.api.FuncQueryRepository
 import io.hamal.repository.api.TopicRepository

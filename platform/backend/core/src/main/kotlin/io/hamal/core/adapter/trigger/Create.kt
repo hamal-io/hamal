@@ -7,7 +7,7 @@ import io.hamal.core.adapter.topic.TopicGetPort
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain._enum.TriggerTypes
 import io.hamal.lib.domain.request.TriggerCreateRequest
 import io.hamal.lib.domain.request.TriggerCreateRequested
 import io.hamal.lib.domain.vo.NamespaceId
@@ -52,7 +52,7 @@ class TriggerCreateAdapter(
     }
 
     private fun ensureEvent(createTrigger: TriggerCreateRequest) {
-        if (createTrigger.type == TriggerType.Event) {
+        if (createTrigger.type == TriggerTypes.Event) {
             requireNotNull(createTrigger.topicId) { "topicId is missing" }
             topicGet(createTrigger.topicId!!)
         }

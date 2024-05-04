@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.trigger
 
 import io.hamal.lib.common.value.ValueObject
-import io.hamal.lib.domain._enum.TriggerType.*
+import io.hamal.lib.domain._enum.TriggerTypes.*
 import io.hamal.lib.domain.vo.CronPattern.Companion.CronPattern
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName

@@ -7,7 +7,7 @@ import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain._enum.TriggerStates.Active
 import io.hamal.lib.domain._enum.TriggerStates.Inactive
-import io.hamal.lib.domain._enum.TriggerType.Event
+import io.hamal.lib.domain._enum.TriggerTypes.Event
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.CronPattern.Companion.CronPattern
 import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
@@ -17,6 +17,7 @@ import io.hamal.lib.domain.vo.TriggerDuration.Companion.TriggerDuration
 import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import io.hamal.lib.domain.vo.TriggerName.Companion.TriggerName
 import io.hamal.lib.domain.vo.TriggerStatus.Companion.TriggerStatus
+import io.hamal.lib.domain.vo.TriggerType.Companion.TriggerType
 import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerCmdRepository.*
@@ -953,7 +954,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             setup()
 
             val query = TriggerQuery(
-                types = listOf(Event),
+                types = listOf(TriggerType(Event)),
                 workspaceIds = listOf(),
                 limit = Limit(10)
             )

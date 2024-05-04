@@ -4,7 +4,7 @@ import io.hamal.api.http.controller.BaseControllerTest
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain._enum.TopicType
-import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain._enum.TriggerTypes
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.TriggerDuration.Companion.TriggerDuration
 import io.hamal.lib.http.HttpStatusCode.Accepted
@@ -53,7 +53,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
         val creationResponse = httpTemplate.post("/v1/namespaces/539/triggers")
             .body(
                 ApiTriggerCreateReq(
-                    type = TriggerType.FixedRate,
+                    type = TriggerTypes.FixedRate,
                     name = name,
                     funcId = funcId,
                     inputs = TriggerInputs(),

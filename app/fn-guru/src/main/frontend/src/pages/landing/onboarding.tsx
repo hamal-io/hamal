@@ -37,7 +37,7 @@ const OnboardingPage: FC = () => {
         if (auth != null && auth.type !== 'Unauthorized') {
             adhoc(auth.workspaceId, `
             sys = require_plugin('std.sys')
-            log = require('sys.log').create({})
+            log = require('std.log').create({})
             log.info('Setting up account')
             sys.funcs.create({
                 name = 'Hello-World',

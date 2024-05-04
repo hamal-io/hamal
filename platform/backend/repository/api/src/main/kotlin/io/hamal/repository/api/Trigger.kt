@@ -8,10 +8,11 @@ import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.serialization.AdapterGeneric
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.TriggerStates.Active
-import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain._enum.TriggerTypes.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import io.hamal.lib.domain.vo.TriggerStatus.Companion.TriggerStatus
+import io.hamal.lib.domain.vo.TriggerType.Companion.TriggerType
 import java.lang.reflect.Type
 
 interface TriggerRepository : TriggerCmdRepository, TriggerQueryRepository
@@ -101,7 +102,7 @@ interface TriggerQueryRepository {
 
     data class TriggerQuery(
         var afterId: TriggerId = TriggerId(SnowflakeId(Long.MAX_VALUE)),
-        var types: List<TriggerType> = TriggerType.values().toList(),
+        var types: List<TriggerType> = entries.map(::TriggerType).toList(),
         var limit: Limit = Limit(1),
         var triggerIds: List<TriggerId> = listOf(),
         var funcIds: List<FuncId> = listOf(),
@@ -136,16 +137,18 @@ sealed interface Trigger : DomainObject<TriggerId>, HasNamespaceId, HasWorkspace
             typeOfT: Type,
             context: JsonDeserializationContext
         ): Trigger {
-            val type = json.asJsonObject.get("type").asString
-            return context.deserialize(json, classMapping[type]!!.java)
+            val type = context.deserialize<TriggerType>(
+                json.asJsonObject.get("type"), TriggerType::class.java
+            )
+            return context.deserialize(json, classMapping[type.enumValue]!!.java)
         }
 
         private val classMapping = mapOf(
-            TriggerType.FixedRate.name to FixedRate::class,
-            TriggerType.Event.name to Event::class,
-            TriggerType.Hook.name to Hook::class,
-            TriggerType.Cron.name to Cron::class,
-            TriggerType.Endpoint.name to Endpoint::class
+            FixedRate to Trigger.FixedRate::class,
+            Event to Trigger.Event::class,
+            Hook to Trigger.Hook::class,
+            Cron to Trigger.Cron::class,
+            Endpoint to Trigger.Endpoint::class
         )
     }
 
@@ -162,7 +165,7 @@ sealed interface Trigger : DomainObject<TriggerId>, HasNamespaceId, HasWorkspace
         val duration: TriggerDuration,
         override val correlationId: CorrelationId? = null
     ) : Trigger {
-        override val type = TriggerType.FixedRate
+        override val type = TriggerType(FixedRate)
     }
 
     class Event(
@@ -178,7 +181,7 @@ sealed interface Trigger : DomainObject<TriggerId>, HasNamespaceId, HasWorkspace
         val topicId: TopicId,
         override val correlationId: CorrelationId? = null
     ) : Trigger {
-        override val type = TriggerType.Event
+        override val type = TriggerType(Event)
     }
 
     class Endpoint(
@@ -193,7 +196,7 @@ sealed interface Trigger : DomainObject<TriggerId>, HasNamespaceId, HasWorkspace
         override val status: TriggerStatus,
         override val correlationId: CorrelationId? = null
     ) : Trigger {
-        override val type = TriggerType.Endpoint
+        override val type = TriggerType(Endpoint)
     }
 
     class Hook(
@@ -208,7 +211,7 @@ sealed interface Trigger : DomainObject<TriggerId>, HasNamespaceId, HasWorkspace
         override val status: TriggerStatus,
         override val correlationId: CorrelationId? = null
     ) : Trigger {
-        override val type = TriggerType.Hook
+        override val type = TriggerType(Hook)
     }
 
     class Cron(
@@ -224,7 +227,7 @@ sealed interface Trigger : DomainObject<TriggerId>, HasNamespaceId, HasWorkspace
         override val correlationId: CorrelationId? = null,
         val cron: CronPattern
     ) : Trigger {
-        override val type = TriggerType.Cron
+        override val type = TriggerType(Cron)
     }
 
 }

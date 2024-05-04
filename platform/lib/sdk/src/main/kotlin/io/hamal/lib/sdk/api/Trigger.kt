@@ -8,10 +8,12 @@ import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.serialization.AdapterJson
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain._enum.TriggerTypes
+import io.hamal.lib.domain._enum.TriggerTypes.*
 import io.hamal.lib.domain.request.TriggerCreateRequest
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
+import io.hamal.lib.domain.vo.TriggerType.Companion.TriggerType
 import io.hamal.lib.http.HttpRequest
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body
@@ -19,7 +21,7 @@ import io.hamal.lib.sdk.api.ApiTriggerService.TriggerQuery
 import io.hamal.lib.sdk.fold
 
 data class ApiTriggerCreateReq(
-    override val type: TriggerType,
+    override val type: TriggerTypes,
     override val name: TriggerName,
     override val funcId: FuncId,
     override val inputs: TriggerInputs? = null,
@@ -81,19 +83,21 @@ data class ApiTriggerList(
                 typeOfT: java.lang.reflect.Type,
                 context: JsonDeserializationContext
             ): Trigger {
-                val triggerType = json.asJsonObject.get("type").asString
+                val type = context.deserialize<TriggerType>(
+                    json.asJsonObject.get("type"), TriggerType::class.java
+                )
                 return context.deserialize(
-                    json, (classMapping[triggerType]
-                        ?: throw NotImplementedError("$triggerType not supported")).java
+                    json, (classMapping[type.enumValue]
+                        ?: throw NotImplementedError("$type not supported")).java
                 )
             }
 
             private val classMapping = mapOf(
-                "Event" to Event::class,
-                "FixedRate" to FixedRate::class,
-                "Hook" to Hook::class,
-                "Cron" to Cron::class,
-                "Endpoint" to Endpoint::class
+                Event to ApiTriggerList.Event::class,
+                FixedRate to ApiTriggerList.FixedRate::class,
+                Hook to ApiTriggerList.Hook::class,
+                Cron to ApiTriggerList.Cron::class,
+                Endpoint to ApiTriggerList.Endpoint::class
             )
         }
     }
@@ -106,7 +110,7 @@ data class ApiTriggerList(
         override val status: TriggerStatus,
         val duration: TriggerDuration
     ) : Trigger {
-        override val type: TriggerType = TriggerType.FixedRate
+        override val type: TriggerType = TriggerType(FixedRate)
     }
 
     class Event(
@@ -117,7 +121,7 @@ data class ApiTriggerList(
         override val status: TriggerStatus,
         val topic: Topic
     ) : Trigger {
-        override val type: TriggerType = TriggerType.Event
+        override val type: TriggerType = TriggerType(Event)
 
         data class Topic(
             val id: TopicId,
@@ -132,7 +136,7 @@ data class ApiTriggerList(
         override val namespace: Trigger.Namespace,
         override val status: TriggerStatus,
     ) : Trigger {
-        override val type: TriggerType = TriggerType.Hook
+        override val type: TriggerType = TriggerType(Hook)
     }
 
     class Cron(
@@ -143,7 +147,7 @@ data class ApiTriggerList(
         override val status: TriggerStatus,
         val cron: CronPattern
     ) : Trigger {
-        override val type: TriggerType = TriggerType.Cron
+        override val type: TriggerType = TriggerType(Cron)
     }
 
     class Endpoint(
@@ -153,7 +157,7 @@ data class ApiTriggerList(
         override val namespace: Trigger.Namespace,
         override val status: TriggerStatus
     ) : Trigger {
-        override val type: TriggerType = TriggerType.Endpoint
+        override val type: TriggerType = TriggerType(Endpoint)
     }
 }
 
@@ -191,19 +195,20 @@ sealed class ApiTrigger : ApiObject() {
             typeOfT: java.lang.reflect.Type,
             context: JsonDeserializationContext
         ): ApiTrigger {
-            val triggerType = json.asJsonObject.get("type").asString
+            val type = context.deserialize<TriggerType>(
+                json.asJsonObject.get("type"), TriggerType::class.java
+            )
             return context.deserialize(
-                json, (classMapping[triggerType]
-                    ?: throw NotImplementedError("$triggerType not supported")).java
+                json, (classMapping[type.enumValue] ?: throw NotImplementedError("$type not supported")).java
             )
         }
 
         private val classMapping = mapOf(
-            "Event" to Event::class,
-            "FixedRate" to FixedRate::class,
-            "Hook" to Hook::class,
-            "Cron" to Cron::class,
-            "Endpoint" to Endpoint::class
+            Event to ApiTrigger.Event::class,
+            FixedRate to ApiTrigger.FixedRate::class,
+            Hook to ApiTrigger.Hook::class,
+            Cron to ApiTrigger.Cron::class,
+            Endpoint to ApiTrigger.Endpoint::class
         )
     }
 
@@ -218,7 +223,7 @@ sealed class ApiTrigger : ApiObject() {
         override val correlationId: CorrelationId? = null,
         val duration: TriggerDuration
     ) : ApiTrigger() {
-        override val type: TriggerType = TriggerType.FixedRate
+        override val type: TriggerType = TriggerType(FixedRate)
     }
 
     class Event(
@@ -231,7 +236,7 @@ sealed class ApiTrigger : ApiObject() {
         override val correlationId: CorrelationId? = null,
         val topic: Topic
     ) : ApiTrigger() {
-        override val type: TriggerType = TriggerType.Event
+        override val type: TriggerType = TriggerType(Event)
 
         data class Topic(
             val id: TopicId,
@@ -248,7 +253,7 @@ sealed class ApiTrigger : ApiObject() {
         override val status: TriggerStatus,
         override val correlationId: CorrelationId? = null
     ) : ApiTrigger() {
-        override val type: TriggerType = TriggerType.Hook
+        override val type: TriggerType = TriggerType(Hook)
     }
 
 
@@ -262,7 +267,7 @@ sealed class ApiTrigger : ApiObject() {
         override val correlationId: CorrelationId? = null,
         val cron: CronPattern
     ) : ApiTrigger() {
-        override val type: TriggerType = TriggerType.Cron
+        override val type: TriggerType = TriggerType(Cron)
     }
 
     class Endpoint(
@@ -274,7 +279,7 @@ sealed class ApiTrigger : ApiObject() {
         override val status: TriggerStatus,
         override val correlationId: CorrelationId? = null
     ) : ApiTrigger() {
-        override val type: TriggerType = TriggerType.Endpoint
+        override val type: TriggerType = TriggerType(Endpoint)
     }
 
 }

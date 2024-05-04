@@ -15,7 +15,7 @@ export default AdhocPage;
 const LuaAdhocPage = () => {
     const [uiState] = useUiState()
     const [adhoc, data] = useAdhoc()
-    const [code, setCode] = useState("log = require('sys.log').create({})\nlog.info('Let\\'s go..')")
+    const [code, setCode] = useState("log = require('std.log').create({})\nlog.info('Let\\'s go..')")
     const Run = () => (
         <Button onClick={() => {
             adhoc(uiState.namespaceId, code, "Lua54")

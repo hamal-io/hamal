@@ -108,6 +108,7 @@ object SerdeModuleValueVariable : SerdeModuleGeneric() {
         this[TriggerName::class] = String(::TriggerName)
         this[TriggerInputs::class] = Object(::TriggerInputs)
         this[TriggerStatus::class] = Enum(::TriggerStatus)
+        this[TriggerType::class] = Enum(::TriggerType)
 
         this[Web3Address::class] = String(::Web3Address)
         this[Web3Challenge::class] = String(::Web3Challenge)

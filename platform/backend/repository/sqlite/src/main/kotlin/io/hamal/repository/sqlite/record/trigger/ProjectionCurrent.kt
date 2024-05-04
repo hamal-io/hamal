@@ -143,7 +143,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
         return if (types.isEmpty()) {
             ""
         } else {
-            "AND type IN (${types.joinToString(",") { "${it.value}" }})"
+            "AND type IN (${types.joinToString(",") { "'${it.stringValue}'" }})"
         }
     }
 

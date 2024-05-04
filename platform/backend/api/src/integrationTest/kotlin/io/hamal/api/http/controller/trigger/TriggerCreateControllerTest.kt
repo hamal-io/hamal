@@ -3,9 +3,9 @@ package io.hamal.api.http.controller.trigger
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.domain._enum.TriggerStates
-import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain._enum.TriggerType.Cron
-import io.hamal.lib.domain._enum.TriggerType.FixedRate
+import io.hamal.lib.domain._enum.TriggerTypes
+import io.hamal.lib.domain._enum.TriggerTypes.Cron
+import io.hamal.lib.domain._enum.TriggerTypes.FixedRate
 import io.hamal.lib.domain.request.TriggerCreateRequested
 import io.hamal.lib.domain.vo.CronPattern.Companion.CronPattern
 import io.hamal.lib.domain.vo.FuncId
@@ -194,7 +194,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
             val creationResponse = httpTemplate.post("/v1/namespaces/539/triggers").body(
                 ApiTriggerCreateReq(
-                    type = TriggerType.Event,
+                    type = TriggerTypes.Event,
                     name = TriggerName("event-trigger"),
                     funcId = funcId,
                     inputs = TriggerInputs(),
@@ -224,7 +224,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
             val creationResponse = httpTemplate.post("/v1/namespaces/539/triggers").body(
                 ApiTriggerCreateReq(
-                    type = TriggerType.Event,
+                    type = TriggerTypes.Event,
                     name = TriggerName("event-trigger"),
                     funcId = funcId,
                     inputs = TriggerInputs(),
@@ -246,7 +246,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
             val creationResponse = httpTemplate.post("/v1/namespaces/539/triggers").body(
                 ApiTriggerCreateReq(
-                    type = TriggerType.Event,
+                    type = TriggerTypes.Event,
                     name = TriggerName("event-trigger"),
                     funcId = funcId,
                     inputs = TriggerInputs(),
@@ -268,7 +268,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
             val creationResponse = httpTemplate.post("/v1/namespaces/539/triggers").body(
                 ApiTriggerCreateReq(
-                    type = TriggerType.Event,
+                    type = TriggerTypes.Event,
                     name = TriggerName("event-trigger"),
                     funcId = FuncId(1234),
                     inputs = TriggerInputs(),
@@ -293,7 +293,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
             val creationResponse = httpTemplate.post("/v1/namespaces/539/triggers").body(
                 ApiTriggerCreateReq(
-                    type = TriggerType.Hook,
+                    type = TriggerTypes.Hook,
                     name = TriggerName("hook-trigger"),
                     funcId = funcId,
                     inputs = TriggerInputs()
@@ -351,7 +351,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
             val creationResponse = httpTemplate.post("/v1/namespaces/539/triggers").body(
                 ApiTriggerCreateReq(
-                    type = TriggerType.Hook,
+                    type = TriggerTypes.Hook,
                     name = TriggerName("hook-trigger"),
                     funcId = FuncId(1234),
                     inputs = TriggerInputs()
@@ -424,7 +424,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
     ): ApiTriggerCreateRequested {
         val creationResponse = httpTemplate.post("/v1/namespaces/539/triggers").body(
             ApiTriggerCreateReq(
-                type = TriggerType.Hook,
+                type = TriggerTypes.Hook,
                 name = name,
                 funcId = funcId,
                 inputs = TriggerInputs()

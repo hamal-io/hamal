@@ -3,7 +3,7 @@ package io.hamal.core.request.handler.trigger
 import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
-import io.hamal.lib.domain._enum.TriggerType.*
+import io.hamal.lib.domain._enum.TriggerTypes.*
 import io.hamal.lib.domain.request.TriggerCreateRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.CronPattern.Companion.CronPattern
@@ -16,6 +16,7 @@ import io.hamal.lib.domain.vo.TriggerDuration.Companion.TriggerDuration
 import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import io.hamal.lib.domain.vo.TriggerInputs
 import io.hamal.lib.domain.vo.TriggerName.Companion.TriggerName
+import io.hamal.lib.domain.vo.TriggerType.Companion.TriggerType
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import org.hamcrest.MatcherAssert.assertThat
@@ -129,7 +130,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
     }
 
     private fun verifySingleFixedRateTriggerExists() {
-        triggerQueryRepository.list(TriggerQuery(types = listOf(FixedRate), workspaceIds = listOf())).also { triggers ->
+        triggerQueryRepository.list(TriggerQuery(types = listOf(TriggerType(FixedRate)), workspaceIds = listOf())).also { triggers ->
             assertThat(triggers, hasSize(1))
 
             with(triggers.first()) {
@@ -144,7 +145,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
     }
 
     private fun verifySingleEventTriggerExists() {
-        triggerQueryRepository.list(TriggerQuery(types = listOf(Event), workspaceIds = listOf())).also { triggers ->
+        triggerQueryRepository.list(TriggerQuery(types = listOf(TriggerType(Event)), workspaceIds = listOf())).also { triggers ->
             assertThat(triggers, hasSize(1))
 
             with(triggers.first()) {
@@ -159,7 +160,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
     }
 
     private fun verifySingleHookTriggerExists() {
-        triggerQueryRepository.list(TriggerQuery(types = listOf(Hook), workspaceIds = listOf())).also { triggers ->
+        triggerQueryRepository.list(TriggerQuery(types = listOf(TriggerType(Hook)), workspaceIds = listOf())).also { triggers ->
             assertThat(triggers, hasSize(1))
 
             with(triggers.first()) {
@@ -173,7 +174,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
     }
 
     private fun verifySingleCronTriggerExists() {
-        triggerQueryRepository.list(TriggerQuery(types = listOf(Cron), workspaceIds = listOf())).also { triggers ->
+        triggerQueryRepository.list(TriggerQuery(types = listOf(TriggerType(Cron)), workspaceIds = listOf())).also { triggers ->
             assertThat(triggers, hasSize(1))
 
             with(triggers.first()) {

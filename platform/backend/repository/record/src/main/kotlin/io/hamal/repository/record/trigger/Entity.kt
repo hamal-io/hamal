@@ -3,8 +3,8 @@ package io.hamal.repository.record.trigger
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain._enum.TriggerStates.Active
 import io.hamal.lib.domain._enum.TriggerStates.Inactive
-import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain._enum.TriggerType.*
+import io.hamal.lib.domain._enum.TriggerTypes
+import io.hamal.lib.domain._enum.TriggerTypes.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.TriggerStatus.Companion.TriggerStatus
 import io.hamal.repository.api.Trigger
@@ -24,7 +24,7 @@ data class TriggerEntity(
     var funcId: FuncId? = null,
     var namespaceId: NamespaceId? = null,
     var name: TriggerName? = null,
-    var type: TriggerType? = null,
+    var type: TriggerTypes? = null,
     var inputs: TriggerInputs? = null,
     var correlationId: CorrelationId? = null,
 

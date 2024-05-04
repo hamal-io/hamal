@@ -3,7 +3,7 @@ package io.hamal.plugin.std.sys.trigger
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain._enum.TriggerTypes
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
@@ -31,7 +31,7 @@ class TriggerCreateFunction(
                 arg1.findString("namespace_id")?.let { NamespaceId(SnowflakeId(it.stringValue)) }
                     ?: ctx[NamespaceId::class],
                 ApiTriggerCreateReq(
-                    type = TriggerType.valueOf(arg1.getString("type").stringValue),
+                    type = TriggerTypes.valueOf(arg1.getString("type").stringValue),
                     funcId = FuncId(SnowflakeId(arg1.getString("func_id").stringValue)),
                     name = TriggerName(arg1.getString("name")),
                     inputs = TriggerInputs(),

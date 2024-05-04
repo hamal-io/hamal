@@ -1,12 +1,12 @@
 package io.hamal.lib.domain.request
 
 import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain._enum.TriggerTypes
 import io.hamal.lib.domain.vo.*
 
 
 interface TriggerCreateRequest {
-    val type: TriggerType
+    val type: TriggerTypes
     val name: TriggerName
     val funcId: FuncId
     val inputs: TriggerInputs?
@@ -21,7 +21,7 @@ data class TriggerCreateRequested(
     override val requestedBy: AuthId,
     override var requestStatus: RequestStatus,
     val id: TriggerId,
-    val type: TriggerType,
+    val type: TriggerTypes,
     val workspaceId: WorkspaceId,
     val name: TriggerName,
     val funcId: FuncId,
