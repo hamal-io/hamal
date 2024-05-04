@@ -10,13 +10,13 @@ import io.hamal.lib.nodes.compiler.node.NodeCompiler
 import io.hamal.lib.nodes.control.Control
 import io.hamal.lib.nodes.control.ControlExtensionTextArea
 
-val SendMessageNode = NodeExtension(
+val SendMessageNode = TemplateNode(
     type = NodeType("Telegram_Send_Message"),
     title = NodeTitle("Telegram - Send Message"),
     size = Size(200, 200),
     controls = listOf(
         ControlExtensionTextArea(
-            port = PortInputExtension(TypeString),
+            port = TemplatePortInput(TypeString),
             defaultValue = ValueString("Hello from hamal - nodes")
         )
     ),

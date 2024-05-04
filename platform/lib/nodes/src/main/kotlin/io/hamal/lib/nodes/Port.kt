@@ -23,3 +23,12 @@ data class PortOutput(
     val id: PortId,
     val type: ValueType
 )
+
+data class TemplatePortInput(
+    val inputType: ValueType
+)
+
+data class TemplatePortOutput(
+    val outputType: ValueType
+)
+

@@ -69,14 +69,14 @@ interface ControlInput : Control {
     val port: PortInput
 }
 
-sealed interface ControlExtension {
+sealed interface TemplateControl {
 
     val type: ControlType
 
-    object Adapter : AdapterJson<ControlExtension> {
+    object Adapter : AdapterJson<TemplateControl> {
 
         override fun serialize(
-            src: ControlExtension,
+            src: TemplateControl,
             typeOfSrc: java.lang.reflect.Type,
             context: JsonSerializationContext
         ): JsonElement {
@@ -87,7 +87,7 @@ sealed interface ControlExtension {
             json: JsonElement,
             typeOfT: java.lang.reflect.Type,
             context: JsonDeserializationContext
-        ): ControlExtension {
+        ): TemplateControl {
             val type = ControlType(json.asJsonObject.get("type").asString)
 
             return when (type) {

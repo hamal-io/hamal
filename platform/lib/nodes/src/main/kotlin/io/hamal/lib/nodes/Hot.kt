@@ -6,7 +6,7 @@ import io.hamal.lib.common.value.serde.SerdeModuleValueJson
 import io.hamal.lib.common.value.serde.ValueVariableAdapters
 import io.hamal.lib.domain.vo.SerdeModuleValueVariable
 import io.hamal.lib.nodes.control.Control
-import io.hamal.lib.nodes.control.ControlExtension
+import io.hamal.lib.nodes.control.TemplateControl
 import io.hamal.lib.nodes.control.ControlIdentifier
 import io.hamal.lib.nodes.control.ControlType
 
@@ -18,7 +18,7 @@ object NodesHotModule : SerdeModuleJson() {
         this[ControlIdentifier::class] = ValueVariableAdapters.String(::ControlIdentifier)
         this[ControlType::class] = ValueVariableAdapters.String(::ControlType)
         this[Control::class] = Control.Adapter
-        this[ControlExtension::class] = ControlExtension.Adapter
+        this[TemplateControl::class] = TemplateControl.Adapter
 
         this[NodeId::class] = ValueVariableAdapters.SnowflakeId(::NodeId)
         this[NodeType::class] = ValueVariableAdapters.String(::NodeType)

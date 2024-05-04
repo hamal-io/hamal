@@ -2,6 +2,7 @@ package io.hamal.lib.nodes
 
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.*
+import io.hamal.lib.nodes.control.TemplateControl
 
 
 class NodeId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
@@ -34,4 +35,12 @@ data class Node(
     val size: Size,
     val properties: NodeProperties = NodeProperties(),
     val outputs: List<PortOutput> = listOf()
+)
+
+data class TemplateNode(
+    val type: NodeType,
+    val title: NodeTitle,
+    val size: Size,
+    val controls: List<TemplateControl>,
+    val outputs: List<TemplatePortOutput>
 )
