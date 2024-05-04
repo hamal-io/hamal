@@ -195,7 +195,7 @@ internal object ValueHonTransform {
     private fun toObject(obj: ValueObject): JsonObject {
         val builder = JsonObject.builder()
         obj.values.forEach { (key, value) ->
-            builder[key.stringValue] = toHon(value)
+            builder[key] = toHon(value)
         }
         return builder.build()
     }

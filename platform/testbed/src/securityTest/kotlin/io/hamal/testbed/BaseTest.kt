@@ -29,7 +29,7 @@ abstract class BaseTest(private val apiUrl: String) : AbstractRunnerTest() {
                 env = RunnerEnv(
                     ValueObject.builder().also { builder ->
                         testEnv.values.forEach { (key, value) ->
-                            builder[key.stringValue] = value
+                            builder[key] = value
                         }
                     }
                         .set("test_api", apiUrl)

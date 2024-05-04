@@ -1,6 +1,5 @@
 package io.hamal.lib.common.value
 
-import io.hamal.lib.common.value.FieldIdentifier.Companion.FieldIdentifier
 import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 import java.math.BigDecimal
 import java.math.BigInteger
@@ -10,27 +9,21 @@ data object TypeObject : Type() {
     override val identifier = TypeIdentifier("Object")
 }
 
-data class ValueObject(val values: LinkedHashMap<FieldIdentifier, Value>) : Value {
+data class ValueObject(val values: LinkedHashMap<String, Value>) : Value {
     override val type get() = TypeObject
 
     fun stringValue(key: String): String = (get(key) as ValueString).stringValue
 
-    operator fun get(identifier: FieldIdentifier): Value = values[identifier] ?: ValueNil
-    operator fun get(identifier: String): Value = get(FieldIdentifier(identifier))
+    operator fun get(identifier: String): Value = values[identifier] ?: ValueNil
 
-    fun getNumber(identifier: FieldIdentifier): ValueNumber = get(identifier) as ValueNumber
-    fun getNumber(identifier: String): ValueNumber = getNumber(FieldIdentifier(identifier))
+    fun getNumber(identifier: String): ValueNumber = get(identifier) as ValueNumber
 
-    fun getSnowflakeId(identifier: FieldIdentifier): ValueSnowflakeId = get(identifier) as ValueSnowflakeId
-    fun getSnowflakeId(identifier: String): ValueSnowflakeId = getSnowflakeId(FieldIdentifier(identifier))
+    fun getSnowflakeId(identifier: String): ValueSnowflakeId = get(identifier) as ValueSnowflakeId
 
-    fun findString(identifier: FieldIdentifier): ValueString? = values[identifier]?.let { it as ValueString }
-    fun findString(identifier: String): ValueString? = findString(FieldIdentifier(identifier))
-    fun getString(identifier: FieldIdentifier): ValueString = findString(identifier) ?: throw NoSuchElementException(identifier.stringValue)
-    fun getString(identifier: String): ValueString = getString(FieldIdentifier(identifier))
+    fun findString(identifier: String): ValueString? = values[identifier]?.let { it as ValueString }
+    fun getString(identifier: String): ValueString = findString(identifier) ?: throw NoSuchElementException(identifier)
 
-    fun getObject(identifier: FieldIdentifier): ValueObject = get(identifier) as ValueObject
-    fun getObject(identifier: String): ValueObject = getObject(FieldIdentifier(identifier))
+    fun getObject(identifier: String): ValueObject = get(identifier) as ValueObject
 
     override fun toString() = "${type.identifier}(${values.entries.joinToString(", ") { it.toString() }})"
 
@@ -60,72 +53,72 @@ abstract class ValueVariableObject : ValueVariable.BaseImpl<ValueObject>()
 class ValueObjectBuilder {
 
     operator fun set(key: String, value: Enum<*>): ValueObjectBuilder {
-        values[FieldIdentifier(key)] = ValueString(value.name)
+        values[key] = ValueString(value.name)
         return this
     }
 
     operator fun set(key: String, value: Value): ValueObjectBuilder {
-        values[FieldIdentifier(key)] = value
+        values[key] = value
         return this
     }
 
     operator fun set(key: String, value: ValueVariable<*>): ValueObjectBuilder {
-        values[FieldIdentifier(key)] = value.value
+        values[key] = value.value
         return this
     }
 
     operator fun set(key: String, value: String): ValueObjectBuilder {
-        values[FieldIdentifier(key)] = ValueString(value)
+        values[key] = ValueString(value)
         return this
     }
 
     operator fun set(key: String, value: Byte): ValueObjectBuilder {
-        values[FieldIdentifier(key)] = ValueNumber(value)
+        values[key] = ValueNumber(value)
         return this
     }
 
     operator fun set(key: String, value: Short): ValueObjectBuilder {
-        values[FieldIdentifier(key)] = ValueNumber(value)
+        values[key] = ValueNumber(value)
         return this
     }
 
     operator fun set(key: String, value: BigInteger): ValueObjectBuilder {
-        values[FieldIdentifier(key)] = ValueNumber(value)
+        values[key] = ValueNumber(value)
         return this
     }
 
     operator fun set(key: String, value: BigDecimal): ValueObjectBuilder {
-        values[FieldIdentifier(key)] = ValueNumber(value)
+        values[key] = ValueNumber(value)
         return this
     }
 
     operator fun set(key: String, value: Int): ValueObjectBuilder {
-        values[FieldIdentifier(key)] = ValueNumber(value)
+        values[key] = ValueNumber(value)
         return this
     }
 
     operator fun set(key: String, value: Float): ValueObjectBuilder {
-        values[FieldIdentifier(key)] = ValueNumber(value)
+        values[key] = ValueNumber(value)
         return this
     }
 
     operator fun set(key: String, value: Double): ValueObjectBuilder {
-        values[FieldIdentifier(key)] = ValueNumber(value)
+        values[key] = ValueNumber(value)
         return this
     }
 
     operator fun set(key: String, value: Long): ValueObjectBuilder {
-        values[FieldIdentifier(key)] = ValueNumber(value)
+        values[key] = ValueNumber(value)
         return this
     }
 
     operator fun set(key: String, value: Boolean): ValueObjectBuilder {
-        values[FieldIdentifier(key)] = ValueBoolean(value)
+        values[key] = ValueBoolean(value)
         return this
     }
 
     fun setNil(key: String): ValueObjectBuilder {
-        values[FieldIdentifier(key)] = ValueNil
+        values[key] = ValueNil
         return this
     }
 
@@ -133,5 +126,5 @@ class ValueObjectBuilder {
         return ValueObject(values)
     }
 
-    private val values = LinkedHashMap<FieldIdentifier, Value>()
+    private val values = LinkedHashMap<String, Value>()
 }

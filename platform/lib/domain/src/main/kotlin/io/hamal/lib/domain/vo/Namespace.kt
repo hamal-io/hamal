@@ -29,14 +29,14 @@ class NamespaceFeatures(override var value: ValueObject = ValueObject.empty) : V
         value.values.forEach { (key, value) ->
             require(
                 NamespaceFeature.entries.any { validFeatures ->
-                    validFeatures.name == key.stringValue
+                    validFeatures.name == key
                 }
-            ) { IllegalArgumentException("${key.stringValue} is not a valid feature.") }
+            ) { IllegalArgumentException("$key is not a valid feature.") }
         }
     }
 
     fun hasFeature(feature: NamespaceFeature): Boolean {
-        return value.values.map { it.key.stringValue }.contains(feature.name)
+        return value.values.map { it.key }.contains(feature.name)
     }
 
     companion object {

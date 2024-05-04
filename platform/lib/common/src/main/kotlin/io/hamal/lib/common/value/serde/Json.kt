@@ -16,8 +16,6 @@ import java.lang.reflect.Type
 object SerdeModuleValueJson : SerdeModuleJson() {
 
     init {
-        this[FieldIdentifier::class] = ValueVariableAdapters.String(::FieldIdentifier)
-
         this[io.hamal.lib.common.value.Type::class] = object : AdapterJson<io.hamal.lib.common.value.Type> {
             override fun serialize(
                 src: io.hamal.lib.common.value.Type,
@@ -219,7 +217,7 @@ internal object ValueJsonTransform {
     private fun toObject(obj: ValueObject): JsonObject {
         val builder = JsonObject.builder()
         obj.values.forEach { (key, value) ->
-            builder[key.stringValue] = toJson(value)
+            builder[key] = toJson(value)
         }
         return builder.build()
     }

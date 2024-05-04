@@ -47,7 +47,7 @@ fun Value?.toKua(state: State): Value {
 //    }
     return when (this) {
         is ValueObject -> state.tableCreate(values.map { (key, value) ->
-            ValueString(key.stringValue) to value.toKua(state)
+            ValueString(key) to value.toKua(state)
         }.toMap())
 
         is ValueArray -> state.tableCreate(value.map { it.toKua(state) })
@@ -84,7 +84,7 @@ fun Value?.toKuaSnakeCase(state: State): Value {
 
     return when (this) {
         is ValueObject -> state.tableCreate(values.map { (key, value) ->
-            ValueString(StringUtils.snakeCase(key.stringValue)) to value.toKuaSnakeCase(state)
+            ValueString(StringUtils.snakeCase(key)) to value.toKuaSnakeCase(state)
         }.toMap())
 
         is ValueArray -> state.tableCreate(value.map { it.toKuaSnakeCase(state) })

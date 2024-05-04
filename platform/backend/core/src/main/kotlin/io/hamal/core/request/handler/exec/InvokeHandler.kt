@@ -60,7 +60,7 @@ class ExecInvokeHandler(
 internal fun InvocationInputs.toExecInputs() = ExecInputs(this.value)
 internal fun merge(funcInputs: FuncInputs, invocationInputs: InvocationInputs): ExecInputs {
     val builder = ValueObject.builder()
-    funcInputs.value.values.forEach { builder[it.key.stringValue] = it.value }
-    invocationInputs.value.values.forEach { builder[it.key.stringValue] = it.value }
+    funcInputs.value.values.forEach { builder[it.key] = it.value }
+    invocationInputs.value.values.forEach { builder[it.key] = it.value }
     return ExecInputs(builder.build())
 }

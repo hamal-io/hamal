@@ -1,12 +1,6 @@
 package io.hamal.lib.common.value
 
 
-class FieldIdentifier(override val value: ValueString) : ValueVariableString() {
-    companion object {
-        fun FieldIdentifier(value: String) = FieldIdentifier(ValueString(value))
-    }
-}
-
 class TypeIdentifier(override val value: ValueString) : ValueVariableString() {
     companion object {
         fun TypeIdentifier(value: String) = TypeIdentifier(ValueString(value))
