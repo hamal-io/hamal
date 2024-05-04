@@ -26,7 +26,7 @@ internal object ControlInvokeTest : AbstractIntegrationTest() {
                         connection(100, 1, 20, 2, 21)
                     ),
                     controls = listOf(
-                        ControlInit(nextControlIdentifier(), NodeId(1)),
+                        ControlInit(nextControlIdentifier(), NodeId(1), ControlInit.Config()),
                         ControlInvoke(nextControlIdentifier(), NodeId(2), portInput(21, TypeString)),
                         ControlTextArea(
                             nextControlIdentifier(),

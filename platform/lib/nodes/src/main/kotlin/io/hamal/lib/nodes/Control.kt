@@ -4,10 +4,7 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.AdapterJson
-import io.hamal.lib.common.value.ValueBoolean
-import io.hamal.lib.common.value.ValueNumber
-import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.common.value.ValueVariableString
+import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.ControlType.Companion.ControlType
 
 data class ControlCapture(
@@ -29,19 +26,22 @@ data class ControlCheckbox(
 
 data class ControlCondition(
     override val identifier: ControlIdentifier,
-    override val nodeId: NodeId
-
-) : Control {
+    override val nodeId: NodeId,
+    override val port: PortInput,
+) : ControlInput {
     override val type: ControlType = ControlType("Condition")
 }
 
 data class ControlInit(
     override val identifier: ControlIdentifier,
     override val nodeId: NodeId,
-    val selector: String = "__nodes__init__",
-    val description: String = ""
+    val config: Config = Config(),
+    val description: String = "",
 ) : Control {
     override val type: ControlType = ControlType("Init")
+
+    class Config(override val value: ValueObject = ValueObject.empty) : ValueVariableObject()
+
 }
 
 data class ControlInvoke(
@@ -84,6 +84,7 @@ class ControlType(override val value: ValueString) : ValueVariableString() {
         fun ControlType(value: String) = ControlType(ValueString(value))
     }
 }
+
 
 // FIXME becomes sealed after migration
 interface Control {

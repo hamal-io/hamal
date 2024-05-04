@@ -24,7 +24,7 @@ open class AsyncConfig : SchedulingConfigurer {
     open fun workerPoolExecutor(): ThreadPoolTaskScheduler {
         val result = ThreadPoolTaskScheduler()
         result.threadNamePrefix = "worker-"
-        result.poolSize = 10
+        result.poolSize = 4
         result.initialize()
         return result
     }

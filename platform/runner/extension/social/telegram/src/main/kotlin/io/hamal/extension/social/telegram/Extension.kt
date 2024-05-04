@@ -1,7 +1,7 @@
 package io.hamal.extension.social.telegram
 
+import io.hamal.extension.social.telegram.nodes.SendMessage
 import io.hamal.extension.social.telegram.nodes.SendMessageNode
-import io.hamal.extension.social.telegram.nodes.SendMessageNodeCompiler
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.extension.RunnerExtension
@@ -13,7 +13,9 @@ object ExtensionSocialTelegramFactory : RunnerExtensionFactory {
         return RunnerExtension(
             name = ValueString("social.telegram"),
             nodes = listOf(SendMessageNode),
-            nodeCompilers = listOf(SendMessageNodeCompiler)
+            nodeCompilers = listOf(
+                SendMessage
+            )
         )
     }
 }

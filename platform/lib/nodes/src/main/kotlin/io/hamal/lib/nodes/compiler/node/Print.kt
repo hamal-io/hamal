@@ -1,6 +1,7 @@
 package io.hamal.lib.nodes.compiler.node
 
 import io.hamal.lib.common.value.TypeNumber
+import io.hamal.lib.common.value.TypeObject
 import io.hamal.lib.common.value.TypeString
 import io.hamal.lib.common.value.ValueType
 import io.hamal.lib.nodes.Control
@@ -19,6 +20,19 @@ sealed interface Print : NodeCompiler {
         override fun toCode(node: Node, controls: List<Control>): kotlin.String {
             return """
             print(arg_1)
+            return
+        """.trimIndent()
+        }
+
+    }
+
+    data object Object : Print {
+        override val inputTypes: List<ValueType> get() = listOf(TypeObject)
+        override val outputTypes: List<ValueType> get() = listOf()
+
+        override fun toCode(node: Node, controls: List<Control>): kotlin.String {
+            return """
+            print(dump(arg_1))
             return
         """.trimIndent()
         }

@@ -13,6 +13,7 @@ object NodesHotModule : SerdeModuleJson() {
 
         this[ControlIdentifier::class] = ValueVariableAdapters.String(::ControlIdentifier)
         this[ControlType::class] = ValueVariableAdapters.String(::ControlType)
+        this[ControlInit.Config::class] = ValueVariableAdapters.Object(ControlInit::Config)
         this[Control::class] = Control.Adapter
         this[TemplateControl::class] = TemplateControl.Adapter
 

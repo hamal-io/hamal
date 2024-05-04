@@ -26,7 +26,7 @@ internal class InitTest : AbstractIntegrationTest() {
                         connection(100, 1, 20, 2, 21)
                     ),
                     controls = listOf(
-                        ControlInit(nextControlIdentifier(), NodeId(1)),
+                        ControlInit(nextControlIdentifier(), NodeId(1), ControlInit.Config()),
                         ControlTextArea(
                             nextControlIdentifier(),
                             NodeId(2),
@@ -141,7 +141,11 @@ internal class InitTest : AbstractIntegrationTest() {
                         connection(100, 1, 20, 2, 21)
                     ),
                     controls = listOf(
-                        ControlInit(nextControlIdentifier(), NodeId(1), selector = "WILL_NOT_FIND_ANYTHING"),
+                        ControlInit(
+                            nextControlIdentifier(),
+                            NodeId(1),
+                            ControlInit.Config(ValueObject.builder().set("selector", "WILL_NOT_FIND_ANYTHING").build())
+                        ),
                         ControlTextArea(
                             nextControlIdentifier(),
                             NodeId(2),
@@ -175,7 +179,7 @@ internal class InitTest : AbstractIntegrationTest() {
                         connection(100, 1, 20, 2, 21)
                     ),
                     controls = listOf(
-                        ControlInit(nextControlIdentifier(), NodeId(1)),
+                        ControlInit(nextControlIdentifier(), NodeId(1), ControlInit.Config()),
                         ControlTextArea(
                             nextControlIdentifier(),
                             NodeId(2),

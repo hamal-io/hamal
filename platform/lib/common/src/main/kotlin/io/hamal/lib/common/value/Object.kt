@@ -44,7 +44,10 @@ data class ValueObject(val values: LinkedHashMap<String, Value>) : Value {
     }
 }
 
-abstract class ValueVariableObject : ValueVariable.BaseImpl<ValueObject>()
+abstract class ValueVariableObject : ValueVariable.BaseImpl<ValueObject>() {
+    fun findString(identifier: String): ValueString? = value.findString(identifier)
+    fun getString(identifier: String): ValueString = value.getString(identifier)
+}
 
 class ValueObjectBuilder {
 

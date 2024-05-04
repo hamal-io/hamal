@@ -6,11 +6,11 @@ import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.ControlType.Companion.ControlType
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.compiler.graph.ComputationGraph.Companion.ComputationGraph
-import io.hamal.lib.nodes.compiler.node.GeneratorRegistry
 import io.hamal.lib.nodes.compiler.node.NodeCompiler
+import io.hamal.lib.nodes.compiler.node.Registry
 
 class GraphCompiler(
-    private val generatorRegistry: GeneratorRegistry
+    private val registry: Registry
 ) {
 
     fun compile(graph: NodesGraph): ValueCode {
@@ -33,7 +33,7 @@ class GraphCompiler(
 
             val outputTypes = node.outputs.map { it.type }
 
-            val generator = generatorRegistry[node.type, inputTypes, outputTypes]
+            val generator = registry[node.type, inputTypes, outputTypes]
 
             val builder = StringBuilder()
             val args = List(generator.inputTypes.size) { "arg_${it + 1}" }.joinToString { it }
@@ -63,8 +63,11 @@ class GraphCompiler(
         code.append("\n")
         code.append("\n")
 
-        val initNode =
-            nodes.find { it.type == NodeType("Init") } ?: throw IllegalArgumentException("No INIT node found")
+        val initNode = graph.controls.find { it.type == ControlType("Init") }?.nodeId?.let { nodeId -> nodes.find { it.id == nodeId } }
+            ?: nodes.find { it.type == NodeType("Init") }
+            ?: throw IllegalArgumentException("No Init node found")
+
+
         val computationGraph = ComputationGraph(graph)
         val orderedNodeIds = breadthFirstSearch(computationGraph, initNode.id)
 

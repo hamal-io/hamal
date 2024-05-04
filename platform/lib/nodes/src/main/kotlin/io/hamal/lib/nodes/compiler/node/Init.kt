@@ -20,7 +20,7 @@ sealed interface Init : NodeCompiler {
         override val outputTypes: List<ValueType> get() = listOf(TypeBoolean)
 
         override fun toCode(node: Node, controls: List<Control>): kotlin.String {
-            val selector = controls.filterIsInstance<ControlInit>().firstOrNull()?.selector ?: "__nodes__init__"
+            val selector = controls.filterIsInstance<ControlInit>().firstOrNull()?.config?.findString("selector") ?: "__nodes__init__"
             if (selector == "No_Value") {
                 return "return nil"
             }
@@ -37,7 +37,7 @@ sealed interface Init : NodeCompiler {
     data object Number : Init {
         override val outputTypes: List<ValueType> get() = listOf(TypeNumber)
         override fun toCode(node: Node, controls: List<Control>): kotlin.String {
-            val selector = controls.filterIsInstance<ControlInit>().firstOrNull()?.selector ?: "__nodes__init__"
+            val selector = controls.filterIsInstance<ControlInit>().firstOrNull()?.config?.findString("selector") ?: "__nodes__init__"
             if (selector == "No_Value") {
                 return "return nil"
             }
@@ -54,7 +54,7 @@ sealed interface Init : NodeCompiler {
     data object String : Init {
         override val outputTypes: List<ValueType> get() = listOf(TypeString)
         override fun toCode(node: Node, controls: List<Control>): kotlin.String {
-            val selector = controls.filterIsInstance<ControlInit>().firstOrNull()?.selector ?: "__nodes__init__"
+            val selector = controls.filterIsInstance<ControlInit>().firstOrNull()?.config?.findString("selector") ?: "__nodes__init__"
             if (selector == "No_Value") {
                 return "return nil"
             }

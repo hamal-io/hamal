@@ -3,9 +3,9 @@ package io.hamal.lib.nodes.compiler.node
 import io.hamal.lib.common.value.ValueType
 import io.hamal.lib.nodes.NodeType
 
-class GeneratorRegistry(nodeCompilers: List<NodeCompiler>) {
+class Registry(nodeCompilers: List<NodeCompiler>) {
 
-    fun register(nodeCompiler: NodeCompiler): GeneratorRegistry {
+    fun register(nodeCompiler: NodeCompiler): Registry {
         generators.putIfAbsent(nodeCompiler.type, mutableListOf())
         if (find(nodeCompiler) == null) {
             generators[nodeCompiler.type]?.add(nodeCompiler)
@@ -13,7 +13,7 @@ class GeneratorRegistry(nodeCompilers: List<NodeCompiler>) {
         return this
     }
 
-    fun register(registry: GeneratorRegistry) {
+    fun register(registry: Registry) {
         registry.generators.values.flatten().forEach { generator -> register(generator) }
     }
 
@@ -44,11 +44,14 @@ class GeneratorRegistry(nodeCompilers: List<NodeCompiler>) {
     }
 }
 
-val defaultGeneratorRegistry = GeneratorRegistry(
+val defaultRegistry = Registry(
     listOf(
         DecisionAnd.Boolean,
         Init.Boolean,
         Init.Number,
         Init.String,
+        Print.Number,
+        Print.Object,
+        Print.String,
     )
 )

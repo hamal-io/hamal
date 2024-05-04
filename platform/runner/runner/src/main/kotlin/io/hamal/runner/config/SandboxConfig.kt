@@ -15,7 +15,7 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Jar
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
-import io.hamal.lib.nodes.compiler.node.defaultGeneratorRegistry
+import io.hamal.lib.nodes.compiler.node.defaultRegistry
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.plugin.net.http.PluginHttpFactory
 import io.hamal.plugin.net.smtp.PluginSmtpFactory
@@ -79,7 +79,7 @@ class SandboxFactoryDefaultImpl(
                 ExtensionWeb3EthFactory,
                 ExtensionWeb3NyanbotFactory
             ).also { sandbox ->
-                sandbox.generatorRegistry.register(defaultGeneratorRegistry)
+                sandbox.generatorRegistry.register(defaultRegistry)
             }
     }
 }

@@ -13,7 +13,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class NodeCompilerRegistryTest {
+internal class RegistryTest {
 
     @Test
     fun `get - Gets generator with no input and output types`() {
@@ -128,7 +128,7 @@ internal class NodeCompilerRegistryTest {
         }
     }
 
-    private val testInstance = GeneratorRegistry(
+    private val testInstance = Registry(
         listOf(
             someNodeCompilerOne,
             someNodeCompilerTwo,
