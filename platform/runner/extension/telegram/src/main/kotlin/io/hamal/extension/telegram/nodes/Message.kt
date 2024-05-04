@@ -1,24 +1,21 @@
 package io.hamal.extension.telegram.nodes
 
 import io.hamal.lib.common.value.TypeString
-import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.common.value.ValueType
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.NodeTitle.Companion.NodeTitle
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.compiler.node.NodeCompiler
-import io.hamal.lib.nodes.control.Control
-import io.hamal.lib.nodes.control.ControlExtensionTextArea
 
 val SendMessageNode = TemplateNode(
     type = NodeType("Telegram_Send_Message"),
     title = NodeTitle("Telegram - Send Message"),
     size = Size(200, 200),
     controls = listOf(
-        ControlExtensionTextArea(
-            port = TemplatePortInput(TypeString),
-            defaultValue = ValueString("Hello from hamal - nodes")
-        )
+//        ControlExtensionTextArea(
+//            port = TemplatePortInput(TypeString),
+//            defaultValue = ValueString("Hello from hamal - nodes")
+//        )
     ),
     outputs = listOf()
 )

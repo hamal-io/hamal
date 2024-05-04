@@ -1,9 +1,9 @@
 package io.hamal.lib.nodes.compiler.node
 
 import io.hamal.lib.common.value.ValueType
+import io.hamal.lib.nodes.Control
 import io.hamal.lib.nodes.Node
 import io.hamal.lib.nodes.NodeType
-import io.hamal.lib.nodes.control.Control
 
 
 interface NodeCompiler {

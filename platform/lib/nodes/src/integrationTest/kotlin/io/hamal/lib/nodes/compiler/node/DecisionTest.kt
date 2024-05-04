@@ -4,7 +4,6 @@ import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.NodeId.Companion.NodeId
 import io.hamal.lib.nodes.PortId.Companion.PortId
-import io.hamal.lib.nodes.control.ControlInvoke
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -28,7 +27,7 @@ internal class DecisionTest : AbstractIntegrationTest() {
                         ),
                         node(
                             3,
-                            "Test_Capture",
+                            "Capture",
                             listOf(portOutput(23, TypeBoolean)),
                             ValueObject.builder().set("capture_fn", ValueString("captureOne")).build()
                         ),
@@ -40,7 +39,7 @@ internal class DecisionTest : AbstractIntegrationTest() {
                         ),
                         node(
                             5,
-                            "Test_Capture",
+                            "Capture",
                             listOf(portOutput(25, TypeBoolean)),
                             ValueObject.builder().set("capture_fn", ValueString("captureTwo")).build()
                         ),
@@ -91,7 +90,7 @@ internal class DecisionTest : AbstractIntegrationTest() {
                         ),
                         node(
                             3,
-                            "Test_Capture",
+                            "Capture",
                             listOf(portOutput(23, TypeBoolean)),
                             ValueObject.builder().set("capture_fn", ValueString("captureOne")).build()
                         ),
@@ -103,7 +102,7 @@ internal class DecisionTest : AbstractIntegrationTest() {
                         ),
                         node(
                             5,
-                            "Test_Capture",
+                            "Capture",
                             listOf(portOutput(25, TypeBoolean)),
                             ValueObject.builder().set("capture_fn", ValueString("captureTwo")).build()
                         ),

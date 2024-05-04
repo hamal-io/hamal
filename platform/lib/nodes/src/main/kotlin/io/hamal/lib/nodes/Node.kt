@@ -2,7 +2,6 @@ package io.hamal.lib.nodes
 
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.*
-import io.hamal.lib.nodes.control.TemplateControl
 
 
 class NodeId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {

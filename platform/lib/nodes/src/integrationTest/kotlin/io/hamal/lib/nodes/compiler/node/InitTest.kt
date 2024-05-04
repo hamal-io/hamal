@@ -3,7 +3,6 @@ package io.hamal.lib.nodes.compiler.node
 import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.NodeId.Companion.NodeId
-import io.hamal.lib.nodes.control.ControlInit
 import io.hamal.runner.test.TestFailConnector
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.equalTo
@@ -21,7 +20,7 @@ internal class InitTest : AbstractIntegrationTest() {
                 graph = NodesGraph(
                     nodes = listOf(
                         node(1, "Init", listOf(portOutput(20, TypeString))),
-                        node(2, "Test_Capture", listOf(portOutput(22, TypeString)))
+                        node(2, "Capture", listOf(portOutput(22, TypeString)))
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
@@ -50,7 +49,7 @@ internal class InitTest : AbstractIntegrationTest() {
                 graph = NodesGraph(
                     nodes = listOf(
                         node(1, "Init", listOf(portOutput(20, TypeBoolean))),
-                        node(2, "Test_Capture", listOf(portOutput(22, TypeBoolean)))
+                        node(2, "Capture", listOf(portOutput(22, TypeBoolean)))
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
@@ -74,7 +73,7 @@ internal class InitTest : AbstractIntegrationTest() {
                 graph = NodesGraph(
                     nodes = listOf(
                         node(1, "Init", listOf(portOutput(20, TypeString))),
-                        node(2, "Test_Capture", listOf(portOutput(22, TypeString)))
+                        node(2, "Capture", listOf(portOutput(22, TypeString)))
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
@@ -103,7 +102,7 @@ internal class InitTest : AbstractIntegrationTest() {
                 graph = NodesGraph(
                     nodes = listOf(
                         node(1, "Init", listOf(portOutput(20, TypeNumber))),
-                        node(2, "Test_Capture", listOf(portOutput(22, TypeNumber)))
+                        node(2, "Capture", listOf(portOutput(22, TypeNumber)))
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)

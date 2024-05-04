@@ -5,14 +5,13 @@ import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.NodeId.Companion.NodeId
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.compiler.node.NodeCompiler
-import io.hamal.lib.nodes.control.Control
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 
 
 interface Capture : NodeCompiler {
-    override val type: NodeType get() = NodeType("Test_Capture")
+    override val type: NodeType get() = NodeType("Capture")
 
     object Boolean : Capture {
         override val inputTypes: List<ValueType> get() = listOf(TypeBoolean)
