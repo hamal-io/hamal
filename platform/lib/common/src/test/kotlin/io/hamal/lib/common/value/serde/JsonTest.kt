@@ -111,6 +111,54 @@ internal class ValueAdapterJsonTest {
     }
 
     @Nested
+    inner class EnumTest {
+        @Test
+        fun write() {
+            val given = ValueEnum(TestEnum.On)
+            val result = serde.write(given)
+            assertThat(result, equalTo("\"On\""))
+        }
+
+        @Test
+        fun read() {
+            val expected = ValueEnum("Off")
+            val result = serde.read<ValueEnum>("\"Off\"")
+            assertThat(result, equalTo(expected))
+
+            assertThat(result.enumValue<TestEnum>(), equalTo(TestEnum.Off))
+        }
+
+        private val serde = Serde.json().register(SerdeModuleValueJson)
+    }
+
+    @Nested
+    inner class EnumVariableTest {
+
+        @Test
+        fun write() {
+            val given = TestObject(ValueEnum(TestEnum.On))
+            val result = serde.write(given)
+            assertThat(result, equalTo("\"On\""))
+        }
+
+        @Test
+        fun read() {
+            val expected = TestObject(ValueEnum("Off"))
+            val result = serde.read<TestObject>("\"Off\"")
+            assertThat(result, equalTo(expected))
+
+            assertThat(result.enumValue<TestEnum>(), equalTo(TestEnum.Off))
+        }
+
+        private val serde = Serde.json()
+            .register(SerdeModuleValueJson)
+            .register(TestObject::class, ValueVariableAdapters.Enum(::TestObject))
+
+
+        inner class TestObject(override val value: ValueEnum) : ValueVariableEnum()
+    }
+
+    @Nested
     inner class InstantTest {
 
         @Test
@@ -366,4 +414,8 @@ internal class ValueAdapterJsonTest {
         inner class TestObject(override val value: ValueString) : ValueVariableString()
     }
 
+
+    private enum class TestEnum {
+        On, Off
+    }
 }

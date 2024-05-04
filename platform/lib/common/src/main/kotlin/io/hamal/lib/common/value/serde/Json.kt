@@ -44,6 +44,7 @@ object SerdeModuleValueJson : SerdeModuleJson() {
         this[ValueArray::class] = ValueJsonAdapters.Array
         this[ValueBoolean::class] = ValueJsonAdapters.Boolean
         this[ValueDecimal::class] = ValueJsonAdapters.Decimal
+        this[ValueEnum::class] = ValueJsonAdapters.Enum
         this[ValueInstant::class] = ValueJsonAdapters.Instant
         this[ValueNil::class] = ValueJsonAdapters.Nil
         this[ValueNumber::class] = ValueJsonAdapters.Number
@@ -84,6 +85,16 @@ internal object ValueJsonAdapters {
         }
 
         override fun serialize(src: ValueDecimal, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+            return GsonTransform.fromNode(ValueJsonTransform.toJson(src))
+        }
+    }
+
+    data object Enum : AdapterJson<ValueEnum> {
+        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ValueEnum {
+            return ValueJsonTransform.fromJson(GsonTransform.toNode(json), ValueEnum::class.java) as ValueEnum
+        }
+
+        override fun serialize(src: ValueEnum, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
             return GsonTransform.fromNode(ValueJsonTransform.toJson(src))
         }
     }
@@ -168,7 +179,7 @@ internal object ValueJsonTransform {
                     ValueSnowflakeId::class.java -> ValueSnowflakeId(node.stringValue)
                     ValueDecimal::class.java -> ValueDecimal(node.stringValue)
                     ValueInstant::class.java -> ValueInstant(InstantUtils.parse(node.stringValue))
-                    ValueNumber::class.java -> ValueNumber(node.stringValue)
+                    ValueEnum::class.java -> ValueEnum(node.stringValue)
                     else -> TODO()
                 }
             }
@@ -194,6 +205,7 @@ internal object ValueJsonTransform {
             is ValueArray -> toArray(value)
             is ValueBoolean -> JsonBoolean(value.booleanValue)
             is ValueDecimal -> JsonString(value.toString())
+            is ValueEnum -> JsonString(value.stringValue)
             is ValueInstant -> JsonString(value.stringValue)
             is ValueNil -> JsonNull
             is ValueNumber -> JsonNumber(value.doubleValue)

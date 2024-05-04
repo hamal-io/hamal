@@ -19,6 +19,7 @@ object SerdeModuleValueHon : SerdeModuleHon() {
         this[ValueArray::class] = ValueHonAdapters.Array
         this[ValueBoolean::class] = ValueHonAdapters.Boolean
         this[ValueDecimal::class] = ValueHonAdapters.Decimal
+        this[ValueEnum::class] = ValueHonAdapters.Enum
         this[ValueInstant::class] = ValueHonAdapters.Instant
         this[ValueNil::class] = ValueHonAdapters.Nil
         this[ValueNumber::class] = ValueHonAdapters.Number
@@ -58,6 +59,17 @@ internal object ValueHonAdapters {
         }
 
         override fun serialize(src: ValueDecimal, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+            return GsonTransform.fromNode(ValueHonTransform.toHon(src))
+        }
+    }
+
+
+    data object Enum : AdapterHon<ValueEnum> {
+        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ValueEnum {
+            return ValueHonTransform.fromHon(GsonTransform.toNode(json)) as ValueEnum
+        }
+
+        override fun serialize(src: ValueEnum, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
             return GsonTransform.fromNode(ValueHonTransform.toHon(src))
         }
     }
@@ -135,6 +147,7 @@ internal object ValueHonTransform {
             TypeArray.identifier -> fromArray(node.asArray("value"))
             TypeBoolean.identifier -> ValueBoolean(node.stringValue("value"))
             TypeDecimal.identifier -> ValueDecimal(node.stringValue("value"))
+            TypeEnum.identifier -> ValueEnum(node.stringValue("value"))
             TypeInstant.identifier -> ValueInstant(InstantUtils.parse(node.stringValue("value")))
             TypeNil.identifier -> ValueNil
             TypeNumber.identifier -> ValueNumber(node.stringValue("value"))
@@ -168,6 +181,7 @@ internal object ValueHonTransform {
             is ValueArray -> builder.set("value", toArray(value))
             is ValueBoolean -> builder.set("value", value.stringValue)
             is ValueDecimal -> builder.set("value", value.stringValue)
+            is ValueEnum -> builder.set("value", value.stringValue)
             is ValueInstant -> builder.set("value", value.stringValue)
             is ValueNil -> builder
             is ValueNumber -> builder.set("value", value.stringValue)
