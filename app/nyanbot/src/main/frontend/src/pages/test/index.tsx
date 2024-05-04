@@ -2,16 +2,18 @@ import React from "react";
 import {useAuth} from "@/hook/auth.ts";
 import {Editor} from "@/components/nodes/editor.tsx";
 import {ControlInit, ControlInvoke, ControlTextArea, Graph, Node} from "@/components/nodes/types.ts";
+import {useUiState} from "@/hook/ui.ts";
 
 export const TestPage = () => {
     const [auth] = useAuth()
+    const [uiState] = useUiState()
     return (
         <Editor
             onSave={(graph: Graph) => {
 
                 console.log(graph)
 
-                fetch(`${import.meta.env.VITE_BASE_URL}/v1/adhoc`, {
+                fetch(`${import.meta.env.VITE_BASE_URL}/v1/namespaces/${uiState.namespaceId}/adhoc`, {
                     method: "POST",
                     headers: {
                         'Accept': 'application/json',
@@ -19,7 +21,8 @@ export const TestPage = () => {
                         'Authorization': `Bearer ${auth.token}`
                     },
                     body: JSON.stringify({
-                        code: JSON.stringify(graph)
+                        code: JSON.stringify(graph),
+                        codeType: "Nodes"
                     })
                 })
                     .then(response => {

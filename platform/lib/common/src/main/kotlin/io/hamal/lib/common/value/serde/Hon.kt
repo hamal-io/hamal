@@ -20,6 +20,7 @@ object SerdeModuleValueHon : SerdeModuleHon() {
 
         this[ValueArray::class] = ValueHonAdapters.Array
         this[ValueBoolean::class] = ValueHonAdapters.Boolean
+        this[ValueCode::class] = ValueHonAdapters.Code
         this[ValueDecimal::class] = ValueHonAdapters.Decimal
         this[ValueEnum::class] = ValueHonAdapters.Enum
         this[ValueInstant::class] = ValueHonAdapters.Instant
@@ -50,6 +51,16 @@ internal object ValueHonAdapters {
         }
 
         override fun serialize(src: ValueBoolean, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+            return GsonTransform.fromNode(ValueHonTransform.toHon(src))
+        }
+    }
+
+    data object Code : AdapterHon<ValueCode> {
+        override fun deserialize(hon: JsonElement, typeOfT: Type, context: JsonDeserializationContext): ValueCode {
+            return ValueHonTransform.fromHon(GsonTransform.toNode(hon)) as ValueCode
+        }
+
+        override fun serialize(src: ValueCode, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
             return GsonTransform.fromNode(ValueHonTransform.toHon(src))
         }
     }
@@ -144,10 +155,10 @@ internal object ValueHonTransform {
 
     fun fromHon(node: JsonNode<*>): Value {
         require(node is JsonObject)
-        val type = ValueType(node.stringValue("type"))
-        return when (type) {
+        return when (val type = ValueType(node.stringValue("type"))) {
             TypeArray -> fromArray(node.asArray("value"))
             TypeBoolean -> ValueBoolean(node.stringValue("value"))
+            TypeCode -> ValueCode(node.stringValue("value"))
             TypeDecimal -> ValueDecimal(node.stringValue("value"))
             TypeEnum -> ValueEnum(node.stringValue("value"))
             TypeInstant -> ValueInstant(InstantUtils.parse(node.stringValue("value")))
@@ -182,6 +193,7 @@ internal object ValueHonTransform {
         return when (value) {
             is ValueArray -> builder.set("value", toArray(value))
             is ValueBoolean -> builder.set("value", value.stringValue)
+            is ValueCode -> builder.set("value", value.stringValue)
             is ValueDecimal -> builder.set("value", value.stringValue)
             is ValueEnum -> builder.set("value", value.stringValue)
             is ValueInstant -> builder.set("value", value.stringValue)

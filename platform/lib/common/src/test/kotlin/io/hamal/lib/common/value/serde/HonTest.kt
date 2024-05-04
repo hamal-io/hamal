@@ -95,6 +95,25 @@ internal class ValueAdapterHonTest {
     }
 
     @Nested
+    inner class CodeTest {
+        @Test
+        fun write() {
+            val given = ValueCode("print('Hamal Rocks')")
+            val result = serde.write(given)
+            assertThat(result, equalTo("""{"type":"Code","value":"print(\u0027Hamal Rocks\u0027)"}"""))
+        }
+
+        @Test
+        fun read() {
+            val expected = ValueCode("print('Hamal Rocks')")
+            val result = serde.read<ValueCode>("""{"type":"Code","value":"print('Hamal Rocks')"}""")
+            assertThat(result, equalTo(expected))
+        }
+
+        private val serde = Serde.hon().register(SerdeModuleValueHon)
+    }
+
+    @Nested
     inner class DecimalTest {
         @Test
         fun write() {

@@ -92,6 +92,26 @@ internal class ValueAdapterJsonTest {
     }
 
     @Nested
+    inner class CodeTest {
+        @Test
+        fun write() {
+            val given = ValueCode("print('Hamal Rocks')")
+            val result = serde.write(given)
+            assertThat(result, equalTo("\"print(\\u0027Hamal Rocks\\u0027)\""))
+        }
+
+        @Test
+        fun read() {
+            val expected = ValueCode("print('Hamal Rocks')")
+            val result = serde.read<ValueCode>("\"print('Hamal Rocks')\"")
+            assertThat(result, equalTo(expected))
+        }
+
+        private val serde = Serde.json().register(SerdeModuleValueJson)
+    }
+
+
+    @Nested
     inner class DecimalTest {
         @Test
         fun write() {
