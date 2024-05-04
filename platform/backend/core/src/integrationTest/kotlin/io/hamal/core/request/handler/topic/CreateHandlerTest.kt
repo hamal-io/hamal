@@ -3,13 +3,14 @@ package io.hamal.core.request.handler.topic
 import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
-import io.hamal.lib.domain._enum.TopicType.Namespace
+import io.hamal.lib.domain._enum.TopicTypes.Namespace
 import io.hamal.lib.domain.request.TopicCreateRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.LogTopicId.Companion.LogTopicId
 import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
 import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
+import io.hamal.lib.domain.vo.TopicType.Companion.TopicType
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import io.hamal.repository.api.log.LogBrokerRepository
 import org.hamcrest.MatcherAssert.assertThat
@@ -30,7 +31,7 @@ internal class TopicCreateHandlerTest : BaseRequestHandlerTest() {
     }
 
     private fun verifySingleTopicExists() {
-        topicQueryRepository.list(TopicQuery(types = listOf(Namespace), limit = Limit(100))).also { topics ->
+        topicQueryRepository.list(TopicQuery(types = listOf(TopicType(Namespace)), limit = Limit(100))).also { topics ->
             assertThat(topics, hasSize(1))
             with(topics.first()) {
                 assertThat(id, equalTo(TopicId(2345)))
@@ -38,7 +39,7 @@ internal class TopicCreateHandlerTest : BaseRequestHandlerTest() {
                 assertThat(logTopicId, equalTo(LogTopicId(3456)))
                 assertThat(workspaceId, equalTo(testWorkspace.id))
                 assertThat(namespaceId, equalTo(testNamespace.id))
-                assertThat(type, equalTo(Namespace))
+                assertThat(type, equalTo(TopicType(Namespace)))
             }
         }
 

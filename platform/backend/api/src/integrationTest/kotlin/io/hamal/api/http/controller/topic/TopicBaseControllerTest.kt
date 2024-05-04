@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.topic
 
 import io.hamal.api.http.controller.BaseControllerTest
-import io.hamal.lib.domain._enum.TopicType
+import io.hamal.lib.domain._enum.TopicTypes
 import io.hamal.lib.domain.vo.TopicEventPayload
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -49,7 +49,7 @@ internal sealed class TopicBaseControllerTest : BaseControllerTest() {
     }
 
 
-    fun createTopic(topicName: TopicName, type: TopicType = TopicType.Namespace): ApiTopicCreateRequested {
+    fun createTopic(topicName: TopicName, type: TopicTypes = TopicTypes.Namespace): ApiTopicCreateRequested {
         val createTopicResponse = httpTemplate.post("/v1/namespaces/{namespaceId}/topics")
             .path("namespaceId", testNamespace.id)
             .body(ApiTopicCreateRequest(topicName, type))

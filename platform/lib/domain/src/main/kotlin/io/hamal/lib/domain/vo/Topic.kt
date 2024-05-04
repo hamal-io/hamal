@@ -2,6 +2,7 @@ package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.*
+import io.hamal.lib.domain._enum.TopicTypes
 
 class LogTopicId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
     companion object {
@@ -34,3 +35,9 @@ class TopicEventId(override val value: ValueSnowflakeId) : ValueVariableSnowflak
 }
 
 class TopicEventPayload(override val value: ValueObject = ValueObject.empty) : ValueVariableObject()
+
+class TopicType(override val value: ValueEnum) : ValueVariableEnum<TopicTypes>(TopicTypes::class) {
+    companion object {
+        fun TopicType(value: Enum<TopicTypes>) = TopicType(ValueEnum(value.name))
+    }
+}

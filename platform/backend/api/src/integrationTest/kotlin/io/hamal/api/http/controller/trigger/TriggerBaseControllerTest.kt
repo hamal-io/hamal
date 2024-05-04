@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.trigger
 import io.hamal.api.http.controller.BaseControllerTest
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.CodeType
-import io.hamal.lib.domain._enum.TopicType
+import io.hamal.lib.domain._enum.TopicTypes
 import io.hamal.lib.domain._enum.TriggerTypes
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.TriggerDuration.Companion.TriggerDuration
@@ -38,7 +38,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
 
     fun createTopic(topicName: TopicName): ApiTopicCreateRequested {
         val createTopicResponse = httpTemplate.post("/v1/namespaces/539/topics")
-            .body(ApiTopicCreateRequest(topicName, TopicType.Namespace))
+            .body(ApiTopicCreateRequest(topicName, TopicTypes.Namespace))
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))

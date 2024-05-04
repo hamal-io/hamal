@@ -5,7 +5,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain._enum.TopicType
+import io.hamal.lib.domain._enum.TopicTypes
 import io.hamal.lib.domain.request.TopicAppendEntryRequest
 import io.hamal.lib.domain.request.TopicCreateRequest
 import io.hamal.lib.domain.vo.*
@@ -18,7 +18,7 @@ import io.hamal.lib.sdk.fold
 
 data class ApiTopicCreateRequest(
     override val name: TopicName,
-    override val type: TopicType
+    override val type: TopicTypes
 ) : TopicCreateRequest
 
 data class ApiTopicCreateRequested(
@@ -27,7 +27,7 @@ data class ApiTopicCreateRequested(
     val id: TopicId,
     val workspaceId: WorkspaceId,
     val namespaceId: NamespaceId,
-    val type: TopicType
+    val type: TopicTypes
 ) : ApiRequested()
 
 
@@ -65,7 +65,7 @@ data class ApiTopicList(
     data class Topic(
         val id: TopicId,
         val name: TopicName,
-        val type: TopicType
+        val type: TopicTypes
     )
 }
 

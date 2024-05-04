@@ -1,13 +1,13 @@
 package io.hamal.lib.domain.request
 
 import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain._enum.TopicType
+import io.hamal.lib.domain._enum.TopicTypes
 import io.hamal.lib.domain.vo.*
 
 
 interface TopicCreateRequest {
     val name: TopicName
-    val type: TopicType
+    val type: TopicTypes
 }
 
 data class TopicCreateRequested(
@@ -19,7 +19,7 @@ data class TopicCreateRequested(
     val workspaceId: WorkspaceId,
     val namespaceId: NamespaceId,
     val name: TopicName,
-    val type: TopicType
+    val type: TopicTypes
 ) : Requested()
 
 

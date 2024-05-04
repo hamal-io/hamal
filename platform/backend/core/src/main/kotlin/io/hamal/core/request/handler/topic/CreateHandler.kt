@@ -3,6 +3,7 @@ package io.hamal.core.request.handler.topic
 import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.domain.request.TopicCreateRequested
+import io.hamal.lib.domain.vo.TopicType.Companion.TopicType
 import io.hamal.repository.api.TopicCmdRepository
 import org.springframework.stereotype.Component
 
@@ -19,7 +20,7 @@ class TopicCreateHandler(
                 name = req.name,
                 workspaceId = req.workspaceId,
                 namespaceId = req.namespaceId,
-                type = req.type
+                type = TopicType(req.type)
             )
         )
     }

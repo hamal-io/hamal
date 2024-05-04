@@ -3,10 +3,11 @@ package io.hamal.api.http.controller.topic
 import io.hamal.core.adapter.namespace_tree.NamespaceTreeGetSubTreePort
 import io.hamal.core.adapter.topic.TopicListPort
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain._enum.TopicType.*
+import io.hamal.lib.domain._enum.TopicTypes
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.domain.vo.TopicType.Companion.TopicType
 import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.sdk.api.ApiTopicList
 import io.hamal.lib.sdk.api.ApiTopicList.Topic
@@ -29,7 +30,8 @@ internal class TopicListController(
         @RequestParam(required = false, name = "limit", defaultValue = "100") limit: Limit,
         @RequestParam(required = false, name = "ids", defaultValue = "") ids: List<TopicId>,
         @RequestParam(required = false, name = "workspace_ids", defaultValue = "") workspaceIds: List<WorkspaceId>,
-        @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId>
+        @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId>,
+        @RequestParam(required = false, name = "types", defaultValue = "") types: List<TopicTypes>
     ): ResponseEntity<ApiTopicList> {
         val allNamespaceIds = namespaceIds.flatMap { namespaceId ->
             namespaceTreeGetSubTree(namespaceId).values
@@ -42,7 +44,7 @@ internal class TopicListController(
                 topicIds = ids,
                 workspaceIds = workspaceIds,
                 namespaceIds = allNamespaceIds,
-                types = listOf(Namespace, Workspace, Public)
+                types = types.map(::TopicType)
             )
         ).let { topics ->
             ResponseEntity.ok(
@@ -51,7 +53,7 @@ internal class TopicListController(
                         Topic(
                             id = topic.id,
                             name = topic.name,
-                            type = topic.type
+                            type = topic.type.enumValue
                         )
                     }
                 )

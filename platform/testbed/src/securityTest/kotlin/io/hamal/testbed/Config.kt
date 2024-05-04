@@ -12,7 +12,9 @@ import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.ExecLogLevel
-import io.hamal.lib.domain._enum.TopicType
+import io.hamal.lib.domain._enum.TopicTypes.*
+import io.hamal.lib.domain._enum.TopicTypes.Namespace
+import io.hamal.lib.domain._enum.TopicTypes.Workspace
 import io.hamal.lib.domain._enum.TriggerStates.Active
 import io.hamal.lib.domain._enum.TriggerStates.Inactive
 import io.hamal.lib.domain.vo.*
@@ -39,6 +41,7 @@ import io.hamal.lib.domain.vo.NamespaceTreeId.Companion.NamespaceTreeId
 import io.hamal.lib.domain.vo.PasswordSalt.Companion.PasswordSalt
 import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
+import io.hamal.lib.domain.vo.TopicType.Companion.TopicType
 import io.hamal.lib.domain.vo.TriggerDuration.Companion.TriggerDuration
 import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import io.hamal.lib.domain.vo.TriggerName.Companion.TriggerName
@@ -55,6 +58,7 @@ import org.springframework.context.annotation.Bean
 import java.time.temporal.ChronoUnit
 import java.util.*
 import kotlin.time.Duration.Companion.milliseconds
+
 
 @TestConfiguration
 class TestApiConfig {
@@ -246,7 +250,7 @@ class TestSetupConfig {
                 name = TopicName("$id-namespace-topic"),
                 namespaceId = NamespaceId(id),
                 workspaceId = WorkspaceId(id),
-                type = TopicType.Namespace,
+                type = TopicType(Namespace),
                 logTopicId = LogTopicId(id)
             )
         )
@@ -258,7 +262,7 @@ class TestSetupConfig {
                 name = TopicName("$id-workspace-topic"),
                 namespaceId = NamespaceId(id),
                 workspaceId = WorkspaceId(id),
-                type = TopicType.Workspace,
+                type = TopicType(Workspace),
                 logTopicId = LogTopicId(id + 1)
             )
         )
@@ -270,7 +274,7 @@ class TestSetupConfig {
                 name = TopicName("$id-public-topic"),
                 namespaceId = NamespaceId(id),
                 workspaceId = WorkspaceId(id),
-                type = TopicType.Public,
+                type = TopicType(Public),
                 logTopicId = LogTopicId(id + 2)
             )
         )

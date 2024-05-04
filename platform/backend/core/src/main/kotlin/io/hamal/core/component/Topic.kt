@@ -4,10 +4,11 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.ValueSnowflakeId
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain._enum.TopicType
+import io.hamal.lib.domain._enum.TopicTypes.Internal
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.domain.vo.TopicType.Companion.TopicType
 import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.repository.api.TopicCmdRepository
 import io.hamal.repository.api.TopicRepository
@@ -32,7 +33,7 @@ class SetupInternalTopics {
                             logTopicId = generateDomainId(::LogTopicId),
                             workspaceId = WorkspaceId.root,
                             namespaceId = NamespaceId.root,
-                            type = TopicType.Internal
+                            type = TopicType(Internal)
                         )
                     }
                 )

@@ -7,10 +7,13 @@ import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.serialization.AdapterGeneric
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain._enum.TopicType
+import io.hamal.lib.domain._enum.TopicTypes.*
+import io.hamal.lib.domain._enum.TopicTypes.Namespace
+import io.hamal.lib.domain._enum.TopicTypes.Workspace
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.TopicEventId.Companion.TopicEventId
 import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
+import io.hamal.lib.domain.vo.TopicType.Companion.TopicType
 import java.lang.reflect.Type
 
 sealed class Topic : DomainObject<TopicId>, HasNamespaceId, HasWorkspaceId {
@@ -33,15 +36,17 @@ sealed class Topic : DomainObject<TopicId>, HasNamespaceId, HasWorkspaceId {
             typeOfT: Type,
             context: JsonDeserializationContext
         ): Topic {
-            val type = json.asJsonObject.get("type").asString
-            return context.deserialize(json, classMapping[type]!!.java)
+            val type = context.deserialize<TopicType>(
+                json.asJsonObject.get("type"), TopicType::class.java
+            )
+            return context.deserialize(json, classMapping[type.enumValue]!!.java)
         }
 
         private val classMapping = mapOf(
-            TopicType.Internal.name to Internal::class,
-            TopicType.Namespace.name to Namespace::class,
-            TopicType.Workspace.name to Workspace::class,
-            TopicType.Public.name to Public::class
+            Internal to Internal::class,
+            Namespace to Namespace::class,
+            Workspace to Workspace::class,
+            Public to Public::class
         )
     }
 
@@ -57,7 +62,7 @@ sealed class Topic : DomainObject<TopicId>, HasNamespaceId, HasWorkspaceId {
         override val workspaceId: WorkspaceId,
         override val namespaceId: NamespaceId
     ) : Topic() {
-        override val type: TopicType = TopicType.Internal
+        override val type: TopicType = TopicType(Internal)
     }
 
     /**
@@ -72,7 +77,7 @@ sealed class Topic : DomainObject<TopicId>, HasNamespaceId, HasWorkspaceId {
         override val workspaceId: WorkspaceId,
         override val namespaceId: NamespaceId
     ) : Topic() {
-        override val type: TopicType = TopicType.Namespace
+        override val type: TopicType = TopicType(Namespace)
     }
 
     /**
@@ -87,7 +92,7 @@ sealed class Topic : DomainObject<TopicId>, HasNamespaceId, HasWorkspaceId {
         override val workspaceId: WorkspaceId,
         override val namespaceId: NamespaceId
     ) : Topic() {
-        override val type: TopicType = TopicType.Workspace
+        override val type: TopicType = TopicType(Workspace)
     }
 
     /**
@@ -103,7 +108,7 @@ sealed class Topic : DomainObject<TopicId>, HasNamespaceId, HasWorkspaceId {
         override val workspaceId: WorkspaceId,
         override val namespaceId: NamespaceId
     ) : Topic() {
-        override val type: TopicType = TopicType.Public
+        override val type: TopicType = TopicType(Public)
     }
 
 }
@@ -146,7 +151,7 @@ interface TopicQueryRepository {
 
     data class TopicQuery(
         var afterId: TopicId = TopicId(SnowflakeId(Long.MAX_VALUE)),
-        var types: List<TopicType> = TopicType.values().toList(),
+        var types: List<TopicType> = entries.map(::TopicType).toList(),
         var limit: Limit = Limit(1),
         var topicIds: List<TopicId> = listOf(),
         var names: List<TopicName> = listOf(),
