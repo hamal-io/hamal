@@ -4,6 +4,7 @@ import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.common.value.*
 import io.hamal.lib.domain._enum.CodeType
+import io.hamal.lib.domain._enum.ExecStates
 import java.time.Instant
 
 class ExecId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
@@ -29,22 +30,11 @@ data class ExecCode(
     val type: CodeType? = null
 )
 
-enum class ExecStatus(val value: Int) {
-    Planned(1),
-    Scheduled(2),
-    Queued(3),
-    Started(4),
-    Completed(5),
-    Failed(6);
-
+class ExecStatus(override val value: ValueEnum) : ValueVariableEnum<ExecStates>(ExecStates::class) {
     companion object {
-        fun valueOf(value: Int) = requireNotNull(mapped[value]) { "$value is not an exec status" }
-
-        private val mapped = ExecStatus.values()
-            .associateBy { it.value }
+        fun ExecStatus(value: Enum<ExecStates>) = ExecStatus(ValueEnum(value.name))
     }
 }
-
 
 class ExecToken(override val value: ValueString) : ValueVariableString() {
     companion object {

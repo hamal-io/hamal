@@ -2,10 +2,10 @@ package io.hamal.api.http.controller.state
 
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain._enum.ExecStates.Started
 import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecState
-import io.hamal.lib.domain.vo.ExecStatus.Started
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode

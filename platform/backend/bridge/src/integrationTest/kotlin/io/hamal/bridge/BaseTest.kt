@@ -7,6 +7,8 @@ import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain._enum.ExecStates
+import io.hamal.lib.domain._enum.ExecStates.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
@@ -170,7 +172,7 @@ internal abstract class BaseTest {
 
     fun createExec(
         execId: ExecId,
-        status: ExecStatus,
+        status: ExecStates,
         correlation: Correlation? = null,
         codeId: CodeId? = null,
         codeVersion: CodeVersion? = null,
@@ -204,7 +206,7 @@ internal abstract class BaseTest {
         )
 
 
-        if (status == ExecStatus.Planned) {
+        if (status == Planned) {
             return planedExec
         }
 
@@ -215,7 +217,7 @@ internal abstract class BaseTest {
             )
         )
 
-        if (status == ExecStatus.Scheduled) {
+        if (status == Scheduled) {
             return scheduled
         }
 
@@ -225,17 +227,17 @@ internal abstract class BaseTest {
                 execId = scheduled.id
             )
         )
-        if (status == ExecStatus.Queued) {
+        if (status == Queued) {
             return queued
         }
 
         val startedExec = execCmdRepository.start(StartCmd(CmdId(4))).first()
-        if (status == ExecStatus.Started) {
+        if (status == Started) {
             return startedExec
         }
 
         return when (status) {
-            ExecStatus.Completed -> execCmdRepository.complete(
+            Completed -> execCmdRepository.complete(
                 ExecCmdRepository.CompleteCmd(
                     id = CmdId(5),
                     execId = startedExec.id,
@@ -248,7 +250,7 @@ internal abstract class BaseTest {
                 )
             )
 
-            ExecStatus.Failed -> execCmdRepository.fail(
+            Failed -> execCmdRepository.fail(
                 ExecCmdRepository.FailCmd(
                     id = CmdId(5),
                     execId = startedExec.id,

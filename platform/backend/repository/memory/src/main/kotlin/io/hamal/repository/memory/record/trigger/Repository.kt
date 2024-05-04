@@ -1,7 +1,7 @@
 package io.hamal.repository.memory.record.trigger
 
 import io.hamal.lib.common.domain.Count
-import io.hamal.lib.domain._enum.TriggerStatuses
+import io.hamal.lib.domain._enum.TriggerStates
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerStatus.Companion.TriggerStatus
 import io.hamal.repository.api.Trigger
@@ -151,7 +151,7 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
             if (commandAlreadyApplied(cmd.id, triggerId)) {
                 versionOf(triggerId, cmd.id)
             } else {
-                val rec: TriggerRecord = if (cmd.status == TriggerStatus(TriggerStatuses.Active)) {
+                val rec: TriggerRecord = if (cmd.status == TriggerStatus(TriggerStates.Active)) {
                     TriggerRecord.SetActive(
                         cmdId = cmd.id,
                         entityId = triggerId

@@ -2,7 +2,7 @@ package io.hamal.api.http.controller.trigger
 
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.domain.Limit.Companion.Limit
-import io.hamal.lib.domain._enum.TriggerStatuses
+import io.hamal.lib.domain._enum.TriggerStates
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain._enum.TriggerType.Cron
 import io.hamal.lib.domain._enum.TriggerType.FixedRate
@@ -62,7 +62,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             assertThat(id, equalTo(result.id))
             assertThat(name, equalTo(TriggerName("trigger")))
             assertThat(namespace.name, equalTo(NamespaceName("hamal")))
-            assertThat(status, equalTo(TriggerStatuses.Active))
+            assertThat(status, equalTo(TriggerStates.Active))
         }
     }
 
@@ -100,7 +100,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
         with(getTrigger(result.id)) {
             assertThat(id, equalTo(result.id))
-            assertThat(status, equalTo(TriggerStatuses.Active))
+            assertThat(status, equalTo(TriggerStates.Active))
             assertThat(name, equalTo(TriggerName("trigger")))
             assertThat(namespace.id, equalTo(namespace.id))
             assertThat(namespace.name, equalTo(NamespaceName("hamal::namespace")))

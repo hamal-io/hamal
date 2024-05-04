@@ -22,7 +22,7 @@ class ExecGetFunction(
             val exec = sdk.exec.get(ExecId(arg1.stringValue))
             null to ctx.tableCreate(
                 "id" to ValueString(exec.id.stringValue),
-                "status" to ValueString(exec.status.name),
+                "status" to exec.status,
                 "inputs" to ctx.tableCreate(),
                 "correlation" to ctx.tableCreate(
                     "id" to (exec.correlation?.value ?: ValueNil)

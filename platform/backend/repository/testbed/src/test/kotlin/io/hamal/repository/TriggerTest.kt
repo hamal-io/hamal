@@ -5,8 +5,8 @@ import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.value.ValueObject
-import io.hamal.lib.domain._enum.TriggerStatuses.Active
-import io.hamal.lib.domain._enum.TriggerStatuses.Inactive
+import io.hamal.lib.domain._enum.TriggerStates.Active
+import io.hamal.lib.domain._enum.TriggerStates.Inactive
 import io.hamal.lib.domain._enum.TriggerType.Event
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.CronPattern.Companion.CronPattern

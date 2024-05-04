@@ -1,7 +1,7 @@
 package io.hamal.repository.sqlite.record.trigger
 
 import io.hamal.lib.common.domain.Count
-import io.hamal.lib.domain._enum.TriggerStatuses.Active
+import io.hamal.lib.domain._enum.TriggerStates.Active
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerStatus.Companion.TriggerStatus
 import io.hamal.repository.api.Trigger

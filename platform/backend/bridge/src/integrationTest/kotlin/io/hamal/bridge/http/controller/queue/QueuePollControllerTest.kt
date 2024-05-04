@@ -2,11 +2,11 @@ package io.hamal.bridge.http.controller.queue
 
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain._enum.ExecStates.Queued
+import io.hamal.lib.domain._enum.ExecStates.Started
 import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
-import io.hamal.lib.domain.vo.ExecStatus.Queued
-import io.hamal.lib.domain.vo.ExecStatus.Started
 import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
 import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import org.hamcrest.MatcherAssert.assertThat

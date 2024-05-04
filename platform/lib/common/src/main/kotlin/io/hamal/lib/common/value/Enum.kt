@@ -15,6 +15,7 @@ data class ValueEnum(val value: String) : Value {
 
     inline fun <reified T : Enum<T>> enumValue(): T = enumValueOf<T>(value)
     val stringValue: String get() = value
+    override fun toString() = stringValue
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

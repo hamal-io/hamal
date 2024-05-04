@@ -1,8 +1,8 @@
 package io.hamal.api.http.controller.trigger
 
 
-import io.hamal.lib.domain._enum.TriggerStatuses.Active
-import io.hamal.lib.domain._enum.TriggerStatuses.Inactive
+import io.hamal.lib.domain._enum.TriggerStates.Active
+import io.hamal.lib.domain._enum.TriggerStates.Inactive
 import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import io.hamal.lib.domain.vo.TriggerName.Companion.TriggerName
@@ -13,7 +13,7 @@ import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 
-internal class TriggerStatusesControllerTest : TriggerBaseControllerTest() {
+internal class TriggerStatesControllerTest : TriggerBaseControllerTest() {
 
     @Test
     fun `Default status is active`() {

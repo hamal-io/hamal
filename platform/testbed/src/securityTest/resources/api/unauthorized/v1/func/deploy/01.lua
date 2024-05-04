@@ -7,7 +7,7 @@ http = require('net.http').create({
 err, res = http.post({
     url = '/v1/funcs/1/deploy',
     headers = { Authorization = 'Bearer ' .. context.env.token },
-    body =  { version = '1', message = 'deploy message' }
+    body =  { version = 1, message = 'deploy message' }
 })
 
 assert(err == nil)

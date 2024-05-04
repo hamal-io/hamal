@@ -7,7 +7,7 @@ import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.serialization.AdapterGeneric
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain._enum.TriggerStatuses.Active
+import io.hamal.lib.domain._enum.TriggerStates.Active
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId

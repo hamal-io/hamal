@@ -3,11 +3,12 @@ package io.hamal.core.adapter.trigger
 import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain._enum.ExecStates.Completed
+import io.hamal.lib.domain._enum.ExecStates.Failed
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.domain.vo.ExecStatus.Completed
-import io.hamal.lib.domain.vo.ExecStatus.Failed
+import io.hamal.lib.domain.vo.ExecStatus.Companion.ExecStatus
 import io.hamal.repository.api.*
 import org.springframework.stereotype.Component
 import java.util.concurrent.CompletableFuture
@@ -59,10 +60,10 @@ class TriggerInvokeEndpointAdapter(
             with(execRepository.find(execId)) {
                 val exec = this
                 if (exec != null) {
-                    if (exec.status == Completed) {
+                    if (exec.status == ExecStatus(Completed)) {
                         return exec
                     } else {
-                        if (this?.status == Failed) {
+                        if (this?.status == ExecStatus(Failed)) {
                             return exec as Exec.Failed
                         } else if (startedAt.plusSeconds(5).isBefore(TimeUtils.now())) {
                             return exec

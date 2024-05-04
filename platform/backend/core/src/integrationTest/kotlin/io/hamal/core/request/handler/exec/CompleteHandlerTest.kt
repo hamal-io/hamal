@@ -3,13 +3,17 @@ package io.hamal.core.request.handler.exec
 import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.EventToSubmit
+import io.hamal.lib.domain._enum.ExecStates
+import io.hamal.lib.domain._enum.ExecStates.Completed
+import io.hamal.lib.domain._enum.ExecStates.Started
 import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.ExecCompleteRequested
-import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
+import io.hamal.lib.domain.vo.EventPayload
+import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
-import io.hamal.lib.domain.vo.ExecStatus.Completed
-import io.hamal.lib.domain.vo.ExecStatus.Started
+import io.hamal.lib.domain.vo.ExecResult
+import io.hamal.lib.domain.vo.ExecState
 import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import io.hamal.repository.api.Exec
@@ -40,7 +44,7 @@ internal class ExecCompleteHandlerTest : BaseRequestHandlerTest() {
     }
 
     @TestFactory
-    fun `Tries to complete exec, but not in status Started`() = ExecStatus.values()
+    fun `Tries to complete exec, but not in status Started`() = ExecStates.values()
         .filterNot { it == Started }
         .map { execStatus ->
             dynamicTest("Can not complete: $execStatus") {

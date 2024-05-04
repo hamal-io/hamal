@@ -8,9 +8,10 @@ import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.serialization.AdapterGeneric
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain._enum.ExecStates.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
-import io.hamal.lib.domain.vo.ExecType.Companion.ExecType
+import io.hamal.lib.domain.vo.ExecStatus.Companion.ExecStatus
 
 interface ExecRepository : ExecCmdRepository, ExecQueryRepository
 
@@ -96,8 +97,6 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
     abstract val inputs: ExecInputs
     abstract val code: ExecCode
 
-    val type: ExecType = ExecType(this::class.simpleName!!)
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -130,20 +129,20 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
             typeOfT: java.lang.reflect.Type,
             context: JsonDeserializationContext
         ): Exec {
-            val type = json.asJsonObject.get("type").asString
-
-
-            return context.deserialize(json, classMapping[type]!!.java)
+            val status = context.deserialize<ExecStatus>(
+                json.asJsonObject.get("status"), ExecStatus::class.java
+            )
+            return context.deserialize(json, classMapping[status.enumValue]!!.java)
         }
 
-        private val classMapping = listOf(
-            Planned::class,
-            Scheduled::class,
-            Queued::class,
-            Started::class,
-            Completed::class,
-            Failed::class
-        ).associateBy { it.simpleName }
+        private val classMapping = mapOf(
+            Planned to Exec.Planned::class,
+            Scheduled to Exec.Scheduled::class,
+            Queued to Exec.Queued::class,
+            Started to Exec.Started::class,
+            Completed to Exec.Completed::class,
+            Failed to Exec.Failed::class
+        )
     }
 
     class Planned(
@@ -158,7 +157,7 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
         override val code: ExecCode,
 // FIXME    val plannedAt: PlannedAt
     ) : Exec() {
-        override val status = ExecStatus.Planned
+        override val status = ExecStatus(Planned)
 
         override fun toString(): String {
             return "Planned($id)"
@@ -173,7 +172,7 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
         val plannedExec: Planned,
         val scheduledAt: ExecScheduledAt,
     ) : Exec() {
-        override val status = ExecStatus.Scheduled
+        override val status = ExecStatus(Scheduled)
         override val triggerId get() = plannedExec.triggerId
         override val namespaceId get() = plannedExec.namespaceId
         override val workspaceId get() = plannedExec.workspaceId
@@ -193,7 +192,7 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
         val scheduledExec: Scheduled,
         val queuedAt: ExecQueuedAt,
     ) : Exec() {
-        override val status = ExecStatus.Queued
+        override val status = ExecStatus(Queued)
         override val triggerId get() = scheduledExec.triggerId
         override val namespaceId get() = scheduledExec.namespaceId
         override val workspaceId get() = scheduledExec.workspaceId
@@ -212,7 +211,7 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
         override val updatedAt: UpdatedAt,
         val queuedExec: Queued
     ) : Exec() {
-        override val status = ExecStatus.Started
+        override val status = ExecStatus(Started)
         override val triggerId get() = queuedExec.triggerId
         override val namespaceId get() = queuedExec.namespaceId
         override val workspaceId get() = queuedExec.workspaceId
@@ -233,7 +232,7 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
         val result: ExecResult,
         val state: ExecState
     ) : Exec() {
-        override val status = ExecStatus.Completed
+        override val status = ExecStatus(Completed)
         override val triggerId get() = startedExec.triggerId
         override val namespaceId get() = startedExec.namespaceId
         override val workspaceId get() = startedExec.workspaceId
@@ -255,7 +254,7 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
         val failedAt: ExecFailedAt,
         val result: ExecResult
     ) : Exec() {
-        override val status = ExecStatus.Failed
+        override val status = ExecStatus(Failed)
         override val triggerId get() = startedExec.triggerId
         override val namespaceId get() = startedExec.namespaceId
         override val workspaceId get() = startedExec.workspaceId

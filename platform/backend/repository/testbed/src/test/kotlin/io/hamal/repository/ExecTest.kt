@@ -7,10 +7,11 @@ import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain._enum.ExecStates
+import io.hamal.lib.domain._enum.ExecStates.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
-import io.hamal.lib.domain.vo.ExecStatus.*
 import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
@@ -102,7 +103,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to schedule exec but not planned`() =
-            ExecStatus.values().filter { it != Planned }.flatMap { status ->
+            entries.filter { it != Planned }.flatMap { status ->
                 runWith(ExecRepository::class, status.name) {
                     createExec(ExecId(23), status)
 
@@ -149,7 +150,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to queue exec but not scheduled`() =
-            ExecStatus.values().filter { it != Scheduled }.flatMap { status ->
+            entries.filter { it != Scheduled }.flatMap { status ->
                 runWith(ExecRepository::class, status.name) {
                     createExec(ExecId(23), status)
 
@@ -200,7 +201,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Nothing to start`() = ExecStatus.values().filter { it != Queued }.flatMap { status ->
+        fun `Nothing to start`() = entries.filter { it != Queued }.flatMap { status ->
             runWith(ExecRepository::class, status.name) {
                 createExec(ExecId(23), status)
 
@@ -247,7 +248,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to complete exec but not started`() =
-            ExecStatus.values().filter { it != Started }.flatMap { status ->
+            entries.filter { it != Started }.flatMap { status ->
                 runWith(ExecRepository::class, status.name) {
                     createExec(ExecId(23), status)
 
@@ -290,8 +291,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             queue(QueueCmd(CmdId(3), ExecId(2)))
             start(StartCmd(CmdId(4)))
 
-            val result =
-                fail(FailCmd(CmdId(5), ExecId(2), ExecResult(ValueObject.builder().set("message", "SomeError").build())))
+            val result = fail(FailCmd(CmdId(5), ExecId(2), ExecResult(ValueObject.builder().set("message", "SomeError").build())))
             assertBaseExec(result)
             assertThat(result.status, equalTo(Failed))
             assertThat(result.result, equalTo(ExecResult(ValueObject.builder().set("message", "SomeError").build())))
@@ -300,7 +300,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Tries to fail exec but not started`() = ExecStatus.values().filter { it != Started }.flatMap { status ->
+        fun `Tries to fail exec but not started`() = entries.filter { it != Started }.flatMap { status ->
             runWith(ExecRepository::class, status.name) {
                 createExec(ExecId(23), status)
 
@@ -636,7 +636,7 @@ private fun ExecRepository.verifyCount(expected: Int, block: ExecQuery.() -> Uni
 
 fun ExecRepository.createExec(
     execId: ExecId,
-    status: ExecStatus,
+    status: ExecStates,
     namespaceId: NamespaceId = NamespaceId(444),
     workspaceId: WorkspaceId = WorkspaceId(333),
     correlation: Correlation? = null
@@ -659,22 +659,13 @@ fun ExecRepository.createExec(
         return planedExec
     }
 
-    val scheduled = schedule(
-        ScheduleCmd(
-            id = CmdId(101),
-            execId = planedExec.id,
-        )
-    )
+    val scheduled = schedule(ScheduleCmd(id = CmdId(101), execId = planedExec.id,))
 
     if (status == Scheduled) {
         return scheduled
     }
 
-    val queued = queue(
-        QueueCmd(
-            id = CmdId(102), execId = scheduled.id
-        )
-    )
+    val queued = queue(QueueCmd(id = CmdId(102), execId = scheduled.id))
     if (status == Queued) {
         return queued
     }

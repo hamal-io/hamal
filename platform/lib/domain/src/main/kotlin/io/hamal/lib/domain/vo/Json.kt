@@ -44,6 +44,7 @@ object SerdeModuleValueVariable : SerdeModuleGeneric() {
         this[ExecInputs::class] = Object(::ExecInputs)
         this[ExecResult::class] = Object(::ExecResult)
         this[ExecState::class] = Object(::ExecState)
+        this[ExecStatus::class] = Enum(::ExecStatus)
         this[ExecScheduledAt::class] = Instant(::ExecScheduledAt)
         this[ExecQueuedAt::class] = Instant(::ExecQueuedAt)
         this[ExecCompletedAt::class] = Instant(::ExecCompletedAt)

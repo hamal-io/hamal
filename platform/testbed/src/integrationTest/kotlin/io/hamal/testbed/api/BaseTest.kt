@@ -8,8 +8,11 @@ import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueObject
+import io.hamal.lib.domain._enum.ExecStates
+import io.hamal.lib.domain._enum.ExecStates.Completed
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
+import io.hamal.lib.domain.vo.ExecStatus.Companion.ExecStatus
 import io.hamal.lib.domain.vo.ExpiresAt.Companion.ExpiresAt
 import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.lib.domain.vo.PasswordSalt.Companion.PasswordSalt
@@ -339,10 +342,10 @@ abstract class BaseApiTest {
 
             while (wait) {
                 with(sdk.exec.get(execReq.id)) {
-                    if (status == ExecStatus.Completed) {
+                    if (status == ExecStatus(Completed)) {
                         wait = false
                     } else {
-                        if (status == ExecStatus.Failed) {
+                        if (status == ExecStatus(ExecStates.Failed)) {
                             return Failed(message = "Execution failed: ${this.result!!.value["message"]}")
                         } else if (startedAt.plusSeconds(1).isBefore(TimeUtils.now())) {
                             return Timeout

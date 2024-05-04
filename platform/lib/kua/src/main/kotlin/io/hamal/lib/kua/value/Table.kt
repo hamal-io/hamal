@@ -35,6 +35,17 @@ class KuaTable(
                 state.tableAppend(index)
             }
 
+            is ValueEnum -> {
+                state.stringPush(ValueString(value.stringValue))
+                state.tableAppend(index)
+            }
+
+            is ValueVariableEnum<*> -> {
+                state.stringPush(ValueString(value.stringValue))
+                state.tableAppend(index)
+            }
+
+
             is ValueError -> {
                 state.errorPush(value)
                 state.tableAppend(index)
@@ -180,6 +191,19 @@ class KuaTable(
                 state.tableRawSet(index)
 
             }
+
+            is ValueEnum -> {
+                state.stringPush(key)
+                state.stringPush(ValueString(value.stringValue))
+                state.tableRawSet(index)
+            }
+
+            is ValueVariableEnum<*> -> {
+                state.stringPush(key)
+                state.stringPush(ValueString(value.stringValue))
+                state.tableRawSet(index)
+            }
+
 
             is ValueError -> {
                 state.stringPush(key)

@@ -1,8 +1,8 @@
 package io.hamal.repository.record.trigger
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain._enum.TriggerStatuses.Active
-import io.hamal.lib.domain._enum.TriggerStatuses.Inactive
+import io.hamal.lib.domain._enum.TriggerStates.Active
+import io.hamal.lib.domain._enum.TriggerStates.Inactive
 import io.hamal.lib.domain._enum.TriggerType
 import io.hamal.lib.domain._enum.TriggerType.*
 import io.hamal.lib.domain.vo.*

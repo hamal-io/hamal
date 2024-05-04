@@ -2,7 +2,7 @@ package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.*
-import io.hamal.lib.domain._enum.TriggerStatuses
+import io.hamal.lib.domain._enum.TriggerStates
 
 class TriggerId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
     companion object {
@@ -18,9 +18,9 @@ class TriggerName(override val value: ValueString) : ValueVariableString() {
     }
 }
 
-class TriggerStatus(override val value: ValueEnum) : ValueVariableEnum<TriggerStatuses>(TriggerStatuses::class) {
+class TriggerStatus(override val value: ValueEnum) : ValueVariableEnum<TriggerStates>(TriggerStates::class) {
     companion object {
-        fun TriggerStatus(value: Enum<TriggerStatuses>) = TriggerStatus(ValueEnum(value.name))
+        fun TriggerStatus(value: Enum<TriggerStates>) = TriggerStatus(ValueEnum(value.name))
     }
 }
 

@@ -13,8 +13,8 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.ExecLogLevel
 import io.hamal.lib.domain._enum.TopicType
-import io.hamal.lib.domain._enum.TriggerStatuses.Active
-import io.hamal.lib.domain._enum.TriggerStatuses.Inactive
+import io.hamal.lib.domain._enum.TriggerStates.Active
+import io.hamal.lib.domain._enum.TriggerStates.Inactive
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountId.Companion.AccountId
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId

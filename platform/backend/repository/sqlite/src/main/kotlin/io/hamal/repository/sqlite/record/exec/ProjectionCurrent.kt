@@ -100,7 +100,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
             """.trimIndent()
         ) {
             set("id", obj.id)
-            set("status", obj.status.value)
+            set("status", obj.status)
             set("namespaceId", obj.namespaceId)
             set("workspaceId", obj.workspaceId)
             set("funcId", obj.correlation?.funcId ?: FuncId(0))

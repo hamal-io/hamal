@@ -3,7 +3,9 @@ package io.hamal.repository.api.record.exec
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain._enum.ExecStates.*
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.ExecStatus.Companion.ExecStatus
 import io.hamal.repository.api.Exec
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
@@ -40,7 +42,7 @@ data class ExecEntity(
                 namespaceId = rec.namespaceId,
                 workspaceId = rec.workspaceId,
                 sequence = rec.sequence(),
-                status = ExecStatus.Planned,
+                status = ExecStatus(Planned),
                 correlation = rec.correlation,
                 inputs = rec.inputs,
                 code = rec.code,
@@ -51,7 +53,7 @@ data class ExecEntity(
             is ExecRecord.Scheduled -> copy(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                status = ExecStatus.Scheduled,
+                status = ExecStatus(Scheduled),
                 scheduledAt = Instant.now(), // FIXME
                 recordedAt = rec.recordedAt()
             )
@@ -59,7 +61,7 @@ data class ExecEntity(
             is ExecRecord.Queued -> copy(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                status = ExecStatus.Queued,
+                status = ExecStatus(Queued),
                 recordedAt = rec.recordedAt()
 //                enqueuedAt = Instant.now() // FIXME
 
@@ -68,7 +70,7 @@ data class ExecEntity(
             is ExecRecord.Started -> copy(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                status = ExecStatus.Started,
+                status = ExecStatus(Started),
                 recordedAt = rec.recordedAt()
 //                startedAt = Instant.now() // FIXME
                 //picked by :platform:runner id..
@@ -77,7 +79,7 @@ data class ExecEntity(
             is ExecRecord.Completed -> copy(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                status = ExecStatus.Completed,
+                status = ExecStatus(Completed),
 //                enqueuedAt = Instant.now() // FIXME
                 result = rec.result,
                 recordedAt = rec.recordedAt(),
@@ -87,7 +89,7 @@ data class ExecEntity(
             is ExecRecord.Failed -> copy(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                status = ExecStatus.Failed,
+                status = ExecStatus(Failed),
                 result = rec.result,
                 recordedAt = rec.recordedAt()
             )
@@ -108,19 +110,19 @@ data class ExecEntity(
             code = code ?: ExecCode()
         )
 
-        if (status == ExecStatus.Planned) return plannedExec
+        if (status == ExecStatus(Planned)) return plannedExec
 
         val scheduledExec = Exec.Scheduled(cmdId, id, recordedAt.toUpdatedAt(), plannedExec, ExecScheduledAt.now())
-        if (status == ExecStatus.Scheduled) return scheduledExec
+        if (status == ExecStatus(Scheduled)) return scheduledExec
 
         val queuedExec = Exec.Queued(cmdId, id, recordedAt.toUpdatedAt(), scheduledExec, ExecQueuedAt.now())
-        if (status == ExecStatus.Queued) return queuedExec
+        if (status == ExecStatus(Queued)) return queuedExec
 
         val startedExec = Exec.Started(cmdId, id, recordedAt.toUpdatedAt(), queuedExec)
-        if (status == ExecStatus.Started) return startedExec
+        if (status == ExecStatus(Started)) return startedExec
 
         return when (status) {
-            ExecStatus.Completed -> Exec.Completed(
+            ExecStatus(Completed) -> Exec.Completed(
                 cmdId,
                 id,
                 recordedAt.toUpdatedAt(),
@@ -130,7 +132,7 @@ data class ExecEntity(
                 state!!
             )
 
-            ExecStatus.Failed -> Exec.Failed(
+            ExecStatus(Failed) -> Exec.Failed(
                 cmdId,
                 id,
                 recordedAt.toUpdatedAt(),

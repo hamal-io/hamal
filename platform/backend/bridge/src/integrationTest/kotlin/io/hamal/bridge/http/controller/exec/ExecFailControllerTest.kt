@@ -2,11 +2,13 @@ package io.hamal.bridge.http.controller.exec
 
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain._enum.ExecStates
+import io.hamal.lib.domain._enum.ExecStates.Failed
+import io.hamal.lib.domain._enum.ExecStates.Started
 import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecResult
-import io.hamal.lib.domain.vo.ExecStatus
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
@@ -26,8 +28,8 @@ import org.junit.jupiter.api.TestFactory
 internal class ExecFailControllerTest : BaseExecControllerTest() {
 
     @TestFactory
-    fun `Can not fail exec which is not started`() = ExecStatus.values()
-        .filterNot { it == ExecStatus.Started }
+    fun `Can not fail exec which is not started`() = ExecStates.values()
+        .filterNot { it == Started }
         .map { execStatus ->
             dynamicTest("Can not fail: $execStatus") {
                 val exec = createExec(
@@ -52,7 +54,7 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
     fun `Fails started exec`() {
         val startedExec = createExec(
             execId = ExecId(123),
-            status = ExecStatus.Started,
+            status = Started,
             correlation = Correlation(
                 funcId = generateDomainId(::FuncId),
                 id = CorrelationId("__correlation__")
@@ -87,7 +89,7 @@ internal class ExecFailControllerTest : BaseExecControllerTest() {
     private fun verifyExecFailed(execId: ExecId) {
         with(execQueryRepository.get(execId) as Exec.Failed) {
             assertThat(id, equalTo(execId))
-            assertThat(status, equalTo(ExecStatus.Failed))
+            assertThat(status, equalTo(Failed))
             assertThat(result, equalTo(ExecResult(ValueObject.builder().set("message", "SomeErrorCause").build())))
         }
     }
