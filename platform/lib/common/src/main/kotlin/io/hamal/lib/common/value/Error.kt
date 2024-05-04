@@ -1,11 +1,6 @@
 package io.hamal.lib.common.value
 
-import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
-
-data object TypeError : Type() {
-    override val identifier = TypeIdentifier("Error")
-}
-
+val TypeError = ValueType("Error")
 
 @JvmInline
 value class ValueError(private val value: String) : Value {

@@ -2,14 +2,11 @@ package io.hamal.lib.common.value
 
 import io.hamal.lib.common.Decimal
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 import java.math.BigDecimal
 import java.math.MathContext
 import java.math.RoundingMode
 
-data object TypeDecimal : Type() {
-    override val identifier = TypeIdentifier("Decimal")
-}
+val TypeDecimal = ValueType("Decimal")
 
 @JvmInline
 value class ValueDecimal(

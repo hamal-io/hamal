@@ -1,11 +1,11 @@
 package io.hamal.lib.kua.value
 
-import io.hamal.lib.common.value.Type
+import io.hamal.lib.common.value.ValueType
 import io.hamal.lib.common.value.Value
 import kotlin.reflect.KClass
 
 interface KuaValue : Value {
-    override val type: Type
+    override val type: ValueType
         get() = TODO("Not yet implemented")
 }
 

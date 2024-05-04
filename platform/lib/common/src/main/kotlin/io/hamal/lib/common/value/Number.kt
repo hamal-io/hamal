@@ -1,11 +1,8 @@
 package io.hamal.lib.common.value
 
-import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 import java.math.BigInteger
 
-data object TypeNumber : Type() {
-    override val identifier = TypeIdentifier("Number")
-}
+val TypeNumber = ValueType("Number")
 
 @JvmInline
 value class ValueNumber(private val value: Double) : ValueComparable<ValueNumber> {

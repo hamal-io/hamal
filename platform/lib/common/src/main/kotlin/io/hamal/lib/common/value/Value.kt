@@ -1,15 +1,21 @@
 package io.hamal.lib.common.value
 
+data class ValueType(val value: String) {
+    override fun toString(): String {
+        return "Type$value"
+    }
+}
+
 interface Value {
-    val type: Type
+    val type: ValueType
 }
 
 interface ValueComparable<VALUE_TYPE : Value> : Value, Comparable<VALUE_TYPE>
 
-interface ValueVariable<VALUE_TYPE : Value> : Value{
+interface ValueVariable<VALUE_TYPE : Value> : Value {
 
     val value: VALUE_TYPE
-    override val type: Type get() = value.type
+    override val type: ValueType get() = value.type
 
     abstract class BaseImpl<VALUE_TYPE : Value> : ValueVariable<VALUE_TYPE> {
 

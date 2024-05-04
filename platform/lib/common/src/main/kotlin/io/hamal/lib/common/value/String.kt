@@ -1,10 +1,6 @@
 package io.hamal.lib.common.value
 
-import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
-
-data object TypeString : Type() {
-    override val identifier = TypeIdentifier("String")
-}
+val TypeString = ValueType("String")
 
 @JvmInline
 value class ValueString(private val value: String) : ValueComparable<ValueString> {

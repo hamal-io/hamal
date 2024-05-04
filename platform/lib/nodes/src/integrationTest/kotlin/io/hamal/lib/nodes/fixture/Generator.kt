@@ -15,29 +15,29 @@ interface GeneratorCapture : Generator {
     override val type: NodeType get() = NodeType("Test_Capture")
 
     object Boolean : GeneratorCapture {
-        override val inputTypes: List<Type> get() = listOf(TypeBoolean)
-        override val outputTypes: List<Type> get() = listOf(TypeBoolean)
+        override val inputTypes: List<ValueType> get() = listOf(TypeBoolean)
+        override val outputTypes: List<ValueType> get() = listOf(TypeBoolean)
         override fun toCode(node: Node, controls: List<Control>) = captureCode(node, controls)
 
     }
 
     object Decimal : GeneratorCapture {
-        override val inputTypes: List<Type> get() = listOf(TypeDecimal)
-        override val outputTypes: List<Type> get() = listOf(TypeDecimal)
+        override val inputTypes: List<ValueType> get() = listOf(TypeDecimal)
+        override val outputTypes: List<ValueType> get() = listOf(TypeDecimal)
         override fun toCode(node: Node, controls: List<Control>) = captureCode(node, controls)
 
     }
 
     object Number : GeneratorCapture {
-        override val inputTypes: List<Type> get() = listOf(TypeNumber)
-        override val outputTypes: List<Type> get() = listOf(TypeNumber)
+        override val inputTypes: List<ValueType> get() = listOf(TypeNumber)
+        override val outputTypes: List<ValueType> get() = listOf(TypeNumber)
         override fun toCode(node: Node, controls: List<Control>) = captureCode(node, controls)
 
     }
 
     object String : GeneratorCapture {
-        override val inputTypes: List<Type> get() = listOf(TypeString)
-        override val outputTypes: List<Type> get() = listOf(TypeString)
+        override val inputTypes: List<ValueType> get() = listOf(TypeString)
+        override val outputTypes: List<ValueType> get() = listOf(TypeString)
         override fun toCode(node: Node, controls: List<Control>) = captureCode(node, controls)
     }
 
@@ -56,8 +56,8 @@ sealed interface GeneratorInvoked : Generator {
     override val type: NodeType get() = NodeType("Test_Invoked")
 
     data object Empty : GeneratorInvoked {
-        override val inputTypes: List<Type> get() = listOf()
-        override val outputTypes: List<Type> get() = listOf()
+        override val inputTypes: List<ValueType> get() = listOf()
+        override val outputTypes: List<ValueType> get() = listOf()
 
         override fun toCode(node: Node, controls: List<Control>): kotlin.String {
             val invokeFunction = node.properties.value.findString("invoke_fn")?.stringValue ?: "invokeOne"
@@ -70,8 +70,8 @@ sealed interface GeneratorInvoked : Generator {
     }
 
     data object Boolean : GeneratorInvoked {
-        override val inputTypes: List<Type> get() = listOf(TypeBoolean)
-        override val outputTypes: List<Type> get() = listOf()
+        override val inputTypes: List<ValueType> get() = listOf(TypeBoolean)
+        override val outputTypes: List<ValueType> get() = listOf()
 
         override fun toCode(node: Node, controls: List<Control>): kotlin.String {
             val invokeFunction = node.properties.value.findString("invoke_fn")?.stringValue ?: "invokeOne"
@@ -84,8 +84,8 @@ sealed interface GeneratorInvoked : Generator {
     }
 
     data object String : GeneratorInvoked {
-        override val inputTypes: List<Type> get() = listOf(TypeString)
-        override val outputTypes: List<Type> get() = listOf()
+        override val inputTypes: List<ValueType> get() = listOf(TypeString)
+        override val outputTypes: List<ValueType> get() = listOf()
 
         override fun toCode(node: Node, controls: List<Control>): kotlin.String {
             val invokeFunction = node.properties.value.findString("invoke_fn")?.stringValue ?: "invokeOne"

@@ -5,7 +5,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-internal class CodeTypeTest {
+internal class CodeValueTypeTest {
     @Test
     fun `Value does not exist`() {
         val exception = assertThrows<IllegalArgumentException> { CodeType.of(777) }

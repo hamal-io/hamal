@@ -1,13 +1,9 @@
 package io.hamal.lib.common.value
 
-import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 import java.math.BigDecimal
 import java.math.BigInteger
 
-
-data object TypeObject : Type() {
-    override val identifier = TypeIdentifier("Object")
-}
+val TypeObject = ValueType("Object")
 
 data class ValueObject(val values: LinkedHashMap<String, Value>) : Value {
     override val type get() = TypeObject
@@ -25,7 +21,7 @@ data class ValueObject(val values: LinkedHashMap<String, Value>) : Value {
 
     fun getObject(identifier: String): ValueObject = get(identifier) as ValueObject
 
-    override fun toString() = "${type.identifier}(${values.entries.joinToString(", ") { it.toString() }})"
+    override fun toString() = values.entries.joinToString(", ") { it.toString() }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

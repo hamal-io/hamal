@@ -1,6 +1,6 @@
 package io.hamal.lib.nodes.compiler
 
-import io.hamal.lib.common.value.Type
+import io.hamal.lib.common.value.ValueType
 import io.hamal.lib.nodes.ControlTextArea
 import io.hamal.lib.nodes.NodeId
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
@@ -21,7 +21,7 @@ class Compiler(
         val code = StringBuilder()
 
         val nodeCodeGenerators = mutableMapOf<NodeId, Generator>()
-        val outputPortMapping = mutableMapOf<PortId, Pair<String, Type>>()
+        val outputPortMapping = mutableMapOf<PortId, Pair<String, ValueType>>()
 
         val nodes = graph.nodes
 

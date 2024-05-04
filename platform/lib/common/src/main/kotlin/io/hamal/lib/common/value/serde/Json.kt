@@ -2,7 +2,6 @@ package io.hamal.lib.common.value.serde
 
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
-import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.AdapterJson
 import io.hamal.lib.common.serialization.GsonTransform
@@ -10,34 +9,12 @@ import io.hamal.lib.common.serialization.SerdeModuleJson
 import io.hamal.lib.common.serialization.json.*
 import io.hamal.lib.common.util.InstantUtils
 import io.hamal.lib.common.value.*
-import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 import java.lang.reflect.Type
 
 object SerdeModuleValueJson : SerdeModuleJson() {
 
     init {
-        this[io.hamal.lib.common.value.Type::class] = object : AdapterJson<io.hamal.lib.common.value.Type> {
-            override fun serialize(
-                src: io.hamal.lib.common.value.Type,
-                typeOfSrc: Type,
-                context: JsonSerializationContext
-            ): JsonElement {
-                return JsonPrimitive(src.identifier.stringValue)
-            }
-
-            override fun deserialize(
-                json: JsonElement,
-                typeOfT: Type,
-                context: JsonDeserializationContext
-            ): io.hamal.lib.common.value.Type {
-                return when (TypeIdentifier(json.asString)) {
-                    TypeBoolean.identifier -> TypeBoolean
-                    TypeNumber.identifier -> TypeNumber
-                    TypeString.identifier -> TypeString
-                    else -> TODO("Not implemented ${json.asString}")
-                }
-            }
-        }
+        this[ValueType::class] = ValueTypeAdapter
 
         this[ValueArray::class] = ValueJsonAdapters.Array
         this[ValueBoolean::class] = ValueJsonAdapters.Boolean

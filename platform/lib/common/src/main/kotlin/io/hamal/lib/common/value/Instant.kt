@@ -1,12 +1,9 @@
 package io.hamal.lib.common.value
 
 import io.hamal.lib.common.util.InstantUtils
-import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 import java.time.Instant
 
-data object TypeInstant : Type() {
-    override val identifier = TypeIdentifier("Instant")
-}
+val TypeInstant = ValueType("Instant")
 
 @JvmInline
 value class ValueInstant(private val value: Instant) : ValueComparable<ValueInstant> {

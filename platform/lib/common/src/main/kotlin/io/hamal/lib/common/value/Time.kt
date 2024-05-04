@@ -1,11 +1,8 @@
 package io.hamal.lib.common.value
 
-import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 import java.time.LocalTime
 
-data object TypeTime : Type() {
-    override val identifier = TypeIdentifier("Time")
-}
+val TypeTime = ValueType("Time")
 
 @JvmInline
 value class ValueTime(private val value: LocalTime) : Value {

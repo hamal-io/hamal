@@ -1,6 +1,6 @@
 package io.hamal.lib.nodes.generator
 
-import io.hamal.lib.common.value.Type
+import io.hamal.lib.common.value.ValueType
 import io.hamal.lib.common.value.TypeNumber
 import io.hamal.lib.common.value.TypeString
 import io.hamal.lib.nodes.Node
@@ -12,8 +12,8 @@ interface GeneratorPrint : Generator {
     override val type: NodeType get() = NodeType("Print")
 
     object Number : GeneratorPrint {
-        override val inputTypes: List<Type> get() = listOf(TypeNumber)
-        override val outputTypes: List<Type> get() = listOf()
+        override val inputTypes: List<ValueType> get() = listOf(TypeNumber)
+        override val outputTypes: List<ValueType> get() = listOf()
 
 
         override fun toCode(node: Node, controls: List<Control>): kotlin.String {
@@ -26,8 +26,8 @@ interface GeneratorPrint : Generator {
     }
 
     object String : GeneratorPrint {
-        override val inputTypes: List<Type> get() = listOf(TypeString)
-        override val outputTypes: List<Type> get() = listOf()
+        override val inputTypes: List<ValueType> get() = listOf(TypeString)
+        override val outputTypes: List<ValueType> get() = listOf()
 
         override fun toCode(node: Node, controls: List<Control>): kotlin.String {
             return """

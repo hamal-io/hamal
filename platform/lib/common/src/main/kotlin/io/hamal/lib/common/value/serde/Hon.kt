@@ -16,6 +16,8 @@ import java.lang.reflect.Type
 object SerdeModuleValueHon : SerdeModuleHon() {
 
     init {
+        this[ValueType::class] = ValueTypeAdapter
+
         this[ValueArray::class] = ValueHonAdapters.Array
         this[ValueBoolean::class] = ValueHonAdapters.Boolean
         this[ValueDecimal::class] = ValueHonAdapters.Decimal
@@ -142,19 +144,19 @@ internal object ValueHonTransform {
 
     fun fromHon(node: JsonNode<*>): Value {
         require(node is JsonObject)
-        val type = TypeIdentifier(ValueString(node.stringValue("type")))
+        val type = ValueType(node.stringValue("type"))
         return when (type) {
-            TypeArray.identifier -> fromArray(node.asArray("value"))
-            TypeBoolean.identifier -> ValueBoolean(node.stringValue("value"))
-            TypeDecimal.identifier -> ValueDecimal(node.stringValue("value"))
-            TypeEnum.identifier -> ValueEnum(node.stringValue("value"))
-            TypeInstant.identifier -> ValueInstant(InstantUtils.parse(node.stringValue("value")))
-            TypeNil.identifier -> ValueNil
-            TypeNumber.identifier -> ValueNumber(node.stringValue("value"))
-            TypeObject.identifier -> fromObject(node.asObject("value"))
-            TypeSnowflakeId.identifier -> ValueSnowflakeId(node.stringValue("value"))
-            TypeString.identifier -> ValueString(node.stringValue("value"))
-            else -> TODO()
+            TypeArray -> fromArray(node.asArray("value"))
+            TypeBoolean -> ValueBoolean(node.stringValue("value"))
+            TypeDecimal -> ValueDecimal(node.stringValue("value"))
+            TypeEnum -> ValueEnum(node.stringValue("value"))
+            TypeInstant -> ValueInstant(InstantUtils.parse(node.stringValue("value")))
+            TypeNil -> ValueNil
+            TypeNumber -> ValueNumber(node.stringValue("value"))
+            TypeObject -> fromObject(node.asObject("value"))
+            TypeSnowflakeId -> ValueSnowflakeId(node.stringValue("value"))
+            TypeString -> ValueString(node.stringValue("value"))
+            else -> TODO("$type not supported yet")
         }
     }
 
@@ -175,7 +177,7 @@ internal object ValueHonTransform {
     }
 
     fun toHon(value: Value): JsonNode<*> {
-        val builder = JsonObject.builder().set("type", value.type.identifier.stringValue)
+        val builder = JsonObject.builder().set("type", value.type.value)
 
         return when (value) {
             is ValueArray -> builder.set("value", toArray(value))

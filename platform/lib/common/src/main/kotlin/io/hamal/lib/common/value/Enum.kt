@@ -1,12 +1,9 @@
 package io.hamal.lib.common.value
 
-import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 import io.hamal.lib.common.value.ValueVariable.BaseImpl
 import kotlin.reflect.KClass
 
-data object TypeEnum : Type() {
-    override val identifier = TypeIdentifier("Enum")
-}
+val TypeEnum = ValueType("Enum")
 
 data class ValueEnum(val value: String) : Value {
     constructor(value: Enum<*>) : this(value.name)

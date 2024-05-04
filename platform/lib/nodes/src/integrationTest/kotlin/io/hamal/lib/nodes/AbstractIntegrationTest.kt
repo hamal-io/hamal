@@ -141,12 +141,12 @@ internal abstract class AbstractIntegrationTest {
 
     fun portInput(
         id: Long,
-        type: Type
+        type: ValueType
     ): PortInput = PortInput(PortId(SnowflakeId(id)), type)
 
     fun portOutput(
         id: Long,
-        type: Type
+        type: ValueType
     ): PortOutput = PortOutput(PortId(SnowflakeId(id)), type)
 
     fun unitOfWork(

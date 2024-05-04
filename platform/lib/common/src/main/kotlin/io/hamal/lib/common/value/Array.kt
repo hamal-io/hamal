@@ -1,13 +1,10 @@
 package io.hamal.lib.common.value
 
-import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.*
 
-data object TypeArray : Type() {
-    override val identifier = TypeIdentifier("Array")
-}
+val TypeArray = ValueType("Array")
 
 data class ValueArray(
     val value: List<Value>

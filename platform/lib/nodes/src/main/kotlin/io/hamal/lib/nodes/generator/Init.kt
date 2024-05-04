@@ -1,6 +1,6 @@
 package io.hamal.lib.nodes.generator
 
-import io.hamal.lib.common.value.Type
+import io.hamal.lib.common.value.ValueType
 import io.hamal.lib.common.value.TypeBoolean
 import io.hamal.lib.common.value.TypeNumber
 import io.hamal.lib.common.value.TypeString
@@ -13,10 +13,10 @@ import io.hamal.lib.nodes.control.ControlInit
 
 sealed interface GeneratorInit : Generator {
     override val type: NodeType get() = NodeType("Init")
-    override val inputTypes: List<Type> get() = listOf()
+    override val inputTypes: List<ValueType> get() = listOf()
 
     data object Boolean : GeneratorInit {
-        override val outputTypes: List<Type> get() = listOf(TypeBoolean)
+        override val outputTypes: List<ValueType> get() = listOf(TypeBoolean)
 
         override fun toCode(node: Node, controls: List<Control>): kotlin.String {
             val selector = controls.filterIsInstance<ControlInit>().firstOrNull()?.selector ?: "__nodes__init__"
@@ -34,7 +34,7 @@ sealed interface GeneratorInit : Generator {
     }
 
     data object Number : GeneratorInit {
-        override val outputTypes: List<Type> get() = listOf(TypeNumber)
+        override val outputTypes: List<ValueType> get() = listOf(TypeNumber)
         override fun toCode(node: Node, controls: List<Control>): kotlin.String {
             val selector = controls.filterIsInstance<ControlInit>().firstOrNull()?.selector ?: "__nodes__init__"
             if (selector == "No_Value") {
@@ -51,7 +51,7 @@ sealed interface GeneratorInit : Generator {
     }
 
     data object String : GeneratorInit {
-        override val outputTypes: List<Type> get() = listOf(TypeString)
+        override val outputTypes: List<ValueType> get() = listOf(TypeString)
         override fun toCode(node: Node, controls: List<Control>): kotlin.String {
             val selector = controls.filterIsInstance<ControlInit>().firstOrNull()?.selector ?: "__nodes__init__"
             if (selector == "No_Value") {

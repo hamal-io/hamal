@@ -1,6 +1,6 @@
 package io.hamal.lib.nodes.generator
 
-import io.hamal.lib.common.value.Type
+import io.hamal.lib.common.value.ValueType
 import io.hamal.lib.common.value.TypeBoolean
 import io.hamal.lib.common.value.ValueTrue
 import io.hamal.lib.nodes.ControlCheckbox
@@ -13,8 +13,8 @@ sealed interface GeneratorDecision : Generator {
     override val type: NodeType get() = NodeType("Decision")
 
     data object Boolean : GeneratorDecision {
-        override val inputTypes: List<Type> get() = listOf(TypeBoolean)
-        override val outputTypes: List<Type> get() = listOf(TypeBoolean, TypeBoolean)
+        override val inputTypes: List<ValueType> get() = listOf(TypeBoolean)
+        override val outputTypes: List<ValueType> get() = listOf(TypeBoolean, TypeBoolean)
 
         override fun toCode(node: Node, controls: List<Control>): String {
             val checkbox = controls.filterIsInstance<ControlCheckbox>().first()

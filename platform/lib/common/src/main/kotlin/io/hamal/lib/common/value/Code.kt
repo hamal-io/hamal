@@ -1,11 +1,6 @@
 package io.hamal.lib.common.value
 
-import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
-
-data object TypeCode : Type() {
-    override val identifier = TypeIdentifier("Code")
-}
-
+val TypeCode = ValueType("Code")
 
 @JvmInline
 value class ValueCode(private val value: String) : Value {

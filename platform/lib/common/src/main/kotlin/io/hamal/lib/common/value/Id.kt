@@ -1,12 +1,9 @@
 package io.hamal.lib.common.value
 
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.common.value.TypeIdentifier.Companion.TypeIdentifier
 
 
-data object TypeSnowflakeId : Type() {
-    override val identifier = TypeIdentifier("Snowflake_Id")
-}
+val TypeSnowflakeId = ValueType("Snowflake_Id")
 
 @JvmInline
 value class ValueSnowflakeId(private val value: SnowflakeId) : ValueComparable<ValueSnowflakeId> {
