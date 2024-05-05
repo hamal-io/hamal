@@ -9,6 +9,7 @@ import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecResult
+import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
 import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
@@ -33,7 +34,7 @@ internal class FailTest : AbstractExecuteTest() {
             unitOfWork(
                 """
             context.fail()
-            context.complete()
+            context.complete({ status_code = 200, result = {} })
         """.trimIndent()
             )
         )
@@ -45,16 +46,10 @@ internal class FailTest : AbstractExecuteTest() {
             testPlugins = arrayOf(
                 ValueString("returns_error") to FunctionReturnsError(),
             ),
-            connector = TestFailConnector { execId, execResult ->
+            connector = TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(
-                    execResult,
-                    equalTo(
-                        ExecResult(
-                            ValueObject.builder().set("message", "Sometimes an error can be a good thing").build()
-                        )
-                    )
-                )
+                assertThat(statusCode, equalTo(ExecStatusCode(432)))
+                assertThat(result, equalTo(ExecResult(ValueObject.builder().set("message", "Sometimes an error can be a good thing").build())))
             }
         )
         runner.run(
@@ -71,9 +66,9 @@ internal class FailTest : AbstractExecuteTest() {
     @Test
     fun `Fails execution without argument`() {
         val runner = createTestRunner(
-            connector = TestFailConnector { execId, execResult ->
+            connector = TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(execResult, equalTo(ExecResult(ValueObject.empty)))
+                assertThat(result, equalTo(ExecResult(ValueObject.empty)))
             }
         )
         runner.run(unitOfWork("context.fail()"))
@@ -83,9 +78,9 @@ internal class FailTest : AbstractExecuteTest() {
     @Test
     fun `Fails execution with string argument`() {
         val runner = createTestRunner(
-            connector = TestFailConnector { execId, execResult ->
+            connector = TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(execResult, equalTo(ExecResult(ValueObject.builder().set("message", "test").build())))
+                assertThat(result, equalTo(ExecResult(ValueObject.builder().set("message", "test").build())))
             }
         )
         runner.run(unitOfWork("context.fail('test')"))
@@ -94,9 +89,9 @@ internal class FailTest : AbstractExecuteTest() {
     @Test
     fun `Fails execution with number argument`() {
         val runner = createTestRunner(
-            connector = TestFailConnector { execId, execResult ->
+            connector = TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(execResult, equalTo(ExecResult(ValueObject.builder().set("value", 1337).build())))
+                assertThat(result, equalTo(ExecResult(ValueObject.builder().set("value", 1337).build())))
             }
         )
         runner.run(unitOfWork("context.fail(1337)"))
@@ -105,9 +100,9 @@ internal class FailTest : AbstractExecuteTest() {
     @Test
     fun `Fails execution with boolean argument`() {
         val runner = createTestRunner(
-            connector = TestFailConnector { execId, execResult ->
+            connector = TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(execResult, equalTo(ExecResult(ValueObject.builder().set("value", false).build())))
+                assertThat(result, equalTo(ExecResult(ValueObject.builder().set("value", false).build())))
             }
         )
         runner.run(unitOfWork("context.fail(false)"))
@@ -116,10 +111,10 @@ internal class FailTest : AbstractExecuteTest() {
     @Test
     fun `Fails execution table argument`() {
         val runner = createTestRunner(
-            connector = TestFailConnector { execId, execResult ->
+            connector = TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
                 assertThat(
-                    execResult, equalTo(
+                    result, equalTo(
                         ExecResult(
                             ValueObject.builder()
                                 .set("reason", "undisclosed")
@@ -130,14 +125,14 @@ internal class FailTest : AbstractExecuteTest() {
                 )
             }
         )
-        runner.run(unitOfWork("context.fail({reason = 'undisclosed', answer = 42})"))
+        runner.run(unitOfWork("context.fail({ status_code = 532, result = {reason = 'undisclosed', answer = 42} })"))
     }
 
     private class FunctionReturnsError : Function0In1Out<ValueError>(
         FunctionOutput1Schema(ValueError::class)
     ) {
         override fun invoke(ctx: FunctionContext): ValueError {
-            return ValueError("Sometimes an error can be a good thing")
+            return ValueError( "Sometimes an error can be a good thing")
         }
     }
 

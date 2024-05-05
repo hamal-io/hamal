@@ -8,6 +8,7 @@ import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecResult
 import io.hamal.lib.domain.vo.ExecState
+import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
 import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
@@ -29,7 +30,7 @@ internal class CompleteTest : AbstractExecuteTest() {
         runner.run(
             unitOfWork(
                 """
-            context.complete()
+            context.complete({ status_code = 200, result = { } })
             error('failed')
         """.trimIndent()
             )
@@ -38,24 +39,27 @@ internal class CompleteTest : AbstractExecuteTest() {
 
     @Test
     fun `Completes execution without argument`() {
-        val runner = createTestRunner(
-            connector = TestConnector { execId, execResult, state, events ->
+        createTestRunner(
+            connector = TestConnector { execId, statusCode, result, state, events ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(execResult, equalTo(ExecResult(ValueObject.empty)))
+                assertThat(statusCode, equalTo(ExecStatusCode(200)))
+                assertThat(result, equalTo(ExecResult(ValueObject.empty)))
                 assertThat(state, equalTo(ExecState()))
                 assertThat(events, hasSize(0))
             }
-        )
-        runner.run(unitOfWork("context.complete()"))
+        ).also { runner ->
+            runner.run(unitOfWork("context.complete()"))
+        }
     }
 
 
     @Test
     fun `Completes execution with string argument`() {
         val runner = createTestRunner(
-            connector = TestConnector { execId, execResult, state, events ->
+            connector = TestConnector { execId, statusCode, result, state, events ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(execResult, equalTo(ExecResult(ValueObject.builder().set("value", "test").build())))
+                assertThat(statusCode, equalTo(ExecStatusCode(200)))
+                assertThat(result, equalTo(ExecResult(ValueObject.builder().set("value", "test").build())))
                 assertThat(state, equalTo(ExecState()))
                 assertThat(events, hasSize(0))
             }
@@ -66,9 +70,10 @@ internal class CompleteTest : AbstractExecuteTest() {
     @Test
     fun `Completes execution with number argument`() {
         val runner = createTestRunner(
-            connector = TestConnector { execId, execResult, state, events ->
+            connector = TestConnector { execId, statusCode, result, state, events ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(execResult, equalTo(ExecResult(ValueObject.builder().set("value", 1337).build())))
+                assertThat(statusCode, equalTo(ExecStatusCode(200)))
+                assertThat(result, equalTo(ExecResult(ValueObject.builder().set("value", 1337).build())))
                 assertThat(state, equalTo(ExecState()))
                 assertThat(events, hasSize(0))
             }
@@ -79,9 +84,10 @@ internal class CompleteTest : AbstractExecuteTest() {
     @Test
     fun `Completes execution with boolean argument`() {
         val runner = createTestRunner(
-            connector = TestConnector { execId, execResult, state, events ->
+            connector = TestConnector { execId, statusCode, result, state, events ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(execResult, equalTo(ExecResult(ValueObject.builder().set("value", false).build())))
+                assertThat(statusCode, equalTo(ExecStatusCode(200)))
+                assertThat(result, equalTo(ExecResult(ValueObject.builder().set("value", false).build())))
                 assertThat(state, equalTo(ExecState()))
                 assertThat(events, hasSize(0))
             }
@@ -90,12 +96,27 @@ internal class CompleteTest : AbstractExecuteTest() {
     }
 
     @Test
-    fun `Completes execution table argument`() {
+    fun `Completes execution with status code and without result`() {
         val runner = createTestRunner(
-            connector = TestConnector { execId, execResult, state, events ->
+            connector = TestConnector { execId, statusCode, result, state, events ->
                 assertThat(execId, equalTo(ExecId(1234)))
+                assertThat(statusCode, equalTo(ExecStatusCode(201)))
+                assertThat(result, equalTo(ExecResult(ValueObject.empty)))
+                assertThat(state, equalTo(ExecState()))
+                assertThat(events, hasSize(0))
+            }
+        )
+        runner.run(unitOfWork("context.complete({ status_code = 201 })"))
+    }
+
+    @Test
+    fun `Completes execution with status code and result`() {
+        val runner = createTestRunner(
+            connector = TestConnector { execId, statusCode, result, state, events ->
+                assertThat(execId, equalTo(ExecId(1234)))
+                assertThat(statusCode, equalTo(ExecStatusCode(201)))
                 assertThat(
-                    execResult, equalTo(
+                    result, equalTo(
                         ExecResult(
                             ValueObject.builder()
                                 .set("reason", "undisclosed")
@@ -108,7 +129,7 @@ internal class CompleteTest : AbstractExecuteTest() {
                 assertThat(events, hasSize(0))
             }
         )
-        runner.run(unitOfWork("context.complete({reason = 'undisclosed', answer = 42})"))
+        runner.run(unitOfWork("context.complete({ status_code = 201, result = { reason = 'undisclosed', answer = 42} })"))
     }
 
     private fun unitOfWork(code: String) = UnitOfWork(

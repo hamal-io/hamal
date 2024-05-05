@@ -6,6 +6,7 @@ import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.HttpSuccessResponse
@@ -44,6 +45,7 @@ internal sealed class StateBaseControllerTest : BaseControllerTest() {
             .body(
                 BridgeExecCompleteRequest(
                     state = state,
+                    statusCode = ExecStatusCode(210),
                     result = ExecResult(),
                     events = listOf()
                 )

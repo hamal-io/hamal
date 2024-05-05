@@ -1,14 +1,19 @@
 package io.hamal.lib.kua
 
-import io.hamal.lib.common.serialization.json.JsonNumber
+import io.hamal.lib.common.value.ValueNumber
 import io.hamal.lib.common.value.ValueObject
 
 abstract class KuaError(message: String, throwable: Throwable? = null) : Error(message, throwable)
 
-class ExitError(
-    val status: JsonNumber,
+class ExitComplete(
+    val statusCode: ValueNumber,
     val result: ValueObject
-) : KuaError(status.toString())
+) : KuaError(statusCode.toString())
+
+class ExitFailure(
+    val statusCode: ValueNumber,
+    val result: ValueObject
+) : KuaError(statusCode.toString())
 
 class AssertionError(message: String) : KuaError(message)
 

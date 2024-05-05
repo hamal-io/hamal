@@ -4,6 +4,7 @@ import io.hamal.lib.common.value.ValueFalse
 import io.hamal.lib.common.value.ValueNumber
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.common.value.ValueTrue
+import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
 import io.hamal.plugin.net.smtp.Message
 import io.hamal.plugin.net.smtp.PluginSmtpFactory
 import io.hamal.plugin.net.smtp.Sender
@@ -119,8 +120,9 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
             extensionFactories = listOf(ExtensionNetSmtpFactory),
-            connector = TestFailConnector { _, result ->
-                assertThat(result.value.stringValue("message"), containsString("host not set"))
+            connector = TestFailConnector { _, statusCode, result ->
+                assertThat(statusCode, equalTo(ExecStatusCode(400)))
+                assertThat(result.getString("message").stringValue, containsString("host not set"))
             }
         ).run(
             unitOfWork(
@@ -357,8 +359,9 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            connector = TestFailConnector { _, result ->
-                assertThat(result.value.stringValue("message"), containsString("from not set"))
+            connector = TestFailConnector { _, statusCode, result ->
+                assertThat(statusCode, equalTo(ExecStatusCode(400)))
+                assertThat(result.getString("message").stringValue, containsString("from not set"))
             }
         ).run(
             unitOfWork(
@@ -385,8 +388,9 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            connector = TestFailConnector { _, result ->
-                assertThat(result.value.stringValue("message"), containsString("to not set"))
+            connector = TestFailConnector { _, statusCode, result ->
+                assertThat(statusCode, equalTo(ExecStatusCode(400)))
+                assertThat(result.getString("message").stringValue, containsString("to not set"))
             }
         ).run(
             unitOfWork(
@@ -413,8 +417,9 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            connector = TestFailConnector { _, result ->
-                assertThat(result.value.stringValue("message"), containsString("subject not set"))
+            connector = TestFailConnector { _, statusCode, result ->
+                assertThat(statusCode, equalTo(ExecStatusCode(400)))
+                assertThat(result.getString("message").stringValue, containsString("subject not set"))
             }
         ).run(
             unitOfWork(
@@ -441,7 +446,8 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            connector = TestFailConnector { _, result ->
+            connector = TestFailConnector { _, statusCode, result ->
+                assertThat(statusCode, equalTo(ExecStatusCode(400)))
                 assertThat(result.value.stringValue("message"), containsString("content not set"))
             }
         ).run(

@@ -29,6 +29,7 @@ data class ExecEntity(
     var code: ExecCode? = null,
     var plannedAt: Instant? = null,
     var scheduledAt: Instant? = null,
+    var statusCode: ExecStatusCode? = null,
     var result: ExecResult? = null,
     var state: ExecState? = null
 
@@ -81,6 +82,7 @@ data class ExecEntity(
                 sequence = rec.sequence(),
                 status = ExecStatus(Completed),
 //                enqueuedAt = Instant.now() // FIXME
+                statusCode = rec.statusCode,
                 result = rec.result,
                 recordedAt = rec.recordedAt(),
                 state = rec.state
@@ -90,6 +92,7 @@ data class ExecEntity(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 status = ExecStatus(Failed),
+                statusCode = rec.statusCode,
                 result = rec.result,
                 recordedAt = rec.recordedAt()
             )
@@ -128,6 +131,7 @@ data class ExecEntity(
                 recordedAt.toUpdatedAt(),
                 startedExec,
                 ExecCompletedAt.now(),
+                statusCode!!,
                 result!!,
                 state!!
             )
@@ -138,6 +142,7 @@ data class ExecEntity(
                 recordedAt.toUpdatedAt(),
                 startedExec,
                 ExecFailedAt.now(),
+                statusCode!!,
                 result!!
             )
 
@@ -161,10 +166,7 @@ fun List<ExecRecord>.createEntity(): ExecEntity {
         recordedAt = firstRecord.recordedAt()
     )
 
-    forEach { record ->
-        result = result.apply(record)
-    }
-
+    forEach { record -> result = result.apply(record) }
 
     return result
 }

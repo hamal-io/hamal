@@ -13,6 +13,7 @@ import io.hamal.lib.domain._enum.ExecStates.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
+import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
 import io.hamal.lib.domain.vo.ExpiresAt.Companion.ExpiresAt
 import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.lib.domain.vo.PasswordSalt.Companion.PasswordSalt
@@ -254,6 +255,7 @@ internal abstract class BaseTest {
                 ExecCmdRepository.CompleteCmd(
                     id = CmdId(5),
                     execId = startedExec.id,
+                    statusCode = ExecStatusCode(200),
                     result = ExecResult(ValueObject.builder().set("hamal", "rocks").build()),
                     state = ExecState(ValueObject.builder().set("state", 23.23).build())
                 )
@@ -263,6 +265,7 @@ internal abstract class BaseTest {
                 ExecCmdRepository.FailCmd(
                     id = CmdId(5),
                     execId = startedExec.id,
+                    statusCode = ExecStatusCode(400),
                     result = ExecResult(ValueObject.builder().set("message", "BaseTest.kt").build())
                 )
             )

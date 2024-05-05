@@ -55,6 +55,7 @@ sealed class ExecRecord(
     data class Completed(
         override val cmdId: CmdId,
         override val entityId: ExecId,
+        val statusCode: ExecStatusCode,
         val result: ExecResult,
         val state: ExecState
     ) : ExecRecord()
@@ -62,6 +63,7 @@ sealed class ExecRecord(
     data class Failed(
         override val cmdId: CmdId,
         override val entityId: ExecId,
+        val statusCode: ExecStatusCode,
         val result: ExecResult
     ) : ExecRecord()
 }

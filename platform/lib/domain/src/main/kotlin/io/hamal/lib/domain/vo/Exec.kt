@@ -42,6 +42,12 @@ class ExecToken(override val value: ValueString) : ValueVariableString() {
     }
 }
 
+class ExecStatusCode(override val value: ValueNumber) : ValueVariableNumber() {
+    companion object {
+        fun ExecStatusCode(value: Int) = ExecStatusCode(ValueNumber(value))
+    }
+}
+
 class ExecResult(override val value: ValueObject = ValueObject.empty) : ValueVariableObject()
 
 class ExecState(override val value: ValueObject = ValueObject.empty) : ValueVariableObject()

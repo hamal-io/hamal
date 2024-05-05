@@ -23,7 +23,7 @@ import io.hamal.runner.run.CodeRunnerImpl
 import org.junit.jupiter.api.fail
 
 class TestConnector(
-    val block: (ExecId, ExecResult, ExecState, List<EventToSubmit>) -> Unit = { _, _, _, _ -> }
+    val block: (ExecId, ExecStatusCode, ExecResult, ExecState, List<EventToSubmit>) -> Unit = { _, _, _, _, _ -> }
 ) : Connector {
     override fun poll(): List<UnitOfWork> {
         TODO()
@@ -31,15 +31,17 @@ class TestConnector(
 
     override fun complete(
         execId: ExecId,
+        statusCode: ExecStatusCode,
         result: ExecResult,
         state: ExecState,
         events: List<EventToSubmit>
     ) {
-        block(execId, result, state, events)
+        block(execId, statusCode, result, state, events)
     }
 
     override fun fail(
         execId: ExecId,
+        statusCode: ExecStatusCode,
         result: ExecResult
     ) {
         fail { result.value["message"].toString() }
@@ -47,7 +49,7 @@ class TestConnector(
 }
 
 class TestFailConnector(
-    val block: (execId: ExecId, ExecResult) -> Unit = { _, _ -> }
+    val block: (execId: ExecId, ExecStatusCode, ExecResult) -> Unit = { _, _, _ -> }
 ) : Connector {
     override fun poll(): List<UnitOfWork> {
         TODO()
@@ -55,6 +57,7 @@ class TestFailConnector(
 
     override fun complete(
         execId: ExecId,
+        statusCode: ExecStatusCode,
         result: ExecResult,
         state: ExecState,
         events: List<EventToSubmit>
@@ -64,9 +67,10 @@ class TestFailConnector(
 
     override fun fail(
         execId: ExecId,
+        statusCode: ExecStatusCode,
         result: ExecResult
     ) {
-        block(execId, result)
+        block(execId, statusCode, result)
     }
 }
 

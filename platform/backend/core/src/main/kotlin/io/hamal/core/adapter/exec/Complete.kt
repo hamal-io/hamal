@@ -27,6 +27,7 @@ class ExecCompleteAdapter(
             requestedBy = SecurityContext.currentAuthId,
             requestStatus = RequestStatus.Submitted,
             id = exec.id,
+            statusCode = req.statusCode,
             result = req.result,
             state = req.state,
             events = req.events
