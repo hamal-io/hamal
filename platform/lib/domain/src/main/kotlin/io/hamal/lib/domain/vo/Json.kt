@@ -68,6 +68,7 @@ object SerdeModuleValueVariable : SerdeModuleGeneric() {
 
         this[FeedbackId::class] = SnowflakeId(::FeedbackId)
         this[FeedbackMessage::class] = String(::FeedbackMessage)
+        this[FeedbackMood::class] = Enum(::FeedbackMood)
 
         this[NamespaceId::class] = SnowflakeId(::NamespaceId)
         this[NamespaceTreeId::class] = SnowflakeId(::NamespaceTreeId)
