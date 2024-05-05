@@ -5,7 +5,6 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain._enum.TopicTypes
 import io.hamal.lib.domain.request.TopicAppendEntryRequest
 import io.hamal.lib.domain.request.TopicCreateRequest
 import io.hamal.lib.domain.vo.*
@@ -18,7 +17,7 @@ import io.hamal.lib.sdk.fold
 
 data class ApiTopicCreateRequest(
     override val name: TopicName,
-    override val type: TopicTypes
+    override val type: TopicType
 ) : TopicCreateRequest
 
 data class ApiTopicCreateRequested(
@@ -27,7 +26,7 @@ data class ApiTopicCreateRequested(
     val id: TopicId,
     val workspaceId: WorkspaceId,
     val namespaceId: NamespaceId,
-    val type: TopicTypes
+    val type: TopicType
 ) : ApiRequested()
 
 
@@ -57,22 +56,20 @@ data class ApiTopic(
     val id: TopicId,
     val name: TopicName,
     val type: TopicType
-) : ApiObject()
+) : ApiObject() {
+
+}
 
 data class ApiTopicList(
-    val topics: List<Topic>
+    val topics: List<ApiTopic>
 ) : ApiObject() {
-    data class Topic(
-        val id: TopicId,
-        val name: TopicName,
-        val type: TopicTypes
-    )
+
 }
 
 interface ApiTopicService {
     fun append(topicId: TopicId, payload: TopicEventPayload): ApiTopicAppendRequested
     fun createTopic(namespaceId: NamespaceId, req: ApiTopicCreateRequest): ApiTopicCreateRequested
-    fun list(query: TopicQuery): List<ApiTopicList.Topic>
+    fun list(query: TopicQuery): List<ApiTopic>
     fun events(topicId: TopicId): List<ApiTopicEventList.Event>
     fun get(topicId: TopicId): ApiTopic
     fun resolve(namespaceId: NamespaceId, topicName: TopicName): TopicId

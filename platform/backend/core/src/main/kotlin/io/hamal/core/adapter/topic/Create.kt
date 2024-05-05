@@ -26,7 +26,7 @@ class TopicCreateAdapter(
     private val requestEnqueue: RequestEnqueuePort
 ) : TopicCreatePort {
     override fun invoke(namespaceId: NamespaceId, req: TopicCreateRequest): TopicCreateRequested {
-        if (req.type == TopicTypes.Internal) {
+        if (req.type.enumValue == TopicTypes.Internal) {
             throw IllegalArgumentException("Can not append internal topics")
         }
         val namespace = namespaceGet(namespaceId)
