@@ -9,7 +9,7 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Topic
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
-import io.hamal.repository.record.serde
+import io.hamal.repository.sqlite.hon
 import io.hamal.repository.record.topic.TopicRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
@@ -29,7 +29,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
                 set("id", topicId)
             }
             map { rs ->
-                serde.decompressAndRead(Topic::class, rs.getBytes("data"))
+                hon.decompressAndRead(Topic::class, rs.getBytes("data"))
             }
         }
     }
@@ -49,7 +49,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
                 set("topicName", topicName)
             }
             map { rs ->
-                serde.decompressAndRead(Topic::class, rs.getBytes("data"))
+                hon.decompressAndRead(Topic::class, rs.getBytes("data"))
             }
         }
     }
@@ -80,7 +80,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
                 set("limit", query.limit)
             }
             map { rs ->
-                serde.decompressAndRead(Topic::class, rs.getBytes("data"))
+                hon.decompressAndRead(Topic::class, rs.getBytes("data"))
             }
         }
     }
@@ -129,7 +129,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
             set("namespaceId", obj.namespaceId)
             set("type", obj.type.value)
             set("name", obj.name)
-            set("data", serde.writeAndCompress(obj))
+            set("data", hon.writeAndCompress(obj))
         }
     }
 

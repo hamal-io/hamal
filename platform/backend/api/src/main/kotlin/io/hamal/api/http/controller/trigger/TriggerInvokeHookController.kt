@@ -1,5 +1,6 @@
 package io.hamal.api.http.controller.trigger
 
+import io.hamal.api.http.controller.json
 import io.hamal.api.http.controller.toApiRequested
 import io.hamal.core.adapter.trigger.TriggerInvokePort
 import io.hamal.lib.common.value.ValueObject
@@ -8,7 +9,6 @@ import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.api.ApiRequested
-import io.hamal.repository.record.serde
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.web.bind.annotation.*
 
@@ -65,6 +65,6 @@ internal class TriggerInvokeHookController(
     private fun HttpServletRequest.content(): ValueObject {
         require(contentType.startsWith("application/json")) { "Only application/json supported yet" }
         val content = reader.lines().reduce("", String::plus)
-        return serde.read(ValueObject::class, content)
+        return json.read(ValueObject::class, content)
     }
 }

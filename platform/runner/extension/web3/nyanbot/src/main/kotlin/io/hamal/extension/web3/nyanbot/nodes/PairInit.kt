@@ -43,7 +43,10 @@ internal data object PairInit : NodeCompiler {
                 http = req
                 
                 http = require('net.http').create({})
-                resp = fail_on_error(http.post({url ='http://localhost:8008/v1/endpoints/f3f08c89810001'}))
+                resp = fail_on_error(http.post({
+                    url ='http://localhost:8008/v1/endpoints/f3f08c89810001'
+                    
+                }))
                 print(resp.content)
 
                 for k,v in pairs(resp.content.result) do print(k,v) end

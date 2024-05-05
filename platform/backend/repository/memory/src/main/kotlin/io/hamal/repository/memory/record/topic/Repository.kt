@@ -13,8 +13,8 @@ import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.repository.api.log.LogBrokerRepository.CreateTopicCmd
 import io.hamal.repository.api.log.LogEventId.Companion.LogEventId
+import io.hamal.repository.memory.hon
 import io.hamal.repository.memory.record.RecordMemoryRepository
-import io.hamal.repository.record.serde
 import io.hamal.repository.record.topic.CreateTopicFromRecords
 import io.hamal.repository.record.topic.TopicRecord
 import java.util.concurrent.locks.ReentrantLock
@@ -71,7 +71,7 @@ class TopicMemoryRepository(
             ).map { evt ->
                 TopicEvent(
                     id = TopicEventId(evt.id.value),
-                    payload = TopicEventPayload(serde.decompressAndRead(ValueObject::class, evt.bytes))
+                    payload = TopicEventPayload(hon.decompressAndRead(ValueObject::class, evt.bytes))
                 )
             }
         }

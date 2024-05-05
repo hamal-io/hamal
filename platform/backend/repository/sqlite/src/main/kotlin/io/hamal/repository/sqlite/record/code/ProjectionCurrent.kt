@@ -8,7 +8,7 @@ import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Code
 import io.hamal.repository.api.CodeQueryRepository.CodeQuery
 import io.hamal.repository.record.code.CodeRecord
-import io.hamal.repository.record.serde
+import io.hamal.repository.sqlite.hon
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
@@ -29,7 +29,7 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
                 set("id", codeId)
             }
             map { rs ->
-                serde.decompressAndRead(Code::class, rs.getBytes("data"))
+                hon.decompressAndRead(Code::class, rs.getBytes("data"))
             }
         }
     }
@@ -55,7 +55,7 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
                 set("limit", query.limit)
             }
             map { rs ->
-                serde.decompressAndRead(Code::class, rs.getBytes("data"))
+                hon.decompressAndRead(Code::class, rs.getBytes("data"))
             }
         }
     }
@@ -95,7 +95,7 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
         ) {
             set("id", obj.id)
             set("workspaceId", obj.workspaceId)
-            set("data", serde.writeAndCompress(obj))
+            set("data", hon.writeAndCompress(obj))
         }
     }
 
