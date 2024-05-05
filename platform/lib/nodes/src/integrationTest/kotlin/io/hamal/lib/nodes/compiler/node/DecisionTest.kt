@@ -9,7 +9,7 @@ import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 
-internal class DecisionTest : AbstractIntegrationTest() {
+internal class DecisionAndTest : AbstractIntegrationTest() {
 
     @Test
     fun `Boolean - happy path`() {
@@ -20,7 +20,7 @@ internal class DecisionTest : AbstractIntegrationTest() {
                     nodes = listOf(
                         node(1, "Init", listOf(PortOutput(PortId(20), TypeBoolean))),
                         node(
-                            2, "Decision", listOf(
+                            2, "Decision_And", listOf(
                                 portOutput(21, TypeBoolean),
                                 portOutput(22, TypeBoolean)
                             )
@@ -29,25 +29,25 @@ internal class DecisionTest : AbstractIntegrationTest() {
                             3,
                             "Capture",
                             listOf(portOutput(23, TypeBoolean)),
-                            ValueObject.builder().set("capture_fn", ValueString("captureOne")).build()
+                            ValueObject.builder().set("capture_fn", ValueString("capture_one")).build()
                         ),
                         node(
                             4,
                             "Test_Invoked",
                             listOf(),
-                            ValueObject.builder().set("invoke_fn", ValueString("invokeOne")).build()
+                            ValueObject.builder().set("invoke_fn", ValueString("invoke_one")).build()
                         ),
                         node(
                             5,
                             "Capture",
                             listOf(portOutput(25, TypeBoolean)),
-                            ValueObject.builder().set("capture_fn", ValueString("captureTwo")).build()
+                            ValueObject.builder().set("capture_fn", ValueString("capture_two")).build()
                         ),
                         node(
                             6,
                             "Test_Invoked",
                             listOf(),
-                            ValueObject.builder().set("invoke_fn", ValueString("invokeTwo")).build()
+                            ValueObject.builder().set("invoke_fn", ValueString("invoke_two")).build()
                         )
                     ),
                     connections = listOf(
@@ -83,7 +83,7 @@ internal class DecisionTest : AbstractIntegrationTest() {
                     nodes = listOf(
                         node(1, "Init", listOf(PortOutput(PortId(20), TypeBoolean))),
                         node(
-                            2, "Decision", listOf(
+                            2, "Decision_And", listOf(
                                 portOutput(21, TypeBoolean),
                                 portOutput(22, TypeBoolean)
                             )
@@ -92,25 +92,25 @@ internal class DecisionTest : AbstractIntegrationTest() {
                             3,
                             "Capture",
                             listOf(portOutput(23, TypeBoolean)),
-                            ValueObject.builder().set("capture_fn", ValueString("captureOne")).build()
+                            ValueObject.builder().set("capture_fn", ValueString("capture_one")).build()
                         ),
                         node(
                             4,
                             "Test_Invoked",
                             listOf(),
-                            ValueObject.builder().set("invoke_fn", ValueString("invokeOne")).build()
+                            ValueObject.builder().set("invoke_fn", ValueString("invoke_one")).build()
                         ),
                         node(
                             5,
                             "Capture",
                             listOf(portOutput(25, TypeBoolean)),
-                            ValueObject.builder().set("capture_fn", ValueString("captureTwo")).build()
+                            ValueObject.builder().set("capture_fn", ValueString("capture_two")).build()
                         ),
                         node(
                             6,
                             "Test_Invoked",
                             listOf(),
-                            ValueObject.builder().set("invoke_fn", ValueString("invokeTwo")).build()
+                            ValueObject.builder().set("invoke_fn", ValueString("invoke_two")).build()
                         )
                     ),
                     connections = listOf(

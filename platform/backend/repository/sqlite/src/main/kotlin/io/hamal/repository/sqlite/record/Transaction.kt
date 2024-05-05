@@ -8,8 +8,12 @@ import io.hamal.lib.common.value.ValueVariableSnowflakeId
 import io.hamal.lib.sqlite.NamedPreparedStatementDelegate
 import io.hamal.lib.sqlite.NamedPreparedStatementResultSetDelegate
 import io.hamal.lib.sqlite.Transaction
-import io.hamal.repository.record.*
+import io.hamal.repository.record.CreateDomainObject
+import io.hamal.repository.record.Record
+import io.hamal.repository.record.RecordRepository
+import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.RecordedAt.Companion.RecordedAt
+import io.hamal.repository.sqlite.hon
 import kotlin.reflect.KClass
 
 
@@ -30,7 +34,7 @@ class RecordTransactionSqlite<ID : ValueVariableSnowflakeId, RECORD : Record<ID>
         ) {
             set("cmdId", record.cmdId)
             set("entityId", record.entityId)
-            set("data", serde.writeAndCompress(record))
+            set("data", hon.writeAndCompress(record))
         }
 
         return record
@@ -46,7 +50,7 @@ class RecordTransactionSqlite<ID : ValueVariableSnowflakeId, RECORD : Record<ID>
                 set("entityId", id)
             }
             map {
-                serde.decompressAndRead(recordClass, it.getBytes("data")).also { record ->
+                hon.decompressAndRead(recordClass, it.getBytes("data")).also { record ->
                     record.recordSequence = RecordSequence(ValueNumber(it.getInt("sequence")))
                     record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }
@@ -64,7 +68,7 @@ class RecordTransactionSqlite<ID : ValueVariableSnowflakeId, RECORD : Record<ID>
                 set("entityId", id)
             }
             map {
-                serde.decompressAndRead(recordClass, it.getBytes("data")).also { record ->
+                hon.decompressAndRead(recordClass, it.getBytes("data")).also { record ->
                     record.recordSequence = RecordSequence(ValueNumber(it.getInt("sequence")))
                     record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }
@@ -93,7 +97,7 @@ class RecordTransactionSqlite<ID : ValueVariableSnowflakeId, RECORD : Record<ID>
                 set("sequence", sequence.intValue)
             }
             map {
-                serde.decompressAndRead(recordClass, it.getBytes("data")).also { record ->
+                hon.decompressAndRead(recordClass, it.getBytes("data")).also { record ->
                     record.recordSequence = RecordSequence(ValueNumber(it.getInt("sequence")))
                     record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }

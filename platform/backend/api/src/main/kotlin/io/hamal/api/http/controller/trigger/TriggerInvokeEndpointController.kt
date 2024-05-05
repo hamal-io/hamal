@@ -1,5 +1,6 @@
 package io.hamal.api.http.controller.trigger
 
+import io.hamal.api.http.controller.json
 import io.hamal.core.adapter.trigger.TriggerInvokeEndpointPort
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.value.ValueObject
@@ -9,7 +10,6 @@ import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sdk.api.ApiExecEndpoint
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.Exec
-import io.hamal.repository.record.serde
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -48,12 +48,14 @@ internal class TriggerInvokeEndpointController(
         return endpointInvoke(
             triggerId = id,
             inputs = InvocationInputs(
-                ValueObject.builder()
-                    .set("method", req.method())
-                    .set("headers", req.headers())
-                    .set("parameters", req.parameters())
-                    .set("content", req.content())
-                    .build()
+                ValueObject.builder().set(
+                    "endpoint", ValueObject.builder()
+                        .set("method", req.method())
+                        .set("headers", req.headers())
+                        .set("parameters", req.parameters())
+                        .set("body", req.body())
+                        .build()
+                ).build()
             ),
             auth
         ).thenApply { exec ->
@@ -100,10 +102,10 @@ private fun HttpServletRequest.parameters(): ValueObject {
     return builder.build()
 }
 
-private fun HttpServletRequest.content(): ValueObject {
+private fun HttpServletRequest.body(): ValueObject {
     val content = reader.lines().reduce("", String::plus)
     if (content.isEmpty()) return ValueObject.empty
 
     require(contentType.startsWith("application/json")) { "Only application/json supported yet" }
-    return serde.read(ValueObject::class, content)
+    return json.read(ValueObject::class, content)
 }

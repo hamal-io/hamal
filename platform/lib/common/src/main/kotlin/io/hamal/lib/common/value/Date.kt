@@ -5,7 +5,7 @@ import java.time.LocalDate
 val TypeDate = ValueType("Date")
 
 @JvmInline
-value class ValueDate(private val value: LocalDate) : Value {
+value class ValueDate(private val value: LocalDate) : ValueSerializable {
     override val type get() = TypeDate
     override fun toString(): String = value.toString()
 

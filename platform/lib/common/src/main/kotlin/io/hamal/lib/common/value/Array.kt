@@ -7,8 +7,8 @@ import java.util.*
 val TypeArray = ValueType("Array")
 
 data class ValueArray(
-    val value: List<Value>
-) : Value {
+    val value: List<ValueSerializable>
+) : ValueSerializable {
     override val type get() = TypeArray
 
     operator fun get(idx: Int): Value = value[idx]
@@ -27,7 +27,7 @@ class ValueArrayBuilder {
 
     fun append(value: Enum<*>): ValueArrayBuilder = append(value.name)
 
-    fun append(value: Value): ValueArrayBuilder {
+    fun append(value: ValueSerializable): ValueArrayBuilder {
         values.add(value)
         return this
     }
@@ -84,5 +84,5 @@ class ValueArrayBuilder {
 
     fun build() = ValueArray(values)
 
-    private val values = LinkedList<Value>()
+    private val values = LinkedList<ValueSerializable>()
 }

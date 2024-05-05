@@ -45,7 +45,7 @@ interface Capture : NodeCompiler {
     }
 
     fun captureCode(ctx: Context): ValueCode {
-        val captureFunction = ctx.node.properties.value.findString("capture_fn")?.stringValue ?: "captureOne"
+        val captureFunction = ctx.node.properties.value.findString("capture_fn")?.stringValue ?: "capture_one"
         return ValueCode(
             """
             test = require_plugin('test')
@@ -65,7 +65,7 @@ sealed interface Invoked : NodeCompiler {
         override val outputTypes: List<ValueType> get() = listOf()
 
         override fun toCode(ctx: Context): ValueCode {
-            val invokeFunction = ctx.node.properties.value.findString("invoke_fn")?.stringValue ?: "invokeOne"
+            val invokeFunction = ctx.node.properties.value.findString("invoke_fn")?.stringValue ?: "invoke_one"
             return ValueCode(
                 """
             test = require_plugin('test')
@@ -81,7 +81,7 @@ sealed interface Invoked : NodeCompiler {
         override val outputTypes: List<ValueType> get() = listOf()
 
         override fun toCode(ctx: Context): ValueCode {
-            val invokeFunction = ctx.node.properties.value.findString("invoke_fn")?.stringValue ?: "invokeOne"
+            val invokeFunction = ctx.node.properties.value.findString("invoke_fn")?.stringValue ?: "invoke_one"
             return ValueCode(
                 """
             test = require_plugin('test')
@@ -97,7 +97,7 @@ sealed interface Invoked : NodeCompiler {
         override val outputTypes: List<ValueType> get() = listOf()
 
         override fun toCode(ctx: Context): ValueCode {
-            val invokeFunction = ctx.node.properties.value.findString("invoke_fn")?.stringValue ?: "invokeOne"
+            val invokeFunction = ctx.node.properties.value.findString("invoke_fn")?.stringValue ?: "invoke_one"
             return ValueCode(
                 """
             test = require_plugin('test')

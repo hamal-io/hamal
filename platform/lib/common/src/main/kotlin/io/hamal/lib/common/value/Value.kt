@@ -10,14 +10,16 @@ interface Value {
     val type: ValueType
 }
 
-interface ValueComparable<VALUE_TYPE : Value> : Value, Comparable<VALUE_TYPE>
+sealed interface ValueSerializable : Value
 
-interface ValueVariable<VALUE_TYPE : Value> : Value {
+interface ValueComparable<VALUE_TYPE : Value> : ValueSerializable, Comparable<VALUE_TYPE>
+
+interface ValueVariable<VALUE_TYPE : ValueSerializable> : ValueSerializable {
 
     val value: VALUE_TYPE
     override val type: ValueType get() = value.type
 
-    abstract class BaseImpl<VALUE_TYPE : Value> : ValueVariable<VALUE_TYPE> {
+    abstract class BaseImpl<VALUE_TYPE : ValueSerializable> : ValueVariable<VALUE_TYPE> {
 
         override fun equals(other: Any?): Boolean {
             if (this === other) return true

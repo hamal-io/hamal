@@ -7,13 +7,13 @@ internal class EqTest : AbstractRunnerTest() {
     @Test
     fun `decimal, number`() {
         val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionDecimalFactory)
+            extensionFactories = listOf(ExtensionStdDecimalFactory)
         )
 
         runner.run(
             unitOfWork(
                 """
-                local decimal = require('std.decimal')
+                local decimal = require('std.decimal').create()
                 local x = decimal.new('512')
                 local y = 1024
                 local z = 512
@@ -29,13 +29,13 @@ internal class EqTest : AbstractRunnerTest() {
     @Test
     fun `decimal, decimal`() {
         val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionDecimalFactory)
+            extensionFactories = listOf(ExtensionStdDecimalFactory)
         )
 
         runner.run(
             unitOfWork(
                 """
-                local decimal = require('std.decimal')
+                local decimal = require('std.decimal').create()
                 local x = decimal.new('512')
                 local y = decimal.new(1024)
                 local z = decimal.new(512)
@@ -50,13 +50,13 @@ internal class EqTest : AbstractRunnerTest() {
     @Test
     fun `number, decimal`() {
         val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionDecimalFactory)
+            extensionFactories = listOf(ExtensionStdDecimalFactory)
         )
 
         runner.run(
             unitOfWork(
                 """
-                local decimal = require('std.decimal')
+                local decimal = require('std.decimal').create()
                 local x = 512
                 local y = decimal.new(1024)
                 local z = decimal.new(512)

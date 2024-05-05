@@ -1,10 +1,11 @@
 package io.hamal.extension.web3.eth
 
 import com.google.gson.Gson
+import io.hamal.extension.std.table.ExtensionStdTableFactory
 import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.json.JsonArray
-import io.hamal.lib.common.value.serde.SerdeModuleValueJson
 import io.hamal.lib.common.value.ValueObject
+import io.hamal.lib.common.value.serde.SerdeModuleValueJson
 import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.lib.domain.vo.SerdeModuleValueVariable
 import io.hamal.lib.kua.NativeLoader
@@ -107,7 +108,7 @@ internal class ExtensionWeb3EthTest : AbstractRunnerTest() {
 
             val runner = createTestRunner(
                 pluginFactories = listOf(PluginWeb3EvmFactory()),
-                extensionFactories = listOf(ExtensionWeb3EthFactory),
+                extensionFactories = listOf(ExtensionStdTableFactory, ExtensionWeb3EthFactory),
                 env = RunnerEnv(
                     ValueObject.builder()
                         .set("test_url", "http://localhost:$localPort/eth")

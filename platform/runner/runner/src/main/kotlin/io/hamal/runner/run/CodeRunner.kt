@@ -82,7 +82,7 @@ class CodeRunnerImpl(
                             CodeType.Nodes -> {
                                 // FIXME load graph from code
                                 val graph = serde.read(NodesGraph::class, unitOfWork.code.stringValue)
-                                val compiledCode = GraphCompiler(sandbox.generatorRegistry).compile(graph)
+                                val compiledCode = GraphCompiler(sandbox.generatorNodeCompilerRegistry).compile(graph)
                                 sandbox.codeLoad(compiledCode)
                             }
                         }
@@ -94,7 +94,7 @@ class CodeRunnerImpl(
                         val stateToSubmit = if (unitOfWork.codeType == CodeType.Lua54) {
                             ctx.getTable(ValueString("state")).toValueObject()
                         } else {
-                            ValueObject.empty
+                            ctx.getTable(ValueString("state")).toValueObject()
                         }
 
                         connector.complete(

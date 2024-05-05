@@ -5,7 +5,7 @@ import kotlin.reflect.KClass
 
 val TypeEnum = ValueType("Enum")
 
-data class ValueEnum(val value: String) : Value {
+data class ValueEnum(val value: String) : ValueSerializable {
     constructor(value: Enum<*>) : this(value.name)
 
     override val type get() = TypeEnum

@@ -5,7 +5,7 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Exec
 import io.hamal.repository.record.exec.ExecRecord
-import io.hamal.repository.record.serde
+import io.hamal.repository.sqlite.hon
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
@@ -26,7 +26,7 @@ internal object ProjectionQueue : ProjectionSqlite<ExecId, ExecRecord, Exec> {
                 set("limit", limit)
             }
             map { rs ->
-                serde.decompressAndRead(Exec::class, rs.getBytes("data"))
+                hon.decompressAndRead(Exec::class, rs.getBytes("data"))
             }
         }
     }
@@ -45,7 +45,7 @@ internal object ProjectionQueue : ProjectionSqlite<ExecId, ExecRecord, Exec> {
             """.trimIndent()
         ) {
             set("id", obj.id)
-            set("data", serde.writeAndCompress(obj))
+            set("data", hon.writeAndCompress(obj))
         }
     }
 

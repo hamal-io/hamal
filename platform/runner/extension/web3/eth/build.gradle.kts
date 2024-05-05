@@ -35,6 +35,7 @@ testing {
                 dependencies {
                     implementation(project(":platform:runner:test"))
                     implementation(project(":platform:runner:plugin:web3"))
+                    implementation(project(":platform:runner:extension:std:table"))
                     implementation(project(":platform:runner:extension:web3:eth"))
                     implementation(project(":platform:lib:web3"))
 

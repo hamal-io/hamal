@@ -168,6 +168,28 @@ fun KuaTable.toJsonObject(): JsonObject {
     return builder.build()
 }
 
+fun KuaTable.toSerializableValue(): ValueSerializable {
+    lateinit var result: ValueSerializable
+
+
+    state.checkpoint {
+        state.nilPush()
+
+        val hasValue = state.tableNext(index).booleanValue
+        if (!hasValue) {
+            result = ValueNil
+        } else {
+            if (state.type(state.absIndex(-2)) == ValueString::class) {
+                result = toValueObject()
+            } else {
+                result = toValueArray()
+            }
+        }
+    }
+
+    return result
+}
+
 fun KuaTable.toValueObject(): ValueObject {
     val builder = ValueObject.builder()
 
@@ -178,10 +200,38 @@ fun KuaTable.toValueObject(): ValueObject {
             val value = state.get(state.absIndex(-1))
 
             builder[key.stringValue] = if (value is KuaTable) {
-                value.toValueObject()
-            } else {
+                value.toSerializableValue()
+            } else if (value is ValueSerializable) {
                 value
+            } else {
+                TODO("$value not serializable")
             }
+
+            state.topPop(1)
+        }
+    }
+
+    return builder.build()
+}
+
+
+private fun KuaTable.toValueArray(): ValueArray {
+    val builder = ValueArray.builder()
+
+    state.checkpoint {
+        state.nilPush()
+        while (state.tableNext(index).booleanValue) {
+            val value = state.get(state.absIndex(-1))
+
+            builder.append(
+                if (value is KuaTable) {
+                    value.toSerializableValue()
+                } else if (value is ValueSerializable) {
+                    value
+                } else {
+                    TODO("$value not serializable")
+                }
+            )
 
             state.topPop(1)
         }

@@ -2,7 +2,7 @@ http = require('net.http').create({
     base_url = context.env.test_url
 })
 
-decimal = require('std.decimal')
+decimal = require('std.decimal').create()
 
 res = fail_on_error(http.post({ url = '/v1/json-echo', body = {} }))
 assert(res.content ~= nil)

@@ -9,7 +9,6 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.StateCmdRepository
 import io.hamal.repository.api.StateRepository
-import io.hamal.repository.record.serde
 import java.nio.file.Path
 
 class StateSqliteRepository(
@@ -54,7 +53,7 @@ class StateSqliteRepository(
             query {
                 set("funcId", cmd.correlatedState.correlation.funcId)
                 set("correlationId", cmd.correlatedState.correlation.id)
-                set("value", serde.writeAndCompress(cmd.correlatedState.value))
+                set("value", hon.writeAndCompress(cmd.correlatedState.value))
             }
         }
     }
@@ -75,7 +74,7 @@ class StateSqliteRepository(
                         funcId = rs.getId("func_id", ::FuncId),
                         id = CorrelationId(rs.getString("correlation_id"))
                     ),
-                    value = serde.decompressAndRead(State::class, rs.getBytes("value"))
+                    value = hon.decompressAndRead(State::class, rs.getBytes("value"))
                 )
             }
         }

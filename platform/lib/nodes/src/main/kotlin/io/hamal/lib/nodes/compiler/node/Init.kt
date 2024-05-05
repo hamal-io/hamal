@@ -51,6 +51,26 @@ sealed interface Init : NodeCompiler {
         }
     }
 
+    data object Object : Init {
+        override val outputTypes: List<ValueType> get() = listOf(TypeObject)
+        override fun toCode(ctx: Context): ValueCode {
+            val selector = ctx.controls.filterIsInstance<ControlInit>().firstOrNull()?.config?.findString("selector") ?: "__nodes__init__"
+            if (selector == "No_Value") {
+                return ValueCode("return nil")
+            }
+            return ValueCode(
+                """
+                initial_value = context.exec.inputs.${selector}
+                if initial_value == nil then
+                    error('No initial value was found')
+                end
+                return initial_value 
+            """.trimIndent()
+            )
+        }
+    }
+
+
     data object String : Init {
         override val outputTypes: List<ValueType> get() = listOf(TypeString)
         override fun toCode(ctx: Context): ValueCode {

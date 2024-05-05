@@ -24,7 +24,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -88,7 +88,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -118,7 +118,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory),
+            extensionFactories = listOf(ExtensionNetSmtpFactory),
             connector = TestFailConnector { _, result ->
                 assertThat(result.value.stringValue("message"), containsString("host not set"))
             }
@@ -147,7 +147,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -177,7 +177,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -207,7 +207,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -237,7 +237,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -267,7 +267,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -297,7 +297,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -327,7 +327,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -468,7 +468,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -498,7 +498,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -529,7 +529,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -559,7 +559,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -589,7 +589,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """

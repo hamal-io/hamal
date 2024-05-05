@@ -4,12 +4,8 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.AdapterGeneric
-import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.serialization.SerdeModuleGeneric
-import io.hamal.lib.common.value.serde.SerdeModuleValueHon
 import io.hamal.lib.common.value.serde.ValueVariableAdapters
-import io.hamal.lib.domain.vo.SerdeModuleValueVariable
-import io.hamal.repository.api.SerdeModuleDomain
 import io.hamal.repository.record.RecordClass.Companion.RecordClass
 import io.hamal.repository.record.account.AccountRecord
 import io.hamal.repository.record.code.CodeRecord
@@ -26,7 +22,7 @@ import io.hamal.repository.record.workspace.WorkspaceRecord
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
-private object SerdeModuleRecord : SerdeModuleGeneric() {
+object SerdeModuleRecord : SerdeModuleGeneric() {
     init {
         this[RecordClass::class] = ValueVariableAdapters.String(::RecordClass)
         this[RecordedAt::class] = ValueVariableAdapters.Instant(::RecordedAt)
@@ -44,12 +40,6 @@ private object SerdeModuleRecord : SerdeModuleGeneric() {
         this[TriggerRecord::class] = TriggerRecord.Adapter
     }
 }
-
-val serde = Serde.hon()
-    .register(SerdeModuleDomain)
-    .register(SerdeModuleRecord)
-    .register(SerdeModuleValueHon)
-    .register(SerdeModuleValueVariable)
 
 abstract class RecordAdapter<BASE_TYPE : Record<*>>(
     recordClasses: List<KClass<out BASE_TYPE>>

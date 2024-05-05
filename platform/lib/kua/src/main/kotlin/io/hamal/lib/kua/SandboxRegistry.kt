@@ -1,9 +1,9 @@
 package io.hamal.lib.kua
 
-import io.hamal.lib.kua.extend.extension.RunnerExtension
-import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.kua.extend.extension.RunnerExtension
+import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 
 interface SandboxRegistry {
     fun register(plugin: RunnerPlugin)
@@ -28,7 +28,7 @@ internal class SandboxRegistryImpl(
     }
 
     override fun pluginPush(name: ValueString) {
-        val extension = plugins[name]!!
+        val extension = plugins[name] ?: throw NoSuchElementException("$name not found in registry")
 
         state.globalSet(ValueString("_internal"), state.tableCreate(extension.internals))
         state.codeLoad(plugins[name]!!.factoryCode)
@@ -42,7 +42,7 @@ internal class SandboxRegistryImpl(
     }
 
     override fun extensionPush(name: ValueString) {
-        val extension = extensions[name]!!
+        val extension = extensions[name] ?: throw NoSuchElementException("$name not found in registry")
 
         state.codeLoad(extension.factoryCode)
         state.codeLoad(ValueCode("_instance = extension_create()"))

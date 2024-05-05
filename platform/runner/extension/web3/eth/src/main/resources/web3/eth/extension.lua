@@ -2,6 +2,7 @@ local hamal_provider_create = function(opts)
     url = opts.url or 'http://web3-eth-proxy-1:10000/eth'
 
     evm = require_plugin('web3.evm')
+    table = require('std.table').create()
 
     return {
         name = 'hamal',
@@ -52,7 +53,7 @@ function extension_create()
                 },
 
                 get_block = function(block)
-                    err, blocks = provider.get_blocks({block})
+                    err, blocks = provider.get_blocks({ block })
                     if err ~= nil then
                         return err, nil
                     end

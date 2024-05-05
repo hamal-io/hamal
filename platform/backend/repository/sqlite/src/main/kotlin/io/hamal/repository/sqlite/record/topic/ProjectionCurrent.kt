@@ -9,8 +9,8 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Topic
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
-import io.hamal.repository.record.serde
 import io.hamal.repository.record.topic.TopicRecord
+import io.hamal.repository.sqlite.hon
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
@@ -29,7 +29,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
                 set("id", topicId)
             }
             map { rs ->
-                serde.decompressAndRead(Topic::class, rs.getBytes("data"))
+                hon.decompressAndRead(Topic::class, rs.getBytes("data"))
             }
         }
     }
@@ -49,7 +49,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
                 set("topicName", topicName)
             }
             map { rs ->
-                serde.decompressAndRead(Topic::class, rs.getBytes("data"))
+                hon.decompressAndRead(Topic::class, rs.getBytes("data"))
             }
         }
     }
@@ -80,7 +80,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
                 set("limit", query.limit)
             }
             map { rs ->
-                serde.decompressAndRead(Topic::class, rs.getBytes("data"))
+                hon.decompressAndRead(Topic::class, rs.getBytes("data"))
             }
         }
     }
@@ -127,9 +127,9 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
             set("id", obj.id)
             set("workspaceId", obj.workspaceId)
             set("namespaceId", obj.namespaceId)
-            set("type", obj.type)
+            set("type", obj.type.value)
             set("name", obj.name)
-            set("data", serde.writeAndCompress(obj))
+            set("data", hon.writeAndCompress(obj))
         }
     }
 
@@ -140,7 +140,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
                  id             INTEGER NOT NULL,
                  workspace_id   INTEGER NOT NULL,
                  namespace_id   INTEGER NOT NULL,
-                 type           INTEGER NOT NULL,
+                 type           VARCHAR(255) NOT NULL,
                  name           VARCHAR(255) NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
@@ -157,9 +157,10 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
         return if (types.isEmpty()) {
             ""
         } else {
-            "AND type IN (${types.joinToString(",") { "${it.stringValue}" }})"
+            "AND type IN (${types.joinToString(",") { "'${it.stringValue}'" }})"
         }
     }
+
 
     private fun TopicQuery.ids(): String {
         return if (topicIds.isEmpty()) {

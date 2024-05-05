@@ -10,7 +10,7 @@ import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.compiler.node.NodeCompiler.Context
 
 sealed interface DecisionAnd : NodeCompiler {
-    override val type: NodeType get() = NodeType("Decision")
+    override val type: NodeType get() = NodeType("Decision_And")
 
     data object Boolean : DecisionAnd {
         override val inputTypes: List<ValueType> get() = listOf(TypeBoolean)

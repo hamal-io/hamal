@@ -5,7 +5,7 @@ import java.math.BigInteger
 
 val TypeObject = ValueType("Object")
 
-data class ValueObject(val values: LinkedHashMap<String, Value>) : Value {
+data class ValueObject(val values: LinkedHashMap<String, ValueSerializable>) : ValueSerializable {
     override val type get() = TypeObject
 
     fun stringValue(key: String): String = (get(key) as ValueString).stringValue
@@ -56,7 +56,7 @@ class ValueObjectBuilder {
         return this
     }
 
-    operator fun set(key: String, value: Value): ValueObjectBuilder {
+    operator fun set(key: String, value: ValueSerializable): ValueObjectBuilder {
         values[key] = value
         return this
     }
@@ -125,5 +125,5 @@ class ValueObjectBuilder {
         return ValueObject(values)
     }
 
-    private val values = LinkedHashMap<String, Value>()
+    private val values = LinkedHashMap<String, ValueSerializable>()
 }

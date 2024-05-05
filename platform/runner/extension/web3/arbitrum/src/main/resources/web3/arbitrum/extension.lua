@@ -2,6 +2,7 @@ local hamal_provider_create = function(opts)
     url = opts.url or 'http://web3-arbitrum-proxy-1:10000/arbitrum'
 
     evm = require_plugin('web3.evm')
+    table = require('std.table').create()
 
     return {
         name = 'hamal',

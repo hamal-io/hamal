@@ -17,6 +17,7 @@ dependencies {
     implementation(project(":platform:runner:extension:net:http"))
     implementation(project(":platform:runner:extension:std:decimal"))
     implementation(project(":platform:runner:extension:std:log"))
+    implementation(project(":platform:runner:extension:std:table"))
     implementation(project(":platform:runner:extension:social:telegram"))
     implementation(project(":platform:runner:extension:web3:arbitrum"))
     implementation(project(":platform:runner:extension:web3:eth"))

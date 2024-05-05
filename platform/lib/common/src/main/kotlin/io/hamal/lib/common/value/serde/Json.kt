@@ -151,7 +151,7 @@ internal object ValueJsonAdapters {
 
 internal object ValueJsonTransform {
 
-    fun fromJson(node: JsonNode<*>, type: Type?): Value {
+    fun fromJson(node: JsonNode<*>, type: Type?): ValueSerializable {
         return when (node) {
             is JsonArray -> fromArray(node.asArray())
             is JsonBoolean -> ValueBoolean(node.booleanValue)

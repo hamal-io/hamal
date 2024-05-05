@@ -153,7 +153,7 @@ internal object ValueHonAdapters {
 
 internal object ValueHonTransform {
 
-    fun fromHon(node: JsonNode<*>): Value {
+    fun fromHon(node: JsonNode<*>): ValueSerializable {
         require(node is JsonObject)
         return when (val type = ValueType(node.stringValue("type"))) {
             TypeArray -> fromArray(node.asArray("value"))

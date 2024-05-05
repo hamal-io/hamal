@@ -6,7 +6,7 @@ import io.hamal.lib.common.snowflake.SnowflakeId
 val TypeSnowflakeId = ValueType("Snowflake_Id")
 
 @JvmInline
-value class ValueSnowflakeId(private val value: SnowflakeId) : ValueComparable<ValueSnowflakeId> {
+value class ValueSnowflakeId(private val value: SnowflakeId) : ValueSerializable, ValueComparable<ValueSnowflakeId> {
     constructor(value: String) : this(SnowflakeId(value))
 
     override val type get() = TypeSnowflakeId

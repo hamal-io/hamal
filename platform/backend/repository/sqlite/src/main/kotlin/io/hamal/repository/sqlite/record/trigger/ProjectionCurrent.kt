@@ -7,7 +7,7 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
-import io.hamal.repository.record.serde
+import io.hamal.repository.sqlite.hon
 import io.hamal.repository.record.trigger.TriggerRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
@@ -27,7 +27,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
                 set("id", triggerId)
             }
             map { rs ->
-                serde.decompressAndRead(Trigger::class, rs.getBytes("data"))
+                hon.decompressAndRead(Trigger::class, rs.getBytes("data"))
             }
         }
     }
@@ -59,7 +59,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
                 set("limit", query.limit)
             }
             map { rs ->
-                serde.decompressAndRead(Trigger::class, rs.getBytes("data"))
+                hon.decompressAndRead(Trigger::class, rs.getBytes("data"))
             }
         }
     }
@@ -114,7 +114,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
             }
             set("namespaceId", obj.namespaceId)
             set("type", obj.type.value)
-            set("data", serde.writeAndCompress(obj))
+            set("data", hon.writeAndCompress(obj))
         }
     }
 
