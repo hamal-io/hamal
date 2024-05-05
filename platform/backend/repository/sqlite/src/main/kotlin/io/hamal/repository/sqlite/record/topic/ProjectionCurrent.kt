@@ -157,7 +157,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
         return if (types.isEmpty()) {
             ""
         } else {
-            "AND type IN (${types.joinToString(",") { "${it.value}" }})"
+            "AND type IN (${types.joinToString(",") { "${it.stringValue}" }})"
         }
     }
 
