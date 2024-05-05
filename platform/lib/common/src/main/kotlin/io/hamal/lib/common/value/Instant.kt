@@ -6,7 +6,7 @@ import java.time.Instant
 val TypeInstant = ValueType("Instant")
 
 @JvmInline
-value class ValueInstant(private val value: Instant) : ValueComparable<ValueInstant> {
+value class ValueInstant(private val value: Instant) : ValueSerializable, ValueComparable<ValueInstant> {
     override val type get() = TypeInstant
     override fun toString(): String = value.toString()
     override fun compareTo(other: ValueInstant) = value.compareTo(other.value)

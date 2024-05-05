@@ -11,7 +11,7 @@ val TypeDecimal = ValueType("Decimal")
 @JvmInline
 value class ValueDecimal(
     val value: Decimal,
-) : Value, Comparable<ValueDecimal> {
+) : ValueSerializable, Comparable<ValueDecimal> {
 
     override val type get() = TypeDecimal
 

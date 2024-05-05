@@ -5,7 +5,7 @@ import java.math.BigInteger
 val TypeNumber = ValueType("Number")
 
 @JvmInline
-value class ValueNumber(private val value: Double) : ValueComparable<ValueNumber> {
+value class ValueNumber(private val value: Double) : ValueSerializable, ValueComparable<ValueNumber> {
     override val type get() = TypeNumber
 
     constructor(value: Byte) : this(value.toDouble())

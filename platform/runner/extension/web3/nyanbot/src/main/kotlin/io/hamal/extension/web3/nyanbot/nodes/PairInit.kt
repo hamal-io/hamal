@@ -20,10 +20,25 @@ internal data object PairInit : NodeCompiler {
 
         return ValueCode(
             """
+                table = require('std.table').create()
                 evt = context.exec.inputs.event or {}
                 address = evt.address or error('address not found')
                 
                 print(address)
+                
+                context.state.completed_addresses = context.state.completed_addresses or { }
+                
+                for k,v in ipairs(context ) do print(k,v) end
+                
+                if table.contains(context.state.completed_addresses, address) then
+                   print('done already')
+                  context.complete({})
+                end
+                 
+                table.insert(context.state.completed_addresses, address)
+                
+                print(dump(context.state.completed_addresses))
+                 
                 
                 http = req
                 
@@ -33,7 +48,6 @@ internal data object PairInit : NodeCompiler {
 
                 for k,v in pairs(resp.content.result) do print(k,v) end
                 
-                decimals = require('std.decimal').create()
                 return resp.content.result
             """.trimIndent()
         )

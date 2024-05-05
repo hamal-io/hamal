@@ -2,7 +2,7 @@ package io.hamal.lib.common.value
 
 val TypeBoolean = ValueType("Boolean")
 
-data class ValueBoolean(private val value: Boolean) : Value {
+data class ValueBoolean(private val value: Boolean) : ValueSerializable {
     constructor(value: String) : this(value.toBoolean())
 
     override val type get() = TypeBoolean

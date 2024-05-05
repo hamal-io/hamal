@@ -94,7 +94,7 @@ class CodeRunnerImpl(
                         val stateToSubmit = if (unitOfWork.codeType == CodeType.Lua54) {
                             ctx.getTable(ValueString("state")).toValueObject()
                         } else {
-                            ValueObject.empty
+                            ctx.getTable(ValueString("state")).toValueObject()
                         }
 
                         connector.complete(
