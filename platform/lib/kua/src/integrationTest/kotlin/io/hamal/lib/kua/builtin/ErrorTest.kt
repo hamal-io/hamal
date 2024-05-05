@@ -4,7 +4,7 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContextNop
-import io.hamal.lib.kua.ScriptError
+import io.hamal.lib.kua.ErrorInternal
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -20,7 +20,7 @@ class ErrorTest {
 
     @Test
     fun `Throws an error`() {
-        val error = assertThrows<ScriptError> {
+        val error = assertThrows<ErrorInternal> {
             sandbox.codeLoad(ValueCode("""error("this should not have happened")"""))
         }
         assertThat(
@@ -31,7 +31,7 @@ class ErrorTest {
 
     @Test
     fun `Assertion failure interrupts script execution`() {
-        assertThrows<ScriptError> {
+        assertThrows<ErrorInternal> {
             sandbox.codeLoad(
                 ValueCode(
                     """

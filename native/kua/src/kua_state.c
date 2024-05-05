@@ -57,16 +57,25 @@ setup_references(JNIEnv* env)
     current_jni_ref.illegal_state_exception_class = load_class(env, "java/lang/IllegalStateException");
     current_jni_ref.error_class = load_class(env, "java/lang/Error");
 
-    current_jni_ref.extension_error_class = load_class(env, "io/hamal/lib/kua/ExtensionError");
-    current_jni_ref.extension_error_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.extension_error_class ,"<init>","(Ljava/lang/Throwable;)V");
+    current_jni_ref.error_extension_class = load_class(env, "io/hamal/lib/kua/ErrorExtension");
+    current_jni_ref.error_extension_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.error_extension_class ,"<init>","(Ljava/lang/Throwable;)V");
 
-    current_jni_ref.script_error_class = load_class(env, "io/hamal/lib/kua/ScriptError");
-    current_jni_ref.script_error_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.script_error_class ,"<init>","(Ljava/lang/String;)V");
+    current_jni_ref.error_decimal_class = load_class(env, "io/hamal/lib/kua/ErrorDecimal");
+    current_jni_ref.error_decimal_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.error_decimal_class ,"<init>","(Ljava/lang/String;)V");
 
-    current_jni_ref.decimal_error_class = load_class(env, "io/hamal/lib/kua/DecimalError");
-    current_jni_ref.decimal_error_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.decimal_error_class ,"<init>","(Ljava/lang/String;)V");
+	current_jni_ref.error_internal_class = load_class(env, "io/hamal/lib/kua/ErrorInternal");
+	current_jni_ref.error_internal_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.error_internal_class ,"<init>","(Ljava/lang/String;)V");
 
-    current_jni_ref.assertion_error_class = load_class(env, "io/hamal/lib/kua/AssertionError");
+	current_jni_ref.error_not_found_class = load_class(env, "io/hamal/lib/kua/ErrorNotFound");
+	current_jni_ref.error_not_found_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.error_not_found_class ,"<init>","(Ljava/lang/String;)V");
+
+	current_jni_ref.error_illegal_argument_class = load_class(env, "io/hamal/lib/kua/ErrorIllegalArgument");
+	current_jni_ref.error_illegal_argument_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.error_illegal_argument_class ,"<init>","(Ljava/lang/String;)V");
+
+	current_jni_ref.error_invalid_state_class = load_class(env, "io/hamal/lib/kua/ErrorInvalidState");
+	current_jni_ref.error_invalid_state_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.error_invalid_state_class ,"<init>","(Ljava/lang/String;)V");
+
+    current_jni_ref.error_assertion_class = load_class(env, "io/hamal/lib/kua/ErrorAssertion");
 
     current_jni_ref.kua_func_class = load_class(env, "io/hamal/lib/kua/value/KuaFunction");
     current_jni_ref.invoked_by_lua_method_id = (*env)->GetMethodID(env, current_jni_ref.kua_func_class, "invokedByLua","(Lio/hamal/lib/kua/Native;)I");
@@ -140,7 +149,7 @@ static void unload_jni_ref(JNIEnv* env)
 	(*env)->DeleteGlobalRef(env, current_jni_ref.illegal_argument_exception_class);
 	(*env)->DeleteGlobalRef(env, current_jni_ref.illegal_state_exception_class);
 	(*env)->DeleteGlobalRef(env, current_jni_ref.error_class);
-	(*env)->DeleteGlobalRef(env, current_jni_ref.extension_error_class);
+	(*env)->DeleteGlobalRef(env, current_jni_ref.error_extension_class);
 	(*env)->DeleteGlobalRef(env, current_jni_ref.kua_func_class);
 }
 

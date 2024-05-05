@@ -5,10 +5,7 @@ import io.hamal.lib.common.value.*
 import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
-import io.hamal.lib.kua.AssertionError
-import io.hamal.lib.kua.ExitComplete
-import io.hamal.lib.kua.ExtensionError
-import io.hamal.lib.kua.tableCreate
+import io.hamal.lib.kua.*
 import io.hamal.lib.kua.value.KuaFunction
 import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.kua.value.toValueObject
@@ -69,7 +66,7 @@ class CodeRunnerImpl(
                         }
                         sandbox.globalSet(ValueString("_internal"), internalTable)
                         sandbox.codeLoad(contextExtension.factoryCode)
-//
+
                         sandbox.codeLoad(ValueCode("${contextExtension.name} = plugin_create(_internal)"))
                         sandbox.globalUnset(ValueString("_internal"))
 
@@ -98,7 +95,7 @@ class CodeRunnerImpl(
                             runnerContext.eventsToSubmit
                         )
                         log.debug("Completed exec: $execId")
-                    } catch (e: ExtensionError) {
+                    } catch (e: ErrorExtension) {
                         val cause = e.cause
                         if (cause is ExitComplete) {
 
@@ -125,14 +122,34 @@ class CodeRunnerImpl(
                         }
                     }
                 }
-        } catch (a: AssertionError) {
-            a.printStackTrace()
+        } catch (e: ErrorAssertion) {
+            e.printStackTrace()
             connector.fail(
                 execId,
                 ExecStatusCode(500),
-                ExecResult(ValueObject.builder().set("message", a.message ?: "Unknown reason").build())
+                ExecResult(ValueObject.builder().set("message", e.message ?: "Unknown reason").build())
             )
-            log.debug("Assertion error: $execId - ${a.message}")
+        } catch (e: ErrorIllegalArgument) {
+            e.printStackTrace()
+            connector.fail(
+                execId,
+                ExecStatusCode(400),
+                ExecResult(ValueObject.builder().set("message", e.message ?: "Unknown reason").build())
+            )
+        } catch (e: ErrorInvalidState) {
+            e.printStackTrace()
+            connector.fail(
+                execId,
+                ExecStatusCode(409),
+                ExecResult(ValueObject.builder().set("message", e.message ?: "Unknown reason").build())
+            )
+        } catch (e: ErrorNotFound) {
+            e.printStackTrace()
+            connector.fail(
+                execId,
+                ExecStatusCode(404),
+                ExecResult(ValueObject.builder().set("message", e.message ?: "Unknown reason").build())
+            )
         } catch (t: Throwable) {
             t.printStackTrace()
             connector.fail(
@@ -140,7 +157,6 @@ class CodeRunnerImpl(
                 ExecStatusCode(500),
                 ExecResult(ValueObject.builder().set("message", t.message ?: "Unknown reason").build())
             )
-            log.debug("Failed exec: $execId")
         }
     }
 

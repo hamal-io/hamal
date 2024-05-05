@@ -27,22 +27,23 @@ internal class FailTest : AbstractExecuteTest() {
 
     @Test
     fun `Invoking fail interrupts execution`() {
-        val runner = createTestRunner(
+        createTestRunner(
             connector = TestFailConnector()
-        )
-        runner.run(
-            unitOfWork(
-                """
+        ).also { runner ->
+            runner.run(
+                unitOfWork(
+                    """
             context.fail()
             context.complete({ status_code = 200, result = {} })
         """.trimIndent()
+                )
             )
-        )
+        }
     }
 
     @Test
     fun `Fails execution with error`() {
-        val runner = createTestRunner(
+        createTestRunner(
             testPlugins = arrayOf(
                 ValueString("returns_error") to FunctionReturnsError(),
             ),
@@ -51,66 +52,71 @@ internal class FailTest : AbstractExecuteTest() {
                 assertThat(statusCode, equalTo(ExecStatusCode(432)))
                 assertThat(result, equalTo(ExecResult(ValueObject.builder().set("message", "Sometimes an error can be a good thing").build())))
             }
-        )
-        runner.run(
-            unitOfWork(
-                """
+        ).also { runner ->
+            runner.run(
+                unitOfWork(
+                    """
             test = require_plugin('test')
             err = test.returns_error()
             context.fail(err)
         """
+                )
             )
-        )
+        }
     }
 
     @Test
     fun `Fails execution without argument`() {
-        val runner = createTestRunner(
+        createTestRunner(
             connector = TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
                 assertThat(result, equalTo(ExecResult(ValueObject.empty)))
             }
-        )
-        runner.run(unitOfWork("context.fail()"))
+        ).also { runner ->
+            runner.run(unitOfWork("context.fail()"))
+        }
     }
 
 
     @Test
     fun `Fails execution with string argument`() {
-        val runner = createTestRunner(
+        createTestRunner(
             connector = TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
                 assertThat(result, equalTo(ExecResult(ValueObject.builder().set("message", "test").build())))
             }
-        )
-        runner.run(unitOfWork("context.fail('test')"))
+        ).also { runner ->
+            runner.run(unitOfWork("context.fail('test')"))
+        }
     }
 
     @Test
     fun `Fails execution with number argument`() {
-        val runner = createTestRunner(
+        createTestRunner(
             connector = TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
                 assertThat(result, equalTo(ExecResult(ValueObject.builder().set("value", 1337).build())))
             }
-        )
-        runner.run(unitOfWork("context.fail(1337)"))
+        ).also { runner ->
+            runner.run(unitOfWork("context.fail(1337)"))
+        }
     }
 
     @Test
     fun `Fails execution with boolean argument`() {
-        val runner = createTestRunner(
+        createTestRunner(
             connector = TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
                 assertThat(result, equalTo(ExecResult(ValueObject.builder().set("value", false).build())))
             }
-        )
-        runner.run(unitOfWork("context.fail(false)"))
+        ).also { runner ->
+            runner.run(unitOfWork("context.fail(false)"))
+        }
     }
 
     @Test
     fun `Fails execution table argument`() {
-        val runner = createTestRunner(
+        createTestRunner(
             connector = TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
                 assertThat(
@@ -124,15 +130,16 @@ internal class FailTest : AbstractExecuteTest() {
                     )
                 )
             }
-        )
-        runner.run(unitOfWork("context.fail({ status_code = 532, result = {reason = 'undisclosed', answer = 42} })"))
+        ).also { runner ->
+            runner.run(unitOfWork("context.fail({ status_code = 532, result = {reason = 'undisclosed', answer = 42} })"))
+        }
     }
 
     private class FunctionReturnsError : Function0In1Out<ValueError>(
         FunctionOutput1Schema(ValueError::class)
     ) {
         override fun invoke(ctx: FunctionContext): ValueError {
-            return ValueError( "Sometimes an error can be a good thing")
+            return ValueError("Sometimes an error can be a good thing")
         }
     }
 

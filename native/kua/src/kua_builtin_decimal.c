@@ -21,7 +21,7 @@ static void
 trap_handler(mpd_context_t *ctx) {
     char err_msg[MPD_MAX_FLAG_STRING];
     mpd_snprint_flags(err_msg, sizeof(err_msg), ctx->status);
-    throw_decimal_error(err_msg);
+	throw_error_decimal(err_msg);
 }
 
 static mpd_context_t global_ctx;
