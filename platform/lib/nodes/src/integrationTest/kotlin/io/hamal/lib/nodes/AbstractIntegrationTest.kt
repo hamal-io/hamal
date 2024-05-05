@@ -59,20 +59,20 @@ internal abstract class AbstractIntegrationTest {
                                 """
                     function plugin_create(internal)
                         local export = {
-                            invokeOne = internal.invokeOne,
-                            invokeTwo = internal.invokeTwo,
-                            captureOne =  internal.captureOne,
-                            captureTwo =  internal.captureTwo
+                            invoke_one = internal.invoke_one,
+                            invoke_two = internal.invoke_two,
+                            capture_one =  internal.capture_one,
+                            capture_two =  internal.capture_two
                         }
                         return export
                     end
                 """.trimIndent()
                             ),
                             internals = mapOf(
-                                ValueString("invokeOne") to testContext.invokedOne,
-                                ValueString("invokeTwo") to testContext.invokedTwo,
-                                ValueString("captureOne") to testContext.captorOne,
-                                ValueString("captureTwo") to testContext.captorTwo
+                                ValueString("invoke_one") to testContext.invokedOne,
+                                ValueString("invoke_two") to testContext.invokedTwo,
+                                ValueString("capture_one") to testContext.captorOne,
+                                ValueString("capture_two") to testContext.captorTwo
                             )
                         )
                     )

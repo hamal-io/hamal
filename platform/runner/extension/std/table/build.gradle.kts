@@ -3,7 +3,7 @@ plugins {
 }
 
 tasks.jar {
-    archiveFileName.set("ext-std-decimal.jar")
+    archiveFileName.set("ext-std-table.jar")
 }
 
 distributions {

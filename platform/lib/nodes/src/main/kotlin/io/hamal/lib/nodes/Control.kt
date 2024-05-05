@@ -24,6 +24,15 @@ data class ControlCheckbox(
     override val type: ControlType = ControlType("Checkbox")
 }
 
+data class ControlCode(
+    override val identifier: ControlIdentifier,
+    override val nodeId: NodeId,
+    override val port: PortInput,
+    val value: ValueCode
+) : ControlInput {
+    override val type: ControlType = ControlType("Code")
+}
+
 data class ControlCondition(
     override val identifier: ControlIdentifier,
     override val nodeId: NodeId,
@@ -112,6 +121,7 @@ interface Control {
             return when (type) {
                 ControlType("Checkbox") -> context.deserialize(json, ControlCheckbox::class.java)
                 ControlType("Capture") -> context.deserialize(json, ControlCapture::class.java)
+                ControlType("Code") -> context.deserialize(json, ControlCode::class.java)
                 ControlType("Condition") -> context.deserialize(json, ControlCondition::class.java)
                 ControlType("Init") -> context.deserialize(json, ControlInit::class.java)
                 ControlType("Invoke") -> context.deserialize(json, ControlInvoke::class.java)
