@@ -127,7 +127,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
             set("id", obj.id)
             set("workspaceId", obj.workspaceId)
             set("namespaceId", obj.namespaceId)
-            set("type", obj.type.value)
+            set("type", obj.type)
             set("name", obj.name)
             set("data", hon.writeAndCompress(obj))
         }
