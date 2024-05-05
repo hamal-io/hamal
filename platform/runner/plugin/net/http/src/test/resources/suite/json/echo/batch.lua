@@ -1,5 +1,5 @@
 local http = require_plugin('net.http')
-local decimal = require('std.decimal')
+local decimal = require('std.decimal').create()
 
 local body = {
     s = 'hamal',

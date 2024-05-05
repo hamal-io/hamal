@@ -18,7 +18,7 @@ internal class ExtensionLogTest : AbstractRunnerTest() {
     fun `Log Trace`() {
         val testService = TestExecLogService()
         val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionLogFactory),
+            extensionFactories = listOf(ExtensionStdLogFactory),
             pluginFactories = listOf(PluginLogFactory(testService))
         )
         runner.run(unitOfWork("local log = require('std.log').create(); log.trace('a trace message')"))
@@ -34,7 +34,7 @@ internal class ExtensionLogTest : AbstractRunnerTest() {
     fun `Log Debug`() {
         val testService = TestExecLogService()
         val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionLogFactory),
+            extensionFactories = listOf(ExtensionStdLogFactory),
             pluginFactories = listOf(PluginLogFactory(testService))
         )
         runner.run(unitOfWork("local log = require('std.log').create(); log.debug('a debug message')"))
@@ -50,7 +50,7 @@ internal class ExtensionLogTest : AbstractRunnerTest() {
     fun `Log Info`() {
         val testService = TestExecLogService()
         val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionLogFactory),
+            extensionFactories = listOf(ExtensionStdLogFactory),
             pluginFactories = listOf(PluginLogFactory(testService))
         )
         runner.run(unitOfWork("local log = require('std.log').create(); log.info('an info message')"))
@@ -66,7 +66,7 @@ internal class ExtensionLogTest : AbstractRunnerTest() {
     fun `Log Warn`() {
         val testService = TestExecLogService()
         val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionLogFactory),
+            extensionFactories = listOf(ExtensionStdLogFactory),
             pluginFactories = listOf(PluginLogFactory(testService))
         )
         runner.run(unitOfWork("local log = require('std.log').create(); log.warn('a warning message')"))
@@ -82,7 +82,7 @@ internal class ExtensionLogTest : AbstractRunnerTest() {
     fun `Log Error`() {
         val testService = TestExecLogService()
         val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionLogFactory),
+            extensionFactories = listOf(ExtensionStdLogFactory),
             pluginFactories = listOf(PluginLogFactory(testService))
         )
         runner.run(unitOfWork("local log = require('std.log').create(); log.error('an error message')"))

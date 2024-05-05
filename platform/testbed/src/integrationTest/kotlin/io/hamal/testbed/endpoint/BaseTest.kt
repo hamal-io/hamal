@@ -5,7 +5,7 @@ import io.hamal.core.component.DelayRetryFixedTime
 import io.hamal.core.component.SetupInternalTopics
 import io.hamal.core.config.BackendBasePath
 import io.hamal.core.service.InternalEventService
-import io.hamal.extension.net.http.ExtensionHttpFactory
+import io.hamal.extension.net.http.ExtensionNetHttpFactory
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.common.value.ValueObject
@@ -307,7 +307,7 @@ abstract class BaseEndpointTest : AbstractRunnerTest() {
                             PluginHttpFactory()
                         ),
                         extensionFactories = listOf(
-                            ExtensionHttpFactory
+                            ExtensionNetHttpFactory
                         ),
                         env = RunnerEnv(
                             ValueObject.builder()

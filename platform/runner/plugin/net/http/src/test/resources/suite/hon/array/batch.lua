@@ -1,5 +1,5 @@
 local http = require_plugin('net.http')
-local decimals = require('std.decimal')
+local decimals = require('std.decimal').create()
 
 local url = context.env.test_url .. '/v1/hon-array'
 

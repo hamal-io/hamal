@@ -1,6 +1,6 @@
 package io.hamal.lib.nodes
 
-import io.hamal.extension.std.decimal.ExtensionDecimalFactory
+import io.hamal.extension.std.decimal.ExtensionStdDecimalFactory
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.*
 import io.hamal.lib.domain.State
@@ -24,8 +24,8 @@ import io.hamal.lib.nodes.NodeId.Companion.NodeId
 import io.hamal.lib.nodes.NodeTitle.Companion.NodeTitle
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.PortId.Companion.PortId
-import io.hamal.lib.nodes.compiler.node.Registry
-import io.hamal.lib.nodes.compiler.node.defaultRegistry
+import io.hamal.lib.nodes.compiler.node.NodeCompilerRegistry
+import io.hamal.lib.nodes.compiler.node.defaultNodeCompilerRegistry
 import io.hamal.lib.nodes.fixture.Capture
 import io.hamal.lib.nodes.fixture.CaptureFunction
 import io.hamal.lib.nodes.fixture.InvokeFunction
@@ -76,11 +76,11 @@ internal abstract class AbstractIntegrationTest {
                             )
                         )
                     )
-                }.also { sandbox -> sandbox.registerExtensions(ExtensionDecimalFactory) }
-                    .also { sandbox -> sandbox.generatorRegistry.register(defaultRegistry) }
+                }.also { sandbox -> sandbox.registerExtensions(ExtensionStdDecimalFactory) }
+                    .also { sandbox -> sandbox.generatorNodeCompilerRegistry.register(defaultNodeCompilerRegistry) }
                     .also { sandbox ->
-                        sandbox.generatorRegistry.register(
-                            Registry(
+                        sandbox.generatorNodeCompilerRegistry.register(
+                            NodeCompilerRegistry(
                                 listOf(
                                     Capture.Boolean,
                                     Capture.Decimal,

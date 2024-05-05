@@ -1,10 +1,11 @@
 package io.hamal.runner.config
 
-import io.hamal.extension.net.http.ExtensionHttpFactory
-import io.hamal.extension.net.smtp.ExtensionSmtpFactory
-import io.hamal.extension.std.decimal.ExtensionDecimalFactory
-import io.hamal.extension.std.log.ExtensionLogFactory
+import io.hamal.extension.net.http.ExtensionNetHttpFactory
+import io.hamal.extension.net.smtp.ExtensionNetSmtpFactory
 import io.hamal.extension.social.telegram.ExtensionSocialTelegramFactory
+import io.hamal.extension.std.decimal.ExtensionStdDecimalFactory
+import io.hamal.extension.std.log.ExtensionStdLogFactory
+import io.hamal.extension.std.table.ExtensionStdTableFactory
 import io.hamal.extension.web3.arbitrum.ExtensionWeb3ArbitrumFactory
 import io.hamal.extension.web3.eth.ExtensionWeb3EthFactory
 import io.hamal.extension.web3.nyanbot.ExtensionWeb3NyanbotFactory
@@ -15,7 +16,7 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Jar
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
-import io.hamal.lib.nodes.compiler.node.defaultRegistry
+import io.hamal.lib.nodes.compiler.node.defaultNodeCompilerRegistry
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.plugin.net.http.PluginHttpFactory
 import io.hamal.plugin.net.smtp.PluginSmtpFactory
@@ -69,17 +70,19 @@ class SandboxFactoryDefaultImpl(
                 PluginWeb3EvmFactory()
             )
             .registerExtensions(
-                ExtensionDecimalFactory,
-                ExtensionSmtpFactory,
-                ExtensionHttpFactory,
-                ExtensionLogFactory,
+                ExtensionNetSmtpFactory,
+                ExtensionNetHttpFactory,
+
+                ExtensionStdDecimalFactory,
+                ExtensionStdLogFactory,
+                ExtensionStdTableFactory,
                 ExtensionSocialTelegramFactory,
 
                 ExtensionWeb3ArbitrumFactory,
                 ExtensionWeb3EthFactory,
                 ExtensionWeb3NyanbotFactory
             ).also { sandbox ->
-                sandbox.generatorRegistry.register(defaultRegistry)
+                sandbox.generatorNodeCompilerRegistry.register(defaultNodeCompilerRegistry)
             }
     }
 }

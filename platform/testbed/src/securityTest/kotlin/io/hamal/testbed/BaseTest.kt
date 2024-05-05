@@ -1,6 +1,6 @@
 package io.hamal.testbed
 
-import io.hamal.extension.net.http.ExtensionHttpFactory
+import io.hamal.extension.net.http.ExtensionNetHttpFactory
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.plugin.net.http.PluginHttpFactory
@@ -25,7 +25,7 @@ abstract class BaseTest(private val apiUrl: String) : AbstractRunnerTest() {
         return try {
             createTestRunner(
                 pluginFactories = listOf(PluginHttpFactory()),
-                extensionFactories = listOf(ExtensionHttpFactory),
+                extensionFactories = listOf(ExtensionNetHttpFactory),
                 env = RunnerEnv(
                     ValueObject.builder().also { builder ->
                         testEnv.values.forEach { (key, value) ->

@@ -7,12 +7,12 @@ internal class NegTest : AbstractRunnerTest() {
     @Test
     fun `decimal, decimal`() {
         val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionDecimalFactory)
+            extensionFactories = listOf(ExtensionStdDecimalFactory)
         )
         runner.run(
             unitOfWork(
                 """
-                local decimal = require('std.decimal')
+                local decimal = require('std.decimal').create()
                 local x = decimal.new(512)
                 local y = decimal.new(-512)
                 

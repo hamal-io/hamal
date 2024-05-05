@@ -3,7 +3,7 @@ package io.hamal.extension.net.http
 import io.hamal.extension.net.http.endpoint.TestHeaderController
 import io.hamal.extension.net.http.endpoint.TestJsonController
 import io.hamal.extension.net.http.endpoint.TestStatusController
-import io.hamal.extension.std.decimal.ExtensionDecimalFactory
+import io.hamal.extension.std.decimal.ExtensionStdDecimalFactory
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.plugin.net.http.PluginHttpFactory
@@ -38,8 +38,8 @@ class ExtensionHttpTest(@LocalServerPort var localServerPort: Int) : AbstractRun
                 val runner = createTestRunner(
                     pluginFactories = listOf(PluginHttpFactory()),
                     extensionFactories = listOf(
-                        ExtensionDecimalFactory,
-                        ExtensionHttpFactory
+                        ExtensionStdDecimalFactory,
+                        ExtensionNetHttpFactory
                     ),
                     env = RunnerEnv(
                         ValueObject.builder()

@@ -82,7 +82,7 @@ class CodeRunnerImpl(
                             CodeType.Nodes -> {
                                 // FIXME load graph from code
                                 val graph = serde.read(NodesGraph::class, unitOfWork.code.stringValue)
-                                val compiledCode = GraphCompiler(sandbox.generatorRegistry).compile(graph)
+                                val compiledCode = GraphCompiler(sandbox.generatorNodeCompilerRegistry).compile(graph)
                                 sandbox.codeLoad(compiledCode)
                             }
                         }

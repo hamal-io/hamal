@@ -8,13 +8,13 @@ internal class DivTest : AbstractRunnerTest() {
     @Test
     fun `decimal, number`() {
         val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionDecimalFactory)
+            extensionFactories = listOf(ExtensionStdDecimalFactory)
         )
 
         runner.run(
             unitOfWork(
                 """
-                local decimal = require('std.decimal')
+                local decimal = require('std.decimal').create()
                 local x = decimal.new('3.14')
                 local y = 2
                 local result = x / y
@@ -29,13 +29,13 @@ internal class DivTest : AbstractRunnerTest() {
     @Test
     fun `decimal, decimal`() {
         val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionDecimalFactory)
+            extensionFactories = listOf(ExtensionStdDecimalFactory)
         )
 
         runner.run(
             unitOfWork(
                 """
-                local decimal = require('std.decimal')
+                local decimal = require('std.decimal').create()
                 local x = decimal.new('3.14')
                 local y = decimal.new(2)
                 local result = x / y
@@ -50,13 +50,13 @@ internal class DivTest : AbstractRunnerTest() {
     @Test
     fun `number, decimal`() {
         val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionDecimalFactory)
+            extensionFactories = listOf(ExtensionStdDecimalFactory)
         )
 
         runner.run(
             unitOfWork(
                 """
-                local decimal = require('std.decimal')
+                local decimal = require('std.decimal').create()
                 local x = 3.14
                 local y = decimal.new(2)
                 local result = x / y

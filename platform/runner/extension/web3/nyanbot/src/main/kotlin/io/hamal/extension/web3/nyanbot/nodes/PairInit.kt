@@ -9,8 +9,8 @@ import io.hamal.lib.nodes.compiler.node.NodeCompiler
 import io.hamal.lib.nodes.compiler.node.NodeCompiler.Context
 
 
-internal data object NewPair : NodeCompiler {
-    override val type = NodeType("Nyanbot_New_Pair")
+internal data object PairInit : NodeCompiler {
+    override val type = NodeType("Nyanbot_Pair_Init")
     override val inputTypes = emptyList<ValueType>()
     override val outputTypes: List<ValueType> = listOf(TypeObject)
 
@@ -20,7 +20,8 @@ internal data object NewPair : NodeCompiler {
 
         return ValueCode(
             """
-                address = context.exec.inputs.event.address
+                evt = context.exec.inputs.event or {}
+                address = evt.address or error('address not found')
                 
                 print(address)
                 
@@ -32,7 +33,7 @@ internal data object NewPair : NodeCompiler {
 
                 for k,v in pairs(resp.content.result) do print(k,v) end
                 
-                decimals = require('std.decimal')
+                decimals = require('std.decimal').create()
                 return resp.content.result
             """.trimIndent()
         )

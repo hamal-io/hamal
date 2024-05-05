@@ -10,7 +10,7 @@ import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 import io.hamal.lib.kua.value.KuaFunction
 import io.hamal.lib.kua.value.KuaReference
 import io.hamal.lib.kua.value.KuaTable
-import io.hamal.lib.nodes.compiler.node.Registry
+import io.hamal.lib.nodes.compiler.node.NodeCompilerRegistry
 
 // FIXME super dirty temporary hack
 val sandboxContextLocal = ThreadLocal<SandboxContext>()
@@ -19,7 +19,7 @@ class Sandbox(
     private val ctx: SandboxContext,
     private val state: CloseableState = CloseableStateImpl(),
     val registry: SandboxRegistry = SandboxRegistryImpl(state),
-    val generatorRegistry: Registry = Registry(listOf())
+    val generatorNodeCompilerRegistry: NodeCompilerRegistry = NodeCompilerRegistry(listOf())
 ) : CloseableState {
 
     init {
@@ -109,7 +109,7 @@ class Sandbox(
 
     fun register(extension: RunnerExtension) {
         registry.register(extension)
-        extension.nodeCompilers.forEach(generatorRegistry::register)
+        extension.nodeCompilers.forEach(generatorNodeCompilerRegistry::register)
     }
 
     override fun close() {

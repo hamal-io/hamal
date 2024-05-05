@@ -7,10 +7,10 @@ import io.hamal.lib.nodes.ControlType.Companion.ControlType
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.compiler.graph.ComputationGraph.Companion.ComputationGraph
 import io.hamal.lib.nodes.compiler.node.NodeCompiler
-import io.hamal.lib.nodes.compiler.node.Registry
+import io.hamal.lib.nodes.compiler.node.NodeCompilerRegistry
 
 class GraphCompiler(
-    private val registry: Registry
+    private val registry: NodeCompilerRegistry
 ) {
 
     fun compile(graph: NodesGraph): ValueCode {

@@ -1,6 +1,6 @@
 package io.hamal.plugin.net.http
 
-import io.hamal.extension.std.decimal.ExtensionDecimalFactory
+import io.hamal.extension.std.decimal.ExtensionStdDecimalFactory
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.plugin.net.http.endpoint.TestHeaderController
@@ -38,7 +38,7 @@ class PluginHttpTest(@LocalServerPort var localServerPort: Int) : AbstractRunner
             dynamicTest("${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}") {
                 val runner = createTestRunner(
                     pluginFactories = listOf(PluginHttpFactory()),
-                    extensionFactories = listOf(ExtensionDecimalFactory),
+                    extensionFactories = listOf(ExtensionStdDecimalFactory),
                     env = RunnerEnv(
                         ValueObject.builder()
                             .set("test_url", "http://localhost:$localServerPort")

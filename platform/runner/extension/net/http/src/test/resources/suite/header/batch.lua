@@ -2,7 +2,7 @@ http = require('net.http').create({
     base_url = context.env.test_url
 })
 
-decimal = require('std.decimal')
+decimal = require('std.decimal').create()
 
 req_headers = {}
 req_headers['Auth-ori-zation'] = 'Bearer ey.SecretToken'
