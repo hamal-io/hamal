@@ -63,7 +63,7 @@ internal class TopicCreateHandlerTest : BaseRequestHandlerTest() {
             logTopicId = LogTopicId(3456),
             workspaceId = testWorkspace.id,
             namespaceId = testNamespace.id,
-            type = Namespace,
+            type = TopicType(Namespace),
             name = TopicName("some-topic-name")
         )
     }

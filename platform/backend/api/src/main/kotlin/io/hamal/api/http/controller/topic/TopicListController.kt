@@ -3,7 +3,12 @@ package io.hamal.api.http.controller.topic
 import io.hamal.core.adapter.namespace_tree.NamespaceTreeGetSubTreePort
 import io.hamal.core.adapter.topic.TopicListPort
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain._enum.TopicTypes
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.TopicId
+import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.domain.vo.TopicType.Companion.TopicType
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.sdk.api.ApiTopic
 import io.hamal.lib.sdk.api.ApiTopicList
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
@@ -26,7 +31,6 @@ internal class TopicListController(
         @RequestParam(required = false, name = "ids", defaultValue = "") ids: List<TopicId>,
         @RequestParam(required = false, name = "workspace_ids", defaultValue = "") workspaceIds: List<WorkspaceId>,
         @RequestParam(required = false, name = "namespace_ids", defaultValue = "") namespaceIds: List<NamespaceId>,
-        @RequestParam(required = false, name = "types", defaultValue = "") types: List<TopicType>
     ): ResponseEntity<ApiTopicList> {
         val allNamespaceIds = namespaceIds.flatMap { namespaceId ->
             namespaceTreeGetSubTree(namespaceId).values
@@ -39,7 +43,11 @@ internal class TopicListController(
                 topicIds = ids,
                 workspaceIds = workspaceIds,
                 namespaceIds = allNamespaceIds,
-                types = types
+                types = listOf(
+                    TopicType(TopicTypes.Workspace),
+                    TopicType(TopicTypes.Namespace),
+                    TopicType(TopicTypes.Public)
+                )
             )
         ).let { topics ->
             ResponseEntity.ok(
