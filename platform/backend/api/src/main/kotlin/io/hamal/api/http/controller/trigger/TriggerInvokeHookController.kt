@@ -38,10 +38,13 @@ internal class TriggerInvokeHookController(
                 override val correlationId = CorrelationId.default
                 override val inputs = InvocationInputs(
                     ValueObject.builder()
-                        .set("headers", req.headers())
-                        .set("parameters", req.parameters())
-                        .set("content", req.content())
-                        .build()
+                        .set(
+                            "hook", ValueObject.builder()
+                                .set("headers", req.headers())
+                                .set("parameters", req.parameters())
+                                .set("body", req.body())
+                                .build()
+                        ).build()
                 )
             }).toApiRequested()
     }
@@ -62,7 +65,7 @@ internal class TriggerInvokeHookController(
         return builder.build()
     }
 
-    private fun HttpServletRequest.content(): ValueObject {
+    private fun HttpServletRequest.body(): ValueObject {
         require(contentType.startsWith("application/json")) { "Only application/json supported yet" }
         val content = reader.lines().reduce("", String::plus)
         return json.read(ValueObject::class, content)

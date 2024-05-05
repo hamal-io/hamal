@@ -34,8 +34,12 @@ internal data object PairInit : NodeCompiler {
                    print('done already')
                   context.complete({})
                 end
+                
+                -- context.on_complete(function() 
+                --   table.insert(context.state.completed_addresses, address)
+                -- end)
                  
-                table.insert(context.state.completed_addresses, address)
+                -- table.insert(context.state.completed_addresses, address)
                 
                 print(dump(context.state.completed_addresses))
                  
@@ -44,8 +48,10 @@ internal data object PairInit : NodeCompiler {
                 
                 http = require('net.http').create({})
                 resp = fail_on_error(http.post({
-                    url ='http://localhost:8008/v1/endpoints/f3f08c89810001'
-                    
+                    url ='http://localhost:8008/v1/endpoints/f3f08c89810001',
+                    body = {
+                        address = address
+                    }
                 }))
                 print(resp.content)
 

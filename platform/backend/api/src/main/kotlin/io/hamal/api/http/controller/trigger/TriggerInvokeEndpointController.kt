@@ -48,12 +48,14 @@ internal class TriggerInvokeEndpointController(
         return endpointInvoke(
             triggerId = id,
             inputs = InvocationInputs(
-                ValueObject.builder()
-                    .set("method", req.method())
-                    .set("headers", req.headers())
-                    .set("parameters", req.parameters())
-                    .set("content", req.content())
-                    .build()
+                ValueObject.builder().set(
+                    "endpoint", ValueObject.builder()
+                        .set("method", req.method())
+                        .set("headers", req.headers())
+                        .set("parameters", req.parameters())
+                        .set("body", req.body())
+                        .build()
+                ).build()
             ),
             auth
         ).thenApply { exec ->
@@ -100,7 +102,7 @@ private fun HttpServletRequest.parameters(): ValueObject {
     return builder.build()
 }
 
-private fun HttpServletRequest.content(): ValueObject {
+private fun HttpServletRequest.body(): ValueObject {
     val content = reader.lines().reduce("", String::plus)
     if (content.isEmpty()) return ValueObject.empty
 
