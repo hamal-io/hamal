@@ -3,10 +3,11 @@ package io.hamal.repository
 import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.util.TimeUtils.withInstant
-import io.hamal.lib.domain._enum.ExecLogLevel
+import io.hamal.lib.domain._enum.ExecLogLevels.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecLogId.Companion.ExecLogId
+import io.hamal.lib.domain.vo.ExecLogLevel.Companion.ExecLogLevel
 import io.hamal.lib.domain.vo.ExecLogMessage.Companion.ExecLogMessage
 import io.hamal.lib.domain.vo.ExecLogTimestamp.Companion.ExecLogTimestamp
 import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
@@ -32,7 +33,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
                     AppendCmd(
                         execLogId = ExecLogId(2),
                         execId = ExecId(3),
-                        level = ExecLogLevel.Info,
+                        level = ExecLogLevel(Info),
                         message = ExecLogMessage("Some Message"),
                         workspaceId = WorkspaceId(4),
                         timestamp = ExecLogTimestamp(Instant.ofEpochMilli(12345678))
@@ -43,7 +44,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
                     assertThat(id, equalTo(ExecLogId(2)))
                     assertThat(execId, equalTo(ExecId(3)))
                     assertThat(workspaceId, equalTo(WorkspaceId(4)))
-                    assertThat(level, equalTo(ExecLogLevel.Info))
+                    assertThat(level.enumValue, equalTo(Info))
                     assertThat(message, equalTo(ExecLogMessage("Some Message")))
                     assertThat(timestamp, equalTo(ExecLogTimestamp(Instant.ofEpochMilli(12345678))))
 
@@ -56,13 +57,19 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Second time appending to same exec log`() = runWith(ExecLogRepository::class) {
             withInstant(Instant.ofEpochMilli(23456)) {
-                appendExecLog(ExecLogId(2), ExecId(3), WorkspaceId(4), ExecLogLevel.Info, ExecLogMessage("First Message"))
+                appendExecLog(
+                    ExecLogId(2),
+                    ExecId(3),
+                    WorkspaceId(4),
+                    ExecLogLevel(Info),
+                    ExecLogMessage("First Message")
+                )
 
                 val result = append(
                     AppendCmd(
                         execLogId = ExecLogId(2),
                         execId = ExecId(3),
-                        level = ExecLogLevel.Info,
+                        level = ExecLogLevel(Info),
                         message = ExecLogMessage("Second Message"),
                         workspaceId = WorkspaceId(4),
                         timestamp = ExecLogTimestamp(Instant.ofEpochMilli(12345678))
@@ -73,7 +80,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
                     assertThat(id, equalTo(ExecLogId(2)))
                     assertThat(execId, equalTo(ExecId(3)))
                     assertThat(workspaceId, equalTo(WorkspaceId(4)))
-                    assertThat(level, equalTo(ExecLogLevel.Info))
+                    assertThat(level.enumValue, equalTo(Info))
                     assertThat(message, equalTo(ExecLogMessage("Second Message")))
                     assertThat(timestamp, equalTo(ExecLogTimestamp(Instant.ofEpochMilli(12345678))))
 
@@ -93,8 +100,8 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Clear table`() = runWith(ExecLogRepository::class) {
-            appendExecLog(ExecLogId(1), ExecId(1), WorkspaceId(3), ExecLogLevel.Info, ExecLogMessage("Here we go"))
-            appendExecLog(ExecLogId(3), ExecId(4), WorkspaceId(3), ExecLogLevel.Info, ExecLogMessage("Hamal Rocks"))
+            appendExecLog(ExecLogId(1), ExecId(1), WorkspaceId(3), ExecLogLevel(Info), ExecLogMessage("Here we go"))
+            appendExecLog(ExecLogId(3), ExecId(4), WorkspaceId(3), ExecLogLevel(Info), ExecLogMessage("Hamal Rocks"))
 
             clear()
             verifyCount(0)
@@ -166,7 +173,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
                 execLogId = ExecLogId(1),
                 execId = ExecId(2),
                 workspaceId = WorkspaceId(3),
-                level = ExecLogLevel.Info,
+                level = ExecLogLevel(Info),
                 message = ExecLogMessage("Message One")
             )
 
@@ -174,7 +181,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
                 execLogId = ExecLogId(2),
                 execId = ExecId(2),
                 workspaceId = WorkspaceId(3),
-                level = ExecLogLevel.Warn,
+                level = ExecLogLevel(Warn),
                 message = ExecLogMessage("Message Two")
             )
 
@@ -182,7 +189,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
                 execLogId = ExecLogId(3),
                 execId = ExecId(3),
                 workspaceId = WorkspaceId(4),
-                level = ExecLogLevel.Error,
+                level = ExecLogLevel(Error),
                 message = ExecLogMessage("Message Three")
             )
 
@@ -190,7 +197,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
                 execLogId = ExecLogId(4),
                 execId = ExecId(5),
                 workspaceId = WorkspaceId(4),
-                level = ExecLogLevel.Error,
+                level = ExecLogLevel(Error),
                 message = ExecLogMessage("Message Four")
             )
         }

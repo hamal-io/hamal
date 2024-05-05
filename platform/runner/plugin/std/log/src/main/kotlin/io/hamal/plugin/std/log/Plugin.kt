@@ -3,9 +3,11 @@ package io.hamal.plugin.std.log
 import io.hamal.lib.common.logger
 import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.domain._enum.ExecLogLevel
-import io.hamal.lib.domain._enum.ExecLogLevel.*
+import io.hamal.lib.domain._enum.ExecLogLevels
+import io.hamal.lib.domain._enum.ExecLogLevels.*
+
 import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecLogLevel.Companion.ExecLogLevel
 import io.hamal.lib.domain.vo.ExecLogMessage.Companion.ExecLogMessage
 import io.hamal.lib.domain.vo.ExecLogTimestamp
 import io.hamal.lib.kua.Sandbox
@@ -42,10 +44,10 @@ class LogFunction(
 ) {
 
     override fun invoke(ctx: FunctionContext, arg1: ValueString, arg2: ValueString): ValueError? {
-        val level = ExecLogLevel.valueOf(arg1.stringValue)
+        val level = ExecLogLevel(ExecLogLevels.valueOf(arg1.stringValue))
         val message = ExecLogMessage(arg2.stringValue)
 
-        when (level) {
+        when (level.enumValue) {
             Trace -> log.trace(message.stringValue)
             Debug -> log.debug(message.stringValue)
             Info -> log.info(message.stringValue)
