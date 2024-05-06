@@ -7,8 +7,8 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
-import io.hamal.repository.sqlite.hon
 import io.hamal.repository.record.trigger.TriggerRecord
+import io.hamal.repository.sqlite.hon
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
@@ -113,7 +113,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
                 set("topicId", 0)
             }
             set("namespaceId", obj.namespaceId)
-            set("type", obj.type.value)
+            set("type", obj.type.enumValue.value)
             set("data", hon.writeAndCompress(obj))
         }
     }
@@ -143,7 +143,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
         return if (types.isEmpty()) {
             ""
         } else {
-            "AND type IN (${types.joinToString(",") { "'${it.stringValue}'" }})"
+            "AND type IN (${types.joinToString(",") { "${it.enumValue.value}" }})"
         }
     }
 
