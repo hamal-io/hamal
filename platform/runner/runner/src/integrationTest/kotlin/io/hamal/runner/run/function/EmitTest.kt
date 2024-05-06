@@ -9,6 +9,7 @@ import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecResult
 import io.hamal.lib.domain.vo.ExecState
+import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
 import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
@@ -25,146 +26,159 @@ internal class EmitTest : AbstractExecuteTest() {
 
     @Test
     fun `No events emitted`() {
-        val runner = createTestRunner(connector = TestConnector { execId, execResult, state, eventToSubmits ->
+        createTestRunner(connector = TestConnector { execId, statusCode, result, state, eventToSubmits ->
             assertThat(execId, equalTo(ExecId(1234)))
-            assertThat(execResult, equalTo(ExecResult()))
+            assertThat(statusCode, equalTo(ExecStatusCode(200)))
+            assertThat(result, equalTo(ExecResult()))
             assertThat(state, equalTo(ExecState()))
             assertThat(eventToSubmits, hasSize(0))
-        })
-        runner.run(unitOfWork(""))
+        }).also { runner ->
+            runner.run(unitOfWork(""))
 
-        val eventsToEmit = runner.context.eventsToSubmit
-        assertThat(eventsToEmit, hasSize(0))
+            val eventsToEmit = runner.context.eventsToSubmit
+            assertThat(eventsToEmit, hasSize(0))
+        }
     }
 
     @Test
     fun `Emit event without any data`() {
-        val runner = createTestRunner(
-            connector = TestFailConnector { execId, result ->
+        createTestRunner(
+            connector = TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
+                assertThat(statusCode, equalTo(ExecStatusCode(400)))
                 assertThat(result.value["message"].toString(), containsString("Topic not present"))
             }
-        )
-        runner.run(unitOfWork("context.emit()"))
+        ).also { runner ->
+            runner.run(unitOfWork("context.emit()"))
 
-        val eventsToEmit = runner.context.eventsToSubmit
-        assertThat(eventsToEmit, hasSize(0))
+            val eventsToEmit = runner.context.eventsToSubmit
+            assertThat(eventsToEmit, hasSize(0))
+        }
     }
 
     @Test
     fun `Emit event without topic`() {
-        val runner = createTestRunner(
-            connector = TestFailConnector { execId, result ->
+        createTestRunner(
+            connector = TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
+                assertThat(statusCode, equalTo(ExecStatusCode(400)))
                 assertThat(result.value["message"].toString(), containsString("Topic not present"))
             }
-        )
-        runner.run(unitOfWork("context.emit({answer = 42})"))
+        ).also { runner ->
+            runner.run(unitOfWork("context.emit({answer = 42})"))
 
-        val eventsToEmit = runner.context.eventsToSubmit
-        assertThat(eventsToEmit, hasSize(0))
+            val eventsToEmit = runner.context.eventsToSubmit
+            assertThat(eventsToEmit, hasSize(0))
+        }
     }
 
 
     @Test
     fun `Emit event without payload`() {
-        val runner = createTestRunner()
-        runner.run(unitOfWork("context.emit({topic = 'test-topic'})"))
+        createTestRunner().also { runner ->
 
-        val eventsToEmit = runner.context.eventsToSubmit
-        assertThat(eventsToEmit, hasSize(1))
+            runner.run(unitOfWork("context.emit({topic = 'test-topic'})"))
 
-        with(eventsToEmit.first()) {
-            assertThat(topicName, equalTo(TopicName("test-topic")))
-            assertThat(payload, equalTo(EventPayload(ValueObject.builder().build())))
+            val eventsToEmit = runner.context.eventsToSubmit
+            assertThat(eventsToEmit, hasSize(1))
+
+            with(eventsToEmit.first()) {
+                assertThat(topicName, equalTo(TopicName("test-topic")))
+                assertThat(payload, equalTo(EventPayload(ValueObject.builder().build())))
+            }
         }
     }
 
 
     @Test
     fun `Emit event with nil payload`() {
-        val runner = createTestRunner()
-        runner.run(unitOfWork("context.emit({ topic = 'test-topic', hamal=nil })"))
+        createTestRunner().also { runner ->
+            runner.run(unitOfWork("context.emit({ topic = 'test-topic', hamal=nil })"))
 
-        val eventsToEmit = runner.context.eventsToSubmit
-        assertThat(eventsToEmit, hasSize(1))
+            val eventsToEmit = runner.context.eventsToSubmit
+            assertThat(eventsToEmit, hasSize(1))
 
-        with(eventsToEmit.first()) {
-            assertThat(topicName, equalTo(TopicName("test-topic")))
-            assertThat(payload, equalTo(EventPayload(ValueObject.builder().build())))
+            with(eventsToEmit.first()) {
+                assertThat(topicName, equalTo(TopicName("test-topic")))
+                assertThat(payload, equalTo(EventPayload(ValueObject.builder().build())))
+            }
         }
     }
 
     @Test
     fun `Emit event with string payload`() {
-        val runner = createTestRunner()
-        runner.run(unitOfWork("context.emit({topic = 'test-topic', hamal='rocks'})"))
+        createTestRunner().also { runner ->
+            runner.run(unitOfWork("context.emit({topic = 'test-topic', hamal='rocks'})"))
 
-        val eventsToEmit = runner.context.eventsToSubmit
-        assertThat(eventsToEmit, hasSize(1))
+            val eventsToEmit = runner.context.eventsToSubmit
+            assertThat(eventsToEmit, hasSize(1))
 
-        with(eventsToEmit.first()) {
-            assertThat(topicName, equalTo(TopicName("test-topic")))
-            assertThat(payload, equalTo(EventPayload(ValueObject.builder().set("hamal", "rocks").build())))
+            with(eventsToEmit.first()) {
+                assertThat(topicName, equalTo(TopicName("test-topic")))
+                assertThat(payload, equalTo(EventPayload(ValueObject.builder().set("hamal", "rocks").build())))
+            }
         }
     }
 
     @Test
     fun `Emit event with number payload`() {
-        val runner = createTestRunner()
-        runner.run(unitOfWork("context.emit({ topic = 'test-topic', answer=42 })"))
+        createTestRunner().also { runner ->
+            runner.run(unitOfWork("context.emit({ topic = 'test-topic', answer=42 })"))
 
-        val eventsToEmit = runner.context.eventsToSubmit
-        assertThat(eventsToEmit, hasSize(1))
+            val eventsToEmit = runner.context.eventsToSubmit
+            assertThat(eventsToEmit, hasSize(1))
 
-        with(eventsToEmit.first()) {
-            assertThat(topicName, equalTo(TopicName("test-topic")))
-            assertThat(payload, equalTo(EventPayload(ValueObject.builder().set("answer", 42.0).build())))
+            with(eventsToEmit.first()) {
+                assertThat(topicName, equalTo(TopicName("test-topic")))
+                assertThat(payload, equalTo(EventPayload(ValueObject.builder().set("answer", 42.0).build())))
+            }
         }
     }
 
     @Test
     fun `Emit event with boolean payload`() {
-        val runner = createTestRunner()
-        runner.run(unitOfWork("context.emit({topic = 'test-topic', true_value=true, false_value=false})"))
+        createTestRunner().also { runner ->
+            runner.run(unitOfWork("context.emit({topic = 'test-topic', true_value=true, false_value=false})"))
 
-        val eventsToEmit = runner.context.eventsToSubmit
-        assertThat(eventsToEmit, hasSize(1))
+            val eventsToEmit = runner.context.eventsToSubmit
+            assertThat(eventsToEmit, hasSize(1))
 
-        with(eventsToEmit.first()) {
-            assertThat(topicName, equalTo(TopicName("test-topic")))
-            assertThat(
-                payload, equalTo(
-                    EventPayload(
-                        ValueObject.builder()
-                            .set("true_value", true)
-                            .set("false_value", false)
-                            .build()
+            with(eventsToEmit.first()) {
+                assertThat(topicName, equalTo(TopicName("test-topic")))
+                assertThat(
+                    payload, equalTo(
+                        EventPayload(
+                            ValueObject.builder()
+                                .set("true_value", true)
+                                .set("false_value", false)
+                                .build()
+                        )
                     )
                 )
-            )
+            }
         }
     }
 
     @Test
     fun `Emit event with table payload`() {
-        val runner = createTestRunner()
-        runner.run(unitOfWork("context.emit({ topic = 'test-topic', nested_table = { value = 23 } })"))
+        createTestRunner().also { runner ->
+            runner.run(unitOfWork("context.emit({ topic = 'test-topic', nested_table = { value = 23 } })"))
 
-        val eventsToEmit = runner.context.eventsToSubmit
-        assertThat(eventsToEmit, hasSize(1))
+            val eventsToEmit = runner.context.eventsToSubmit
+            assertThat(eventsToEmit, hasSize(1))
 
-        with(eventsToEmit.first()) {
-            assertThat(topicName, equalTo(TopicName("test-topic")))
-            assertThat(
-                payload, equalTo(
-                    EventPayload(
-                        ValueObject.builder()
-                            .set("nested_table", ValueObject.builder().set("value", 23).build())
-                            .build()
+            with(eventsToEmit.first()) {
+                assertThat(topicName, equalTo(TopicName("test-topic")))
+                assertThat(
+                    payload, equalTo(
+                        EventPayload(
+                            ValueObject.builder()
+                                .set("nested_table", ValueObject.builder().set("value", 23).build())
+                                .build()
+                        )
                     )
                 )
-            )
+            }
         }
     }
 

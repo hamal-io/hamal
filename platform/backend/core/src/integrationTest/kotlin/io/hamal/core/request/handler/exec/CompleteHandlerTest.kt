@@ -14,6 +14,7 @@ import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecResult
 import io.hamal.lib.domain.vo.ExecState
+import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
 import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import io.hamal.repository.api.Exec
@@ -69,6 +70,7 @@ internal class ExecCompleteHandlerTest : BaseRequestHandlerTest() {
             requestedBy = AuthId(20),
             requestStatus = RequestStatus.Submitted,
             id = ExecId(1234),
+            statusCode = ExecStatusCode(200),
             result = ExecResult(ValueObject.builder().set("hamal", "rocks").build()),
             state = ExecState(ValueObject.builder().set("counter", 1).build()),
             events = listOf(
@@ -87,6 +89,7 @@ internal class ExecCompleteHandlerTest : BaseRequestHandlerTest() {
                 require(this is Exec.Completed)
                 assertThat(id, equalTo(ExecId(1234)))
                 assertThat(status, equalTo(Completed))
+                assertThat(statusCode, equalTo(ExecStatusCode(200)))
                 assertThat(result, equalTo(ExecResult(ValueObject.builder().set("hamal", "rocks").build())))
             }
         }

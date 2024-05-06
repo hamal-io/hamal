@@ -12,14 +12,19 @@ data class ValueObject(val values: LinkedHashMap<String, ValueSerializable>) : V
 
     operator fun get(identifier: String): Value = values[identifier] ?: ValueNil
 
-    fun getNumber(identifier: String): ValueNumber = get(identifier) as ValueNumber
+    fun findNumber(identifier: String): ValueNumber? = values[identifier]?.let { it as ValueNumber }
+    fun getNumber(identifier: String): ValueNumber = findNumber(identifier) ?: throw NoSuchElementException(identifier)
 
     fun getSnowflakeId(identifier: String): ValueSnowflakeId = get(identifier) as ValueSnowflakeId
+
+    fun findSerializable(identifier: String): ValueSerializable? = values[identifier]?.let { it as ValueSerializable }
+    fun getSerializable(identifier: String): ValueSerializable = findSerializable(identifier) ?: throw NoSuchElementException(identifier)
 
     fun findString(identifier: String): ValueString? = values[identifier]?.let { it as ValueString }
     fun getString(identifier: String): ValueString = findString(identifier) ?: throw NoSuchElementException(identifier)
 
-    fun getObject(identifier: String): ValueObject = get(identifier) as ValueObject
+    fun findObject(identifier: String): ValueObject? = values[identifier]?.let { it as ValueObject }
+    fun getObject(identifier: String): ValueObject = findObject(identifier) ?: throw NoSuchElementException(identifier)
 
     override fun toString() = values.entries.joinToString(", ") { it.toString() }
 
@@ -45,6 +50,16 @@ data class ValueObject(val values: LinkedHashMap<String, ValueSerializable>) : V
 }
 
 abstract class ValueVariableObject : ValueVariable.BaseImpl<ValueObject>() {
+
+    fun findNumber(identifier: String): ValueNumber? = value.findNumber(identifier)
+    fun getNumber(identifier: String): ValueNumber = value.getNumber(identifier)
+
+    fun findObject(identifier: String): ValueObject? = value.findObject(identifier)
+    fun getObject(identifier: String): ValueObject = value.getObject(identifier)
+
+    fun findSerializable(identifier: String): ValueSerializable? = value.findSerializable(identifier)
+    fun getSerializable(identifier: String): ValueSerializable = value.getSerializable(identifier)
+
     fun findString(identifier: String): ValueString? = value.findString(identifier)
     fun getString(identifier: String): ValueString = value.getString(identifier)
 }

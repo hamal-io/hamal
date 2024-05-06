@@ -20,9 +20,11 @@ internal data object PairInit : NodeCompiler {
 
         return ValueCode(
             """
+                throw = require('std.throw').create()
                 table = require('std.table').create()
+                
                 evt = context.exec.inputs.event or {}
-                address = evt.address or error('address not found')
+                address = evt.address or throw.illegal_argument('address not found')
                 
                 print(address)
                 

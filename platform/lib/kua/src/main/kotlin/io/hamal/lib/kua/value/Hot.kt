@@ -199,12 +199,18 @@ fun KuaTable.toValueObject(): ValueObject {
             val key = state.stringGet(state.absIndex(-2))
             val value = state.get(state.absIndex(-1))
 
-            builder[key.stringValue] = if (value is KuaTable) {
-                value.toSerializableValue()
-            } else if (value is ValueSerializable) {
-                value
-            } else {
-                TODO("$value not serializable")
+            builder[key.stringValue] = when (value) {
+                is KuaTable -> {
+                    value.toSerializableValue()
+                }
+
+                is ValueSerializable -> {
+                    value
+                }
+
+                else -> {
+                    TODO("$value not serializable")
+                }
             }
 
             state.topPop(1)
@@ -224,12 +230,18 @@ private fun KuaTable.toValueArray(): ValueArray {
             val value = state.get(state.absIndex(-1))
 
             builder.append(
-                if (value is KuaTable) {
-                    value.toSerializableValue()
-                } else if (value is ValueSerializable) {
-                    value
-                } else {
-                    TODO("$value not serializable")
+                when (value) {
+                    is KuaTable -> {
+                        value.toSerializableValue()
+                    }
+
+                    is ValueSerializable -> {
+                        value
+                    }
+
+                    else -> {
+                        TODO("$value not serializable")
+                    }
                 }
             )
 

@@ -52,6 +52,7 @@ object SerdeModuleValueVariable : SerdeModuleGeneric() {
 
         this[ExecToken::class] = String(::ExecToken)
         this[ExecLogId::class] = SnowflakeId(::ExecLogId)
+        this[ExecLogLevel::class] = Enum(::ExecLogLevel)
         this[ExecLogMessage::class] = String(::ExecLogMessage)
         this[ExecLogTimestamp::class] = Instant(::ExecLogTimestamp)
 

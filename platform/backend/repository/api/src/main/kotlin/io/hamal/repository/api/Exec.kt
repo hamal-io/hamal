@@ -53,6 +53,7 @@ interface ExecCmdRepository : CmdRepository {
     data class CompleteCmd(
         val id: CmdId,
         val execId: ExecId,
+        val statusCode: ExecStatusCode,
         val result: ExecResult,
         val state: ExecState
     )
@@ -60,6 +61,7 @@ interface ExecCmdRepository : CmdRepository {
     data class FailCmd(
         val id: CmdId,
         val execId: ExecId,
+        val statusCode: ExecStatusCode,
         val result: ExecResult
     )
 }
@@ -229,6 +231,7 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
         override val updatedAt: UpdatedAt,
         val startedExec: Started,
         val completedAt: ExecCompletedAt,
+        val statusCode: ExecStatusCode,
         val result: ExecResult,
         val state: ExecState
     ) : Exec() {
@@ -252,6 +255,7 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
         val startedExec: Started,
         //FIXME failedAt
         val failedAt: ExecFailedAt,
+        val statusCode: ExecStatusCode,
         val result: ExecResult
     ) : Exec() {
         override val status = ExecStatus(Failed)

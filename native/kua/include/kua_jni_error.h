@@ -5,25 +5,35 @@
 #include "kua_common.h"
 
 int
-throw_illegal_argument(char const *message);
+throw_illegal_argument(char const* message);
 
 int
-throw_illegal_state(char const *message);
+throw_illegal_state(char const* message);
 
 int
-throw_error(char const *message);
+throw_error(char const* message);
 
 int
-throw_assert_error(char const *message);
+throw_error_assert(char const* message);
 
 int
-throw_extension_error(jthrowable throwable);
+throw_error_extension(jthrowable throwable);
 
 int
-throw_script_error(char const *message);
+throw_error_internal(char const* message);
 
 int
-throw_decimal_error(char const *message);
+throw_error_decimal(char const* message);
+
+int
+throw_error_not_found(char const* message);
+
+int
+throw_error_illegal_argument(char const* message);
+
+int
+throw_error_invalid_state(char const* message);
+
 
 int
 throw(jthrowable throwable);
