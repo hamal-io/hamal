@@ -1,8 +1,9 @@
 package io.hamal.api.http.controller.feedback
 
-import io.hamal.lib.domain._enum.FeedbackMood
+import io.hamal.lib.domain._enum.FeedbackMoods.Normal
 import io.hamal.lib.domain.request.FeedbackCreateRequest
 import io.hamal.lib.domain.vo.FeedbackMessage.Companion.FeedbackMessage
+import io.hamal.lib.domain.vo.FeedbackMood.Companion.FeedbackMood
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.sdk.api.ApiError
@@ -17,7 +18,7 @@ internal class FeedbackGetControllerTest : FeedbackBaseControllerTest() {
     fun `Get feedback`() {
         val res = createFeedback(
             FeedbackCreateRequest(
-                mood = FeedbackMood.Normal,
+                mood = FeedbackMood(Normal),
                 message = FeedbackMessage("My mood is so normal"),
                 accountId = null
             )
@@ -25,7 +26,7 @@ internal class FeedbackGetControllerTest : FeedbackBaseControllerTest() {
 
         with(getFeedback(res.id)) {
             assertThat(id, equalTo(res.id))
-            assertThat(mood, equalTo(FeedbackMood.Normal))
+            assertThat(mood, equalTo(Normal))
             assertThat(message, equalTo(FeedbackMessage("My mood is so normal")))
             assertThat(accountId, nullValue())
         }

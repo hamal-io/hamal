@@ -1,10 +1,10 @@
 package io.hamal.repository.record.feedback
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain._enum.FeedbackMood
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.FeedbackId
 import io.hamal.lib.domain.vo.FeedbackMessage
+import io.hamal.lib.domain.vo.FeedbackMood
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordAdapter
 import io.hamal.repository.record.RecordSequence

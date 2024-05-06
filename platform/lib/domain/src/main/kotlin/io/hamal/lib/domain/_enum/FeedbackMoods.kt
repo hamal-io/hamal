@@ -1,6 +1,6 @@
 package io.hamal.lib.domain._enum
 
-enum class FeedbackMood(val value: Int) {
+enum class FeedbackMoods(val value: Int) {
     Happy(0),
     Excited(1),
     Normal(2),
@@ -9,8 +9,8 @@ enum class FeedbackMood(val value: Int) {
 
     companion object {
         @JvmStatic
-        fun of(value: Int): FeedbackMood {
-            val result = FeedbackMood.values().find { it.value == value }
+        fun of(value: Int): FeedbackMoods {
+            val result = FeedbackMoods.values().find { it.value == value }
             require(result != null) { "$value not mapped as a feedback mood" }
             return result
         }

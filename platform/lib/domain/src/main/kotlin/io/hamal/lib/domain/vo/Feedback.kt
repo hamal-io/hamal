@@ -1,10 +1,8 @@
 package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.common.value.ValueSnowflakeId
-import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.common.value.ValueVariableSnowflakeId
-import io.hamal.lib.common.value.ValueVariableString
+import io.hamal.lib.common.value.*
+import io.hamal.lib.domain._enum.FeedbackMoods
 
 class FeedbackId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
     companion object {
@@ -17,5 +15,11 @@ class FeedbackId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeI
 class FeedbackMessage(override val value: ValueString) : ValueVariableString() {
     companion object {
         fun FeedbackMessage(value: String) = FeedbackMessage(ValueString(value))
+    }
+}
+
+class FeedbackMood(override val value: ValueEnum) : ValueVariableEnum<FeedbackMoods>(FeedbackMoods::class) {
+    companion object {
+        fun FeedbackMood(value: Enum<FeedbackMoods>) = FeedbackMood(ValueEnum(value.name))
     }
 }
