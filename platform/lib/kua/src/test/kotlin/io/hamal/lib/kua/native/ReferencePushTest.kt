@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.native
 
+import io.hamal.lib.kua.ErrorIllegalArgument
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -68,7 +69,7 @@ internal class ReferencePushTest : NativeBaseTest() {
         val refOne = testInstance.referenceAcquire()
 
         repeat(999999) { testInstance.numberPush(it.toDouble()) }
-        assertThrows<IllegalArgumentException> { testInstance.referencePush(refOne) }
+        assertThrows<ErrorIllegalArgument> { testInstance.referencePush(refOne) }
             .also { exception -> assertThat(exception.message, equalTo("Prevented stack overflow")) }
     }
 }

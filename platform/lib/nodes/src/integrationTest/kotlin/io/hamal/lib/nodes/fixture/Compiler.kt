@@ -114,7 +114,7 @@ internal class TestInvokedTest : AbstractIntegrationTest() {
     @Test
     fun `Nodes invokes another node`() {
 
-        createTestRunner().run(
+        runTest(
             unitOfWork(
                 initValue = ValueString("Hamal Rocks"),
                 graph = NodesGraph(
@@ -142,7 +142,7 @@ internal class TestInvokedTest : AbstractIntegrationTest() {
 
     @Test
     fun `Nodes invokes multiple nodes`() {
-        createTestRunner().run(
+        runTest(
             unitOfWork(
                 initValue = ValueString("Hamal Rocks"),
                 graph = NodesGraph(

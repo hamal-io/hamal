@@ -4,7 +4,9 @@ import io.hamal.core.component.DelayRetry
 import io.hamal.core.component.DelayRetryFixedTime
 import io.hamal.core.config.BackendBasePath
 import io.hamal.extension.net.http.ExtensionNetHttpFactory
+import io.hamal.extension.std.memoize.ExtensionStdMemoizeFactory
 import io.hamal.extension.std.table.ExtensionStdTableFactory
+import io.hamal.extension.std.`throw`.ExtensionStdThrowFactory
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.common.value.ValueCode
@@ -82,6 +84,11 @@ class TestRunnerSandboxFactory(
         )
 
         return Sandbox(ctx)
+            .registerExtensions(
+                ExtensionStdTableFactory,
+                ExtensionStdThrowFactory,
+                ExtensionStdMemoizeFactory,
+            )
             .registerPlugins(
                 PluginLogFactory(sdk.execLog),
                 PluginDebugFactory(),

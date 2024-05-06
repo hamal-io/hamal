@@ -1,7 +1,5 @@
 package io.hamal.lib.nodes
 
-import io.hamal.extension.std.decimal.ExtensionStdDecimalFactory
-import io.hamal.extension.std.`throw`.ExtensionStdThrowFactory
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.*
 import io.hamal.lib.domain.State
@@ -10,14 +8,9 @@ import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
-import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
-import io.hamal.lib.kua.NativeLoader
-import io.hamal.lib.kua.NativeLoader.Preference.Resources
-import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.SandboxContext
-import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
+import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 import io.hamal.lib.nodes.ConnectionId.Companion.ConnectionId
 import io.hamal.lib.nodes.ConnectionLabel.Companion.ConnectionLabel
 import io.hamal.lib.nodes.ControlIdentifier.Companion.ControlIdentifier
@@ -31,11 +24,9 @@ import io.hamal.lib.nodes.fixture.Capture
 import io.hamal.lib.nodes.fixture.CaptureFunction
 import io.hamal.lib.nodes.fixture.InvokeFunction
 import io.hamal.lib.nodes.fixture.Invoked
-import io.hamal.runner.config.EnvFactory
-import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
 import io.hamal.runner.connector.UnitOfWork
-import io.hamal.runner.run.CodeRunnerImpl
+import io.hamal.runner.test.RunnerFixture.createTestRunner
 import io.hamal.runner.test.TestConnector
 
 internal abstract class AbstractIntegrationTest {
@@ -47,17 +38,15 @@ internal abstract class AbstractIntegrationTest {
         val invokedTwo: InvokeFunction = InvokeFunction()
     )
 
-    fun createTestRunner(connector: Connector = TestConnector()) = CodeRunnerImpl(
-        connector,
-        object : SandboxFactory {
-            override fun create(ctx: SandboxContext): Sandbox {
-                NativeLoader.load(Resources)
-                return Sandbox(SandboxContextNop).also { sandbox ->
-                    sandbox.register(
-                        RunnerPlugin(
-                            name = ValueString("test"),
-                            factoryCode = ValueCode(
-                                """
+    fun runTest(unitOfWork: UnitOfWork, connector: Connector = TestConnector()) {
+        createTestRunner(
+            connector = connector,
+            pluginFactories = listOf(
+                RunnerPluginFactory {
+                    RunnerPlugin(
+                        name = ValueString("test"),
+                        factoryCode = ValueCode(
+                            """
                     function plugin_create(internal)
                         local export = {
                             invoke_one = internal.invoke_one,
@@ -68,39 +57,32 @@ internal abstract class AbstractIntegrationTest {
                         return export
                     end
                 """.trimIndent()
-                            ),
-                            internals = mapOf(
-                                ValueString("invoke_one") to testContext.invokedOne,
-                                ValueString("invoke_two") to testContext.invokedTwo,
-                                ValueString("capture_one") to testContext.captorOne,
-                                ValueString("capture_two") to testContext.captorTwo
-                            )
+                        ),
+                        internals = mapOf(
+                            ValueString("invoke_one") to testContext.invokedOne,
+                            ValueString("invoke_two") to testContext.invokedTwo,
+                            ValueString("capture_one") to testContext.captorOne,
+                            ValueString("capture_two") to testContext.captorTwo
                         )
                     )
-                }.also { sandbox -> sandbox.registerExtensions(ExtensionStdDecimalFactory) }
-                    .also { sandbox -> sandbox.generatorNodeCompilerRegistry.register(defaultNodeCompilerRegistry) }
-                    .also { sandbox -> sandbox.registerExtensions(ExtensionStdThrowFactory) }
-                    .also { sandbox ->
-                        sandbox.generatorNodeCompilerRegistry.register(
-                            NodeCompilerRegistry(
-                                listOf(
-                                    Capture.Boolean,
-                                    Capture.Decimal,
-                                    Capture.Number,
-                                    Capture.String,
-                                    Invoked.Boolean,
-                                    Invoked.Empty,
-                                    Invoked.String,
-                                )
-                            )
-                        )
-                    }
-            }
-        },
-        object : EnvFactory {
-            override fun create() = RunnerEnv()
-        }
-    )
+                }
+            ),
+            nodeCompilerRegistries = listOf(
+                defaultNodeCompilerRegistry,
+                NodeCompilerRegistry(
+                    listOf(
+                        Capture.Boolean,
+                        Capture.Decimal,
+                        Capture.Number,
+                        Capture.String,
+                        Invoked.Boolean,
+                        Invoked.Empty,
+                        Invoked.String,
+                    )
+                )
+            )
+        ).run(unitOfWork)
+    }
 
     fun node(
         id: Long,

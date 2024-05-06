@@ -16,7 +16,7 @@ internal class InitTest : AbstractIntegrationTest() {
 
     @Test
     fun `Able to receive value with default selector`() {
-        createTestRunner().run(
+        runTest(
             unitOfWork(
                 initValue = ValueString("Hamal Rocks"),
                 graph = NodesGraph(
@@ -45,7 +45,7 @@ internal class InitTest : AbstractIntegrationTest() {
 
     @Test
     fun `Boolean`() {
-        createTestRunner().run(
+        runTest(
             unitOfWork(
                 initValue = ValueTrue,
                 graph = NodesGraph(
@@ -69,7 +69,7 @@ internal class InitTest : AbstractIntegrationTest() {
 
     @Test
     fun `String`() {
-        createTestRunner().run(
+        runTest(
             unitOfWork(
                 initValue = ValueString("Hamal Rocks"),
                 graph = NodesGraph(
@@ -98,7 +98,7 @@ internal class InitTest : AbstractIntegrationTest() {
 
     @Test
     fun `Number`() {
-        createTestRunner().run(
+        runTest(
             unitOfWork(
                 initValue = ValueNumber(13.37),
                 graph = NodesGraph(
@@ -127,12 +127,7 @@ internal class InitTest : AbstractIntegrationTest() {
 
     @Test
     fun `No initial value with selector`() {
-        createTestRunner(
-            connector = TestFailConnector { _, statusCode, result ->
-                assertThat(statusCode, equalTo(ExecStatusCode(400)))
-                assertThat(result.getString("message").stringValue, containsString("No initial value was found"))
-            }
-        ).run(
+        runTest(
             unitOfWork(
                 initValue = ValueString("nyanNYANnyanNyan"),
                 graph = NodesGraph(
@@ -157,21 +152,19 @@ internal class InitTest : AbstractIntegrationTest() {
                         )
                     )
                 )
-            )
+            ),
+            TestFailConnector { _, statusCode, result ->
+                assertThat(statusCode, equalTo(ExecStatusCode(400)))
+                assertThat(result.getString("message").stringValue, containsString("No initial value was found"))
+            }
         )
-
         assertThat(testContext.invokedOne.invocations, equalTo(0))
     }
 
 
     @Test
     fun `No initial value was set`() {
-        createTestRunner(
-            connector = TestFailConnector { _, statusCode, result ->
-                assertThat(statusCode, Matchers.equalTo(ExecStatusCode(400)))
-                assertThat(result.getString("message").stringValue, containsString("No initial value was found"))
-            }
-        ).run(
+        runTest(
             unitOfWork(
                 initValue = ValueNil,
                 graph = NodesGraph(
@@ -192,7 +185,11 @@ internal class InitTest : AbstractIntegrationTest() {
                         )
                     )
                 )
-            )
+            ),
+            TestFailConnector { _, statusCode, result ->
+                assertThat(statusCode, Matchers.equalTo(ExecStatusCode(400)))
+                assertThat(result.getString("message").stringValue, containsString("No initial value was found"))
+            }
         )
 
         assertThat(testContext.invokedOne.invocations, equalTo(0))

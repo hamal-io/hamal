@@ -1,9 +1,10 @@
 package io.hamal.lib.kua.state
 
-import io.hamal.lib.kua.StackTop
-import io.hamal.lib.kua.numberGet
 import io.hamal.lib.common.value.ValueNumber
 import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.kua.ErrorIllegalState
+import io.hamal.lib.kua.StackTop
+import io.hamal.lib.kua.numberGet
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
@@ -36,7 +37,7 @@ internal class SerdeNumberGetTest : StateBaseTest() {
     @TestFactory
     fun `Not a number`() = runTest { testInstance ->
         testInstance.stringPush(ValueString("Not  a boolean"))
-        assertThrows<IllegalStateException> {
+        assertThrows<ErrorIllegalState> {
             testInstance.numberGet(1)
         }.also { exception ->
             assertThat(

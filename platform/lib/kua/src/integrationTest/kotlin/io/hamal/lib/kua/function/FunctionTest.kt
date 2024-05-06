@@ -1,14 +1,14 @@
 package io.hamal.lib.kua.function
 
-import io.hamal.lib.kua.ErrorExtension
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueNumber
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.kua.ErrorPlugin
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
-import io.hamal.lib.common.value.ValueCode
-import io.hamal.lib.common.value.ValueNumber
-import io.hamal.lib.common.value.ValueString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.instanceOf
 import org.hamcrest.MatcherAssert.assertThat
@@ -53,7 +53,7 @@ internal class FunctionTest {
             )
         )
 
-        val exception = assertThrows<ErrorExtension> {
+        val exception = assertThrows<ErrorPlugin> {
             sandbox.codeLoad(
                 ValueCode(
                     """

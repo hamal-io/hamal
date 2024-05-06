@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.native
 
+import io.hamal.lib.kua.ErrorIllegalState
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -58,7 +59,7 @@ internal class TableRawSetIdxTest : NativeBaseTest() {
     @Test
     fun `Tries to set a raw value but not a table`() {
         testInstance.numberPush(2.34)
-        assertThrows<IllegalStateException> {
+        assertThrows<ErrorIllegalState> {
             testInstance.stringPush("value")
             testInstance.tableRawSetIdx(1, 4)
         }.also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was number")) }

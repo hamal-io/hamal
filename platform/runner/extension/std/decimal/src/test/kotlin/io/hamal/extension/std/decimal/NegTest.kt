@@ -1,15 +1,12 @@
 package io.hamal.extension.std.decimal
 
-import io.hamal.runner.test.AbstractRunnerTest
+import io.hamal.runner.test.RunnerFixture.unitOfWork
 import org.junit.jupiter.api.Test
 
-internal class NegTest : AbstractRunnerTest() {
+internal class NegTest : AbstractTest() {
     @Test
     fun `decimal, decimal`() {
-        val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionStdDecimalFactory)
-        )
-        runner.run(
+        runTest(
             unitOfWork(
                 """
                 local decimal = require('std.decimal').create()

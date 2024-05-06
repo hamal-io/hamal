@@ -5,7 +5,9 @@ import io.hamal.extension.net.smtp.ExtensionNetSmtpFactory
 import io.hamal.extension.social.telegram.ExtensionSocialTelegramFactory
 import io.hamal.extension.std.decimal.ExtensionStdDecimalFactory
 import io.hamal.extension.std.log.ExtensionStdLogFactory
+import io.hamal.extension.std.memoize.ExtensionStdMemoizeFactory
 import io.hamal.extension.std.table.ExtensionStdTableFactory
+import io.hamal.extension.std.`throw`.ExtensionStdThrowFactory
 import io.hamal.extension.web3.arbitrum.ExtensionWeb3ArbitrumFactory
 import io.hamal.extension.web3.eth.ExtensionWeb3EthFactory
 import io.hamal.extension.web3.nyanbot.ExtensionWeb3NyanbotFactory
@@ -61,6 +63,12 @@ class SandboxFactoryDefaultImpl(
         )
 
         return Sandbox(ctx)
+            .registerExtensions(
+                ExtensionStdTableFactory,
+                ExtensionStdThrowFactory,
+                ExtensionStdMemoizeFactory,
+                ExtensionStdDecimalFactory
+            )
             .registerPlugins(
                 PluginSmtpFactory(),
                 PluginHttpFactory(),
@@ -70,12 +78,11 @@ class SandboxFactoryDefaultImpl(
                 PluginWeb3EvmFactory()
             )
             .registerExtensions(
+                ExtensionStdLogFactory,
+
                 ExtensionNetSmtpFactory,
                 ExtensionNetHttpFactory,
 
-                ExtensionStdDecimalFactory,
-                ExtensionStdLogFactory,
-                ExtensionStdTableFactory,
                 ExtensionSocialTelegramFactory,
 
                 ExtensionWeb3ArbitrumFactory,

@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.native
 
+import io.hamal.lib.kua.ErrorIllegalArgument
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -63,21 +64,21 @@ internal class TypeTest : NativeBaseTest() {
     @Test
     fun `Tries to get boolean with 0 index`() {
         testInstance.booleanPush(true)
-        assertThrows<IllegalArgumentException> { testInstance.type(0) }
+        assertThrows<ErrorIllegalArgument> { testInstance.type(0) }
             .also { exception -> assertThat(exception.message, equalTo("Index must not be 0")) }
     }
 
     @Test
     fun `Tries to get type with index bigger than stack size`() {
         testInstance.booleanPush(true)
-        assertThrows<IllegalArgumentException> { testInstance.type(2) }
+        assertThrows<ErrorIllegalArgument> { testInstance.type(2) }
             .also { exception -> assertThat(exception.message, equalTo("Index out of bounds")) }
     }
 
     @Test
     fun `Tries to get type with abs(negative index) bigger than stack size`() {
         testInstance.booleanPush(true)
-        assertThrows<IllegalArgumentException> { testInstance.type(-2) }
+        assertThrows<ErrorIllegalArgument> { testInstance.type(-2) }
             .also { exception -> assertThat(exception.message, equalTo("Index out of bounds")) }
     }
 }

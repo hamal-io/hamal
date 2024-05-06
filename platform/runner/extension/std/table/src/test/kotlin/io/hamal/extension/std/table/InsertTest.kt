@@ -1,16 +1,15 @@
 package io.hamal.extension.std.table
 
-import io.hamal.runner.test.AbstractRunnerTest
+import io.hamal.runner.test.RunnerFixture.unitOfWork
 import org.junit.jupiter.api.Test
 
-internal class InsertTest : AbstractRunnerTest() {
+internal class InsertTest : AbstractTest() {
 
     @Test
     fun `Insert into empty table`() {
-        createTestRunner(extensionFactories = listOf(ExtensionStdTableFactory)).also { runner ->
-            runner.run(
-                unitOfWork(
-                    """
+        runTest(
+            unitOfWork(
+                """
                 table = require('std.table').create()
                 test_instance = { }
                 
@@ -21,17 +20,16 @@ internal class InsertTest : AbstractRunnerTest() {
                 assert( table.length(test_instance) == 2 )
                 assert( test_instance[2] == 'Rocks' ) 
             """
-                )
             )
-        }
+        )
     }
+
 
     @Test
     fun `Insert into specific position`() {
-        createTestRunner(extensionFactories = listOf(ExtensionStdTableFactory)).also { runner ->
-            runner.run(
-                unitOfWork(
-                    """
+        runTest(
+            unitOfWork(
+                """
                 table = require('std.table').create()
                 test_instance = { }
                 
@@ -43,8 +41,7 @@ internal class InsertTest : AbstractRunnerTest() {
                 assert( test_instance[1] == 'Rocks' )
                 assert( test_instance[2] == 'Hamal' )
             """
-                )
             )
-        }
+        )
     }
 }

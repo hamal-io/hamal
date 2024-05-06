@@ -10,7 +10,8 @@ import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.lib.domain.vo.SerdeModuleValueVariable
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.plugin.web3.evm.evm.PluginWeb3EvmFactory
-import io.hamal.runner.test.AbstractRunnerTest
+import io.hamal.runner.test.RunnerFixture.createTestRunner
+import io.hamal.runner.test.RunnerFixture.unitOfWork
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -85,7 +86,7 @@ internal class TestEvmController {
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @ActiveProfiles("test")
-internal class ExtensionWeb3ArbitrumTest : AbstractRunnerTest() {
+internal class ExtensionWeb3ArbitrumTest {
 
     @TestFactory
     fun run(): List<DynamicTest> {
@@ -106,7 +107,7 @@ internal class ExtensionWeb3ArbitrumTest : AbstractRunnerTest() {
 
         for (file in files) {
 
-            val runner = createTestRunner(
+            createTestRunner(
                 pluginFactories = listOf(PluginWeb3EvmFactory()),
                 extensionFactories = listOf(ExtensionStdTableFactory, ExtensionWeb3ArbitrumFactory),
                 env = RunnerEnv(
@@ -114,8 +115,9 @@ internal class ExtensionWeb3ArbitrumTest : AbstractRunnerTest() {
                         .set("test_url", "http://localhost:$localPort/arbitrum")
                         .build()
                 )
-            )
-            runner.run(unitOfWork(String(Files.readAllBytes(file))))
+            ).also { runner ->
+                runner.run(unitOfWork(String(Files.readAllBytes(file))))
+            }
         }
     }
 

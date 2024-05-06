@@ -13,8 +13,8 @@ function extension_create()
             __throw_not_found__(msg)
         end
 
-        function instance.invalid_state(msg)
-            __throw_invalid_state__(msg)
+        function instance.illegal_state(msg)
+            __throw_illegal_state__(msg)
         end
 
         function instance.illegal_argument(msg)

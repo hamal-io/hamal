@@ -4,7 +4,8 @@ import io.hamal.lib.common.value.ValueNumber
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.common.value.ValueTrue
 import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
-import io.hamal.runner.test.AbstractRunnerTest
+import io.hamal.runner.test.RunnerFixture.createTestRunner
+import io.hamal.runner.test.RunnerFixture.unitOfWork
 import io.hamal.runner.test.TestFailConnector
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.containsString
@@ -12,7 +13,7 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
 
-internal object PluginSmtpTest : AbstractRunnerTest() {
+internal object PluginSmtpTest {
 
     @Test
     fun `Invokes sender`() {

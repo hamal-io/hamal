@@ -1,5 +1,7 @@
 package io.hamal.lib.kua.native
 
+import io.hamal.lib.kua.ErrorIllegalArgument
+import io.hamal.lib.kua.ErrorIllegalState
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -38,7 +40,7 @@ internal class TableSubTableGetTest : NativeBaseTest() {
 
         assertThat(testInstance.topGet(), equalTo(1))
 
-        assertThrows<IllegalStateException> { testInstance.tableSubTableGet(1, "does not exists") }
+        assertThrows<ErrorIllegalState> { testInstance.tableSubTableGet(1, "does not exists") }
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was nil")) }
 
         assertThat(testInstance.topGet(), equalTo(1))
@@ -51,7 +53,7 @@ internal class TableSubTableGetTest : NativeBaseTest() {
         testInstance.stringPush("rocks")
         testInstance.tableFieldSet(1, "hamal")
 
-        assertThrows<IllegalStateException> {
+        assertThrows<ErrorIllegalState> {
             testInstance.tableSubTableGet(1, "hamal")
         }.also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was string")) }
 
@@ -72,7 +74,7 @@ internal class TableSubTableGetTest : NativeBaseTest() {
 
         repeat(999998) { testInstance.booleanPush(true) }
 
-        assertThrows<IllegalArgumentException> { testInstance.tableFieldGet(1, "nested") }
+        assertThrows<ErrorIllegalArgument> { testInstance.tableFieldGet(1, "nested") }
             .also { exception ->
                 assertThat(
                     exception.message, equalTo("Prevented stack overflow")
