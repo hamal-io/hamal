@@ -11,11 +11,10 @@ import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain._enum.ExecLogLevel
+import io.hamal.lib.domain._enum.ExecLogLevels.Warn
 import io.hamal.lib.domain._enum.TopicTypes.*
 import io.hamal.lib.domain._enum.TopicTypes.Namespace
 import io.hamal.lib.domain._enum.TopicTypes.Workspace
-import io.hamal.lib.domain._enum.ExecLogLevels.Warn
 import io.hamal.lib.domain._enum.TriggerStates.Active
 import io.hamal.lib.domain._enum.TriggerStates.Inactive
 import io.hamal.lib.domain.vo.*
