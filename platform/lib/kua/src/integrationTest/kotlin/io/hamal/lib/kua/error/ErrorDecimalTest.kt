@@ -1,6 +1,6 @@
 package io.hamal.lib.kua.error
 
-import io.hamal.lib.kua.DecimalError
+import io.hamal.lib.kua.ErrorDecimal
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.Sandbox
@@ -10,11 +10,11 @@ import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 
-class DecimalErrorTest {
+class ErrorDecimalTest {
 
     @Test
     fun `Throws an error if decimal error occurs`() {
-        val error = assertThrows<DecimalError> {
+        val error = assertThrows<ErrorDecimal> {
             sandbox.codeLoad(
                 ValueCode(
                     """

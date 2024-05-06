@@ -1,55 +1,58 @@
-local function require_boolean(tbl, key, default)
-    local value = tbl[key] or default
-    if value == nil then
-        error(key .. ' not set')
-    end
-
-    if type(value) ~= 'boolean' then
-        error(key .. ' expected to be of type boolean but was ' .. type(value))
-    end
-
-    return value
-end
-
-local function require_number(tbl, key, default)
-    local value = tbl[key] or default
-    if value == nil then
-        error(key .. ' not set')
-    end
-    if type(value) ~= 'number' then
-        error(key .. ' expected to be of type number but was ' .. type(value))
-    end
-
-    return value
-end
-
-local function require_string(tbl, key, default)
-    local value = tbl[key] or default
-    if value == nil then
-        error(key .. ' not set')
-    end
-    if type(value) ~= 'string' then
-        error(key .. ' expected to be of type string but was ' .. type(value))
-    end
-
-    return value
-end
-
-local function maybe_string(tbl, key)
-    local value = tbl[key]
-    if value == nil then
-        return nil
-    end
-    if type(value) ~= 'string' then
-        error(key .. ' expected to be of type string but was ' .. type(value))
-    end
-
-    return value
-end
 
 function extension_create()
+    local throw = require('std.throw').create()
     local smtp = require_plugin('net.smtp')
+
     local export = { }
+
+    local function require_boolean(tbl, key, default)
+        local value = tbl[key] or default
+        if value == nil then
+            throw.illegal_argument(key .. ' not set')
+        end
+
+        if type(value) ~= 'boolean' then
+            throw.illegal_argument(key .. ' expected to be of type boolean but was ' .. type(value))
+        end
+
+        return value
+    end
+
+    local function require_number(tbl, key, default)
+        local value = tbl[key] or default
+        if value == nil then
+            throw.illegal_argument(key .. ' not set')
+        end
+        if type(value) ~= 'number' then
+            throw.illegal_argument(key .. ' expected to be of type number but was ' .. type(value))
+        end
+
+        return value
+    end
+
+    local function require_string(tbl, key, default)
+        local value = tbl[key] or default
+        if value == nil then
+            throw.illegal_argument(key .. ' not set')
+        end
+        if type(value) ~= 'string' then
+            throw.illegal_argument(key .. ' expected to be of type string but was ' .. type(value))
+        end
+
+        return value
+    end
+
+    local function maybe_string(tbl, key)
+        local value = tbl[key]
+        if value == nil then
+            return nil
+        end
+        if type(value) ~= 'string' then
+            throw.illegal_argument(key .. ' expected to be of type string but was ' .. type(value))
+        end
+
+        return value
+    end
 
     function export.create(_cfg)
         local instance = {

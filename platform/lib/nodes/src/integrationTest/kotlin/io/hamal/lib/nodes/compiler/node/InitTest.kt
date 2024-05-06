@@ -1,12 +1,14 @@
 package io.hamal.lib.nodes.compiler.node
 
 import io.hamal.lib.common.value.*
+import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.NodeId.Companion.NodeId
 import io.hamal.runner.test.TestFailConnector
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
 
 
@@ -126,8 +128,9 @@ internal class InitTest : AbstractIntegrationTest() {
     @Test
     fun `No initial value with selector`() {
         createTestRunner(
-            connector = TestFailConnector { _, execResult ->
-                assertThat(execResult.value.stringValue("message"), containsString("No initial value was found"))
+            connector = TestFailConnector { _, statusCode, result ->
+                assertThat(statusCode, equalTo(ExecStatusCode(400)))
+                assertThat(result.getString("message").stringValue, containsString("No initial value was found"))
             }
         ).run(
             unitOfWork(
@@ -164,8 +167,9 @@ internal class InitTest : AbstractIntegrationTest() {
     @Test
     fun `No initial value was set`() {
         createTestRunner(
-            connector = TestFailConnector { _, execResult ->
-                assertThat(execResult.value.stringValue("message"), containsString("No initial value was found"))
+            connector = TestFailConnector { _, statusCode, result ->
+                assertThat(statusCode, Matchers.equalTo(ExecStatusCode(400)))
+                assertThat(result.getString("message").stringValue, containsString("No initial value was found"))
             }
         ).run(
             unitOfWork(

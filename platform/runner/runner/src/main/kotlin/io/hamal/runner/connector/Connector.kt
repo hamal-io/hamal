@@ -25,6 +25,7 @@ interface Connector {
 
     fun complete(
         execId: ExecId,
+        statusCode: ExecStatusCode,
         result: ExecResult,
         state: ExecState,
         events: List<EventToSubmit>
@@ -32,6 +33,7 @@ interface Connector {
 
     fun fail(
         execId: ExecId,
+        statusCode: ExecStatusCode,
         result: ExecResult
     )
 }

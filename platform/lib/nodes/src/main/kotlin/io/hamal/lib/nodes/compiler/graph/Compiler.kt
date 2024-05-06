@@ -38,6 +38,8 @@ class GraphCompiler(
             val builder = StringBuilder()
             val args = List(generator.inputTypes.size) { "arg_${it + 1}" }.joinToString { it }
 
+            builder.append("throw = require('std.throw').create()")
+
             builder.append("""function n_${node.id.stringValue}(${args})""")
             builder.append("\n")
             builder.append(generator.toCode(NodeCompiler.Context(node, controls.filter { it.nodeId == node.id })))

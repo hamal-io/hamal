@@ -28,7 +28,7 @@ class AssertTest {
 
     @Test
     fun `Assertion fails`() {
-        val error = assertThrows<AssertionError> {
+        val error = assertThrows<ErrorAssertion> {
             sandbox.codeLoad(
                 ValueCode(
                     """
@@ -44,7 +44,7 @@ class AssertTest {
 
     @Test
     fun `Assertion failure interrupts script execution`() {
-        assertThrows<AssertionError> {
+        assertThrows<ErrorAssertion> {
             sandbox.codeLoad(
                 ValueCode(
                     """
@@ -58,7 +58,7 @@ class AssertTest {
 
     @Test
     fun `Throws an error if error happen within assert - length of nil`() {
-        val error = assertThrows<ScriptError> {
+        val error = assertThrows<ErrorInternal> {
             sandbox.codeLoad(
                 ValueCode(
                     """

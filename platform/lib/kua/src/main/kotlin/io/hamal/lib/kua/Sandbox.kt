@@ -103,7 +103,10 @@ class Sandbox(
     }
 
     fun registerExtensions(vararg factories: RunnerExtensionFactory): Sandbox {
-        factories.map { it.create(this) }.forEach(this::register)
+        factories.map { it.create(this) }.forEach { extension ->
+            registerExtensions(*extension.dependencies.toTypedArray())
+            register(extension)
+        }
         return this
     }
 

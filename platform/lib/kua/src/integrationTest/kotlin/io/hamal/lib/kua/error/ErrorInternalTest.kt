@@ -4,7 +4,7 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContextNop
-import io.hamal.lib.kua.ScriptError
+import io.hamal.lib.kua.ErrorInternal
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -16,10 +16,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.fail
 
-class ScriptErrorTest {
+class ErrorInternalTest {
     @Test
     fun `Throws an error if script error occurs`() {
-        val error = assertThrows<ScriptError> {
+        val error = assertThrows<ErrorInternal> {
             sandbox.codeLoad(ValueCode("""local x = does.not.exist"""))
         }
         assertThat(error.message, equalTo("[string \"local x = does.not.exist\"]:1: <name> expected near 'not'"))
@@ -27,7 +27,7 @@ class ScriptErrorTest {
 
     @Test
     fun `Script error interrupts execution`() {
-        assertThrows<ScriptError> {
+        assertThrows<ErrorInternal> {
             sandbox.codeLoad(ValueCode("""local x = does.not.exist; require('test').call()"""))
         }
     }
