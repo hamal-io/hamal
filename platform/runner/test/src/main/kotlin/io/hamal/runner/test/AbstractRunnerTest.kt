@@ -44,7 +44,7 @@ class TestConnector(
         statusCode: ExecStatusCode,
         result: ExecResult
     ) {
-        fail { result.value["message"].toString() }
+        fail { result.toString() }
     }
 }
 

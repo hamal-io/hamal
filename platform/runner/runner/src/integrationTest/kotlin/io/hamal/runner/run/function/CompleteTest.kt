@@ -96,17 +96,32 @@ internal class CompleteTest : AbstractExecuteTest() {
     }
 
     @Test
+    fun `Completes with table result`() {
+        val runner = createTestRunner(
+            connector = TestConnector { execId, statusCode, result, state, events ->
+                assertThat(execId, equalTo(ExecId(1234)))
+                assertThat(statusCode, equalTo(ExecStatusCode(200)))
+                assertThat(result, equalTo(ExecResult(ValueObject.builder().set("answer", 42).build())))
+                assertThat(state, equalTo(ExecState()))
+                assertThat(events, hasSize(0))
+            }
+        )
+        runner.run(unitOfWork("context.complete({ answer = 42 })"))
+    }
+
+
+    @Test
     fun `Completes execution with status code and without result`() {
         val runner = createTestRunner(
             connector = TestConnector { execId, statusCode, result, state, events ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(statusCode, equalTo(ExecStatusCode(201)))
+                assertThat(statusCode, equalTo(ExecStatusCode(204)))
                 assertThat(result, equalTo(ExecResult(ValueObject.empty)))
                 assertThat(state, equalTo(ExecState()))
                 assertThat(events, hasSize(0))
             }
         )
-        runner.run(unitOfWork("context.complete({ status_code = 201 })"))
+        runner.run(unitOfWork("context.complete({ status_code = 204 })"))
     }
 
     @Test

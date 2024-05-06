@@ -27,7 +27,13 @@ function plugin_create(internal)
             return internal.complete({ status_code = 200, result = {} })
         elseif (type(req) == 'table') then
             status_code = req.status_code or 200
-            result = req.result or {}
+
+            if req.status_code ~= nil then
+                result = req.result or {}
+            else
+                result = req.result or req or {}
+            end
+
             return internal.complete({ status_code = status_code, result = result })
         else
             return internal.complete({ status_code = 200, result = { value = req } })
