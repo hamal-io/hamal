@@ -20,6 +20,7 @@ data class ExecInvokeRequested(
 
 
 interface ExecFailRequest {
+    val statusCode: ExecStatusCode
     val result: ExecResult
 }
 
@@ -28,11 +29,13 @@ data class ExecFailRequested(
     override val requestedBy: AuthId,
     override var requestStatus: RequestStatus,
     val id: ExecId,
+    val statusCode: ExecStatusCode,
     val result: ExecResult
 ) : Requested()
 
 
 interface ExecCompleteRequest {
+    val statusCode: ExecStatusCode
     val result: ExecResult
     val state: ExecState
     val events: List<EventToSubmit>
@@ -44,6 +47,7 @@ data class ExecCompleteRequested(
     override var requestStatus: RequestStatus,
     val id: ExecId,
     val state: ExecState,
+    val statusCode: ExecStatusCode,
     val result: ExecResult,
     val events: List<EventToSubmit>
 ) : Requested()

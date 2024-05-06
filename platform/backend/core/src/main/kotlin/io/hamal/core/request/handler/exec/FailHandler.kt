@@ -27,7 +27,7 @@ class ExecFailHandler(
     }
 
     private fun failExec(req: ExecFailRequested) =
-        execCmdRepository.fail(FailCmd(req.cmdId(), req.id, req.result))
+        execCmdRepository.fail(FailCmd(req.cmdId(), req.id, req.statusCode, req.result))
 
     private fun emitFailedEvent(cmdId: CmdId, exec: Exec.Failed) {
         eventEmitter.emit(cmdId, ExecFailedEvent(exec))

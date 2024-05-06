@@ -9,6 +9,8 @@ import io.hamal.repository.api.ExecRepository
 import io.hamal.repository.api.record.exec.CreateExecFromRecords
 import io.hamal.repository.memory.record.RecordMemoryRepository
 import io.hamal.repository.record.exec.ExecRecord
+import io.hamal.repository.record.exec.ExecRecord.Completed
+import io.hamal.repository.record.exec.ExecRecord.Failed
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -105,7 +107,7 @@ class ExecMemoryRepository : RecordMemoryRepository<ExecId, ExecRecord, Exec>(
             } else {
                 check(currentVersion(execId) is Exec.Started) { "$execId not started" }
 
-                store(ExecRecord.Completed(cmdId, execId, cmd.result, cmd.state))
+                store(Completed(cmdId, execId, cmd.statusCode, cmd.result, cmd.state))
 
                 (versionOf(execId, cmdId) as Exec.Completed).also(currentProjection::upsert)
             }
@@ -122,7 +124,7 @@ class ExecMemoryRepository : RecordMemoryRepository<ExecId, ExecRecord, Exec>(
             } else {
                 check(currentVersion(execId) is Exec.Started) { "$execId not started" }
 
-                store(ExecRecord.Failed(cmdId, execId, cmd.result))
+                store(Failed(cmdId, execId, cmd.statusCode, cmd.result))
 
                 (versionOf(execId, cmdId) as Exec.Failed).also(currentProjection::upsert)
             }

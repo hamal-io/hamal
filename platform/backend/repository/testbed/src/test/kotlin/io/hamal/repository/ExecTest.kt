@@ -12,6 +12,7 @@ import io.hamal.lib.domain._enum.ExecStates.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
+import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
 import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
@@ -233,12 +234,14 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 CompleteCmd(
                     CmdId(5),
                     ExecId(2),
+                    ExecStatusCode(200),
                     ExecResult(ValueObject.builder().set("answer", 42).build()),
                     ExecState(ValueObject.builder().set("state", 1337).build())
                 )
             )
 
             assertBaseExec(result)
+            assertThat(result.statusCode, equalTo(ExecStatusCode(200)))
             assertThat(result.status, equalTo(Completed))
             assertThat(result.result, equalTo(ExecResult(ValueObject.builder().set("answer", 42).build())))
             assertThat(result.state, equalTo(ExecState(ValueObject.builder().set("state", 1337).build())))
@@ -253,7 +256,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                     createExec(ExecId(23), status)
 
                     val exception = assertThrows<IllegalStateException> {
-                        complete(CompleteCmd(CmdId(4), ExecId(23), ExecResult(), ExecState()))
+                        complete(CompleteCmd(CmdId(4), ExecId(23), ExecStatusCode(0), ExecResult(), ExecState()))
                     }
                     assertThat(exception.message, equalTo("17 not started"))
 
@@ -270,7 +273,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             start(StartCmd(CmdId(4)))
 
             val exception = assertThrows<NoSuchElementException> {
-                complete(CompleteCmd(CmdId(4), ExecId(23), ExecResult(), ExecState()))
+                complete(CompleteCmd(CmdId(4), ExecId(23), ExecStatusCode(0), ExecResult(), ExecState()))
             }
             assertThat(exception.message, equalTo("Exec not found"))
 
@@ -291,7 +294,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             queue(QueueCmd(CmdId(3), ExecId(2)))
             start(StartCmd(CmdId(4)))
 
-            val result = fail(FailCmd(CmdId(5), ExecId(2), ExecResult(ValueObject.builder().set("message", "SomeError").build())))
+            val result = fail(FailCmd(CmdId(5), ExecId(2), ExecStatusCode(0), ExecResult(ValueObject.builder().set("message", "SomeError").build())))
             assertBaseExec(result)
             assertThat(result.status, equalTo(Failed))
             assertThat(result.result, equalTo(ExecResult(ValueObject.builder().set("message", "SomeError").build())))
@@ -305,7 +308,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 createExec(ExecId(23), status)
 
                 val exception = assertThrows<IllegalStateException> {
-                    fail(FailCmd(CmdId(4), ExecId(23), ExecResult()))
+                    fail(FailCmd(CmdId(4), ExecId(23), ExecStatusCode(0), ExecResult()))
                 }
                 assertThat(exception.message, equalTo("17 not started"))
 
@@ -322,7 +325,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             start(StartCmd(CmdId(4)))
 
             val exception = assertThrows<NoSuchElementException> {
-                fail(FailCmd(CmdId(4), ExecId(23), ExecResult()))
+                fail(FailCmd(CmdId(4), ExecId(23), ExecStatusCode(0), ExecResult()))
             }
             assertThat(exception.message, equalTo("Exec not found"))
 
@@ -659,7 +662,7 @@ fun ExecRepository.createExec(
         return planedExec
     }
 
-    val scheduled = schedule(ScheduleCmd(id = CmdId(101), execId = planedExec.id,))
+    val scheduled = schedule(ScheduleCmd(id = CmdId(101), execId = planedExec.id))
 
     if (status == Scheduled) {
         return scheduled
@@ -680,6 +683,7 @@ fun ExecRepository.createExec(
             CompleteCmd(
                 id = CmdId(104),
                 execId = startedExec.id,
+                statusCode = ExecStatusCode(200),
                 result = ExecResult(ValueObject.builder().set("answer", 42).build()),
                 state = ExecState(ValueObject.builder().set("state", 1337).build())
             )
@@ -689,6 +693,7 @@ fun ExecRepository.createExec(
             FailCmd(
                 id = CmdId(104),
                 execId = startedExec.id,
+                statusCode = ExecStatusCode(500),
                 result = ExecResult(ValueObject.builder().set("message", "ExecTest").build())
             )
         )

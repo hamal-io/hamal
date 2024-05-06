@@ -1,6 +1,6 @@
 package io.hamal.lib.kua.function
 
-import io.hamal.lib.kua.ExtensionError
+import io.hamal.lib.kua.ErrorExtension
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.Sandbox
@@ -53,7 +53,7 @@ internal class FunctionTest {
             )
         )
 
-        val exception = assertThrows<ExtensionError> {
+        val exception = assertThrows<ErrorExtension> {
             sandbox.codeLoad(
                 ValueCode(
                     """

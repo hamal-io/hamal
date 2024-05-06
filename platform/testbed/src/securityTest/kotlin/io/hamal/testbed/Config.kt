@@ -15,6 +15,7 @@ import io.hamal.lib.domain._enum.ExecLogLevel
 import io.hamal.lib.domain._enum.TopicTypes.*
 import io.hamal.lib.domain._enum.TopicTypes.Namespace
 import io.hamal.lib.domain._enum.TopicTypes.Workspace
+import io.hamal.lib.domain._enum.ExecLogLevels.Warn
 import io.hamal.lib.domain._enum.TriggerStates.Active
 import io.hamal.lib.domain._enum.TriggerStates.Inactive
 import io.hamal.lib.domain.vo.*
@@ -28,6 +29,7 @@ import io.hamal.lib.domain.vo.CronPattern.Companion.CronPattern
 import io.hamal.lib.domain.vo.DeployMessage.Companion.DeployMessage
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecLogId.Companion.ExecLogId
+import io.hamal.lib.domain.vo.ExecLogLevel.Companion.ExecLogLevel
 import io.hamal.lib.domain.vo.ExecLogMessage.Companion.ExecLogMessage
 import io.hamal.lib.domain.vo.ExpiresAt.Companion.ExpiresAt
 import io.hamal.lib.domain.vo.ExtensionId.Companion.ExtensionId
@@ -58,7 +60,6 @@ import org.springframework.context.annotation.Bean
 import java.time.temporal.ChronoUnit
 import java.util.*
 import kotlin.time.Duration.Companion.milliseconds
-
 
 @TestConfiguration
 class TestApiConfig {
@@ -210,7 +211,7 @@ class TestSetupConfig {
             ExecLogCmdRepository.AppendCmd(
                 execId = ExecId(id),
                 execLogId = ExecLogId(id),
-                level = ExecLogLevel.Warn,
+                level = ExecLogLevel(Warn),
                 message = ExecLogMessage("Hamal Rocks"),
                 workspaceId = WorkspaceId(id),
                 timestamp = ExecLogTimestamp.now()

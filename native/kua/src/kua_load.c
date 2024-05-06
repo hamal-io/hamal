@@ -10,9 +10,9 @@ load_string(lua_State *L, char const *code) {
     if (result != LUA_OK) {
         char const *error_c_str = lua_tostring(L, -1);
         if (error_c_str == NULL) {
-            throw_script_error("Unknown error occurred");
+			throw_error_internal("Unknown error occurred");
         } else {
-            throw_script_error(error_c_str);
+			throw_error_internal(error_c_str);
         }
     }
     return result;

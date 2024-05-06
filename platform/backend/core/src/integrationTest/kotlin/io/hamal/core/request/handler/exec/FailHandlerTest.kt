@@ -11,6 +11,7 @@ import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecResult
+import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
 import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
 import io.hamal.repository.api.Exec
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
@@ -66,6 +67,7 @@ internal class ExecFailHandlerTest : BaseRequestHandlerTest() {
             requestedBy = AuthId(20),
             requestStatus = Submitted,
             id = ExecId(1234),
+            statusCode = ExecStatusCode(450),
             result = ExecResult(ValueObject.builder().set("message", "You have not tried hard enough").build())
         )
     }
@@ -77,10 +79,8 @@ internal class ExecFailHandlerTest : BaseRequestHandlerTest() {
                 require(this is Exec.Failed)
                 assertThat(id, equalTo(ExecId(1234)))
                 assertThat(status, equalTo(Failed))
-                assertThat(
-                    result,
-                    equalTo(ExecResult(ValueObject.builder().set("message", "You have not tried hard enough").build()))
-                )
+                assertThat(statusCode, equalTo(ExecStatusCode(450)))
+                assertThat(result, equalTo(ExecResult(ValueObject.builder().set("message", "You have not tried hard enough").build())))
             }
         }
     }
