@@ -127,7 +127,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
             set("id", obj.id)
             set("workspaceId", obj.workspaceId)
             set("namespaceId", obj.namespaceId)
-            set("type", obj.type)
+            set("type", obj.type.enumValue.value)
             set("name", obj.name)
             set("data", hon.writeAndCompress(obj))
         }
@@ -140,7 +140,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
                  id             INTEGER NOT NULL,
                  workspace_id   INTEGER NOT NULL,
                  namespace_id   INTEGER NOT NULL,
-                 type           VARCHAR(255) NOT NULL,
+                 type           INTEGER NOT NULL,
                  name           VARCHAR(255) NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
@@ -157,7 +157,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
         return if (types.isEmpty()) {
             ""
         } else {
-            "AND type IN (${types.joinToString(",") { "'${it.stringValue}'" }})"
+            "AND type IN (${types.joinToString(",") { "'${it.enumValue.value}'" }})"
         }
     }
 

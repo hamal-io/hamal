@@ -149,12 +149,7 @@ interface TopicQueryRepository {
 
     data class TopicQuery(
         var afterId: TopicId = TopicId(SnowflakeId(Long.MAX_VALUE)),
-        var types: List<TopicType> = listOf(
-            TopicType(TopicTypes.Internal),
-            TopicType(TopicTypes.Workspace),
-            TopicType(TopicTypes.Namespace),
-            TopicType(TopicTypes.Public)
-        ),
+        var types: List<TopicType> = TopicTypes.entries.map(::TopicType),
         var limit: Limit = Limit(1),
         var topicIds: List<TopicId> = listOf(),
         var names: List<TopicName> = listOf(),
