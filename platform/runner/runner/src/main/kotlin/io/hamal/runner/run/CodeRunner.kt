@@ -2,7 +2,7 @@ package io.hamal.runner.run
 
 import io.hamal.lib.common.logger
 import io.hamal.lib.common.value.*
-import io.hamal.lib.domain._enum.CodeType
+import io.hamal.lib.domain._enum.CodeTypes
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
 import io.hamal.lib.kua.*
@@ -71,12 +71,12 @@ class CodeRunnerImpl(
                         sandbox.globalUnset(ValueString("_internal"))
 
                         when (unitOfWork.codeType) {
-                            CodeType.None -> TODO()
-                            CodeType.Lua54 -> {
+                            CodeType.CodeType(CodeTypes.None) -> TODO()
+                            CodeType.CodeType(CodeTypes.Lua54) -> {
                                 sandbox.codeLoad(unitOfWork.code)
                             }
 
-                            CodeType.Nodes -> {
+                            CodeType.CodeType(CodeTypes.Nodes) -> {
                                 // FIXME load graph from code
                                 val graph = serde.read(NodesGraph::class, unitOfWork.code.stringValue)
                                 val compiledCode = GraphCompiler(sandbox.generatorNodeCompilerRegistry).compile(graph)

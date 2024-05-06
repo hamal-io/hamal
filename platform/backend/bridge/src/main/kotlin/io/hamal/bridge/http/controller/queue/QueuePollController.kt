@@ -5,7 +5,8 @@ import io.hamal.core.event.InternalEventEmitter
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.domain.GenerateCmdId
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain._enum.CodeType
+import io.hamal.lib.domain._enum.CodeTypes.Lua54
+import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
 import io.hamal.lib.sdk.bridge.BridgeUnitOfWorkList
 import io.hamal.lib.sdk.bridge.BridgeUnitOfWorkList.UnitOfWork
 import io.hamal.repository.api.CodeQueryRepository
@@ -52,7 +53,7 @@ internal class QueuePollController(
                     inputs = exec.inputs,
                     state = state,
                     code = code,
-                    codeType = exec.code.type ?: CodeType.Lua54 // FIXME make not nullable
+                    codeType = exec.code.type ?: CodeType(Lua54) // FIXME make not nullable
                 )
             }), OK
         )

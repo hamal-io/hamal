@@ -3,7 +3,8 @@ package io.hamal.api.http.controller.func
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueObject
-import io.hamal.lib.domain._enum.CodeType
+import io.hamal.lib.domain._enum.CodeTypes.Lua54
+import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
 import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
@@ -62,7 +63,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                     name = FuncName("created-name"),
                     inputs = FuncInputs(ValueObject.builder().set("hamal", "createdInputs").build()),
                     code = ValueCode("createdCode"),
-                    codeType = CodeType.Lua54
+                    codeType = CodeType(Lua54)
                 )
             )
         )
@@ -225,7 +226,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                     name = name,
                     inputs = FuncInputs(ValueObject.builder().set("hamal", "createdInputs").build()),
                     code = code,
-                    codeType = CodeType.Lua54
+                    codeType = CodeType(Lua54)
                 )
             )
         )

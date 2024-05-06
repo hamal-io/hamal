@@ -2,8 +2,9 @@ package io.hamal.api.http.controller.func
 
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain._enum.CodeType
+import io.hamal.lib.domain._enum.CodeTypes.Lua54
 import io.hamal.lib.domain.request.ExecInvokeRequested
+import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
 import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
@@ -30,7 +31,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                     name = FuncName("test"),
                     inputs = FuncInputs(),
                     code = ValueCode("x = 10"),
-                    codeType = CodeType.Lua54
+                    codeType = CodeType(Lua54)
                 )
             )
         )
@@ -70,7 +71,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                     name = FuncName("test"),
                     inputs = FuncInputs(),
                     code = ValueCode(""),
-                    codeType = CodeType.Lua54
+                    codeType = CodeType(Lua54)
                 )
             )
         )
@@ -108,7 +109,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                     name = FuncName("test"),
                     inputs = FuncInputs(),
                     code = ValueCode(""),
-                    codeType = CodeType.Lua54
+                    codeType = CodeType(Lua54)
                 )
             )
         )
@@ -153,7 +154,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                     name = FuncName("funcName"),
                     inputs = FuncInputs(),
                     code = ValueCode("createCode"),
-                    codeType = CodeType.Lua54
+                    codeType = CodeType(Lua54)
                 )
             )
         )
@@ -197,7 +198,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                     name = FuncName("test"),
                     inputs = FuncInputs(),
                     code = ValueCode(""),
-                    codeType = CodeType.Lua54
+                    codeType = CodeType(Lua54)
                 )
             )
         )

@@ -3,8 +3,9 @@ package io.hamal.runner.test
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain._enum.CodeType
+import io.hamal.lib.domain._enum.CodeTypes.Lua54
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
@@ -108,7 +109,7 @@ abstract class AbstractRunnerTest {
         inputs = inputs,
         state = State(),
         code = ValueCode(code),
-        codeType = CodeType.Lua54,
+        codeType = CodeType(Lua54),
         correlation = null
     )
 }

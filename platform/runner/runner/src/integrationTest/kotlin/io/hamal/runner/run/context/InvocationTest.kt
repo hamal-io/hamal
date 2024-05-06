@@ -2,7 +2,8 @@ package io.hamal.runner.run.context
 
 import io.hamal.lib.common.value.*
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain._enum.CodeType
+import io.hamal.lib.domain._enum.CodeTypes.Lua54
+import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
 import io.hamal.lib.domain.vo.EventId.Companion.EventId
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
@@ -82,7 +83,7 @@ internal object EventInvocationTest : AbstractExecuteTest() {
 
                 """.trimIndent()
                 ),
-                codeType = CodeType.Lua54
+                codeType = CodeType(Lua54)
             )
         )
     }
@@ -132,7 +133,7 @@ internal object EventInvocationTest : AbstractExecuteTest() {
                 ),
                 state = State(),
                 code = ValueCode("require_plugin('test').fn()"),
-                codeType = CodeType.Lua54
+                codeType = CodeType(Lua54)
             )
         )
         assertThat(testFn.result?.value?.size, equalTo(2))
@@ -194,7 +195,7 @@ internal object HookInvocationTest : AbstractExecuteTest() {
 
                 """.trimIndent()
                 ),
-                codeType = CodeType.Lua54
+                codeType = CodeType(Lua54)
             )
         )
     }
@@ -222,7 +223,7 @@ internal object HookInvocationTest : AbstractExecuteTest() {
                 ),
                 state = State(),
                 code = ValueCode("require_plugin('test').fn()"),
-                codeType = CodeType.Lua54
+                codeType = CodeType(Lua54)
             )
         )
         assertThat(testFn.method, equalTo(ValueString("Delete")))
@@ -290,7 +291,7 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
 
                 """.trimIndent()
                 ),
-                codeType = CodeType.Lua54
+                codeType = CodeType(Lua54)
             )
         )
     }
@@ -318,7 +319,7 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
                 ),
                 state = State(),
                 code = ValueCode("require_plugin('test').fn()"),
-                codeType = CodeType.Lua54
+                codeType = CodeType(Lua54)
             )
         )
         assertThat(testFn.method, equalTo(ValueString("Delete")))

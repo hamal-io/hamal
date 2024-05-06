@@ -1,8 +1,9 @@
 package io.hamal.api.http.controller.request
 
 import io.hamal.lib.common.value.ValueCode
-import io.hamal.lib.domain._enum.CodeType
+import io.hamal.lib.domain._enum.CodeTypes.Lua54
 import io.hamal.lib.domain._enum.RequestStatus.Completed
+import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
 import io.hamal.lib.domain.vo.ExecCode
 import io.hamal.lib.sdk.api.ApiExecInvokeRequested
 import io.hamal.lib.sdk.api.ApiRequestList
@@ -48,7 +49,7 @@ internal class RequestListControllerTest : RequestBaseControllerTest() {
             .map { it as ApiExecInvokeRequested }
             .forEachIndexed { idx, req ->
                 val code = execQueryRepository.get(req.id).code
-                assertThat(code, equalTo(ExecCode(value = ValueCode("${22 - idx}"), type = CodeType.Lua54)))
+                assertThat(code, equalTo(ExecCode(value = ValueCode("${22 - idx}"), type = CodeType(Lua54))))
             }
     }
 
@@ -70,7 +71,7 @@ internal class RequestListControllerTest : RequestBaseControllerTest() {
             .map { it as ApiExecInvokeRequested }
             .forEach { req ->
                 val code = execQueryRepository.get(req.id).code
-                assertThat(code, equalTo(ExecCode(value = ValueCode("71"), type = CodeType.Lua54)))
+                assertThat(code, equalTo(ExecCode(value = ValueCode("71"), type = CodeType(Lua54))))
             }
     }
 }

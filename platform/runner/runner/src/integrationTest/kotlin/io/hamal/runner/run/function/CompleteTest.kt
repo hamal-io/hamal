@@ -3,7 +3,8 @@ package io.hamal.runner.run.function
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain._enum.CodeType
+import io.hamal.lib.domain._enum.CodeTypes
+import io.hamal.lib.domain.vo.CodeType
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecResult
@@ -155,7 +156,7 @@ internal class CompleteTest : AbstractExecuteTest() {
         inputs = ExecInputs(),
         state = State(),
         code = ValueCode(code),
-        codeType = CodeType.Lua54,
+        codeType = CodeType.CodeType(CodeTypes.Lua54),
         correlation = null
     )
 }
