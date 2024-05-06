@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.request
 
-import io.hamal.lib.domain._enum.RequestStatus.Completed
+import io.hamal.lib.domain._enum.RequestStatuses.Completed
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound

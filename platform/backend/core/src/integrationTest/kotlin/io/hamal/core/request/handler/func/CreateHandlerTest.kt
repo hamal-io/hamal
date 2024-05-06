@@ -5,7 +5,7 @@ import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain._enum.CodeType
-import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.FuncCreateRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
@@ -17,6 +17,7 @@ import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import io.hamal.repository.api.FuncCode
 import io.hamal.repository.api.FuncDeployment
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
@@ -74,7 +75,7 @@ internal class FuncCreateHandlerTest : BaseRequestHandlerTest() {
         FuncCreateRequested(
             requestId = RequestId(1),
             requestedBy = AuthId(2),
-            requestStatus = Submitted,
+            requestStatus = RequestStatus(Submitted),
             workspaceId = testWorkspace.id,
             id = FuncId(12345),
             namespaceId = NamespaceId(23456),

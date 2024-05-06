@@ -44,22 +44,22 @@ class LogFunction(
 ) {
 
     override fun invoke(ctx: FunctionContext, arg1: ValueString, arg2: ValueString): ValueError? {
-        val level = ExecLogLevel(ExecLogLevels.valueOf(arg1.stringValue))
-        val message = ExecLogMessage(arg2.stringValue)
+        val level = ExecLogLevels.valueOf(arg1.stringValue)
+        val message = arg2.stringValue
 
-        when (level.enumValue) {
-            Trace -> log.trace(message.stringValue)
-            Debug -> log.debug(message.stringValue)
-            Info -> log.info(message.stringValue)
-            Warn -> log.warn(message.stringValue)
-            Error -> log.error(message.stringValue)
+        when (level) {
+            Trace -> log.trace(message)
+            Debug -> log.debug(message)
+            Info -> log.info(message)
+            Warn -> log.warn(message)
+            Error -> log.error(message)
         }
 
         execLogService.append(
             ctx[ExecId::class],
             ApiExecLogAppendRequest(
-                level = level,
-                message = message,
+                level = ExecLogLevel(level),
+                message = ExecLogMessage(message),
                 timestamp = ExecLogTimestamp.now()
             )
         )

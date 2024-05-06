@@ -5,7 +5,7 @@ import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain._enum.ExecStates
 import io.hamal.lib.domain._enum.ExecStates.Failed
 import io.hamal.lib.domain._enum.ExecStates.Started
-import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.ExecFailRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.ExecId
@@ -13,6 +13,8 @@ import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecResult
 import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
 import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
+import io.hamal.lib.domain.vo.RequestStatus
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import io.hamal.repository.api.Exec
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import org.hamcrest.MatcherAssert.assertThat
@@ -65,7 +67,7 @@ internal class ExecFailHandlerTest : BaseRequestHandlerTest() {
         ExecFailRequested(
             requestId = RequestId(10),
             requestedBy = AuthId(20),
-            requestStatus = Submitted,
+            requestStatus = RequestStatus(Submitted),
             id = ExecId(1234),
             statusCode = ExecStatusCode(450),
             result = ExecResult(ValueObject.builder().set("message", "You have not tried hard enough").build())

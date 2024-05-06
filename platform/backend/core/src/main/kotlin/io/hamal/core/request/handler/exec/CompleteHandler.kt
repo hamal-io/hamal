@@ -8,9 +8,10 @@ import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain._enum.TopicType
+import io.hamal.lib.domain._enum.TopicTypes.Internal
 import io.hamal.lib.domain.request.ExecCompleteRequested
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.TopicType.Companion.TopicType
 import io.hamal.repository.api.*
 import io.hamal.repository.api.event.ExecCompletedEvent
 import io.hamal.repository.api.log.LogBrokerRepository
@@ -86,7 +87,7 @@ class ExecCompleteHandler(
                     workspaceId = namespace.workspaceId,
                     namespaceId = namespace.id,
                     logTopicId = generateId(::LogTopicId),
-                    type = TopicType.Namespace
+                    type = TopicType(Internal)
                 )
             )
 

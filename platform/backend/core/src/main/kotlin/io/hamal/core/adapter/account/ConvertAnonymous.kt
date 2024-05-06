@@ -5,12 +5,13 @@ import io.hamal.core.component.EncodePassword
 import io.hamal.core.component.GenerateToken
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.AccountConvertAnonymousRequest
 import io.hamal.lib.domain.request.AccountConvertRequested
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.domain.vo.AuthId
 import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import org.springframework.stereotype.Component
 
 fun interface AccountConvertAnonymousPort {
@@ -30,7 +31,7 @@ class AccountConvertAnonymousAdapter(
         return AccountConvertRequested(
             requestId = generateDomainId(::RequestId),
             requestedBy = SecurityContext.currentAuthId,
-            requestStatus = RequestStatus.Submitted,
+            requestStatus = RequestStatus(Submitted),
             id = accountId,
             email = req.email,
             emailAuthId = generateDomainId(::AuthId),

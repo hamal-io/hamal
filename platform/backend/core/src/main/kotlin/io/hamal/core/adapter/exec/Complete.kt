@@ -3,11 +3,12 @@ package io.hamal.core.adapter.exec
 import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.ExecCompleteRequest
 import io.hamal.lib.domain.request.ExecCompleteRequested
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import org.springframework.stereotype.Component
 
 fun interface ExecCompletePort {
@@ -25,7 +26,7 @@ class ExecCompleteAdapter(
         return ExecCompleteRequested(
             requestId = generateDomainId(::RequestId),
             requestedBy = SecurityContext.currentAuthId,
-            requestStatus = RequestStatus.Submitted,
+            requestStatus = RequestStatus(Submitted),
             id = exec.id,
             statusCode = req.statusCode,
             result = req.result,

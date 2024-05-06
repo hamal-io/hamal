@@ -6,10 +6,11 @@ import io.hamal.lib.common.serialization.Serde
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.common.value.serde.SerdeModuleValueHon
-import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.TopicAppendEventRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import io.hamal.lib.domain.vo.SerdeModuleValueVariable
 import io.hamal.lib.domain.vo.TopicEventPayload
 import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
@@ -34,7 +35,7 @@ internal class TopicAppendHandlerTest : BaseRequestHandlerTest() {
             TopicAppendEventRequested(
                 requestId = RequestId(SnowflakeId(123)),
                 requestedBy = AuthId(2),
-                requestStatus = Submitted,
+                requestStatus = RequestStatus(Submitted),
                 id = TopicId(4444),
                 payload = TopicEventPayload(ValueObject.builder().set("hamal", "rocks").build())
             )
@@ -59,7 +60,7 @@ internal class TopicAppendHandlerTest : BaseRequestHandlerTest() {
                 TopicAppendEventRequested(
                     requestId = RequestId(SnowflakeId(123)),
                     requestedBy = AuthId(2),
-                    requestStatus = Submitted,
+                    requestStatus = RequestStatus(Submitted),
                     id = TopicId(123),
                     payload = TopicEventPayload(ValueObject.builder().set("hamal", "rocks").build())
                 )

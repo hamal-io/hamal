@@ -3,7 +3,7 @@ package io.hamal.core.request.handler.func
 import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.core.request.handler.NextCommandId
 import io.hamal.lib.common.value.ValueCode
-import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.FuncDeployRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.CodeId
@@ -15,6 +15,7 @@ import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
 import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import io.hamal.repository.api.CodeCmdRepository
 import io.hamal.repository.api.FuncCmdRepository
 import org.hamcrest.CoreMatchers.equalTo
@@ -32,7 +33,7 @@ internal class FuncDeployHandlerTest : BaseRequestHandlerTest() {
             FuncDeployRequested(
                 requestId = RequestId(500),
                 requestedBy = AuthId(2),
-                requestStatus = Submitted,
+                requestStatus = RequestStatus(Submitted),
                 id = FuncId(1),
                 workspaceId = testWorkspace.id,
                 version = CodeVersion(10),
@@ -55,7 +56,7 @@ internal class FuncDeployHandlerTest : BaseRequestHandlerTest() {
             FuncDeployRequested(
                 requestId = RequestId(500),
                 requestedBy = AuthId(2),
-                requestStatus = Submitted,
+                requestStatus = RequestStatus(Submitted),
                 id = FuncId(1),
                 workspaceId = testWorkspace.id,
                 version = CodeVersion(10),
@@ -78,7 +79,7 @@ internal class FuncDeployHandlerTest : BaseRequestHandlerTest() {
             FuncDeployRequested(
                 requestId = RequestId(500),
                 requestedBy = AuthId(2),
-                requestStatus = Submitted,
+                requestStatus = RequestStatus(Submitted),
                 workspaceId = testWorkspace.id,
                 id = FuncId(1),
                 version = null,

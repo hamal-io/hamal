@@ -38,7 +38,6 @@ class ExecLogSqliteRepository(
                     message VARCHAR(255) NOT NULL,
                     timestamp INTEGER NOT NULL,
                     PRIMARY KEY (id)
-                    
                 );
             """.trimIndent()
             )

@@ -2,7 +2,7 @@ package io.hamal.core.request.handler.trigger
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.value.ValueObject
-import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain._enum.TriggerTypes.*
 import io.hamal.lib.domain.request.TriggerCreateRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
@@ -10,6 +10,7 @@ import io.hamal.lib.domain.vo.CronPattern.Companion.CronPattern
 import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
 import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import io.hamal.lib.domain.vo.TriggerDuration.Companion.TriggerDuration
@@ -202,7 +203,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
         TriggerCreateRequested(
             requestId = RequestId(1),
             requestedBy = AuthId(2),
-            requestStatus = Submitted,
+            requestStatus = RequestStatus(Submitted),
             type = FixedRate,
             id = TriggerId(1234),
             namespaceId = testNamespace.id,
@@ -220,7 +221,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
         TriggerCreateRequested(
             requestId = RequestId(1),
             requestedBy = AuthId(2),
-            requestStatus = Submitted,
+            requestStatus = RequestStatus(Submitted),
             type = Event,
             id = TriggerId(1234),
             namespaceId = testNamespace.id,
@@ -238,7 +239,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
         TriggerCreateRequested(
             requestId = RequestId(1),
             requestedBy = AuthId(2),
-            requestStatus = Submitted,
+            requestStatus = RequestStatus(Submitted),
             type = Hook,
             id = TriggerId(1234),
             namespaceId = testNamespace.id,
@@ -255,7 +256,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
         TriggerCreateRequested(
             requestId = RequestId(1),
             requestedBy = AuthId(2),
-            requestStatus = Submitted,
+            requestStatus = RequestStatus(Submitted),
             type = Cron,
             id = TriggerId(1234),
             namespaceId = testNamespace.id,

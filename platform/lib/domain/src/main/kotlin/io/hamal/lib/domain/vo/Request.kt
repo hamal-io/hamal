@@ -1,10 +1,8 @@
 package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.common.value.ValueSnowflakeId
-import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.common.value.ValueVariableSnowflakeId
-import io.hamal.lib.common.value.ValueVariableString
+import io.hamal.lib.common.value.*
+import io.hamal.lib.domain._enum.RequestStatuses
 
 class RequestId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
     companion object {
@@ -17,5 +15,11 @@ class RequestId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId
 class RequestClass(override val value: ValueString) : ValueVariableString() {
     companion object {
         fun RequestClass(value: String) = RequestClass(ValueString(value))
+    }
+}
+
+class RequestStatus(override val value: ValueEnum) : ValueVariableEnum<RequestStatuses>(RequestStatuses::class) {
+    companion object {
+        fun RequestStatus(value: Enum<RequestStatuses>) = RequestStatus(ValueEnum(value.name))
     }
 }
