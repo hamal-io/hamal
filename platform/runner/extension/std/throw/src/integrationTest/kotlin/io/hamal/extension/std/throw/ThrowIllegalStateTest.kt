@@ -9,9 +9,9 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class ThrowInvalidStateTest : AbstractRunnerTest() {
+internal class ThrowIllegalStateTest : AbstractRunnerTest() {
     @Test
-    fun `Throws invalid state error `() {
+    fun `Throws illegal state error `() {
         createTestRunner(
             extensionFactories = listOf(ExtensionStdThrowFactory),
             connector = TestFailConnector { _, statusCode, result ->
@@ -24,7 +24,7 @@ internal class ThrowInvalidStateTest : AbstractRunnerTest() {
                     """
                 throw = require('std.throw').create()
                 
-                throw.invalid_state('wrong state')
+                throw.illegal_state('wrong state')
             """
                 )
             )

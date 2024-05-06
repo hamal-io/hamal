@@ -12,6 +12,17 @@ function plugin_create(internal)
         state = internal.state
     }
 
+    throw = require('std.throw').create()
+    table = require('std.table').create()
+
+    on_complete_functions = { }
+
+    local function complete_functions()
+        for _, fn in ipairs(on_complete_functions) do
+            fn()
+        end
+    end
+
     function export.emit(event)
         local evt = event or {}
         if evt.topic == nil then
@@ -22,7 +33,16 @@ function plugin_create(internal)
         internal.emit(topic, evt)
     end
 
+    function export.on_complete(fn)
+        if type(fn) ~= 'function' then
+            throw.illegal_argument('Expected function but got ' .. type(fn))
+        end
+        table.insert(on_complete_functions, fn)
+    end
+
     function export.complete(req)
+        complete_functions()
+
         if (type(req) == 'nil' or req == nil) then
             return internal.complete({ status_code = 200, result = {} })
         elseif (type(req) == 'table') then

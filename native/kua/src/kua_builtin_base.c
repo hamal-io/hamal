@@ -49,7 +49,7 @@ kua_throw_not_found(lua_State* L)
 }
 
 static int
-kua_throw_illegal_argument(lua_State* L)
+kua_throw_error_illegal_argument(lua_State* L)
 {
 	char const* error_c_str = lua_tostring(L, -1);
 	throw_error_illegal_argument(error_c_str);
@@ -57,7 +57,7 @@ kua_throw_illegal_argument(lua_State* L)
 }
 
 static int
-kua_throw_invalid_state(lua_State* L)
+kua_throw_illegal_state(lua_State* L)
 {
 	char const* error_c_str = lua_tostring(L, -1);
 	throw_error_invalid_state(error_c_str);
@@ -85,24 +85,24 @@ kua_tostring(lua_State* L)
 
 
 static const luaL_Reg base_funcs[] = {
-		{ "assert",                     kua_assert },
-		{ "__throw_internal__",         kua_throw_internal },
-		{ "__throw_not_found__",        kua_throw_not_found },
-		{ "__throw_illegal_argument__", kua_throw_illegal_argument },
-		{ "__throw_invalid_state__",    kua_throw_invalid_state },
-		{ "next",                       luaB_next },
-		{ "pairs",                      luaB_pairs },
-		{ "ipairs",                     luaB_ipairs },
-		{ "print",                      luaB_print }, // FIXME replace with some logger
-		{ "getmetatable",               luaB_getmetatable },
-		{ "setmetatable",               luaB_setmetatable },
-		{ "rawequal",                   luaB_rawequal },
-		{ "rawlen",                     luaB_rawlen },
-		{ "rawget",                     luaB_rawget },
-		{ "rawset",                     luaB_rawset },
-		{ "select",                     luaB_select },
-		{ "type",                       kua_type },
-		{ "tostring",                   kua_tostring },
+		{ "assert",                           kua_assert },
+		{ "__throw_internal__",               kua_throw_internal },
+		{ "__throw_not_found__",              kua_throw_not_found },
+		{ "__throw_error_illegal_argument__", kua_throw_error_illegal_argument },
+		{ "__throw_illegal_state__",          kua_throw_illegal_state },
+		{ "next",                             luaB_next },
+		{ "pairs",                            luaB_pairs },
+		{ "ipairs",                           luaB_ipairs },
+		{ "print",                            luaB_print }, // FIXME replace with some logger
+		{ "getmetatable",                     luaB_getmetatable },
+		{ "setmetatable",                     luaB_setmetatable },
+		{ "rawequal",                         luaB_rawequal },
+		{ "rawlen",                           luaB_rawlen },
+		{ "rawget",                           luaB_rawget },
+		{ "rawset",                           luaB_rawset },
+		{ "select",                           luaB_select },
+		{ "type",                             kua_type },
+		{ "tostring",                         kua_tostring },
 		{ NULL, NULL }
 };
 

@@ -8,7 +8,7 @@ check_index(lua_State *L, int idx) {
     if (idx != LUA_REGISTRYINDEX) {
         int top = lua_gettop(L);
         if (abs(idx) > top) {
-            throw_illegal_argument("Index out of bounds");
+            throw_error_illegal_argument("Index out of bounds");
             return CHECK_RESULT_ERROR;
         }
     }
@@ -18,7 +18,7 @@ check_index(lua_State *L, int idx) {
 enum check_result
 check_argument(int condition, char const *error_message) {
     if (condition != 1) {
-        throw_illegal_argument(error_message);
+        throw_error_illegal_argument(error_message);
         return CHECK_RESULT_ERROR;
     }
     return CHECK_RESULT_OK;
@@ -27,7 +27,7 @@ check_argument(int condition, char const *error_message) {
 enum check_result
 check_stack_overflow(lua_State *L, int total) {
     if (lua_checkstack(L, abs(total)) == 0) {
-        throw_illegal_argument("Prevented stack overflow");
+        throw_error_illegal_argument("Prevented stack overflow");
         return CHECK_RESULT_ERROR;
     }
     return CHECK_RESULT_OK;
@@ -36,7 +36,7 @@ check_stack_overflow(lua_State *L, int total) {
 enum check_result
 check_stack_underflow(lua_State *L, int total) {
     if (lua_gettop(L) - total < 0) {
-        throw_illegal_argument("Prevented stack underflow");
+        throw_error_illegal_argument("Prevented stack underflow");
         return CHECK_RESULT_ERROR;
     }
     return CHECK_RESULT_OK;
@@ -53,7 +53,7 @@ check_lua_type_at(lua_State *L, int idx, enum type expected_lua_type) {
 
         lua_concat(L, 4);
 
-        throw_illegal_state(lua_tostring(L, lua_gettop(L)));
+        throw_error_invalid_state(lua_tostring(L, lua_gettop(L)));
         return CHECK_RESULT_ERROR;
     }
     return CHECK_RESULT_OK;
@@ -70,7 +70,7 @@ check_type_at(lua_State *L, int idx, enum type expected_type) {
 
         lua_concat(L, 4);
 
-        throw_illegal_state(lua_tostring(L, lua_gettop(L)));
+        throw_error_invalid_state(lua_tostring(L, lua_gettop(L)));
         return CHECK_RESULT_ERROR;
     }
     return CHECK_RESULT_OK;

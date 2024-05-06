@@ -95,7 +95,7 @@ class CodeRunnerImpl(
                             runnerContext.eventsToSubmit
                         )
                         log.debug("Completed exec: $execId")
-                    } catch (e: ErrorExtension) {
+                    } catch (e: ErrorPlugin) {
                         val cause = e.cause
                         if (cause is ExitComplete) {
 
@@ -136,7 +136,7 @@ class CodeRunnerImpl(
                 ExecStatusCode(400),
                 ExecResult(ValueObject.builder().set("message", e.message ?: "Unknown reason").build())
             )
-        } catch (e: ErrorInvalidState) {
+        } catch (e: ErrorIllegalState) {
             e.printStackTrace()
             connector.fail(
                 execId,
