@@ -12,7 +12,9 @@ import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.ExecLogLevels.Warn
-import io.hamal.lib.domain._enum.TopicType
+import io.hamal.lib.domain._enum.TopicTypes.*
+import io.hamal.lib.domain._enum.TopicTypes.Namespace
+import io.hamal.lib.domain._enum.TopicTypes.Workspace
 import io.hamal.lib.domain._enum.TriggerStates.Active
 import io.hamal.lib.domain._enum.TriggerStates.Inactive
 import io.hamal.lib.domain.vo.*
@@ -40,6 +42,7 @@ import io.hamal.lib.domain.vo.NamespaceTreeId.Companion.NamespaceTreeId
 import io.hamal.lib.domain.vo.PasswordSalt.Companion.PasswordSalt
 import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
+import io.hamal.lib.domain.vo.TopicType.Companion.TopicType
 import io.hamal.lib.domain.vo.TriggerDuration.Companion.TriggerDuration
 import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import io.hamal.lib.domain.vo.TriggerName.Companion.TriggerName
@@ -64,7 +67,7 @@ class TestApiConfig {
     fun backendBasePath() = BackendBasePath("/tmp/hamal/testbed/${UUID.randomUUID()}")
 
     @Bean
-    fun delayRetry(): DelayRetry = DelayRetryFixedTime(50.milliseconds)
+    fun delayRetry(): DelayRetry = DelayRetryFixedTime(10.milliseconds)
 }
 
 @TestConfiguration
@@ -247,7 +250,7 @@ class TestSetupConfig {
                 name = TopicName("$id-namespace-topic"),
                 namespaceId = NamespaceId(id),
                 workspaceId = WorkspaceId(id),
-                type = TopicType.Namespace,
+                type = TopicType(Namespace),
                 logTopicId = LogTopicId(id)
             )
         )
@@ -259,7 +262,7 @@ class TestSetupConfig {
                 name = TopicName("$id-workspace-topic"),
                 namespaceId = NamespaceId(id),
                 workspaceId = WorkspaceId(id),
-                type = TopicType.Workspace,
+                type = TopicType(Workspace),
                 logTopicId = LogTopicId(id + 1)
             )
         )
@@ -271,7 +274,7 @@ class TestSetupConfig {
                 name = TopicName("$id-public-topic"),
                 namespaceId = NamespaceId(id),
                 workspaceId = WorkspaceId(id),
-                type = TopicType.Public,
+                type = TopicType(Public),
                 logTopicId = LogTopicId(id + 2)
             )
         )

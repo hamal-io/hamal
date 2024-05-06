@@ -105,6 +105,7 @@ object SerdeModuleValueVariable : SerdeModuleGeneric() {
         this[TopicName::class] = String(::TopicName)
         this[TopicEventId::class] = SnowflakeId(::TopicEventId)
         this[TopicEventPayload::class] = Object(::TopicEventPayload)
+        this[TopicType::class] = Enum(::TopicType)
 
         this[TriggerId::class] = SnowflakeId(::TriggerId)
         this[TriggerDuration::class] = String(::TriggerDuration)

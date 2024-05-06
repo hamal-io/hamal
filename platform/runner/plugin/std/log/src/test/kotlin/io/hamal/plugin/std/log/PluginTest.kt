@@ -19,7 +19,7 @@ internal class PluginLogTest : AbstractTest() {
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
         with(testService.req) {
-            assertThat(level.enumValue, equalTo(Trace))
+            assertThat(level, equalTo(Trace))
             assertThat(message, equalTo(ExecLogMessage("a trace message")))
         }
     }
@@ -32,7 +32,7 @@ internal class PluginLogTest : AbstractTest() {
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
         with(testService.req) {
-            assertThat(level.enumValue, equalTo(Debug))
+            assertThat(level, equalTo(Debug))
             assertThat(message, equalTo(ExecLogMessage("a debug message")))
         }
     }
@@ -45,7 +45,7 @@ internal class PluginLogTest : AbstractTest() {
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
         with(testService.req) {
-            assertThat(level.enumValue, equalTo(Info))
+            assertThat(level, equalTo(Info))
             assertThat(message, equalTo(ExecLogMessage("an info message")))
         }
     }
@@ -58,7 +58,7 @@ internal class PluginLogTest : AbstractTest() {
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
         with(testService.req) {
-            assertThat(level.enumValue, equalTo(Warn))
+            assertThat(level, equalTo(Warn))
             assertThat(message, equalTo(ExecLogMessage("a warn message")))
         }
     }
@@ -71,7 +71,7 @@ internal class PluginLogTest : AbstractTest() {
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
         with(testService.req) {
-            assertThat(level.enumValue, equalTo(Error))
+            assertThat(level, equalTo(Error))
             assertThat(message, equalTo(ExecLogMessage("an error message")))
         }
     }

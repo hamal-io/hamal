@@ -1,9 +1,10 @@
 package io.hamal.api.http.controller.topic
 
 
-import io.hamal.lib.domain._enum.TopicType
+import io.hamal.lib.domain._enum.TopicTypes.*
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
+import io.hamal.lib.domain.vo.TopicType.Companion.TopicType
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.body
@@ -20,7 +21,7 @@ internal class TopicCreateControllerTest : TopicBaseControllerTest() {
     fun `Tries to create internal topic`() {
         val createTopicResponse = httpTemplate.post("/v1/namespaces/{namespaceId}/topics")
             .path("namespaceId", testNamespace.id)
-            .body(ApiTopicCreateRequest(TopicName("topics_one"), TopicType.Internal))
+            .body(ApiTopicCreateRequest(TopicName("topics_one"), TopicType(Internal)))
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(HttpStatusCode.BadRequest))
@@ -38,7 +39,7 @@ internal class TopicCreateControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Creates namespace topic`() {
-        val topicId = awaitCompleted(createTopic(TopicName("topics_one"), TopicType.Namespace)).id
+        val topicId = awaitCompleted(createTopic(TopicName("topics_one"), TopicType(Namespace))).id
 
         verifyTopicCreated(topicId)
 
@@ -53,7 +54,7 @@ internal class TopicCreateControllerTest : TopicBaseControllerTest() {
     fun `Tries to create namespace topic but name already exists`() {
         awaitCompleted(createTopic(TopicName("topics_one")))
 
-        with(createTopic(TopicName("topics_one"), TopicType.Namespace)) {
+        with(createTopic(TopicName("topics_one"), TopicType(Namespace))) {
             awaitFailed(requestId)
         }
 
@@ -67,7 +68,7 @@ internal class TopicCreateControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Creates workspace topic`() {
-        val topicId = awaitCompleted(createTopic(TopicName("topics_one"), TopicType.Workspace)).id
+        val topicId = awaitCompleted(createTopic(TopicName("topics_one"), TopicType(Workspace))).id
 
         verifyTopicCreated(topicId)
 
@@ -82,7 +83,7 @@ internal class TopicCreateControllerTest : TopicBaseControllerTest() {
     fun `Tries to create workspace topic but name already exists`() {
         awaitCompleted(createTopic(TopicName("topics_one")))
 
-        with(createTopic(TopicName("topics_one"), TopicType.Workspace)) {
+        with(createTopic(TopicName("topics_one"), TopicType(Workspace))) {
             awaitFailed(requestId)
         }
 
@@ -95,7 +96,7 @@ internal class TopicCreateControllerTest : TopicBaseControllerTest() {
 
     @Test
     fun `Creates public topic`() {
-        val topicId = awaitCompleted(createTopic(TopicName("topics_one"), TopicType.Public)).id
+        val topicId = awaitCompleted(createTopic(TopicName("topics_one"), TopicType(Public))).id
 
         verifyTopicCreated(topicId)
 
@@ -110,7 +111,7 @@ internal class TopicCreateControllerTest : TopicBaseControllerTest() {
     fun `Tries to create public topic but name already exists`() {
         awaitCompleted(createTopic(TopicName("topics_one")))
 
-        with(createTopic(TopicName("topics_one"), TopicType.Public)) {
+        with(createTopic(TopicName("topics_one"), TopicType(Public))) {
             awaitFailed(requestId)
         }
 

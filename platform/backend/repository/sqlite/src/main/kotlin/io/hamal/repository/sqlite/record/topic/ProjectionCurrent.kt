@@ -9,8 +9,8 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Topic
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
-import io.hamal.repository.sqlite.hon
 import io.hamal.repository.record.topic.TopicRecord
+import io.hamal.repository.sqlite.hon
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
@@ -127,7 +127,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
             set("id", obj.id)
             set("workspaceId", obj.workspaceId)
             set("namespaceId", obj.namespaceId)
-            set("type", obj.type.value)
+            set("type", obj.type.enumValue.value)
             set("name", obj.name)
             set("data", hon.writeAndCompress(obj))
         }
@@ -138,7 +138,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
             """
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
-                 workspace_id       INTEGER NOT NULL,
+                 workspace_id   INTEGER NOT NULL,
                  namespace_id   INTEGER NOT NULL,
                  type           INTEGER NOT NULL,
                  name           VARCHAR(255) NOT NULL,
@@ -157,9 +157,10 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
         return if (types.isEmpty()) {
             ""
         } else {
-            "AND type IN (${types.joinToString(",") { "${it.value}" }})"
+            "AND type IN (${types.joinToString(",") { "${it.enumValue.value}" }})"
         }
     }
+
 
     private fun TopicQuery.ids(): String {
         return if (topicIds.isEmpty()) {
