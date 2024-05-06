@@ -5,7 +5,7 @@ import io.hamal.lib.domain.vo.*
 
 interface NamespaceAppendRequest {
     val name: NamespaceName
-    val features: NamespaceFeatures?
+    val features: NamespaceFeaturesMap?
 }
 
 data class NamespaceAppendRequested(
@@ -16,12 +16,12 @@ data class NamespaceAppendRequested(
     val workspaceId: WorkspaceId,
     val parentId: NamespaceId,
     val name: NamespaceName,
-    val features: NamespaceFeatures?
+    val features: NamespaceFeaturesMap?
 ) : Requested()
 
 interface NamespaceUpdateRequest {
     val name: NamespaceName?
-    val features: NamespaceFeatures?
+    val features: NamespaceFeaturesMap?
 }
 
 data class NamespaceUpdateRequested(
@@ -31,5 +31,5 @@ data class NamespaceUpdateRequested(
     val id: NamespaceId,
     val workspaceId: WorkspaceId,
     val name: NamespaceName?,
-    val features: NamespaceFeatures?
+    val features: NamespaceFeaturesMap?
 ) : Requested()

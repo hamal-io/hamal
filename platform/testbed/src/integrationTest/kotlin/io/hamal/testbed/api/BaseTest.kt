@@ -158,7 +158,7 @@ class ClearController {
                 namespaceId = NamespaceId.root,
                 workspaceId = WorkspaceId.root,
                 name = NamespaceName("root-namespace"),
-                features = NamespaceFeatures.default
+                features = NamespaceFeaturesMap.default
             )
         )
 
@@ -268,7 +268,7 @@ class TestConfig {
                     namespaceId = NamespaceId.root,
                     workspaceId = WorkspaceId.root,
                     name = NamespaceName("root-namespace"),
-                    features = NamespaceFeatures.default
+                    features = NamespaceFeaturesMap.default
                 )
             )
         } catch (ignored: Throwable) {

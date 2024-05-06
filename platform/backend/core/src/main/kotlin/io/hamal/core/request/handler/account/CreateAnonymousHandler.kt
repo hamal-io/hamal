@@ -7,7 +7,7 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.request.AccountCreateAnonymousRequested
 import io.hamal.lib.domain.vo.ExpiresAt.Companion.ExpiresAt
-import io.hamal.lib.domain.vo.NamespaceFeatures
+import io.hamal.lib.domain.vo.NamespaceFeaturesMap
 import io.hamal.lib.domain.vo.NamespaceName
 import io.hamal.lib.domain.vo.NamespaceTreeId
 import io.hamal.lib.domain.vo.WorkspaceName.Companion.WorkspaceName
@@ -64,7 +64,7 @@ class AccountCreateAnonymousHandler(
                 namespaceId = req.namespaceId,
                 workspaceId = req.workspaceId,
                 name = NamespaceName.default,
-                features = NamespaceFeatures.default
+                features = NamespaceFeaturesMap.default
             )
         )
     }

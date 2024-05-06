@@ -73,7 +73,8 @@ object SerdeModuleValueVariable : SerdeModuleGeneric() {
         this[NamespaceId::class] = SnowflakeId(::NamespaceId)
         this[NamespaceTreeId::class] = SnowflakeId(::NamespaceTreeId)
         this[NamespaceName::class] = String(::NamespaceName)
-        this[NamespaceFeatures::class] = Object(::NamespaceFeatures)
+        this[NamespaceFeature::class] = Enum(::NamespaceFeature)
+        this[NamespaceFeaturesMap::class] = Object(::NamespaceFeaturesMap)
 
 
         this[FuncId::class] = SnowflakeId(::FuncId)

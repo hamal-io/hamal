@@ -11,7 +11,7 @@ import io.hamal.lib.domain.vo.CronPattern.Companion.CronPattern
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
-import io.hamal.lib.domain.vo.NamespaceFeatures
+import io.hamal.lib.domain.vo.NamespaceFeaturesMap
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
@@ -75,7 +75,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
                 namespaceId = NamespaceId(2345),
                 workspaceId = testWorkspace.id,
                 name = NamespaceName("hamal::namespace"),
-                features = NamespaceFeatures.default
+                features = NamespaceFeaturesMap.default
             )
         )
 

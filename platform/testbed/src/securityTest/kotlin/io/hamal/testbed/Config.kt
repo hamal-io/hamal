@@ -141,7 +141,7 @@ class TestSetupConfig {
                 namespaceId = NamespaceId(id),
                 workspaceId = WorkspaceId(id),
                 name = NamespaceName("$id-namespace"),
-                features = NamespaceFeatures.default
+                features = NamespaceFeaturesMap.default
             )
         )
 

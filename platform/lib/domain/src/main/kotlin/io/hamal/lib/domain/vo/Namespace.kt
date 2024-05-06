@@ -2,8 +2,9 @@ package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.*
-import io.hamal.lib.domain._enum.NamespaceFeature
-import io.hamal.lib.domain._enum.NamespaceFeature.*
+import io.hamal.lib.domain._enum.NamespaceFeatures
+import io.hamal.lib.domain._enum.NamespaceFeatures.*
+import io.hamal.lib.domain.vo.NamespaceFeature.Companion.NamespaceFeature
 
 class NamespaceId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
     companion object {
@@ -22,32 +23,39 @@ class NamespaceName(override val value: ValueString) : ValueVariableString() {
     }
 }
 
+class NamespaceFeature(override val value: ValueEnum) : ValueVariableEnum<NamespaceFeatures>(NamespaceFeatures::class) {
+    companion object {
+        fun NamespaceFeature(value: Enum<NamespaceFeatures>) = NamespaceFeature(ValueEnum(value.name))
+    }
+}
 
-class NamespaceFeatures(override var value: ValueObject = ValueObject.empty) : ValueVariableObject() {
+class NamespaceFeaturesMap(override var value: ValueObject = ValueObject.empty) : ValueVariableObject() {
 
     init {
-        value.values.forEach { (key, value) ->
+        value.values.forEach { (feat, value) ->
             require(
-                NamespaceFeature.entries.any { validFeatures ->
-                    validFeatures.name == key
+                NamespaceFeatures.entries.any { validFeatures ->
+                    validFeatures.name == feat
                 }
-            ) { IllegalArgumentException("$key is not a valid feature.") }
+            ) { IllegalArgumentException("$feat is not a valid feature.") }
         }
     }
 
     fun hasFeature(feature: NamespaceFeature): Boolean {
-        return value.values.map { it.key }.contains(feature.name)
+        return value.values.map { it.key }.contains(feature.stringValue)
     }
 
     companion object {
-        val default = NamespaceFeatures(
+        val default = NamespaceFeaturesMap(
             ValueObject.builder()
-                .set(schedule.name, true)
-                .set(topic.name, false)
-                .set(webhook.name, false)
-                .set(endpoint.name, false)
+                .set(NamespaceFeature(schedule).stringValue, true)
+                .set(NamespaceFeature(topic).stringValue, false)
+                .set(NamespaceFeature(webhook).stringValue, false)
+                .set(NamespaceFeature(endpoint).stringValue, false)
                 .build()
         )
     }
 }
+
+
 

@@ -164,7 +164,7 @@ internal abstract class BaseTest {
                 namespaceId = namespaceId,
                 workspaceId = testWorkspace.id,
                 name = NamespaceName("hamal"),
-                features = NamespaceFeatures.default
+                features = NamespaceFeaturesMap.default
             )
         )
     }

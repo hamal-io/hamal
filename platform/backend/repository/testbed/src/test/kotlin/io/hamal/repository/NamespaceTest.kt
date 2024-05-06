@@ -4,8 +4,9 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.common.domain.Limit.Companion.Limit
-import io.hamal.lib.domain._enum.NamespaceFeature.*
-import io.hamal.lib.domain.vo.NamespaceFeatures
+import io.hamal.lib.domain._enum.NamespaceFeatures.*
+import io.hamal.lib.domain.vo.NamespaceFeature.Companion.NamespaceFeature
+import io.hamal.lib.domain.vo.NamespaceFeaturesMap
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
@@ -40,7 +41,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                     namespaceId = NamespaceId(234),
                     workspaceId = WorkspaceId(1),
                     name = NamespaceName("SomeNamespace"),
-                    features = NamespaceFeatures.default
+                    features = NamespaceFeaturesMap.default
                 )
             )
 
@@ -48,10 +49,10 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(NamespaceId(234)))
                 assertThat(workspaceId, equalTo(WorkspaceId(1)))
                 assertThat(name, equalTo(NamespaceName("SomeNamespace")))
-                assertTrue(features.hasFeature(schedule))
-                assertTrue(features.hasFeature(webhook))
-                assertTrue(features.hasFeature(endpoint))
-                assertTrue(features.hasFeature(topic))
+                assertTrue(features.hasFeature(NamespaceFeature(schedule)))
+                assertTrue(features.hasFeature(NamespaceFeature(webhook)))
+                assertTrue(features.hasFeature(NamespaceFeature(endpoint)))
+                assertTrue(features.hasFeature(NamespaceFeature(topic)))
             }
 
             verifyCount(1)
@@ -75,7 +76,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                         namespaceId = NamespaceId(5),
                         workspaceId = WorkspaceId(333),
                         name = NamespaceName("second-namespace-name"),
-                        features = NamespaceFeatures.default
+                        features = NamespaceFeaturesMap.default
                     )
                 )
 
@@ -351,7 +352,7 @@ private fun NamespaceRepository.createNamespace(
             namespaceId = namespaceId,
             workspaceId = workspaceId,
             name = name,
-            features = NamespaceFeatures.default
+            features = NamespaceFeaturesMap.default
         )
     )
 }

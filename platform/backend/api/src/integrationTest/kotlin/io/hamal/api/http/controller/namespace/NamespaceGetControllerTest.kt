@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.namespace
 
-import io.hamal.lib.domain.vo.NamespaceFeatures
+import io.hamal.lib.domain.vo.NamespaceFeaturesMap
 import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
@@ -40,7 +40,7 @@ internal class NamespaceGetControllerTest : NamespaceBaseControllerTest() {
         with(getNamespaceResponse.result(ApiNamespace::class)) {
             assertThat(id, equalTo(namespaceId))
             assertThat(name, equalTo(NamespaceName("namespace-one")))
-            assertThat(features, equalTo(NamespaceFeatures.default))
+            assertThat(features, equalTo(NamespaceFeaturesMap.default))
         }
     }
 }
