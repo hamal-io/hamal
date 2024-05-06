@@ -29,7 +29,8 @@ import io.hamal.repository.api.*
 import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
-import io.hamal.runner.test.AbstractRunnerTest
+import io.hamal.runner.test.RunnerFixture.createTestRunner
+import io.hamal.runner.test.RunnerFixture.unitOfWork
 import jakarta.annotation.PostConstruct
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -288,7 +289,7 @@ class TestConfig {
 }
 
 
-abstract class BaseEndpointTest : AbstractRunnerTest() {
+abstract class BaseEndpointTest {
 
     abstract val sdk: ApiSdkImpl
 

@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.native
 
+import io.hamal.lib.kua.ErrorIllegalArgument
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -18,13 +19,13 @@ internal class TableCreateTest : NativeBaseTest() {
 
     @Test
     fun `Array count must not be negative`() {
-        assertThrows<IllegalArgumentException> { testInstance.tableCreate(-1, 0) }
+        assertThrows<ErrorIllegalArgument> { testInstance.tableCreate(-1, 0) }
             .also { exception -> assertThat(exception.message, equalTo("Array count must not be negative")) }
     }
 
     @Test
     fun `Records count must not be negative`() {
-        assertThrows<IllegalArgumentException> { testInstance.tableCreate(0, -1) }
+        assertThrows<ErrorIllegalArgument> { testInstance.tableCreate(0, -1) }
             .also { exception -> assertThat(exception.message, equalTo("Records count must not be negative")) }
     }
 }

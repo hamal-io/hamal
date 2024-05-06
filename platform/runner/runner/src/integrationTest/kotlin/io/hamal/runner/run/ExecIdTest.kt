@@ -41,21 +41,22 @@ internal class ExecIdTest : AbstractExecuteTest() {
     fun `exec id available in function`() {
         val testFn = TestFunction()
 
-        val testExecutor = createTestRunner(ValueString("fn") to testFn)
-        testExecutor.run(
-            UnitOfWork(
-                id = ExecId(1234),
-                execToken = ExecToken("ExecToken"),
-                namespaceId = NamespaceId(9876),
-                workspaceId = WorkspaceId(5432),
-                inputs = ExecInputs(),
-                state = State(),
-                code = ValueCode("require_plugin('test').fn()"),
-                codeType = CodeType(Lua54),
-                correlation = null
+        createTestRunner(ValueString("fn") to testFn).also { runner ->
+            runner.run(
+                UnitOfWork(
+                    id = ExecId(1234),
+                    execToken = ExecToken("ExecToken"),
+                    namespaceId = NamespaceId(9876),
+                    workspaceId = WorkspaceId(5432),
+                    inputs = ExecInputs(),
+                    state = State(),
+                    code = ValueCode("require_plugin('test').fn()"),
+                    codeType = CodeType(Lua54),
+                    correlation = null
+                )
             )
-        )
-        assertThat(testFn.result, equalTo("4d2"))
+            assertThat(testFn.result, equalTo("4d2"))
+        }
     }
 
     class TestFunction(var result: String? = null) : Function0In0Out() {

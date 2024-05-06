@@ -24,14 +24,14 @@ errorHandler(lua_State* L)
 				(*env)->IsInstanceOf(env, throwable, jni_ref().error_internal_class) ||
 				(*env)->IsInstanceOf(env, throwable, jni_ref().error_not_found_class) ||
 				(*env)->IsInstanceOf(env, throwable, jni_ref().error_illegal_argument_class) ||
-				(*env)->IsInstanceOf(env, throwable, jni_ref().error_invalid_state_class)
-			)
+				(*env)->IsInstanceOf(env, throwable, jni_ref().error_illegal_state_class)
+				)
 		{
 			throw(throwable);
 			return 0;
 		}
 
-		throw_error_extension(throwable);
+		throw_error_plugin(throwable);
 		return 0;
 	}
 
@@ -84,7 +84,7 @@ call_func_value(lua_State* L)
 	lua_getfield(L, LUA_REGISTRYINDEX, "__KState");
 	if (!lua_isuserdata(L, -1))
 	{
-		throw_error("Unable to obtain state");
+		throw_error_internal("Unable to obtain state");
 		return lua_error(L);
 	}
 	jobject kstate = *(jobject*)lua_touserdata(L, -1);
@@ -95,7 +95,7 @@ call_func_value(lua_State* L)
 	lua_pop(L, 1);
 	if (!func_to_call)
 	{
-		throw_illegal_state("Unable to load func value");
+		throw_error_invalid_state("Unable to load func value");
 		return lua_error(L);
 	}
 
@@ -121,7 +121,7 @@ call_func_value_closure(lua_State* L)
 	*user_data = (*env)->NewGlobalRef(env, (jobject)lua_touserdata(L, 1));
 	if (!*user_data)
 	{
-		throw_error("Error: Failed to create global reference");
+		throw_error_internal("Error: Failed to create global reference");
 		lua_error(L);
 	}
 	lua_setmetatable(L, -2);

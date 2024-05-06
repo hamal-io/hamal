@@ -19,7 +19,7 @@ class ErrorAssertion(message: String) : KuaError(message)
 
 class ErrorDecimal(message: String) : KuaError(message)
 
-class ErrorExtension(cause: Throwable) : KuaError(cause.message ?: "Unknown error", cause)
+class ErrorPlugin(cause: Throwable) : KuaError(cause.message ?: "Unknown error", cause)
 
 class ErrorInternal(message: String) : KuaError(message)
 
@@ -27,4 +27,4 @@ class ErrorNotFound(message: String) : KuaError(message)
 
 class ErrorIllegalArgument(message: String) : KuaError(message)
 
-class ErrorInvalidState(message: String) : KuaError(message)
+class ErrorIllegalState(message: String) : KuaError(message)

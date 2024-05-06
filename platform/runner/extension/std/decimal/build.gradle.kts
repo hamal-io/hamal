@@ -37,6 +37,7 @@ testing {
                 dependencies {
                     implementation(project(":platform:runner:test"))
                     implementation(project(":platform:runner:extension:std:decimal"))
+                    implementation(project(":platform:runner:extension:std:decimal"))
                 }
             }
         }

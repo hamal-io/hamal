@@ -1,5 +1,8 @@
 package io.hamal.runner.test
 
+import io.hamal.extension.std.memoize.ExtensionStdMemoizeFactory
+import io.hamal.extension.std.table.ExtensionStdTableFactory
+import io.hamal.extension.std.`throw`.ExtensionStdThrowFactory
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
@@ -16,6 +19,7 @@ import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
 import io.hamal.lib.kua.extend.extension.RunnerExtensionFactory
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
+import io.hamal.lib.nodes.compiler.node.NodeCompilerRegistry
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
@@ -76,23 +80,28 @@ class TestFailConnector(
 }
 
 
-abstract class AbstractRunnerTest {
+object RunnerFixture {
 
     fun createTestRunner(
         pluginFactories: List<RunnerPluginFactory> = listOf(),
         extensionFactories: List<RunnerExtensionFactory> = listOf(),
         connector: Connector = TestConnector(),
-        env: RunnerEnv = RunnerEnv()
-    ) = CodeRunnerImpl(
-        connector,
-        object : SandboxFactory {
-            override fun create(ctx: SandboxContext): Sandbox {
-                NativeLoader.load(Resources)
-                return Sandbox(ctx)
-                    .registerPlugins(*pluginFactories.toTypedArray())
-                    .registerExtensions(*extensionFactories.toTypedArray())
-            }
-        },
+        env: RunnerEnv = RunnerEnv(),
+        nodeCompilerRegistries: List<NodeCompilerRegistry> = listOf()
+    ) = CodeRunnerImpl(connector, object : SandboxFactory {
+        override fun create(ctx: SandboxContext): Sandbox {
+            NativeLoader.load(Resources)
+            return Sandbox(ctx)
+                .registerExtensions(
+                    ExtensionStdTableFactory,
+                    ExtensionStdThrowFactory,
+                    ExtensionStdMemoizeFactory
+                )
+                .registerPlugins(*pluginFactories.toTypedArray())
+                .registerExtensions(*extensionFactories.toTypedArray())
+                .also { sandbox -> nodeCompilerRegistries.forEach(sandbox.generatorNodeCompilerRegistry::register) }
+        }
+    },
         object : EnvFactory {
             override fun create() = env
         }

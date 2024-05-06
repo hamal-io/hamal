@@ -14,7 +14,7 @@ internal object ControlInvokeTest : AbstractIntegrationTest() {
 
     @Test
     fun `A node can be invoked without exchanging any data`() {
-        createTestRunner().run(
+        runTest(
             unitOfWork(
                 initValue = ValueString("This value will not passed into capture node"),
                 graph = NodesGraph(

@@ -152,7 +152,7 @@ internal class KuaTableTest {
             ValueString("key") to ValueNumber(23)
         )
 
-        assertThrows<IllegalStateException> {
+        assertThrows<ErrorIllegalState> {
             testInstance.getBoolean(ValueString("key"))
         }.also { exception -> assertThat(exception.message, equalTo("Expected type to be boolean but was number")) }
     }
@@ -205,7 +205,7 @@ internal class KuaTableTest {
             ValueString("key") to ValueString("Hamal Rocks")
         )
 
-        assertThrows<IllegalStateException> {
+        assertThrows<ErrorIllegalState> {
             testInstance.getDecimal(ValueString("key"))
         }.also { exception -> assertThat(exception.message, equalTo("Expected type to be decimal but was string")) }
     }
@@ -259,7 +259,7 @@ internal class KuaTableTest {
             ValueString("key") to ValueString("Hamal Rocks")
         )
 
-        assertThrows<IllegalStateException> {
+        assertThrows<ErrorIllegalState> {
             testInstance.getError(ValueString("key"))
         }.also { exception -> assertThat(exception.message, equalTo("Expected type to be error but was string")) }
     }
@@ -312,7 +312,7 @@ internal class KuaTableTest {
             ValueString("key") to ValueString("Hamal Rocks")
         )
 
-        assertThrows<IllegalStateException> {
+        assertThrows<ErrorIllegalState> {
             testInstance.getNumber(ValueString("key"))
         }.also { exception -> assertThat(exception.message, equalTo("Expected type to be number but was string")) }
     }
@@ -364,7 +364,7 @@ internal class KuaTableTest {
             ValueString("key") to ValueNumber(404)
         )
 
-        assertThrows<IllegalStateException> {
+        assertThrows<ErrorIllegalState> {
             testInstance.getString(ValueString("key"))
         }.also { exception -> assertThat(exception.message, equalTo("Expected type to be string but was number")) }
     }
@@ -428,7 +428,7 @@ internal class KuaTableTest {
             ValueString("key") to ValueString("Hamal Rocks")
         )
 
-        assertThrows<IllegalStateException> {
+        assertThrows<ErrorIllegalState> {
             testInstance.getTable(ValueString("key"))
         }.also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was string")) }
     }

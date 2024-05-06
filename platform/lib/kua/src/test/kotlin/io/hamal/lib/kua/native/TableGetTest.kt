@@ -1,5 +1,7 @@
 package io.hamal.lib.kua.native
 
+import io.hamal.lib.kua.ErrorIllegalArgument
+import io.hamal.lib.kua.ErrorIllegalState
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -33,28 +35,28 @@ internal class TableGetTest : NativeBaseTest() {
     @Test
     fun `Tries to get table with 0 index`() {
         testInstance.tableCreate(0, 0)
-        assertThrows<IllegalArgumentException> { testInstance.tableGet(0) }
+        assertThrows<ErrorIllegalArgument> { testInstance.tableGet(0) }
             .also { exception -> assertThat(exception.message, equalTo("Index must not be 0")) }
     }
 
     @Test
     fun `Tries to get table with index bigger than stack size`() {
         testInstance.tableCreate(0, 0)
-        assertThrows<IllegalArgumentException> { testInstance.tableGet(2) }
+        assertThrows<ErrorIllegalArgument> { testInstance.tableGet(2) }
             .also { exception -> assertThat(exception.message, equalTo("Index out of bounds")) }
     }
 
     @Test
     fun `Tries to get table with abs(negative index) bigger than stack size`() {
         testInstance.tableCreate(0, 0)
-        assertThrows<IllegalArgumentException> { testInstance.tableGet(2) }
+        assertThrows<ErrorIllegalArgument> { testInstance.tableGet(2) }
             .also { exception -> assertThat(exception.message, equalTo("Index out of bounds")) }
     }
 
     @Test
     fun `Tries to get number as a table`() {
         testInstance.numberPush(1.0)
-        assertThrows<IllegalStateException> { testInstance.tableGet(1) }
+        assertThrows<ErrorIllegalState> { testInstance.tableGet(1) }
             .also { exception ->
                 assertThat(
                     exception.message, equalTo("Expected type to be table but was number")

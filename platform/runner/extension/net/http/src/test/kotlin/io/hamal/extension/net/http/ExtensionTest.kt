@@ -8,7 +8,8 @@ import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.plugin.net.http.PluginHttpFactory
 import io.hamal.plugin.net.http.fixture.TestWebConfig
-import io.hamal.runner.test.AbstractRunnerTest
+import io.hamal.runner.test.RunnerFixture.createTestRunner
+import io.hamal.runner.test.RunnerFixture.unitOfWork
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -29,13 +30,13 @@ import kotlin.io.path.name
         TestStatusController::class
     ], webEnvironment = RANDOM_PORT
 )
-class ExtensionHttpTest(@LocalServerPort var localServerPort: Int) : AbstractRunnerTest() {
+class ExtensionHttpTest(@LocalServerPort var localServerPort: Int) {
 
     @TestFactory
     fun run(): List<DynamicTest> {
         return collectFiles().map { testFile ->
             dynamicTest("${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}") {
-                val runner = createTestRunner(
+                createTestRunner(
                     pluginFactories = listOf(PluginHttpFactory()),
                     extensionFactories = listOf(
                         ExtensionStdDecimalFactory,
@@ -46,8 +47,9 @@ class ExtensionHttpTest(@LocalServerPort var localServerPort: Int) : AbstractRun
                             .set("test_url", "http://localhost:$localServerPort")
                             .build()
                     )
-                )
-                runner.run(unitOfWork(String(Files.readAllBytes(testFile))))
+                ).also { runner ->
+                    runner.run(unitOfWork(String(Files.readAllBytes(testFile))))
+                }
             }
         }.toList()
     }
