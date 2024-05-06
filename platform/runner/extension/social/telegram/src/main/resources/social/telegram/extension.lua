@@ -5,7 +5,9 @@ function extension_create()
         local http = require('net.http').create({
             base_url = cfg.base_url or 'https://api.telegram.org',
         })
-        local bot_token = cfg.bot_token or error('bot_token has to be set')
+        local throw = require('std.throw').create()
+
+        local bot_token = cfg.bot_token or throw.illegal_argument('bot_token has to be set')
 
         local instance = {}
 
@@ -13,7 +15,7 @@ function extension_create()
             cmd = cmd or {}
             local err, resp = http.post({
                 url = '/bot' .. bot_token .. '/sendMessage',
-                body =  {
+                body = {
                     ['chat_id'] = cmd.chat_id,
                     ['text'] = cmd.text,
                     ['disable_notification'] = true,

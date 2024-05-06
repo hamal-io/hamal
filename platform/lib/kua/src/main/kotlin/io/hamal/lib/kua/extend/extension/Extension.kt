@@ -1,10 +1,10 @@
 package io.hamal.lib.kua.extend.extension
 
-import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.nodes.TemplateNode
 import io.hamal.lib.nodes.compiler.node.NodeCompiler
-import io.hamal.lib.common.value.ValueString
 
 
 interface RunnerExtensionFactory {
@@ -15,7 +15,8 @@ class RunnerExtension(
     val name: ValueString,
     val factoryCode: ValueCode = loadFactoryCodeFromResources(name),
     val nodes: List<TemplateNode> = listOf(),
-    val nodeCompilers: List<NodeCompiler> = listOf()
+    val nodeCompilers: List<NodeCompiler> = listOf(),
+    val dependencies: List<RunnerExtensionFactory> = listOf()
 ) {
     companion object {
         @JvmStatic

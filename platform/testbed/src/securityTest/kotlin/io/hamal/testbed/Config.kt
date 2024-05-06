@@ -63,7 +63,7 @@ class TestApiConfig {
     fun backendBasePath() = BackendBasePath("/tmp/hamal/testbed/${UUID.randomUUID()}")
 
     @Bean
-    fun delayRetry(): DelayRetry = DelayRetryFixedTime(10.milliseconds)
+    fun delayRetry(): DelayRetry = DelayRetryFixedTime(50.milliseconds)
 }
 
 @TestConfiguration

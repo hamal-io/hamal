@@ -31,7 +31,7 @@ internal class CompleteTest : AbstractExecuteTest() {
             unitOfWork(
                 """
             context.complete({ status_code = 200, result = { } })
-            error('failed')
+            __throw_internal__('failed')
         """.trimIndent()
             )
         )

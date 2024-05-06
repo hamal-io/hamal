@@ -36,7 +36,7 @@ testing {
             if (this is JvmTestSuite) {
                 dependencies {
                     implementation(project(":platform:runner:test"))
-                    implementation(project(":platform:runner:extension:std:error"))
+                    implementation(project(":platform:runner:extension:std:throw"))
                 }
             }
         }

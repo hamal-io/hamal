@@ -1,4 +1,4 @@
-package io.hamal.extension.std.error
+package io.hamal.extension.std.`throw`
 
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.ExecResult
@@ -9,11 +9,11 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class ErrorInvalidStateTest : AbstractRunnerTest() {
+internal class ThrowInvalidStateTest : AbstractRunnerTest() {
     @Test
     fun `Throws invalid state error `() {
         createTestRunner(
-            extensionFactories = listOf(ExtensionStdErrorFactory),
+            extensionFactories = listOf(ExtensionStdThrowFactory),
             connector = TestFailConnector { _, statusCode, result ->
                 assertThat(statusCode, equalTo(ExecStatusCode(409)))
                 assertThat(result, equalTo(ExecResult(ValueObject.builder().set("message", "wrong state").build())))
@@ -22,9 +22,9 @@ internal class ErrorInvalidStateTest : AbstractRunnerTest() {
             runner.run(
                 unitOfWork(
                     """
-                error = require('std.error').create()
+                throw = require('std.throw').create()
                 
-                error.invalid_state('wrong state')
+                throw.invalid_state('wrong state')
             """
                 )
             )

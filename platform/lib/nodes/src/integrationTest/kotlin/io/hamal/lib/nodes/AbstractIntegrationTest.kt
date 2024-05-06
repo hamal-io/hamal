@@ -1,6 +1,7 @@
 package io.hamal.lib.nodes
 
 import io.hamal.extension.std.decimal.ExtensionStdDecimalFactory
+import io.hamal.extension.std.`throw`.ExtensionStdThrowFactory
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.*
 import io.hamal.lib.domain.State
@@ -78,6 +79,7 @@ internal abstract class AbstractIntegrationTest {
                     )
                 }.also { sandbox -> sandbox.registerExtensions(ExtensionStdDecimalFactory) }
                     .also { sandbox -> sandbox.generatorNodeCompilerRegistry.register(defaultNodeCompilerRegistry) }
+                    .also { sandbox -> sandbox.registerExtensions(ExtensionStdThrowFactory) }
                     .also { sandbox ->
                         sandbox.generatorNodeCompilerRegistry.register(
                             NodeCompilerRegistry(

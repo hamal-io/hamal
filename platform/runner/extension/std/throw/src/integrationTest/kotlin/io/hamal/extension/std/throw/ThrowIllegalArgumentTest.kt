@@ -1,4 +1,4 @@
-package io.hamal.extension.std.error
+package io.hamal.extension.std.`throw`
 
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.ExecResult
@@ -9,22 +9,22 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class ErrorInternalTest : AbstractRunnerTest() {
+internal class ThrowIllegalArgumentTest : AbstractRunnerTest() {
     @Test
-    fun `Throws internal server error `() {
+    fun `Throws illegal argument `() {
         createTestRunner(
-            extensionFactories = listOf(ExtensionStdErrorFactory),
+            extensionFactories = listOf(ExtensionStdThrowFactory),
             connector = TestFailConnector { _, statusCode, result ->
-                assertThat(statusCode, equalTo(ExecStatusCode(500)))
-                assertThat(result, equalTo(ExecResult(ValueObject.builder().set("message", "something went wrong").build())))
+                assertThat(statusCode, equalTo(ExecStatusCode(400)))
+                assertThat(result, equalTo(ExecResult(ValueObject.builder().set("message", "this is malformed").build())))
             }
         ).also { runner ->
             runner.run(
                 unitOfWork(
                     """
-                error = require('std.error').create()
+                throw = require('std.throw').create()
                 
-                error.internal('something went wrong')
+                throw.illegal_argument('this is malformed')
             """
                 )
             )

@@ -1,5 +1,6 @@
 package io.hamal.extension.net.smtp
 
+import io.hamal.extension.std.`throw`.ExtensionStdThrowFactory
 import io.hamal.lib.common.value.ValueFalse
 import io.hamal.lib.common.value.ValueNumber
 import io.hamal.lib.common.value.ValueString
@@ -25,7 +26,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionNetSmtpFactory)
+            extensionFactories = listOf(ExtensionStdThrowFactory, ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -359,6 +360,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
+            extensionFactories = listOf(ExtensionNetSmtpFactory),
             connector = TestFailConnector { _, statusCode, result ->
                 assertThat(statusCode, equalTo(ExecStatusCode(400)))
                 assertThat(result.getString("message").stringValue, containsString("from not set"))
@@ -388,6 +390,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
+            extensionFactories = listOf(ExtensionStdThrowFactory, ExtensionNetSmtpFactory),
             connector = TestFailConnector { _, statusCode, result ->
                 assertThat(statusCode, equalTo(ExecStatusCode(400)))
                 assertThat(result.getString("message").stringValue, containsString("to not set"))
@@ -417,6 +420,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
+            extensionFactories = listOf(ExtensionNetSmtpFactory),
             connector = TestFailConnector { _, statusCode, result ->
                 assertThat(statusCode, equalTo(ExecStatusCode(400)))
                 assertThat(result.getString("message").stringValue, containsString("subject not set"))
@@ -446,6 +450,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
+            extensionFactories = listOf( ExtensionNetSmtpFactory),
             connector = TestFailConnector { _, statusCode, result ->
                 assertThat(statusCode, equalTo(ExecStatusCode(400)))
                 assertThat(result.value.stringValue("message"), containsString("content not set"))

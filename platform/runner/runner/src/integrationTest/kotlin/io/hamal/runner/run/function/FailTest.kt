@@ -44,13 +44,11 @@ internal class FailTest : AbstractExecuteTest() {
     @Test
     fun `Fails execution with error`() {
         createTestRunner(
-            testPlugins = arrayOf(
-                ValueString("returns_error") to FunctionReturnsError(),
-            ),
+            testPlugins = arrayOf(ValueString("returns_error") to FunctionReturnsError()),
             connector = TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(statusCode, equalTo(ExecStatusCode(432)))
-                assertThat(result, equalTo(ExecResult(ValueObject.builder().set("message", "Sometimes an error can be a good thing").build())))
+                assertThat(statusCode, equalTo(ExecStatusCode(500)))
+                assertThat(result, equalTo(ExecResult(ValueObject.builder().set("value", ValueError("Sometimes an error can be a good thing")).build())))
             }
         ).also { runner ->
             runner.run(
@@ -70,6 +68,7 @@ internal class FailTest : AbstractExecuteTest() {
         createTestRunner(
             connector = TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
+                assertThat(statusCode, equalTo(ExecStatusCode(500)))
                 assertThat(result, equalTo(ExecResult(ValueObject.empty)))
             }
         ).also { runner ->
@@ -83,7 +82,8 @@ internal class FailTest : AbstractExecuteTest() {
         createTestRunner(
             connector = TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(result, equalTo(ExecResult(ValueObject.builder().set("message", "test").build())))
+                assertThat(statusCode, equalTo(ExecStatusCode(500)))
+                assertThat(result, equalTo(ExecResult(ValueObject.builder().set("value", "test").build())))
             }
         ).also { runner ->
             runner.run(unitOfWork("context.fail('test')"))
@@ -95,6 +95,7 @@ internal class FailTest : AbstractExecuteTest() {
         createTestRunner(
             connector = TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
+                assertThat(statusCode, equalTo(ExecStatusCode(500)))
                 assertThat(result, equalTo(ExecResult(ValueObject.builder().set("value", 1337).build())))
             }
         ).also { runner ->
@@ -107,6 +108,7 @@ internal class FailTest : AbstractExecuteTest() {
         createTestRunner(
             connector = TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
+                assertThat(statusCode, equalTo(ExecStatusCode(500)))
                 assertThat(result, equalTo(ExecResult(ValueObject.builder().set("value", false).build())))
             }
         ).also { runner ->

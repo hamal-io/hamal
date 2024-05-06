@@ -111,12 +111,12 @@ class CodeRunnerImpl(
                             )
                             log.debug("Completed exec: $execId")
 
-                        } else {
+                        } else if (cause is ExitFailure) {
                             e.printStackTrace()
                             connector.fail(
                                 execId,
-                                ExecStatusCode(500),
-                                ExecResult(ValueObject.builder().set("message", e.message ?: "Unknown reason").build()) // FIXME use ValueError
+                                ExecStatusCode(cause.statusCode),
+                                ExecResult(cause.result)
                             )
                             log.debug("Failed exec: $execId")
                         }

@@ -1,4 +1,4 @@
-package io.hamal.extension.std.error
+package io.hamal.extension.std.`throw`
 
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.ExecResult
@@ -9,22 +9,22 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class ErrorNotFoundTest : AbstractRunnerTest() {
+internal class ThrowInternalTest : AbstractRunnerTest() {
     @Test
-    fun `Throws not found error `() {
+    fun `Throws internal server `() {
         createTestRunner(
-            extensionFactories = listOf(ExtensionStdErrorFactory),
+            extensionFactories = listOf(ExtensionStdThrowFactory),
             connector = TestFailConnector { _, statusCode, result ->
-                assertThat(statusCode, equalTo(ExecStatusCode(404)))
-                assertThat(result, equalTo(ExecResult(ValueObject.builder().set("message", "could not find xyz").build())))
+                assertThat(statusCode, equalTo(ExecStatusCode(500)))
+                assertThat(result, equalTo(ExecResult(ValueObject.builder().set("message", "something went wrong").build())))
             }
         ).also { runner ->
             runner.run(
                 unitOfWork(
                     """
-                error = require('std.error').create()
+                throw = require('std.throw').create()
                 
-                error.not_found('could not find xyz')
+                throw.internal('something went wrong')
             """
                 )
             )
