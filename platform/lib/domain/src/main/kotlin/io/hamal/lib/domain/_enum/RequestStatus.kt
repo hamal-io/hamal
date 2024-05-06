@@ -9,20 +9,11 @@ enum class RequestStatuses(val value: Int) {
 
     companion object {
         @JvmStatic
-        fun fromInt(value: Int): RequestStatuses {
+        fun of(value: Int): RequestStatuses {
             val result = entries.find { it.value == value }
             require(result != null) { "$value not mapped as a RequestStatus" }
             return result
         }
     }
-    /*companion object {
-        fun fromInt(value: Int) = when (value) {
-            1 -> Submitted
-            2 -> Processing
-            3 -> Completed
-            4 -> Failed
-            else -> throw IllegalArgumentException("Invalid RequestStatus")
-        }
-    }*/
 }
 

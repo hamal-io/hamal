@@ -4,7 +4,7 @@ import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain._enum.RequestStatuses.Companion.fromInt
+import io.hamal.lib.domain._enum.RequestStatuses.Companion.of
 import io.hamal.lib.domain.request.Requested
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
@@ -85,7 +85,7 @@ class RequestSqliteRepository(
                         statusField(this::class).also { field ->
                             field.set(
                                 this,
-                                RequestStatus(fromInt(rs.getInt("status")))
+                                RequestStatus(of(rs.getInt("status")))
                             )
                         }
                     }
@@ -142,7 +142,7 @@ class RequestSqliteRepository(
                     statusField(this::class).also { field ->
                         field.set(
                             this,
-                            RequestStatus(fromInt(rs.getInt("status")))
+                            RequestStatus(of(rs.getInt("status")))
                         )
                     }
                 }
@@ -173,7 +173,7 @@ class RequestSqliteRepository(
                     statusField(this::class).also { field ->
                         field.set(
                             this,
-                            RequestStatus(fromInt(rs.getInt("status")))
+                            RequestStatus(of(rs.getInt("status")))
                         )
                     }
                 }
