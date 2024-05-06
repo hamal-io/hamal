@@ -49,6 +49,7 @@ class ExecCompleteHandler(
             ExecCmdRepository.CompleteCmd(
                 req.cmdId(),
                 req.id,
+                req.statusCode,
                 req.result,
                 ExecState(req.state.value)
             )

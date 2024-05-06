@@ -5,9 +5,9 @@ import io.hamal.core.adapter.trigger.TriggerInvokeEndpointPort
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain._enum.EndpointMethod
+import io.hamal.lib.domain.vo.ExecResult
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.TriggerId
-import io.hamal.lib.sdk.api.ApiExecEndpoint
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.Exec
 import jakarta.servlet.http.HttpServletRequest
@@ -44,7 +44,7 @@ internal class TriggerInvokeEndpointController(
         id: TriggerId,
         req: HttpServletRequest,
         auth: Auth
-    ): CompletableFuture<ResponseEntity<ApiExecEndpoint>> {
+    ): CompletableFuture<ResponseEntity<ExecResult>> {
         return endpointInvoke(
             triggerId = id,
             inputs = InvocationInputs(
@@ -59,20 +59,25 @@ internal class TriggerInvokeEndpointController(
             ),
             auth
         ).thenApply { exec ->
-            ResponseEntity.ok(
-                ApiExecEndpoint(
-                    id = exec.id,
-                    status = exec.status,
-                    correlation = exec.correlation?.id,
-                    result = if (exec is Exec.Completed) {
-                        exec.result
-                    } else if (exec is Exec.Failed) {
-                        exec.result
-                    } else {
-                        null
-                    }
-                )
-            )
+            when (exec) {
+
+                is Exec.Completed -> {
+                    ResponseEntity
+                        .status(exec.statusCode.intValue)
+                        .body(exec.result)
+
+                }
+
+                is Exec.Failed -> {
+                    ResponseEntity
+                        .status(exec.statusCode.intValue)
+                        .body(exec.result)
+                }
+
+                else -> {
+                    TODO()
+                }
+            }
         }
     }
 }

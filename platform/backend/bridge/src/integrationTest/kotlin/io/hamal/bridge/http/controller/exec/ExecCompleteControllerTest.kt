@@ -11,6 +11,7 @@ import io.hamal.lib.domain._enum.ExecStates.Started
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
+import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
@@ -88,6 +89,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
             .body(
                 BridgeExecCompleteRequest(
                     state = ExecState(),
+                    statusCode = ExecStatusCode(1),
                     result = ExecResult(),
                     events = listOf()
                 )
@@ -105,6 +107,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
         with(execQueryRepository.get(execId) as Exec.Completed) {
             assertThat(id, equalTo(execId))
             assertThat(status, equalTo(Completed))
+            assertThat(statusCode, equalTo(ExecStatusCode(201)))
             assertThat(result, equalTo(ExecResult(ValueObject.builder().set("hamal", "rocks").build())))
         }
     }
@@ -147,6 +150,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
             .body(
                 BridgeExecCompleteRequest(
                     state = ExecState(ValueObject.builder().set("value", 13.37).build()),
+                    statusCode = ExecStatusCode(201),
                     result = ExecResult(ValueObject.builder().set("hamal", "rocks").build()),
                     events = listOf(
                         EventToSubmit(

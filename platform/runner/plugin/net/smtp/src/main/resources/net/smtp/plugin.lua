@@ -1,54 +1,54 @@
-local function require_boolean(tbl, key)
-    local value = tbl[key]
-    if value == nil then
-        error(key .. ' not set')
-    end
-
-    if type(value) ~= 'boolean' then
-        error(key .. ' expected to be of type boolean but was ' .. type(value))
-    end
-
-    return value
-end
-
-local function require_number(tbl, key)
-    local value = tbl[key]
-    if value == nil then
-        error(key .. ' not set')
-    end
-    if type(value) ~= 'number' then
-        error(key .. ' expected to be of type number but was ' .. type(value))
-    end
-
-    return value
-end
-
-local function require_string(tbl, key)
-    local value = tbl[key]
-    if value == nil then
-        error(key .. ' not set')
-    end
-    if type(value) ~= 'string' then
-        error(key .. ' expected to be of type string but was ' .. type(value))
-    end
-
-    return value
-end
-
-local function maybe_string(tbl, key)
-    local value = tbl[key]
-    if value == nil then
-        return nil
-    end
-    if type(value) ~= 'string' then
-        error(key .. ' expected to be of type string but was ' .. type(value))
-    end
-
-    return value
-end
-
 function plugin_create(internal)
     local export = { }
+
+    local function require_boolean(tbl, key)
+        local value = tbl[key]
+        if value == nil then
+            __throw_illegal_argument__(key .. ' not set')
+        end
+
+        if type(value) ~= 'boolean' then
+            __throw_illegal_argument__(key .. ' expected to be of type boolean but was ' .. type(value))
+        end
+
+        return value
+    end
+
+    local function require_number(tbl, key)
+        local value = tbl[key]
+        if value == nil then
+            __throw_illegal_argument__(key .. ' not set')
+        end
+        if type(value) ~= 'number' then
+            __throw_illegal_argument__(key .. ' expected to be of type number but was ' .. type(value))
+        end
+
+        return value
+    end
+
+    local function require_string(tbl, key)
+        local value = tbl[key]
+        if value == nil then
+            __throw_illegal_argument__(key .. ' not set')
+        end
+        if type(value) ~= 'string' then
+            __throw_illegal_argument__(key .. ' expected to be of type string but was ' .. type(value))
+        end
+
+        return value
+    end
+
+    local function maybe_string(tbl, key)
+        local value = tbl[key]
+        if value == nil then
+            return nil
+        end
+        if type(value) ~= 'string' then
+            __throw_illegal_argument__(key .. ' expected to be of type string but was ' .. type(value))
+        end
+
+        return value
+    end
 
     function export.send(_mail)
         local mail = _mail or {}

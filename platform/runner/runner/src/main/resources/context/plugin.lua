@@ -11,37 +11,44 @@ function plugin_create(internal)
         },
         state = internal.state
     }
-    function export.complete(result)
-        if (type(result) == 'nil') then
-            return internal.complete({})
-        elseif (type(result) == 'string' or
-                type(result) == 'number' or
-                type(result) == 'boolean') then
-            return internal.complete({ value = result })
-        else
-            return internal.complete(result)
-        end
-    end
 
     function export.emit(event)
         local evt = event or {}
         if evt.topic == nil then
-            return error("Topic not present")
+            __throw_illegal_argument__("Topic not present")
         end
         local topic = evt.topic
         evt.topic = nil
         internal.emit(topic, evt)
     end
 
-    function export.fail(reason)
-        if (type(reason) == 'nil') then
-            return internal.fail({})
-        elseif type(reason) == 'string' then
-            return internal.fail({ message = reason })
-        elseif type(reason) == 'number' or type(reason) == 'boolean' then
-            return internal.fail({ value = reason })
+    function export.complete(req)
+        if (type(req) == 'nil' or req == nil) then
+            return internal.complete({ status_code = 200, result = {} })
+        elseif (type(req) == 'table') then
+            status_code = req.status_code or 200
+
+            if req.status_code ~= nil then
+                result = req.result or {}
+            else
+                result = req.result or req or {}
+            end
+
+            return internal.complete({ status_code = status_code, result = result })
         else
-            return internal.fail(reason)
+            return internal.complete({ status_code = 200, result = { value = req } })
+        end
+    end
+
+    function export.fail(req)
+        if (type(req) == 'nil' or req == nil) then
+            return internal.fail({ status_code = 500, result = {} })
+        elseif (type(req) == 'table') then
+            status_code = req.status_code or 500
+            result = req.result or {}
+            return internal.fail({ status_code = status_code, result = result })
+        else
+            return internal.fail({ status_code = 500, result = { value = req } })
         end
     end
 
