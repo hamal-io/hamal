@@ -3,6 +3,7 @@ package io.hamal.lib.domain.vo
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.common.value.*
+import io.hamal.lib.domain._enum.ExecLogLevels
 import java.time.Instant
 
 
@@ -17,6 +18,12 @@ class ExecLogId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId
 class ExecLogMessage(override val value: ValueString) : ValueVariableString() {
     companion object {
         fun ExecLogMessage(value: String) = ExecLogMessage(ValueString(value))
+    }
+}
+
+class ExecLogLevel(override val value: ValueEnum) : ValueVariableEnum<ExecLogLevels>(ExecLogLevels::class) {
+    companion object {
+        fun ExecLogLevel(value: Enum<ExecLogLevels>) = ExecLogLevel(ValueEnum(value.name))
     }
 }
 

@@ -1,6 +1,6 @@
 package io.hamal.extension.std.log
 
-import io.hamal.lib.domain._enum.ExecLogLevel.*
+import io.hamal.lib.domain._enum.ExecLogLevels.*
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecLogMessage.Companion.ExecLogMessage
@@ -25,7 +25,7 @@ internal class ExtensionLogTest : AbstractRunnerTest() {
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
         with(testService.req) {
-            assertThat(level, equalTo(Trace))
+            assertThat(level.enumValue, equalTo(Trace))
             assertThat(message, equalTo(ExecLogMessage("a trace message")))
         }
     }
@@ -41,7 +41,7 @@ internal class ExtensionLogTest : AbstractRunnerTest() {
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
         with(testService.req) {
-            assertThat(level, equalTo(Debug))
+            assertThat(level.enumValue, equalTo(Debug))
             assertThat(message, equalTo(ExecLogMessage("a debug message")))
         }
     }
@@ -57,7 +57,7 @@ internal class ExtensionLogTest : AbstractRunnerTest() {
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
         with(testService.req) {
-            assertThat(level, equalTo(Info))
+            assertThat(level.enumValue, equalTo(Info))
             assertThat(message, equalTo(ExecLogMessage("an info message")))
         }
     }
@@ -73,7 +73,7 @@ internal class ExtensionLogTest : AbstractRunnerTest() {
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
         with(testService.req) {
-            assertThat(level, equalTo(Warn))
+            assertThat(level.enumValue, equalTo(Warn))
             assertThat(message, equalTo(ExecLogMessage("a warning message")))
         }
     }
@@ -89,7 +89,7 @@ internal class ExtensionLogTest : AbstractRunnerTest() {
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
         with(testService.req) {
-            assertThat(level, equalTo(Error))
+            assertThat(level.enumValue, equalTo(Error))
             assertThat(message, equalTo(ExecLogMessage("an error message")))
         }
     }

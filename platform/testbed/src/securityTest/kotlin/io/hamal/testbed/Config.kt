@@ -11,7 +11,7 @@ import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain._enum.ExecLogLevel
+import io.hamal.lib.domain._enum.ExecLogLevels.Warn
 import io.hamal.lib.domain._enum.TopicType
 import io.hamal.lib.domain._enum.TriggerStates.Active
 import io.hamal.lib.domain._enum.TriggerStates.Inactive
@@ -26,6 +26,7 @@ import io.hamal.lib.domain.vo.CronPattern.Companion.CronPattern
 import io.hamal.lib.domain.vo.DeployMessage.Companion.DeployMessage
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecLogId.Companion.ExecLogId
+import io.hamal.lib.domain.vo.ExecLogLevel.Companion.ExecLogLevel
 import io.hamal.lib.domain.vo.ExecLogMessage.Companion.ExecLogMessage
 import io.hamal.lib.domain.vo.ExpiresAt.Companion.ExpiresAt
 import io.hamal.lib.domain.vo.ExtensionId.Companion.ExtensionId
@@ -206,7 +207,7 @@ class TestSetupConfig {
             ExecLogCmdRepository.AppendCmd(
                 execId = ExecId(id),
                 execLogId = ExecLogId(id),
-                level = ExecLogLevel.Warn,
+                level = ExecLogLevel(Warn),
                 message = ExecLogMessage("Hamal Rocks"),
                 workspaceId = WorkspaceId(id),
                 timestamp = ExecLogTimestamp.now()
