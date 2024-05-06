@@ -3,8 +3,8 @@ package io.hamal.api.http.controller.adhoc
 import io.hamal.api.http.controller.BaseControllerTest
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.CodeType
-import io.hamal.lib.domain._enum.RequestStatus.Processing
-import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatuses.Processing
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.vo.ExecCode
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
@@ -35,7 +35,7 @@ internal class AdhocControllerTest : BaseControllerTest() {
         require(response is HttpSuccessResponse) { "request was not successful" }
 
         val result = awaitCompleted(response.result(ApiExecInvokeRequested::class))
-        assertThat(result.requestStatus, oneOf(Submitted, Processing))
+        assertThat(result.requestStatus.enumValue, oneOf(Submitted, Processing))
 
         verifyReqCompleted(result.requestId)
         verifyExecQueued(result.id)

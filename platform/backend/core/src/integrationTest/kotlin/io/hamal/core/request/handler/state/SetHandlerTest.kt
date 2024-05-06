@@ -5,12 +5,13 @@ import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.StateSetRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
@@ -29,7 +30,7 @@ internal class StateSetHandlerTest : BaseRequestHandlerTest() {
         testInstance(
             StateSetRequested(
                 requestId = RequestId(1),
-                requestStatus = RequestStatus.Submitted,
+                requestStatus = RequestStatus(Submitted),
                 requestedBy = AuthId(2),
                 state = CorrelatedState(
                     correlation = correlation,

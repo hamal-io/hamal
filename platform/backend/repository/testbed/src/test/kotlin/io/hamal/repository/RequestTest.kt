@@ -2,12 +2,14 @@ package io.hamal.repository
 
 import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.common.domain.Limit.Companion.Limit
-import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain._enum.RequestStatus.*
+import io.hamal.lib.domain._enum.RequestStatuses
+import io.hamal.lib.domain._enum.RequestStatuses.*
 import io.hamal.lib.domain.request.TestRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
+import io.hamal.lib.domain.vo.RequestStatus
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import io.hamal.repository.api.RequestQueryRepository.RequestQuery
 import io.hamal.repository.api.RequestRepository
 import io.hamal.repository.fixture.AbstractUnitTest
@@ -22,7 +24,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
     inner class QueueTest {
         @TestFactory
         fun `Queues req`() = runWith(RequestRepository::class) {
-            queue(TestRequested(RequestId(1), AuthId(1), Submitted))
+            queue(TestRequested(RequestId(1), AuthId(1), RequestStatus(Submitted)))
             verifyCount(1)
         }
     }
@@ -37,10 +39,10 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Less reqs there than limit`() = runWith(RequestRepository::class) {
-            queue(TestRequested(RequestId(1), AuthId(5), Submitted))
-            queue(TestRequested(RequestId(2), AuthId(6), Submitted))
-            queue(TestRequested(RequestId(3), AuthId(7), Submitted))
-            queue(TestRequested(RequestId(4), AuthId(8), Submitted))
+            queue(TestRequested(RequestId(2), AuthId(6), RequestStatus(Submitted)))
+            queue(TestRequested(RequestId(3), AuthId(7), RequestStatus(Submitted)))
+            queue(TestRequested(RequestId(1), AuthId(5), RequestStatus(Submitted)))
+            queue(TestRequested(RequestId(4), AuthId(8), RequestStatus(Submitted)))
 
             val result = next(Limit(5))
             assertThat(result, hasSize(4))
@@ -52,10 +54,10 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Limit req amount`() = runWith(RequestRepository::class) {
-            queue(TestRequested(RequestId(1), AuthId(5), Submitted))
-            queue(TestRequested(RequestId(2), AuthId(6), Submitted))
-            queue(TestRequested(RequestId(3), AuthId(7), Submitted))
-            queue(TestRequested(RequestId(4), AuthId(8), Submitted))
+            queue(TestRequested(RequestId(1), AuthId(5), RequestStatus(Submitted)))
+            queue(TestRequested(RequestId(2), AuthId(6), RequestStatus(Submitted)))
+            queue(TestRequested(RequestId(3), AuthId(7), RequestStatus(Submitted)))
+            queue(TestRequested(RequestId(4), AuthId(8), RequestStatus(Submitted)))
 
             val result = next(Limit(2))
             assertThat(result, hasSize(2))
@@ -74,8 +76,8 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Clear table`() = runWith(RequestRepository::class) {
-            createRequest(RequestId(1), Submitted)
-            createRequest(RequestId(2), Completed)
+            createRequest(RequestId(1), RequestStatus(Submitted))
+            createRequest(RequestId(2), RequestStatus(Submitted))
 
             clear()
             verifyCount(0)
@@ -87,22 +89,22 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Complete processing req`() = runWith(RequestRepository::class) {
-            createRequest(RequestId(234), Processing)
+            createRequest(RequestId(234), RequestStatus(Processing))
 
             complete(RequestId(234))
 
             with(get(RequestId(234))) {
-                assertThat(requestStatus, equalTo(Completed))
+                assertThat(requestStatus.enumValue, equalTo(Completed))
             }
 
             verifyCount(1)
         }
 
         @TestFactory
-        fun `Tries to complete but not processing`() = RequestStatus.values().filter { it != Processing }
+        fun `Tries to complete but not processing`() = RequestStatuses.entries.filter { it != Processing }
             .flatMap { reqStatus ->
                 runWith(RequestRepository::class, reqStatus.name) {
-                    createRequest(RequestId(234), reqStatus)
+                    createRequest(RequestId(234), RequestStatus(reqStatus))
 
                     val exception = assertThrows<IllegalStateException> {
                         complete(RequestId(234))
@@ -110,14 +112,14 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
                     assertThat(exception.message, equalTo("Request not processing"))
 
                     with(get(RequestId(234))) {
-                        assertThat(requestStatus, equalTo(reqStatus))
+                        assertThat(requestStatus.enumValue, equalTo(reqStatus))
                     }
                 }
             }
 
         @TestFactory
         fun `Tries to complete but request does not exist`() = runWith(RequestRepository::class) {
-            createRequest(RequestId(23), Submitted)
+            createRequest(RequestId(23), RequestStatus(Submitted))
 
             val exception = assertThrows<NoSuchElementException> {
                 complete(RequestId(3223))
@@ -131,22 +133,22 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Fail processing request`() = runWith(RequestRepository::class) {
-            createRequest(RequestId(234), Processing)
+            createRequest(RequestId(234), RequestStatus(Processing))
 
             fail(RequestId(234))
 
             with(get(RequestId(234))) {
-                assertThat(requestStatus, equalTo(Failed))
+                assertThat(requestStatus.enumValue, equalTo(Failed))
             }
 
             verifyCount(1)
         }
 
         @TestFactory
-        fun `Tries to fail request but not processing`() = RequestStatus.values().filter { it != Processing }
+        fun `Tries to fail request but not processing`() = RequestStatuses.entries.filter { it != Processing }
             .flatMap { reqStatus ->
                 runWith(RequestRepository::class, reqStatus.name) {
-                    createRequest(RequestId(234), reqStatus)
+                    createRequest(RequestId(234), RequestStatus(reqStatus))
 
                     val exception = assertThrows<IllegalStateException> {
                         fail(RequestId(234))
@@ -161,7 +163,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to fail but request does not exist`() = runWith(RequestRepository::class) {
-            createRequest(RequestId(23), Submitted)
+            createRequest(RequestId(23), RequestStatus(Submitted))
 
             val exception = assertThrows<NoSuchElementException> {
                 fail(RequestId(3223))
@@ -174,7 +176,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
     inner class GetTest {
         @TestFactory
         fun `Get request by id`() = runWith(RequestRepository::class) {
-            createRequest(RequestId(1), Submitted)
+            createRequest(RequestId(1), RequestStatus(Submitted))
             with(get(RequestId(1))) {
                 assertThat(requestStatus, equalTo(Submitted))
             }
@@ -182,7 +184,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to get request by id but does not exist`() = runWith(RequestRepository::class) {
-            createRequest(RequestId(1), Submitted)
+            createRequest(RequestId(1), RequestStatus(Submitted))
             val exception = assertThrows<NoSuchElementException> {
                 get(RequestId(111111))
             }
@@ -194,7 +196,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
     inner class FindTest {
         @TestFactory
         fun `Find request by id`() = runWith(RequestRepository::class) {
-            createRequest(RequestId(1), Submitted)
+            createRequest(RequestId(1), RequestStatus(Submitted))
             with(find(RequestId(1))!!) {
                 assertThat(requestStatus, equalTo(Submitted))
             }
@@ -202,7 +204,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to request func by id but does not exist`() = runWith(RequestRepository::class) {
-            createRequest(RequestId(1), Submitted)
+            createRequest(RequestId(1), RequestStatus(Submitted))
             val result = find(RequestId(111111))
             assertThat(result, nullValue())
         }
@@ -240,10 +242,10 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
         }
 
         private fun RequestRepository.setup() {
-            createRequest(RequestId(1), Submitted)
-            createRequest(RequestId(2), Completed)
-            createRequest(RequestId(3), Failed)
-            createRequest(RequestId(4), Submitted)
+            createRequest(RequestId(1), RequestStatus(Submitted))
+            createRequest(RequestId(2), RequestStatus(Completed))
+            createRequest(RequestId(3), RequestStatus(Failed))
+            createRequest(RequestId(4), RequestStatus(Submitted))
         }
     }
 }

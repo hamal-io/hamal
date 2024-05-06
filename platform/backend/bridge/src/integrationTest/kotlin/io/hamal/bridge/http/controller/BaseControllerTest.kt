@@ -1,7 +1,8 @@
 package io.hamal.bridge.http.controller
 
 import io.hamal.bridge.BaseTest
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatuses.Completed
+import io.hamal.lib.domain._enum.RequestStatuses.Failed
 import io.hamal.lib.domain.request.Requested
 import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.http.HttpTemplateImpl
@@ -26,8 +27,8 @@ internal abstract class BaseControllerTest : BaseTest() {
         with(requestQueryRepository.find(id)!!) {
             MatcherAssert.assertThat(id, Matchers.equalTo(id))
             MatcherAssert.assertThat(
-                requestStatus,
-                Matchers.equalTo(RequestStatus.Completed)
+                requestStatus.enumValue,
+                Matchers.equalTo(Completed)
             )
         }
     }
@@ -36,8 +37,8 @@ internal abstract class BaseControllerTest : BaseTest() {
         with(requestQueryRepository.find(id)!!) {
             MatcherAssert.assertThat(id, Matchers.equalTo(id))
             MatcherAssert.assertThat(
-                requestStatus,
-                Matchers.equalTo(RequestStatus.Failed)
+                requestStatus.enumValue,
+                Matchers.equalTo(Failed)
             )
         }
     }
@@ -46,10 +47,10 @@ internal abstract class BaseControllerTest : BaseTest() {
     fun awaitCompleted(id: RequestId) {
         while (true) {
             requestQueryRepository.find(id)?.let {
-                if (it.requestStatus == RequestStatus.Completed) {
+                if (it.requestStatus.enumValue == Completed) {
                     return
                 }
-                if (it.requestStatus == RequestStatus.Failed) {
+                if (it.requestStatus.enumValue == Failed) {
                     throw IllegalStateException("expected $id to complete but failed")
                 }
             }
@@ -73,11 +74,11 @@ internal abstract class BaseControllerTest : BaseTest() {
     fun awaitFailed(id: RequestId) {
         while (true) {
             requestQueryRepository.find(id)?.let {
-                if (it.requestStatus == RequestStatus.Failed) {
+                if (it.requestStatus.enumValue == Failed) {
                     return
                 }
 
-                if (it.requestStatus == RequestStatus.Completed) {
+                if (it.requestStatus.enumValue == Completed) {
                     throw IllegalStateException("expected $id to fail but completed")
                 }
             }

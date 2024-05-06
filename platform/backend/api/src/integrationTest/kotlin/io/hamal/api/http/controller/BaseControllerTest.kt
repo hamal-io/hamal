@@ -1,8 +1,8 @@
 package io.hamal.api.http.controller
 
 import io.hamal.api.BaseTest
-import io.hamal.lib.domain._enum.RequestStatus.Completed
-import io.hamal.lib.domain._enum.RequestStatus.Failed
+import io.hamal.lib.domain._enum.RequestStatuses.Completed
+import io.hamal.lib.domain._enum.RequestStatuses.Failed
 import io.hamal.lib.domain.request.Requested
 import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
 import io.hamal.lib.domain.vo.RequestId
@@ -46,10 +46,10 @@ internal abstract class BaseControllerTest : BaseTest() {
     fun awaitCompleted(id: RequestId) {
         while (true) {
             requestQueryRepository.find(id)?.let {
-                if (it.requestStatus == Completed) {
+                if (it.requestStatus.enumValue == Completed) {
                     return
                 }
-                if (it.requestStatus == Failed) {
+                if (it.requestStatus.enumValue == Failed) {
                     throw IllegalStateException("expected $id to complete but failed")
                 }
             }
@@ -73,11 +73,11 @@ internal abstract class BaseControllerTest : BaseTest() {
     fun awaitFailed(id: RequestId) {
         while (true) {
             requestQueryRepository.find(id)?.let {
-                if (it.requestStatus == Failed) {
+                if (it.requestStatus.enumValue == Failed) {
                     return
                 }
 
-                if (it.requestStatus == Completed) {
+                if (it.requestStatus.enumValue == Completed) {
                     throw IllegalStateException("expected $id to fail but completed")
                 }
             }

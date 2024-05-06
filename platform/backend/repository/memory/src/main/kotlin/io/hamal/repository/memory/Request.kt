@@ -4,10 +4,10 @@ import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain._enum.RequestStatus.Processing
+import io.hamal.lib.domain._enum.RequestStatuses.*
 import io.hamal.lib.domain.request.Requested
 import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import io.hamal.repository.api.RequestQueryRepository
 import io.hamal.repository.api.RequestRepository
 import org.springframework.stereotype.Repository
@@ -41,7 +41,7 @@ class RequestMemoryRepository : RequestRepository {
 
                 store[reqId]?.let { req ->
                     req.apply {
-                        statusField(this::class).also { field -> field.set(this, Processing) }
+                        statusField(this::class).also { field -> field.set(this, RequestStatus(Processing)) }
                     }
                 }
 
@@ -55,9 +55,9 @@ class RequestMemoryRepository : RequestRepository {
     override fun complete(reqId: RequestId) {
         lock.withLock {
             val req = get(reqId)
-            check(req.requestStatus == Processing) { "Request not processing" }
+            check(req.requestStatus.enumValue == Processing) { "Request not processing" }
             store[req.requestId] = req.apply {
-                statusField(this::class).also { field -> field.set(this, RequestStatus.Completed) }
+                statusField(this::class).also { field -> field.set(this, RequestStatus(Completed)) }
             }
         }
     }
@@ -65,9 +65,9 @@ class RequestMemoryRepository : RequestRepository {
     override fun fail(reqId: RequestId) {
         lock.withLock {
             val req = get(reqId)
-            check(req.requestStatus == Processing) { "Request not processing" }
+            check(req.requestStatus.enumValue == Processing) { "Request not processing" }
             store[req.requestId] = req.apply {
-                statusField(this::class).also { field -> field.set(this, RequestStatus.Failed) }
+                statusField(this::class).also { field -> field.set(this, RequestStatus(Failed)) }
             }
         }
     }

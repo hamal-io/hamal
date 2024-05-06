@@ -93,6 +93,7 @@ object SerdeModuleValueVariable : SerdeModuleGeneric() {
 
         this[RequestId::class] = SnowflakeId(::RequestId)
         this[RequestClass::class] = String(::RequestClass)
+        this[RequestStatus::class] = Enum(::RequestStatus)
 
         this[RunnerId::class] = SnowflakeId(::RunnerId)
 
