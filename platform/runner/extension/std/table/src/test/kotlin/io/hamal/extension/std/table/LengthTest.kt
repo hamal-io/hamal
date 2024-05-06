@@ -1,15 +1,12 @@
 package io.hamal.extension.std.table
 
-import io.hamal.runner.test.AbstractRunnerTest
+import io.hamal.runner.test.RunnerFixture.unitOfWork
 import org.junit.jupiter.api.Test
 
-internal class LengthTest : AbstractRunnerTest() {
+internal class LengthTest : AbstractTest() {
     @Test
     fun `Empty table`() {
-        val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionStdTableFactory)
-        )
-        runner.run(
+        runTest(
             unitOfWork(
                 """
                 table = require('std.table').create()
@@ -23,10 +20,7 @@ internal class LengthTest : AbstractRunnerTest() {
 
     @Test
     fun `Single value`() {
-        val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionStdTableFactory)
-        )
-        runner.run(
+        runTest(
             unitOfWork(
                 """
                 table = require('std.table').create()
@@ -43,10 +37,7 @@ internal class LengthTest : AbstractRunnerTest() {
 
     @Test
     fun `Multiple values`() {
-        val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionStdTableFactory)
-        )
-        runner.run(
+        runTest(
             unitOfWork(
                 """
                 table = require('std.table').create()

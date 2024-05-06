@@ -1,17 +1,13 @@
 package io.hamal.extension.std.decimal
 
-import io.hamal.runner.test.AbstractRunnerTest
+import io.hamal.runner.test.RunnerFixture.unitOfWork
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
-internal class DecimalTest : AbstractRunnerTest() {
+internal class DecimalTest : AbstractTest() {
     @Test
     fun `Can import decimal`() {
-        val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionStdDecimalFactory)
-        )
-
-        runner.run(
+        runTest(
             unitOfWork(
                 """
             local decimal = require('std.decimal').create()
@@ -23,11 +19,7 @@ internal class DecimalTest : AbstractRunnerTest() {
 
     @Test
     fun `Creating decimal and iterating over _G does not crash`() {
-        val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionStdDecimalFactory)
-        )
-
-        runner.run(
+        runTest(
             unitOfWork(
                 """
             local decimal = require('std.decimal').create()
@@ -41,11 +33,7 @@ internal class DecimalTest : AbstractRunnerTest() {
     @Disabled //204-breaks all tests
     @Test
     fun `Can create new decimal instance by number`() {
-        val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionStdDecimalFactory)
-        )
-
-        runner.run(
+        runTest(
             unitOfWork(
                 """
             local decimal = require('std.decimal').create()
@@ -58,11 +46,7 @@ internal class DecimalTest : AbstractRunnerTest() {
 
     @Test
     fun `Can create new decimal instance by string`() {
-        val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionStdDecimalFactory)
-        )
-
-        runner.run(
+        runTest(
             unitOfWork(
                 """
             local decimal = require('std.decimal').create()

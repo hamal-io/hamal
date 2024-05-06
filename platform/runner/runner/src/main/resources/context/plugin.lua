@@ -26,7 +26,7 @@ function plugin_create(internal)
     function export.emit(event)
         local evt = event or {}
         if evt.topic == nil then
-            __throw_illegal_argument__("Topic not present")
+            throw.illegal_argument("Topic not present")
         end
         local topic = evt.topic
         evt.topic = nil
