@@ -52,7 +52,7 @@ class RequestSqliteRepository(
         connection.tx {
             execute("INSERT INTO requests (id,status,data) VALUES (:id,:status,:data)") {
                 set("id", req.requestId)
-                set("status", req.requestStatus.value)
+                set("status", req.requestStatus.enumValue.value)
                 set("data", hon.write(req))
             }
         }

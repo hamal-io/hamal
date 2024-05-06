@@ -39,9 +39,9 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Less reqs there than limit`() = runWith(RequestRepository::class) {
+            queue(TestRequested(RequestId(1), AuthId(5), RequestStatus(Submitted)))
             queue(TestRequested(RequestId(2), AuthId(6), RequestStatus(Submitted)))
             queue(TestRequested(RequestId(3), AuthId(7), RequestStatus(Submitted)))
-            queue(TestRequested(RequestId(1), AuthId(5), RequestStatus(Submitted)))
             queue(TestRequested(RequestId(4), AuthId(8), RequestStatus(Submitted)))
 
             val result = next(Limit(5))
