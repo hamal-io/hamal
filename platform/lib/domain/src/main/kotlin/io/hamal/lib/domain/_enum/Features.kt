@@ -9,8 +9,8 @@ enum class Features(val value: Int) {
 
     companion object {
         @JvmStatic
-        fun of(value: Int): FeedbackMood {
-            val result = FeedbackMood.entries.find { it.value == value }
+        fun of(value: Int): Features {
+            val result = Features.entries.find { it.value == value }
             require(result != null) { "$value not mapped as a feature" }
             return result
         }

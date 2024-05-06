@@ -5,7 +5,8 @@ import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain._enum.CodeType
+import io.hamal.lib.domain._enum.CodeTypes.Lua54
+import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecResult
@@ -153,7 +154,7 @@ internal class FailTest : AbstractExecuteTest() {
         inputs = ExecInputs(),
         state = State(),
         code = ValueCode(code),
-        codeType = CodeType.Lua54,
+        codeType = CodeType(Lua54),
         correlation = null
     )
 }

@@ -4,7 +4,6 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.ValueCode
-import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.request.FuncCreateRequest
 import io.hamal.lib.domain.request.FuncDeployRequest
 import io.hamal.lib.domain.request.FuncInvokeRequest

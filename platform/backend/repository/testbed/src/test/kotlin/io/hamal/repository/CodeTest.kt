@@ -5,7 +5,7 @@ import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.value.ValueCode
-import io.hamal.lib.domain._enum.CodeType
+import io.hamal.lib.domain._enum.CodeTypes
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
 import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
@@ -45,7 +45,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 assertThat(workspaceId, equalTo(WorkspaceId(1)))
                 assertThat(version, equalTo(CodeVersion(1)))
                 assertThat(value, equalTo(ValueCode("40 + 2")))
-                assertThat(type, equalTo(CodeType.Lua54))
+                assertThat(type.enumValue, equalTo(CodeTypes.Lua54))
             }
         }
 
@@ -69,7 +69,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(CodeId(1)))
                 assertThat(version, equalTo(CodeVersion(1)))
                 assertThat(value, equalTo(ValueCode("40 + 2")))
-                assertThat(type, equalTo(CodeType.Lua54))
+                assertThat(type.enumValue, equalTo(CodeTypes.Lua54))
 
             }
 
@@ -77,7 +77,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(CodeId(2)))
                 assertThat(version, equalTo(CodeVersion(1)))
                 assertThat(value, equalTo(ValueCode("40 + 2")))
-                assertThat(type, equalTo(CodeType.Lua54))
+                assertThat(type.enumValue, equalTo(CodeTypes.Lua54))
             }
         }
     }
@@ -100,7 +100,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 assertThat(workspaceId, equalTo(WorkspaceId(1)))
                 assertThat(version, equalTo(CodeVersion(2)))
                 assertThat(value, equalTo(ValueCode("40 + 2")))
-                assertThat(type, equalTo(CodeType.Lua54))
+                assertThat(type.enumValue, equalTo(CodeTypes.Lua54))
             }
 
             verifyCount(1)
@@ -124,7 +124,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                     assertThat(workspaceId, equalTo(WorkspaceId(1)))
                     assertThat(version, equalTo(CodeVersion(iteration + 2)))
                     assertThat(value, equalTo(ValueCode("40 + $iteration")))
-                    assertThat(type, equalTo(CodeType.Lua54))
+                    assertThat(type.enumValue, equalTo(CodeTypes.Lua54))
 
                 }
             }
@@ -176,7 +176,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(version, equalTo(CodeVersion(1)))
                 assertThat(value, equalTo(ValueCode("1 + 1")))
-                assertThat(type, equalTo(CodeType.Lua54))
+                assertThat(type.enumValue, equalTo(CodeTypes.Lua54))
 
             }
         }
@@ -206,7 +206,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             with(get(CodeId(1), CodeVersion(5))) {
                 assertThat(version, equalTo(CodeVersion(5)))
                 assertThat(value, equalTo(ValueCode("1 + 3")))
-                assertThat(type, equalTo(CodeType.Lua54))
+                assertThat(type.enumValue, equalTo(CodeTypes.Lua54))
             }
         }
 
@@ -276,7 +276,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(version, equalTo(CodeVersion(1)))
                 assertThat(value, equalTo(ValueCode("1 + 1")))
-                assertThat(type, equalTo(CodeType.Lua54))
+                assertThat(type.enumValue, equalTo(CodeTypes.Lua54))
             }
         }
 
@@ -295,19 +295,19 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
             with(find(CodeId(1), CodeVersion(1))!!) {
                 assertThat(version, equalTo(CodeVersion(1)))
                 assertThat(value, equalTo(ValueCode("created")))
-                assertThat(type, equalTo(CodeType.Lua54))
+                assertThat(type.enumValue, equalTo(CodeTypes.Lua54))
             }
 
             with(find(CodeId(1), CodeVersion(2))!!) {
                 assertThat(version, equalTo(CodeVersion(2)))
                 assertThat(value, equalTo(ValueCode("1 + 0")))
-                assertThat(type, equalTo(CodeType.Lua54))
+                assertThat(type.enumValue, equalTo(CodeTypes.Lua54))
             }
 
             with(find(CodeId(1), CodeVersion(5))!!) {
                 assertThat(version, equalTo(CodeVersion(5)))
                 assertThat(value, equalTo(ValueCode("1 + 3")))
-                assertThat(type, equalTo(CodeType.Lua54))
+                assertThat(type.enumValue, equalTo(CodeTypes.Lua54))
             }
         }
 
@@ -368,7 +368,7 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(CodeId(3)))
                 assertThat(workspaceId, equalTo(WorkspaceId(4)))
                 assertThat(value, equalTo(ValueCode("1 + 3")))
-                assertThat(type, equalTo(CodeType.Lua54))
+                assertThat(type.enumValue, equalTo(CodeTypes.Lua54))
             }
         }
 
@@ -389,14 +389,14 @@ internal class CodeRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(CodeId(4)))
                 assertThat(workspaceId, equalTo(WorkspaceId(5)))
                 assertThat(value, equalTo(ValueCode("1 + 4")))
-                assertThat(type, equalTo(CodeType.Lua54))
+                assertThat(type.enumValue, equalTo(CodeTypes.Lua54))
             }
 
             with(result[1]) {
                 assertThat(id, equalTo(CodeId(3)))
                 assertThat(workspaceId, equalTo(WorkspaceId(4)))
                 assertThat(value, equalTo(ValueCode("1 + 3")))
-                assertThat(type, equalTo(CodeType.Lua54))
+                assertThat(type.enumValue, equalTo(CodeTypes.Lua54))
             }
         }
 

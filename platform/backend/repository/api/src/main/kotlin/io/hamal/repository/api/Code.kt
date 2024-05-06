@@ -4,9 +4,11 @@ import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.ValueCode
-import io.hamal.lib.domain._enum.CodeType
+import io.hamal.lib.domain._enum.CodeTypes.Lua54
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
+import io.hamal.lib.domain.vo.CodeType
+import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
 import io.hamal.lib.domain.vo.CodeVersion
 import io.hamal.lib.domain.vo.WorkspaceId
 
@@ -31,7 +33,7 @@ interface CodeCmdRepository : CmdRepository {
         val codeId: CodeId,
         val workspaceId: WorkspaceId,
         val value: ValueCode,
-        val type: CodeType = CodeType.Lua54
+        val type: CodeType = CodeType(Lua54)
     )
 
     data class UpdateCmd(

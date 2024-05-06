@@ -3,7 +3,8 @@ package io.hamal.runner.run
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain._enum.CodeType
+import io.hamal.lib.domain._enum.CodeTypes.Lua54
+import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
@@ -30,7 +31,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
                 inputs = ExecInputs(),
                 state = State(),
                 code = ValueCode("assert(context.exec.id == '4d2')"),
-                codeType = CodeType.Lua54,
+                codeType = CodeType(Lua54),
                 correlation = null
             )
         )
@@ -50,7 +51,7 @@ internal class ExecIdTest : AbstractExecuteTest() {
                     inputs = ExecInputs(),
                     state = State(),
                     code = ValueCode("require_plugin('test').fn()"),
-                    codeType = CodeType.Lua54,
+                    codeType = CodeType(Lua54),
                     correlation = null
                 )
             )

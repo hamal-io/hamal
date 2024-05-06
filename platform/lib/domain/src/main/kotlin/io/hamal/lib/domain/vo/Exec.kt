@@ -3,7 +3,6 @@ package io.hamal.lib.domain.vo
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.common.value.*
-import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain._enum.ExecStates
 import java.time.Instant
 

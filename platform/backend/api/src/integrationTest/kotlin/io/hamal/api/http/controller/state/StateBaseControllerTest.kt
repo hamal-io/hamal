@@ -4,7 +4,7 @@ import io.hamal.api.http.controller.BaseControllerTest
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain._enum.CodeType
+import io.hamal.lib.domain._enum.CodeTypes
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
 import io.hamal.lib.http.HttpStatusCode.Accepted
@@ -29,7 +29,7 @@ internal sealed class StateBaseControllerTest : BaseControllerTest() {
                     name = name,
                     inputs = FuncInputs(),
                     code = ValueCode(""),
-                    codeType = CodeType.Lua54
+                    codeType = CodeType.CodeType(CodeTypes.Lua54)
                 )
             )
             .execute()

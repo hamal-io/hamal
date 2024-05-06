@@ -1,10 +1,8 @@
 package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.common.value.ValueNumber
-import io.hamal.lib.common.value.ValueSnowflakeId
-import io.hamal.lib.common.value.ValueVariableNumber
-import io.hamal.lib.common.value.ValueVariableSnowflakeId
+import io.hamal.lib.common.value.*
+import io.hamal.lib.domain._enum.CodeTypes
 
 class CodeId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
     companion object {
@@ -21,5 +19,11 @@ class CodeVersion(override val value: ValueNumber) : ValueVariableNumber() {
 
     companion object {
         fun CodeVersion(value: Int) = CodeVersion(ValueNumber(value))
+    }
+}
+
+class CodeType(override val value: ValueEnum) : ValueVariableEnum<CodeTypes>(CodeTypes::class) {
+    companion object {
+        fun CodeType(value: Enum<CodeTypes>) = CodeType(ValueEnum(value.name))
     }
 }

@@ -33,6 +33,7 @@ object SerdeModuleValueVariable : SerdeModuleGeneric() {
         this[CmdId::class] = SnowflakeId(::CmdId)
 
         this[CodeId::class] = SnowflakeId(::CodeId)
+        this[CodeType::class] = Enum(::CodeType)
         this[CodeVersion::class] = Number(::CodeVersion)
 
         this[CorrelationId::class] = String(::CorrelationId)

@@ -2,10 +2,11 @@ package io.hamal.api.http.controller.trigger
 
 import io.hamal.api.http.controller.BaseControllerTest
 import io.hamal.lib.common.value.ValueCode
-import io.hamal.lib.domain._enum.CodeType
+import io.hamal.lib.domain._enum.CodeTypes.Lua54
 import io.hamal.lib.domain._enum.TopicTypes.Namespace
 import io.hamal.lib.domain._enum.TriggerTypes
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
 import io.hamal.lib.domain.vo.TopicType.Companion.TopicType
 import io.hamal.lib.domain.vo.TriggerDuration.Companion.TriggerDuration
 import io.hamal.lib.http.HttpStatusCode.Accepted
@@ -26,7 +27,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
                     name = name,
                     inputs = FuncInputs(),
                     code = ValueCode(""),
-                    codeType = CodeType.Lua54
+                    codeType = CodeType(Lua54)
                 )
             )
             .execute()
