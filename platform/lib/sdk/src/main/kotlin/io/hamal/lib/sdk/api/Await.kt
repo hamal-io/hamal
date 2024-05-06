@@ -1,6 +1,7 @@
 package io.hamal.lib.sdk.api
 
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatuses.Completed
+import io.hamal.lib.domain._enum.RequestStatuses.Failed
 import io.hamal.lib.http.HttpTemplate
 
 interface ApiAwaitService {
@@ -18,12 +19,12 @@ internal class ApiAwaitServiceImpl(
                 .path("reqId", req.requestId)
                 .execute(ApiRequested::class)
                 .let {
-                    when (it.requestStatus) {
-                        RequestStatus.Completed -> {
+                    when (it.requestStatus.enumValue) {
+                        Completed -> {
                             return
                         }
 
-                        RequestStatus.Failed -> {
+                        Failed -> {
                             throw IllegalStateException("expected ${req.requestId} to complete but failed")
                         }
 

@@ -48,7 +48,7 @@ class FuncDeployFunction(
 
             null to ctx.tableCreate(
                 "request_id" to res.requestId,
-                "request_status" to ValueString(res.requestStatus.name),
+                "request_status" to ValueString(res.requestStatus.stringValue),
                 "id" to res.id,
             )
         } catch (t: Throwable) {

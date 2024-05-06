@@ -6,7 +6,6 @@ import com.google.gson.JsonObject
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.AdapterJson
 import io.hamal.lib.domain._enum.FeedbackMood
-import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountId.Companion.AccountId
 import io.hamal.lib.domain.vo.FeedbackMessage.Companion.FeedbackMessage

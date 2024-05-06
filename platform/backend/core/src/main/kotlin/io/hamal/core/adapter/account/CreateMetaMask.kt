@@ -5,10 +5,11 @@ import io.hamal.core.component.GenerateSalt
 import io.hamal.core.component.GenerateToken
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.AccountCreateMetaMaskRequest
 import io.hamal.lib.domain.request.AccountCreateMetaMaskRequested
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import org.springframework.stereotype.Component
 
 fun interface AccountCreateMetaMaskPort {
@@ -27,7 +28,7 @@ class AccountCreateMetaMaskAdapter(
         return AccountCreateMetaMaskRequested(
             requestId = generateDomainId(::RequestId),
             requestedBy = SecurityContext.currentAuthId,
-            requestStatus = RequestStatus.Submitted,
+            requestStatus = RequestStatus(Submitted),
             id = req.id,
             type = AccountType.User,
             workspaceId = workspaceId,

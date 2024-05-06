@@ -5,10 +5,12 @@ import io.hamal.core.adapter.func.FuncGetPort
 import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatuses
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.request.TriggerInvokeRequest
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import org.springframework.stereotype.Component
 
 fun interface TriggerInvokePort {
@@ -36,7 +38,7 @@ class TriggerInvokeAdapter(
         return ExecInvokeRequested(
             requestId = generateDomainId(::RequestId),
             requestedBy = SecurityContext.currentAuthId,
-            requestStatus = RequestStatus.Submitted,
+            requestStatus = RequestStatus(Submitted),
             id = generateDomainId(::ExecId),
             triggerId = id,
             namespaceId = func.namespaceId,
