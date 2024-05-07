@@ -10,6 +10,7 @@ data class UnitOfWork(
     val id: ExecId,
     val namespaceId: NamespaceId,
     val workspaceId: WorkspaceId,
+    val triggerId: TriggerId?,
     val inputs: ExecInputs,
     val state: State,
     val code: ValueCode,

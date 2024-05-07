@@ -13,6 +13,7 @@ import io.hamal.lib.domain.vo.ExecResult
 import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
 import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
+import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.lib.kua.function.Function0In1Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -140,6 +141,7 @@ internal class FailTest : AbstractTest() {
         execToken = ExecToken("ExecToken"),
         namespaceId = NamespaceId(9876),
         workspaceId = WorkspaceId(5432),
+        triggerId = TriggerId(4567),
         inputs = ExecInputs(),
         state = State(),
         code = ValueCode(code),

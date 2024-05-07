@@ -12,6 +12,7 @@ import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
+import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
@@ -115,6 +116,7 @@ object RunnerFixture {
         execToken = ExecToken("ExecToken"),
         namespaceId = NamespaceId(98876),
         workspaceId = WorkspaceId(5432),
+        triggerId = TriggerId(4567),
         inputs = inputs,
         state = State(),
         code = ValueCode(code),

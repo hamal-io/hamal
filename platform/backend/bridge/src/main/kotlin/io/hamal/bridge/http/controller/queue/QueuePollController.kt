@@ -49,6 +49,7 @@ internal class QueuePollController(
                     execToken = getExecToken(exec.id).token,
                     namespaceId = exec.namespaceId,
                     workspaceId = exec.workspaceId,
+                    triggerId = exec.triggerId,
                     correlation = exec.correlation,
                     inputs = exec.inputs,
                     state = state,

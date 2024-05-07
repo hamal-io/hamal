@@ -11,6 +11,7 @@ import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
+import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
@@ -31,6 +32,7 @@ internal object EventInvocationTest : AbstractTest() {
                 execToken = ExecToken("ExecToken"),
                 namespaceId = NamespaceId(9876),
                 workspaceId = WorkspaceId(5432),
+                triggerId = TriggerId(4567),
                 inputs = ExecInputs(
                     ValueObject.builder()
                         .set(
@@ -97,6 +99,7 @@ internal object EventInvocationTest : AbstractTest() {
                 execToken = ExecToken("ExecToken"),
                 namespaceId = NamespaceId(9876),
                 workspaceId = WorkspaceId(5432),
+                triggerId = TriggerId(4567),
                 inputs = ExecInputs(
                     ValueObject.builder()
                         .set(
@@ -163,6 +166,7 @@ internal object HookInvocationTest : AbstractTest() {
                 execToken = ExecToken("ExecToken"),
                 namespaceId = NamespaceId(9876),
                 workspaceId = WorkspaceId(5432),
+                triggerId = TriggerId(4567),
                 inputs = ExecInputs(
                     ValueObject.builder().set(
                         "hook", ValueObject.builder()
@@ -209,6 +213,7 @@ internal object HookInvocationTest : AbstractTest() {
                 execToken = ExecToken("ExecToken"),
                 namespaceId = NamespaceId(9876),
                 workspaceId = WorkspaceId(5432),
+                triggerId = TriggerId(4567),
                 inputs = ExecInputs(
                     ValueObject.builder().set(
                         "hook", ValueObject.builder()
@@ -258,6 +263,7 @@ internal object EndpointInvocationTest : AbstractTest() {
                 execToken = ExecToken("ExecToken"),
                 namespaceId = NamespaceId(9876),
                 workspaceId = WorkspaceId(5432),
+                triggerId = TriggerId(4567),
                 inputs = ExecInputs(
                     ValueObject.builder().set(
                         "endpoint", ValueObject.builder()
@@ -304,6 +310,7 @@ internal object EndpointInvocationTest : AbstractTest() {
                 execToken = ExecToken("ExecToken"),
                 namespaceId = NamespaceId(9876),
                 workspaceId = WorkspaceId(5432),
+                triggerId = TriggerId(4567),
                 inputs = ExecInputs(
                     ValueObject.builder().set(
                         "endpoint", ValueObject.builder()

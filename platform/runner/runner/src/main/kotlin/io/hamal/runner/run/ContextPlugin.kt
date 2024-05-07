@@ -1,9 +1,11 @@
 package io.hamal.runner.run
 
+import io.hamal.lib.common.value.ValueNil
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.RunnerEnv
+import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
@@ -24,6 +26,7 @@ class RunnerContextFactory(
             internals = mapOf(
                 ValueString("inputs") to inputs,
                 ValueString("exec_id") to ValueString(executionCtx[ExecId::class].stringValue),
+                ValueString("trigger_id") to (executionCtx.find(TriggerId::class)?.stringValue?.let(::ValueString) ?: ValueNil),
                 ValueString("emit") to EmitFunction(executionCtx),
                 ValueString("fail") to FailRunFunction,
                 ValueString("complete") to CompleteRunFunction,

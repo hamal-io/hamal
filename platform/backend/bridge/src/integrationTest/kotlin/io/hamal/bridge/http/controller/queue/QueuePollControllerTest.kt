@@ -9,6 +9,7 @@ import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
 import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
+import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test
@@ -35,6 +36,7 @@ internal class QueuePollControllerTest : BaseQueueControllerTest() {
                 assertThat(execToken, equalTo(ExecToken("ExecToken")))
                 assertThat(namespaceId, equalTo(testNamespace.id))
                 assertThat(workspaceId, equalTo(testWorkspace.id))
+                assertThat(triggerId, equalTo(TriggerId(23)))
                 assertThat(inputs, equalTo(ExecInputs()))
                 assertThat(correlation, nullValue())
                 assertThat(code, equalTo(ValueCode("40 + 2")))
@@ -62,15 +64,9 @@ internal class QueuePollControllerTest : BaseQueueControllerTest() {
                 assertThat(execToken, equalTo(ExecToken("ExecToken")))
                 assertThat(namespaceId, equalTo(testNamespace.id))
                 assertThat(workspaceId, equalTo(testWorkspace.id))
+                assertThat(triggerId, equalTo(TriggerId(23)))
                 assertThat(inputs, equalTo(ExecInputs()))
-                assertThat(
-                    correlation, equalTo(
-                        Correlation(
-                            funcId = FuncId(123),
-                            id = CorrelationId("_some_chosen_correlation_@")
-                        )
-                    )
-                )
+                assertThat(correlation, equalTo(Correlation(funcId = FuncId(123),id = CorrelationId("_some_chosen_correlation_@"))))
                 assertThat(code, equalTo(ValueCode("40 + 2")))
 
                 verifyExecStarted(id)

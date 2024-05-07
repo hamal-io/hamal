@@ -9,6 +9,7 @@ import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
+import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
@@ -141,6 +142,7 @@ internal abstract class AbstractIntegrationTest {
         execToken = ExecToken("ExecToken"),
         namespaceId = NamespaceId(9876),
         workspaceId = WorkspaceId(5432),
+        triggerId = TriggerId(4567),
         inputs = ExecInputs(
             ValueObject.builder()
                 .set("__nodes__init__", initValue)

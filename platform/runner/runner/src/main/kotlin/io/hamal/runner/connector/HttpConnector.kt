@@ -22,6 +22,7 @@ class HttpConnector(
                     execToken = it.execToken,
                     namespaceId = it.namespaceId,
                     workspaceId = it.workspaceId,
+                    triggerId = it.triggerId,
                     inputs = it.inputs,
                     state = it.state,
                     code = it.code,

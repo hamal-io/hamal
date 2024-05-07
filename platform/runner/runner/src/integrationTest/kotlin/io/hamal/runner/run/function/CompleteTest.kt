@@ -12,6 +12,7 @@ import io.hamal.lib.domain.vo.ExecState
 import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
 import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
+import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.runner.connector.UnitOfWork
 import io.hamal.runner.run.AbstractTest
@@ -149,6 +150,7 @@ internal class CompleteTest : AbstractTest() {
         execToken = ExecToken("ExecToken"),
         namespaceId = NamespaceId(9876),
         workspaceId = WorkspaceId(5432),
+        triggerId = TriggerId(4567),
         inputs = ExecInputs(),
         state = State(),
         code = ValueCode(code),
