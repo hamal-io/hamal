@@ -3,7 +3,7 @@ package io.hamal.plugin.std.sys.topic
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.domain._enum.TopicTypes
+import io.hamal.lib.domain._enum.TopicTypes.Namespace
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.TopicName
@@ -31,7 +31,7 @@ class TopicCreateFunction(
                     ?: ctx[NamespaceId::class],
                 ApiTopicCreateRequest(
                     name = TopicName(arg1.getString("name")),
-                    type = TopicType(TopicTypes.Namespace)
+                    type = TopicType(Namespace)
                 )
             )
 

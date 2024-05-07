@@ -3,7 +3,7 @@ package io.hamal.api.http.controller.topic
 import io.hamal.core.adapter.namespace_tree.NamespaceTreeGetSubTreePort
 import io.hamal.core.adapter.topic.TopicListPort
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain._enum.TopicTypes
+import io.hamal.lib.domain._enum.TopicTypes.*
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -44,9 +44,9 @@ internal class TopicListController(
                 workspaceIds = workspaceIds,
                 namespaceIds = allNamespaceIds,
                 types = listOf(
-                    TopicType(TopicTypes.Workspace),
-                    TopicType(TopicTypes.Namespace),
-                    TopicType(TopicTypes.Public)
+                    TopicType(Workspace),
+                    TopicType(Namespace),
+                    TopicType(Public)
                 )
             )
         ).let { topics ->

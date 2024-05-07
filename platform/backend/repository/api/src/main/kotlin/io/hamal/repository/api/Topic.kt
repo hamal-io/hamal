@@ -8,6 +8,9 @@ import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.serialization.AdapterGeneric
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain._enum.TopicTypes
+import io.hamal.lib.domain._enum.TopicTypes.*
+import io.hamal.lib.domain._enum.TopicTypes.Namespace
+import io.hamal.lib.domain._enum.TopicTypes.Workspace
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.TopicEventId.Companion.TopicEventId
 import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
@@ -41,10 +44,10 @@ sealed class Topic : DomainObject<TopicId>, HasNamespaceId, HasWorkspaceId {
         }
 
         private val classMapping = mapOf(
-            TopicTypes.Internal to Internal::class,
-            TopicTypes.Namespace to Namespace::class,
-            TopicTypes.Workspace to Workspace::class,
-            TopicTypes.Public to Public::class
+            Internal to Topic.Internal::class,
+            Namespace to Topic.Namespace::class,
+            Workspace to Topic.Workspace::class,
+            Public to Topic.Public::class
         )
     }
 
@@ -60,7 +63,7 @@ sealed class Topic : DomainObject<TopicId>, HasNamespaceId, HasWorkspaceId {
         override val workspaceId: WorkspaceId,
         override val namespaceId: NamespaceId
     ) : Topic() {
-        override val type: TopicType = TopicType(TopicTypes.Internal)
+        override val type: TopicType = TopicType(Internal)
     }
 
     /**
@@ -75,7 +78,7 @@ sealed class Topic : DomainObject<TopicId>, HasNamespaceId, HasWorkspaceId {
         override val workspaceId: WorkspaceId,
         override val namespaceId: NamespaceId
     ) : Topic() {
-        override val type: TopicType = TopicType(TopicTypes.Namespace)
+        override val type: TopicType = TopicType(Namespace)
     }
 
     /**
@@ -90,7 +93,7 @@ sealed class Topic : DomainObject<TopicId>, HasNamespaceId, HasWorkspaceId {
         override val workspaceId: WorkspaceId,
         override val namespaceId: NamespaceId
     ) : Topic() {
-        override val type: TopicType = TopicType(TopicTypes.Workspace)
+        override val type: TopicType = TopicType(Workspace)
     }
 
     /**
@@ -106,7 +109,7 @@ sealed class Topic : DomainObject<TopicId>, HasNamespaceId, HasWorkspaceId {
         override val workspaceId: WorkspaceId,
         override val namespaceId: NamespaceId
     ) : Topic() {
-        override val type: TopicType = TopicType(TopicTypes.Public)
+        override val type: TopicType = TopicType(Public)
     }
 
 }
