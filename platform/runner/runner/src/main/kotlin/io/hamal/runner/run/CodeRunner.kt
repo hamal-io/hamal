@@ -66,30 +66,22 @@ class CodeRunnerImpl(
                     sandbox.codeLoad(ValueCode("${contextExtension.name} = plugin_create(_internal)"))
                     sandbox.globalUnset(ValueString("_internal"))
 
-                        when (unitOfWork.codeType) {
-                            CodeType(None) -> TODO()
-                            CodeType(Lua54) -> {
-                                sandbox.codeLoad(unitOfWork.code)
-                            }
-
-                            CodeType(Nodes) -> {
-                                // FIXME load graph from code
-                                val graph = serde.read(NodesGraph::class, unitOfWork.code.stringValue)
-                                val compiledCode = GraphCompiler(sandbox.generatorNodeCompilerRegistry).compile(graph)
-                                sandbox.codeLoad(compiledCode)
-                            }
+                    when (unitOfWork.codeType) {
+                        CodeType(None) -> TODO()
+                        CodeType(Lua54) -> {
+                            sandbox.codeLoad(unitOfWork.code)
                         }
 
-                    val ctx = sandbox.globalGetTable(ValueString("context"))
+                        CodeType(Nodes) -> {
+                            // FIXME load graph from code
+                            val graph = serde.read(NodesGraph::class, unitOfWork.code.stringValue)
+                            val compiledCode = GraphCompiler(sandbox.generatorNodeCompilerRegistry).compile(graph)
+                            sandbox.codeLoad(compiledCode)
+                        }
+                    }
 
-                    connector.complete(
-                        execId,
-                        ExecStatusCode(200),
-                        ExecResult(),
-                        ExecState(ctx.getTable(ValueString("state")).toValueObject()),
-                        runnerContext.eventsToSubmit
-                    )
-                    log.debug("Completed exec: $execId")
+                    sandbox.codeLoad(ValueCode("""context.complete({})"""))
+
                 } catch (e: ErrorPlugin) {
                     val cause = e.cause
                     when (cause) {

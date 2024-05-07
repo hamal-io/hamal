@@ -15,10 +15,12 @@ function plugin_create(internal)
     throw = require('std.throw').create()
     table = require('std.table').create()
 
-    on_complete_functions = { }
+    callbacks = {
+        complete = { }
+    }
 
     local function complete_functions()
-        for _, fn in ipairs(on_complete_functions) do
+        for _, fn in ipairs(callbacks.complete) do
             fn()
         end
     end
@@ -33,11 +35,19 @@ function plugin_create(internal)
         internal.emit(topic, evt)
     end
 
-    function export.on_complete(fn)
+    function export.on(evt, fn)
+        evt = evt or throw.illegal_argument('event is not set')
+        if evt ~= 'completed' then
+            throw.illegal_argument(evt .. ' not supported yet')
+        end
+
+        fn = fn or throw.illegal_argument('function is not set')
+
         if type(fn) ~= 'function' then
             throw.illegal_argument('Expected function but got ' .. type(fn))
         end
-        table.insert(on_complete_functions, fn)
+
+        table.insert(callbacks.complete, fn)
     end
 
     function export.complete(req)
