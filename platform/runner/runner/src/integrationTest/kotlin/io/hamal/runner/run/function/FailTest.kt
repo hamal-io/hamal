@@ -18,109 +18,100 @@ import io.hamal.lib.kua.function.Function0In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionOutput1Schema
 import io.hamal.runner.connector.UnitOfWork
-import io.hamal.runner.run.AbstractExecuteTest
+import io.hamal.runner.run.AbstractTest
 import io.hamal.runner.test.TestFailConnector
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class FailTest : AbstractExecuteTest() {
+internal class FailTest : AbstractTest() {
 
     @Test
     fun `Invoking fail interrupts execution`() {
-        createTestRunner(
-            connector = TestFailConnector()
-        ).also { runner ->
-            runner.run(
-                unitOfWork(
-                    """
+        runTest(
+            unitOfWork(
+                """
             context.fail()
             context.complete({ status_code = 200, result = {} })
         """.trimIndent()
-                )
-            )
-        }
+            ),
+            TestFailConnector()
+        )
     }
 
     @Test
     fun `Fails execution with error`() {
-        createTestRunner(
-            testPlugins = arrayOf(ValueString("returns_error") to FunctionReturnsError()),
-            connector = TestFailConnector { execId, statusCode, result ->
-                assertThat(execId, equalTo(ExecId(1234)))
-                assertThat(statusCode, equalTo(ExecStatusCode(500)))
-                assertThat(result, equalTo(ExecResult(ValueObject.builder().set("value", ValueError("Sometimes an error can be a good thing")).build())))
-            }
-        ).also { runner ->
-            runner.run(
-                unitOfWork(
-                    """
+        runTest(
+            unitOfWork(
+                """
             test = require_plugin('test')
             err = test.returns_error()
             context.fail(err)
         """
-                )
-            )
-        }
+            ),
+            TestFailConnector { execId, statusCode, result ->
+                assertThat(execId, equalTo(ExecId(1234)))
+                assertThat(statusCode, equalTo(ExecStatusCode(500)))
+                assertThat(result, equalTo(ExecResult(ValueObject.builder().set("value", ValueError("Sometimes an error can be a good thing")).build())))
+            },
+            mapOf(ValueString("returns_error") to FunctionReturnsError()),
+        )
     }
 
     @Test
     fun `Fails execution without argument`() {
-        createTestRunner(
-            connector = TestFailConnector { execId, statusCode, result ->
+        runTest(
+            unitOfWork("context.fail()"),
+            TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
                 assertThat(statusCode, equalTo(ExecStatusCode(500)))
                 assertThat(result, equalTo(ExecResult(ValueObject.empty)))
             }
-        ).also { runner ->
-            runner.run(unitOfWork("context.fail()"))
-        }
+        )
     }
 
 
     @Test
     fun `Fails execution with string argument`() {
-        createTestRunner(
-            connector = TestFailConnector { execId, statusCode, result ->
+        runTest(
+            unitOfWork("context.fail('test')"),
+            TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
                 assertThat(statusCode, equalTo(ExecStatusCode(500)))
                 assertThat(result, equalTo(ExecResult(ValueObject.builder().set("value", "test").build())))
             }
-        ).also { runner ->
-            runner.run(unitOfWork("context.fail('test')"))
-        }
+        )
     }
 
     @Test
     fun `Fails execution with number argument`() {
-        createTestRunner(
-            connector = TestFailConnector { execId, statusCode, result ->
+        runTest(
+            unitOfWork("context.fail(1337)"),
+            TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
                 assertThat(statusCode, equalTo(ExecStatusCode(500)))
                 assertThat(result, equalTo(ExecResult(ValueObject.builder().set("value", 1337).build())))
             }
-        ).also { runner ->
-            runner.run(unitOfWork("context.fail(1337)"))
-        }
+        )
     }
 
     @Test
     fun `Fails execution with boolean argument`() {
-        createTestRunner(
-            connector = TestFailConnector { execId, statusCode, result ->
+        runTest(
+            unitOfWork("context.fail(false)"),
+            TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
                 assertThat(statusCode, equalTo(ExecStatusCode(500)))
                 assertThat(result, equalTo(ExecResult(ValueObject.builder().set("value", false).build())))
             }
-        ).also { runner ->
-            runner.run(unitOfWork("context.fail(false)"))
-        }
+        )
     }
 
     @Test
     fun `Fails execution table argument`() {
-        createTestRunner(
-            connector = TestFailConnector { execId, statusCode, result ->
+        runTest(
+            unitOfWork("context.fail({ status_code = 532, result = {reason = 'undisclosed', answer = 42} })"),
+            TestFailConnector { execId, statusCode, result ->
                 assertThat(execId, equalTo(ExecId(1234)))
                 assertThat(
                     result, equalTo(
@@ -133,9 +124,7 @@ internal class FailTest : AbstractExecuteTest() {
                     )
                 )
             }
-        ).also { runner ->
-            runner.run(unitOfWork("context.fail({ status_code = 532, result = {reason = 'undisclosed', answer = 42} })"))
-        }
+        )
     }
 
     private class FunctionReturnsError : Function0In1Out<ValueError>(

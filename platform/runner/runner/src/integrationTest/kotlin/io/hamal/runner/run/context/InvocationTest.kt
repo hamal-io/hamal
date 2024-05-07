@@ -15,18 +15,17 @@ import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.runner.connector.UnitOfWork
-import io.hamal.runner.run.AbstractExecuteTest
+import io.hamal.runner.run.AbstractTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal object EventInvocationTest : AbstractExecuteTest() {
+internal object EventInvocationTest : AbstractTest() {
 
 
     @Test
     fun `Events available in code`() {
-        val testExecutor = createTestRunner()
-        testExecutor.run(
+        runTest(
             UnitOfWork(
                 id = ExecId(1234),
                 execToken = ExecToken("ExecToken"),
@@ -92,8 +91,7 @@ internal object EventInvocationTest : AbstractExecuteTest() {
     fun `Events available in function`() {
         val testFn = TestFunction()
 
-        val testExecutor = createTestRunner(ValueString("fn") to testFn)
-        testExecutor.run(
+        runTest(
             UnitOfWork(
                 id = ExecId(1234),
                 execToken = ExecToken("ExecToken"),
@@ -134,8 +132,10 @@ internal object EventInvocationTest : AbstractExecuteTest() {
                 state = State(),
                 code = ValueCode("require_plugin('test').fn()"),
                 codeType = CodeType(Lua54)
-            )
+            ),
+            testPlugins = mapOf(ValueString("fn") to testFn)
         )
+
         assertThat(testFn.result?.value?.size, equalTo(2))
 
         assertThat(testFn.result!!.asObject(0).getSnowflakeId("id"), equalTo(ValueSnowflakeId("4d2")))
@@ -153,12 +153,11 @@ internal object EventInvocationTest : AbstractExecuteTest() {
     }
 }
 
-internal object HookInvocationTest : AbstractExecuteTest() {
+internal object HookInvocationTest : AbstractTest() {
 
     @Test
     fun `Hook available in code`() {
-        val testExecutor = createTestRunner()
-        testExecutor.run(
+        runTest(
             UnitOfWork(
                 id = ExecId(1234),
                 execToken = ExecToken("ExecToken"),
@@ -204,8 +203,7 @@ internal object HookInvocationTest : AbstractExecuteTest() {
     fun `Hook available in function`() {
         val testFn = TestFunction()
 
-        val testExecutor = createTestRunner(ValueString("fn") to testFn)
-        testExecutor.run(
+        runTest(
             UnitOfWork(
                 id = ExecId(1234),
                 execToken = ExecToken("ExecToken"),
@@ -224,7 +222,8 @@ internal object HookInvocationTest : AbstractExecuteTest() {
                 state = State(),
                 code = ValueCode("require_plugin('test').fn()"),
                 codeType = CodeType(Lua54)
-            )
+            ),
+            testPlugins = mapOf(ValueString("fn") to testFn)
         )
         assertThat(testFn.method, equalTo(ValueString("Delete")))
         assertThat(testFn.headers, equalTo(ValueObject.builder().set("content-type", "application/json").build()))
@@ -249,12 +248,11 @@ internal object HookInvocationTest : AbstractExecuteTest() {
 
 }
 
-internal object EndpointInvocationTest : AbstractExecuteTest() {
+internal object EndpointInvocationTest : AbstractTest() {
 
     @Test
     fun `Endpoint available in code`() {
-        val testExecutor = createTestRunner()
-        testExecutor.run(
+        runTest(
             UnitOfWork(
                 id = ExecId(1234),
                 execToken = ExecToken("ExecToken"),
@@ -300,8 +298,7 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
     fun `Endpoint available in function`() {
         val testFn = TestFunction()
 
-        val testExecutor = createTestRunner(ValueString("fn") to testFn)
-        testExecutor.run(
+        runTest(
             UnitOfWork(
                 id = ExecId(1234),
                 execToken = ExecToken("ExecToken"),
@@ -320,7 +317,8 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
                 state = State(),
                 code = ValueCode("require_plugin('test').fn()"),
                 codeType = CodeType(Lua54)
-            )
+            ),
+            testPlugins = mapOf(ValueString("fn") to testFn)
         )
         assertThat(testFn.method, equalTo(ValueString("Delete")))
         assertThat(testFn.headers, equalTo(ValueObject.builder().set("content-type", "application/json").build()))

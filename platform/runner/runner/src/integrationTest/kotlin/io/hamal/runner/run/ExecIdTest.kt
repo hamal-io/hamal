@@ -18,11 +18,10 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class ExecIdTest : AbstractExecuteTest() {
+internal class ExecIdTest : AbstractTest() {
     @Test
     fun `exec id available in code`() {
-        val testExecutor = createTestRunner()
-        testExecutor.run(
+        runTest(
             UnitOfWork(
                 id = ExecId(1234),
                 execToken = ExecToken("ExecToken"),
@@ -41,22 +40,22 @@ internal class ExecIdTest : AbstractExecuteTest() {
     fun `exec id available in function`() {
         val testFn = TestFunction()
 
-        createTestRunner(ValueString("fn") to testFn).also { runner ->
-            runner.run(
-                UnitOfWork(
-                    id = ExecId(1234),
-                    execToken = ExecToken("ExecToken"),
-                    namespaceId = NamespaceId(9876),
-                    workspaceId = WorkspaceId(5432),
-                    inputs = ExecInputs(),
-                    state = State(),
-                    code = ValueCode("require_plugin('test').fn()"),
-                    codeType = CodeType(Lua54),
-                    correlation = null
-                )
-            )
-            assertThat(testFn.result, equalTo("4d2"))
-        }
+        runTest(
+            UnitOfWork(
+                id = ExecId(1234),
+                execToken = ExecToken("ExecToken"),
+                namespaceId = NamespaceId(9876),
+                workspaceId = WorkspaceId(5432),
+                inputs = ExecInputs(),
+                state = State(),
+                code = ValueCode("require_plugin('test').fn()"),
+                codeType = CodeType(Lua54),
+                correlation = null
+            ),
+            testPlugins = mapOf(ValueString("fn") to testFn)
+        )
+
+        assertThat(testFn.result, equalTo("4d2"))
     }
 
     class TestFunction(var result: String? = null) : Function0In0Out() {
