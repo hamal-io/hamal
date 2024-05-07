@@ -51,6 +51,15 @@ class ExecResult(override val value: ValueObject = ValueObject.empty) : ValueVar
 
 class ExecState(override val value: ValueObject = ValueObject.empty) : ValueVariableObject()
 
+class ExecPlannedAt(override val value: ValueInstant) : ValueVariableInstant() {
+    companion object {
+        @JvmStatic
+        fun now(): ExecPlannedAt = ExecPlannedAt(TimeUtils.now())
+        fun ExecPlannedAt(value: Instant) = ExecPlannedAt(ValueInstant(value))
+    }
+}
+
+
 class ExecScheduledAt(override val value: ValueInstant) : ValueVariableInstant() {
     companion object {
         @JvmStatic
@@ -64,6 +73,14 @@ class ExecQueuedAt(override val value: ValueInstant) : ValueVariableInstant() {
         @JvmStatic
         fun now(): ExecQueuedAt = ExecQueuedAt(TimeUtils.now())
         fun ExecQueuedAt(value: Instant) = ExecQueuedAt(ValueInstant(value))
+    }
+}
+
+class ExecStartedAt(override val value: ValueInstant) : ValueVariableInstant() {
+    companion object {
+        @JvmStatic
+        fun now(): ExecStartedAt = ExecStartedAt(TimeUtils.now())
+        fun ExecStartedAt(value: Instant) = ExecStartedAt(ValueInstant(value))
     }
 }
 

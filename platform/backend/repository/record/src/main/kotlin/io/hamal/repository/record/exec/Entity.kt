@@ -110,40 +110,49 @@ data class ExecEntity(
             workspaceId = workspaceId,
             correlation = correlation,
             inputs = inputs ?: ExecInputs(ValueObject.empty),
-            code = code ?: ExecCode()
+            code = code ?: ExecCode(),
+            plannedAt = ExecPlannedAt(recordedAt.value)
         )
 
         if (status == ExecStatus(Planned)) return plannedExec
 
-        val scheduledExec = Exec.Scheduled(cmdId, id, recordedAt.toUpdatedAt(), plannedExec, ExecScheduledAt.now())
+        val scheduledExec = Exec.Scheduled(
+            cmdId = cmdId,
+            exec = plannedExec,
+            scheduledAt = ExecScheduledAt(recordedAt.value)
+        )
         if (status == ExecStatus(Scheduled)) return scheduledExec
 
-        val queuedExec = Exec.Queued(cmdId, id, recordedAt.toUpdatedAt(), scheduledExec, ExecQueuedAt.now())
+        val queuedExec = Exec.Queued(
+            cmdId = cmdId,
+            exec = scheduledExec,
+            queuedAt = ExecQueuedAt(recordedAt.value)
+        )
         if (status == ExecStatus(Queued)) return queuedExec
 
-        val startedExec = Exec.Started(cmdId, id, recordedAt.toUpdatedAt(), queuedExec)
+        val startedExec = Exec.Started(
+            cmdId = cmdId,
+            exec = queuedExec,
+            startedAt = ExecStartedAt(recordedAt.value)
+        )
         if (status == ExecStatus(Started)) return startedExec
 
         return when (status) {
             ExecStatus(Completed) -> Exec.Completed(
-                cmdId,
-                id,
-                recordedAt.toUpdatedAt(),
-                startedExec,
-                ExecCompletedAt.now(),
-                statusCode!!,
-                result!!,
-                state!!
+                cmdId = cmdId,
+                exec = startedExec,
+                completedAt = ExecCompletedAt(recordedAt.value),
+                statusCode = statusCode!!,
+                result = result!!,
+                state = state!!
             )
 
             ExecStatus(Failed) -> Exec.Failed(
-                cmdId,
-                id,
-                recordedAt.toUpdatedAt(),
-                startedExec,
-                ExecFailedAt.now(),
-                statusCode!!,
-                result!!
+                cmdId = cmdId,
+                exec = startedExec,
+                failedAt = ExecFailedAt(recordedAt.value),
+                statusCode = statusCode!!,
+                result = result!!
             )
 
             else -> TODO()
