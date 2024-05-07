@@ -38,6 +38,12 @@ data class ApiTriggerCreateRequested(
     val namespaceId: NamespaceId
 ) : ApiRequested()
 
+data class ApiTriggerDeleteRequested(
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: TriggerId
+) : ApiRequested()
+
 
 data class ApiTriggerStatusRequested(
     override val requestId: RequestId,

@@ -46,3 +46,9 @@ interface TriggerInvokeRequest {
     val inputs: InvocationInputs?
 }
 
+data class TriggerDeleteRequested(
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: TriggerId
+) : Requested()
