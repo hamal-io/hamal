@@ -1,14 +1,21 @@
 package io.hamal.core.request.handler.namespace
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
-import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.NamespaceAppendRequested
 import io.hamal.lib.domain.request.NamespaceDeleteRequested
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
+import io.hamal.lib.domain.vo.NamespaceFeatures
+import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
+import io.hamal.lib.domain.vo.NamespaceTreeId
+import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import io.hamal.repository.api.NamespaceCmdRepository
-import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
+import io.hamal.repository.api.NamespaceQueryRepository
 import io.hamal.repository.api.NamespaceTreeCmdRepository
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers
@@ -17,6 +24,7 @@ import org.hamcrest.Matchers.hasSize
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+
 
 internal class DeleteHandlerTest : BaseRequestHandlerTest() {
 
@@ -50,7 +58,7 @@ internal class DeleteHandlerTest : BaseRequestHandlerTest() {
         testDeleteHandler(requestedDeleteNamespace)
 
         val namespaces = namespaceQueryRepository.list(
-            NamespaceQuery(
+            NamespaceQueryRepository.NamespaceQuery(
                 limit = Limit.all,
                 workspaceIds = listOf(testWorkspace.id)
             )
@@ -75,7 +83,7 @@ internal class DeleteHandlerTest : BaseRequestHandlerTest() {
         NamespaceDeleteRequested(
             requestId = RequestId(4),
             requestedBy = AuthId(4),
-            requestStatus = RequestStatus.Submitted,
+            requestStatus = RequestStatus(Submitted),
             id = NamespaceId(5),
         )
     }
@@ -84,7 +92,7 @@ internal class DeleteHandlerTest : BaseRequestHandlerTest() {
         NamespaceAppendRequested(
             requestId = RequestId(3),
             requestedBy = AuthId(4),
-            requestStatus = RequestStatus.Submitted,
+            requestStatus = RequestStatus(Submitted),
             parentId = NamespaceId.root,
             id = NamespaceId(5),
             workspaceId = testWorkspace.id,

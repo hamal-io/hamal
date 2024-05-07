@@ -1,6 +1,7 @@
 package io.hamal.repository.memory
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.repository.api.ExecLog
 import io.hamal.repository.api.ExecLogCmdRepository.AppendCmd
 import io.hamal.repository.api.ExecLogQueryRepository.ExecLogQuery
@@ -41,7 +42,7 @@ class ExecLogMemoryRepository : ExecLogRepository {
                 .filter { query.workspaceIds.isEmpty() || query.workspaceIds.contains(it.workspaceId) }
                 .filter { query.execIds.isEmpty() || query.execIds.contains(it.execId) }
                 .filter { query.execLogIds.isEmpty() || query.execLogIds.contains(it.id) }
-                .take(query.limit.value)
+                .take(query.limit.intValue)
                 .toList()
         }
     }

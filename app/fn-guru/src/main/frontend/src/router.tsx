@@ -21,12 +21,12 @@ import WorkspaceLayout from "./components/app/layout/workspace";
 import WorkspaceNamespaceListTab from "./pages/app/workspace-detail/tab/namespace-list";
 import TopicListPage from "@/pages/app/topic-list";
 import TopicDetailPage from "@/pages/app/topic-detail";
-import BlueprintListPage from "@/pages/app/blueprint-list";
 import React from "react";
 import WorkspaceDetailPage from "@/pages/app/workspace-detail";
 import WorkspaceGeneralTab from "@/pages/app/workspace-detail/tab/general";
-import BlueprintEditor from "@/pages/app/blueprint-list/components/editor.tsx";
 import AccountPage from "@/pages/app/account/account.tsx";
+import RecipeEditor from "@/pages/app/recipe-list/components/editor.tsx";
+import RecipePage from "@/pages/app/recipe-list";
 
 export const router = createBrowserRouter([
     {path: "/", element: <HomePage/>},
@@ -42,15 +42,15 @@ export const router = createBrowserRouter([
             </WorkspaceLayout>
     },
     {
-        path: "/blueprints/editor/:blueprintId", element:
+        path: "/recipes/editor/:recipeId", element:
             <WorkspaceLayout>
-                <BlueprintEditor/>
+                <RecipeEditor/>
             </WorkspaceLayout>
     },
     {
-        path: "/blueprints", element:
+        path: "/recipes", element:
             <WorkspaceLayout>
-                <BlueprintListPage/>
+                <RecipePage/>
             </WorkspaceLayout>
     },
     {

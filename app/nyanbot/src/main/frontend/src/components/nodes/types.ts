@@ -31,15 +31,15 @@ export type Connection = {
 }
 
 export type ControlId = string
-export type ControlType = 'Condition' | 'Input' | 'Text'
+export type ControlType = 'Condition' | 'Input' | 'Init' | 'Invoke' | 'Text_Area'
 
-export type Control = ControlCondition | ControlInput | ControlText
+export type Control = ControlCondition | ControlInput | ControlInit | ControlInvoke | ControlTextArea
 
 type ControlBase = {
     id: ControlId;
     type: ControlType;
+    nodeId: NodeId;
     label?: string;
-    ports: Port[];
 }
 
 export const isControl = (value: any): value is ControlBase => {
@@ -47,8 +47,7 @@ export const isControl = (value: any): value is ControlBase => {
         typeof value === "object" &&
         value !== null &&
         "id" in value &&
-        "type" in value &&
-        "ports" in value
+        "type" in value
     );
 }
 
@@ -68,19 +67,46 @@ export const isControlInput = (value: any): value is ControlCondition => {
     return isControl(value) && value.type === 'Input';
 }
 
-export type ControlText = ControlBase & {
-    type: "Text";
-    text?: string;
+export type ControlTextArea = ControlBase & {
+    type: 'Text_Area';
+    value?: string;
     placeholder?: string;
+    port: {
+        id: PortId;
+        type: string;
+    }
 }
 
-export const isControlText = (value: any): value is ControlText => {
-    return isControl(value) && value.type === 'Text';
+export const isControlTextArea = (value: any): value is ControlTextArea => {
+    return isControl(value) && value.type === 'Text_Area';
 }
+
+export type ControlInit = ControlBase & {
+    type: 'Init';
+    selector: string;
+    description: string;
+}
+
+export const isControlInit = (value: any): value is ControlInit => {
+    return isControl(value) && value.type === 'Init';
+}
+
+export type ControlInvoke = ControlBase & {
+    type: "Invoke";
+    port: {
+        id: PortId;
+    }
+}
+
+export const isControlInvoke = (value: any): value is ControlInvoke => {
+    return isControl(value) && value.type === 'Invoke';
+}
+
 
 export type Graph = {
     nodes: Node[];
     connections: Connection[];
+    controls: Control[];
 }
 
 export type NodeId = string
@@ -93,14 +119,19 @@ export type Node = {
     title?: NodeLabel;
     position: Position;
     size: Size;
-    controls: Control[]
-    outputs: Port[]
+    outputs: PortOutput[];
 }
 
 export type PortId = string
 
-export type Port = {
+export type PortInput = {
     id: PortId;
+    inputType: string; // FIXME type
+}
+
+export type PortOutput = {
+    id: PortId;
+    type: string; // FIXME type
 }
 
 export type Position = {

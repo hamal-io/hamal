@@ -1,9 +1,9 @@
 package io.hamal.lib.kua.state
 
 import io.hamal.lib.kua.*
-import io.hamal.lib.kua.type.KuaNumber
-import io.hamal.lib.kua.type.KuaString
-import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.value.KuaTable
+import io.hamal.lib.common.value.ValueNumber
+import io.hamal.lib.common.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
@@ -21,15 +21,15 @@ internal class TableLengthTest : StateBaseTest() {
     fun `Length of table with appended values`() = runTest { testInstance ->
         testInstance.tableCreate(0, 1)
 
-        testInstance.numberPush(KuaNumber(1.0))
+        testInstance.numberPush(ValueNumber(1.0))
         testInstance.tableAppend(1)
         assertThat(testInstance.tableLength(1), equalTo(TableLength(1)))
 
-        testInstance.numberPush(KuaNumber(2.0))
+        testInstance.numberPush(ValueNumber(2.0))
         testInstance.tableAppend(1)
         assertThat(testInstance.tableLength(1), equalTo(TableLength(2)))
 
-        testInstance.numberPush(KuaNumber(3.0))
+        testInstance.numberPush(ValueNumber(3.0))
         testInstance.tableAppend(1)
         assertThat(testInstance.tableLength(1), equalTo(TableLength(3)))
     }
@@ -40,23 +40,23 @@ internal class TableLengthTest : StateBaseTest() {
 
         testInstance.tableCreate(0, 1)
 
-        testInstance.stringPush(KuaString("value"))
-        testInstance.tableFieldSet(2, KuaString("key"))
+        testInstance.stringPush(ValueString("value"))
+        testInstance.tableFieldSet(2, ValueString("key"))
         assertThat(testInstance.tableLength(2), equalTo(TableLength(1)))
 
-        testInstance.stringPush(KuaString("value"))
-        testInstance.tableFieldSet(2, KuaString("key-2"))
+        testInstance.stringPush(ValueString("value"))
+        testInstance.tableFieldSet(2, ValueString("key-2"))
         assertThat(testInstance.tableLength(2), equalTo(TableLength(2)))
     }
 
     @TestFactory
     fun `Length of sub table`() = runTest { testInstance ->
         val nested = testInstance.tableCreate(
-            KuaString("hamal") to KuaString("rocks")
+            ValueString("hamal") to ValueString("rocks")
         )
 
         testInstance.tableCreate(
-            KuaString("nested") to nested
+            ValueString("nested") to nested
         )
 
         testInstance.tableSubTableGet(-1, "nested").also { resultClass ->

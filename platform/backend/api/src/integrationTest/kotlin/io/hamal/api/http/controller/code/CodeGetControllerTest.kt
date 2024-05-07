@@ -1,8 +1,8 @@
 package io.hamal.api.http.controller.code
 
-import io.hamal.lib.domain.vo.CodeId
-import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.domain.vo.CodeVersion
+import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
+import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.sdk.api.ApiError
@@ -48,10 +48,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
 
         repeat(10) { iter ->
             codeCmdRepository.update(
-                CodeId(2), CodeCmdRepository.UpdateCmd(
-                    CmdGen(),
-                    CodeValue("40 + ${2 + iter}")
-                )
+                CodeId(2), CodeCmdRepository.UpdateCmd(CmdGen(), CodeValue("40 + ${2 + iter}"))
             )
         }
 
@@ -77,10 +74,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
 
         repeat(5) {
             codeCmdRepository.update(
-                CodeId(3), CodeCmdRepository.UpdateCmd(
-                    CmdGen(),
-                    CodeValue("40 + 2")
-                )
+                CodeId(3), CodeCmdRepository.UpdateCmd(CmdGen(), CodeValue("40 + 2"))
             )
             assertThat(getCode(CodeId(3)).version, equalTo(CodeVersion(2)))
         }

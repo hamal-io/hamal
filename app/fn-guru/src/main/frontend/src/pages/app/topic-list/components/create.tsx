@@ -71,7 +71,7 @@ const Create : FC<Props> = ({onClose}) => {
                 </Button>
             </DialogTrigger>
             <DialogContent>
-                <DialogHeader>Create topiction</DialogHeader>
+                <DialogHeader>Create topic</DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                         <FormField

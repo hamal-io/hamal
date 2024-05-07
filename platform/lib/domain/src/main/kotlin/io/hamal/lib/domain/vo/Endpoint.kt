@@ -1,20 +1,11 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.ValueObjectHotObject
-import io.hamal.lib.common.domain.ValueObjectId
-import io.hamal.lib.common.domain.ValueObjectString
-import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueObject
+import io.hamal.lib.common.value.ValueVariableObject
 
-class EndpointId(override val value: SnowflakeId) : ValueObjectId() {
-    constructor(value: Int) : this(SnowflakeId(value.toLong()))
-    constructor(value: String) : this(SnowflakeId(value.toLong(16)))
-}
 
-class EndpointName(override val value: String) : ValueObjectString()
+class EndpointHeaders(override val value: ValueObject = ValueObject.empty) : ValueVariableObject()
 
-class EndpointHeaders(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
+class EndpointParameters(override val value: ValueObject = ValueObject.empty) : ValueVariableObject()
 
-class EndpointParameters(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
-
-class EndpointContent(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
+class EndpointContent(override val value: ValueObject = ValueObject.empty) : ValueVariableObject()

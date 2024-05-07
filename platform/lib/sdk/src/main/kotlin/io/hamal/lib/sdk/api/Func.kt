@@ -1,14 +1,14 @@
 package io.hamal.lib.sdk.api
 
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain._enum.CodeType
-import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.FuncCreateRequest
 import io.hamal.lib.domain.request.FuncDeployRequest
 import io.hamal.lib.domain.request.FuncInvokeRequest
 import io.hamal.lib.domain.request.FuncUpdateRequest
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.http.HttpRequest
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.body

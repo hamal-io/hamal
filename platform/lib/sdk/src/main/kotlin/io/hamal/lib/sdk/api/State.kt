@@ -1,15 +1,12 @@
 package io.hamal.lib.sdk.api
 
-import io.hamal.lib.common.domain.ValueObjectHotObject
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.Value
+import io.hamal.lib.common.value.ValueObject
+import io.hamal.lib.common.value.ValueVariableObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.StateSetRequest
-import io.hamal.lib.domain.vo.CorrelationId
-import io.hamal.lib.domain.vo.FuncId
-import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.*
 
 data class ApiStateSetRequest(
     override val correlation: Correlation,
@@ -22,7 +19,7 @@ data class ApiStateSetRequested(
 ) : ApiRequested()
 
 
-class ApiState(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
+class ApiState(override val value: ValueObject = ValueObject.empty) : ValueVariableObject()
 
 data class ApiCorrelation(
     val id: CorrelationId,
@@ -38,5 +35,5 @@ data class ApiCorrelatedState(
     val correlation: ApiCorrelation,
     val state: ApiState
 ) {
-    operator fun get(key: String) = state.value[key]
+    operator fun get(key: String): Value = state.value[key]
 }

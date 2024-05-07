@@ -1,5 +1,7 @@
 package io.hamal.lib.kua.native
 
+import io.hamal.lib.kua.ErrorIllegalArgument
+import io.hamal.lib.kua.ErrorIllegalState
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -10,28 +12,28 @@ internal class BooleanGetTest : NativeBaseTest() {
     @Test
     fun `Tries to get boolean with 0 index`() {
         testInstance.booleanPush(true)
-        assertThrows<IllegalArgumentException> { testInstance.booleanGet(0) }
+        assertThrows<ErrorIllegalArgument> { testInstance.booleanGet(0) }
             .also { exception -> assertThat(exception.message, equalTo("Index must not be 0")) }
     }
 
     @Test
     fun `Tries to get boolean with index bigger than stack size`() {
         testInstance.booleanPush(true)
-        assertThrows<IllegalArgumentException> { testInstance.booleanGet(2) }
+        assertThrows<ErrorIllegalArgument> { testInstance.booleanGet(2) }
             .also { exception -> assertThat(exception.message, equalTo("Index out of bounds")) }
     }
 
     @Test
     fun `Tries to get boolean with abs(negative index) bigger than stack size`() {
         testInstance.booleanPush(true)
-        assertThrows<IllegalArgumentException> { testInstance.booleanGet(-2) }
+        assertThrows<ErrorIllegalArgument> { testInstance.booleanGet(-2) }
             .also { exception -> assertThat(exception.message, equalTo("Index out of bounds")) }
     }
 
     @Test
     fun `Tries to get not boolean as as boolean`() {
         testInstance.numberPush(1.0)
-        assertThrows<IllegalStateException> { testInstance.booleanGet(1) }
+        assertThrows<ErrorIllegalState> { testInstance.booleanGet(1) }
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be boolean but was number")) }
 
     }

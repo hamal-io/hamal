@@ -1,15 +1,16 @@
 package io.hamal.plugin.web3.evm
 
 import com.google.gson.Gson
-import io.hamal.lib.common.hot.HotArray
-import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.common.hot.HotObjectModule
-import io.hamal.lib.common.serialization.JsonFactoryBuilder
+import io.hamal.lib.common.serialization.Serde
+import io.hamal.lib.common.serialization.json.JsonArray
+import io.hamal.lib.common.value.ValueObject
+import io.hamal.lib.common.value.serde.SerdeModuleValueJson
 import io.hamal.lib.domain.vo.RunnerEnv
-import io.hamal.lib.domain.vo.ValueObjectJsonModule
+import io.hamal.lib.domain.vo.SerdeModuleValueVariable
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.plugin.web3.evm.evm.PluginWeb3EvmFactory
-import io.hamal.runner.test.AbstractRunnerTest
+import io.hamal.runner.test.RunnerFixture.createTestRunner
+import io.hamal.runner.test.RunnerFixture.unitOfWork
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -46,13 +47,13 @@ internal open class TestProxy
 internal open class TestWebConfig : WebMvcConfigurer {
 
     @Bean
-    open fun gson(): Gson = JsonFactoryBuilder()
-        .register(HotObjectModule)
-        .register(ValueObjectJsonModule)
-        .build()
+    open fun gsonJson(): Gson = Serde.json()
+        .register(SerdeModuleValueJson)
+        .register(SerdeModuleValueVariable)
+        .gson
 
     @Bean
-    open fun gsonHttpMessageConverter(gson: Gson): GsonHttpMessageConverter {
+    open fun httpMessageJsonConverter(gson: Gson): GsonHttpMessageConverter {
         val result = GsonHttpMessageConverter()
         result.gson = gson
         result.defaultCharset = StandardCharsets.UTF_8
@@ -65,7 +66,7 @@ internal open class TestWebConfig : WebMvcConfigurer {
 
     override fun configureMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {
         converters.add(SourceHttpMessageConverter<Source>())
-        converters.add(gsonHttpMessageConverter(gson()))
+        converters.add(httpMessageJsonConverter(gsonJson()))
     }
 }
 
@@ -74,8 +75,8 @@ internal class TestEvmController {
     @PostMapping("/{chain}")
     fun handle(
         @PathVariable("chain") chain: String,
-        @RequestBody requests: HotArray
-    ): ResponseEntity<HotArray> {
+        @RequestBody requests: JsonArray
+    ): ResponseEntity<JsonArray> {
         return ResponseEntity.ok(TestHandler.handle(chain, requests))
     }
 }
@@ -86,7 +87,7 @@ internal class TestEvmController {
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @ActiveProfiles("test")
-internal class PluginWeb3EvmTest : AbstractRunnerTest() {
+internal class PluginWeb3EvmTest {
 
     @TestFactory
     fun run(): List<DynamicTest> {
@@ -106,17 +107,18 @@ internal class PluginWeb3EvmTest : AbstractRunnerTest() {
             .sorted()
 
         for (file in files) {
-            val runner = createTestRunner(
+            createTestRunner(
                 pluginFactories = listOf(
                     PluginWeb3EvmFactory(),
                 ),
                 env = RunnerEnv(
-                    HotObject.builder()
+                    ValueObject.builder()
                         .set("test_url", "http://localhost:${localPort}")
                         .build()
                 )
-            )
-            runner.run(unitOfWork(String(Files.readAllBytes(file))))
+            ).also { runner ->
+                runner.run(unitOfWork(String(Files.readAllBytes(file))))
+            }
         }
     }
 

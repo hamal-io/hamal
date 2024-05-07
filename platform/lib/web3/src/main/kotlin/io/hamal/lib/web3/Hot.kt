@@ -1,20 +1,16 @@
 package io.hamal.lib.web3
 
-import io.hamal.lib.common.hot.HotObjectModule
-import io.hamal.lib.common.serialization.JsonFactoryBuilder
-import io.hamal.lib.domain.Json
-import io.hamal.lib.domain.vo.ValueObjectJsonModule
-import io.hamal.lib.web3.evm.EvmHotModule
-import io.hamal.lib.web3.evm.chain.arbitrum.ArbitrumHotModule
-import io.hamal.lib.web3.evm.chain.eth.EthHotModule
+import io.hamal.lib.common.serialization.Serde
+import io.hamal.lib.common.value.serde.SerdeModuleValueJson
+import io.hamal.lib.domain.vo.SerdeModuleValueVariable
+import io.hamal.lib.web3.evm.SerdeModuleJsonEvm
+import io.hamal.lib.web3.evm.chain.arbitrum.SerdeModuleJsonArbitrum
+import io.hamal.lib.web3.evm.chain.eth.SerdeModuleJsonEth
 
 
-val json = Json(
-    JsonFactoryBuilder()
-        .register(HotObjectModule)
-        .register(ValueObjectJsonModule)
-        .register(EvmHotModule)
-        .register(EthHotModule)
-        .register(ArbitrumHotModule)
-
-)
+val serde = Serde.json()
+    .register(SerdeModuleValueJson)
+    .register(SerdeModuleValueVariable)
+    .register(SerdeModuleJsonEvm)
+    .register(SerdeModuleJsonEth)
+    .register(SerdeModuleJsonArbitrum)

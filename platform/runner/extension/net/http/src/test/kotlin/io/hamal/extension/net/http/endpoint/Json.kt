@@ -1,8 +1,8 @@
 package io.hamal.extension.net.http.endpoint
 
-import io.hamal.lib.common.hot.HotArray
-import io.hamal.lib.common.hot.HotNode
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.serialization.json.JsonArray
+import io.hamal.lib.common.serialization.json.JsonNode
+import io.hamal.lib.common.serialization.json.JsonObject
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -12,19 +12,19 @@ import org.springframework.web.bind.annotation.RestController
 open class TestJsonController {
 
     @RequestMapping("/v1/json-empty-object")
-    fun jsonEmptyObject(): ResponseEntity<HotObject> {
-        return ResponseEntity.ok(HotObject.empty)
+    fun jsonEmptyObject(): ResponseEntity<JsonObject> {
+        return ResponseEntity.ok(JsonObject.empty)
     }
 
     @RequestMapping("/v1/json-empty-array")
-    fun jsonEmptyArray(): ResponseEntity<HotArray> {
-        return ResponseEntity.ok(HotArray.empty)
+    fun jsonEmptyArray(): ResponseEntity<JsonArray> {
+        return ResponseEntity.ok(JsonArray.empty)
     }
 
     @RequestMapping("/v1/json-array")
-    fun jsonArray(): ResponseEntity<HotArray> {
+    fun jsonArray(): ResponseEntity<JsonArray> {
         return ResponseEntity.ok(
-            HotArray.builder()
+            JsonArray.builder()
                 .append(23)
                 .append(true)
                 .append("24.23")
@@ -34,9 +34,9 @@ open class TestJsonController {
     }
 
     @RequestMapping("/v1/json-error")
-    fun jsonError(): ResponseEntity<HotObject> {
+    fun jsonError(): ResponseEntity<JsonObject> {
         return ResponseEntity.badRequest().body(
-            HotObject.builder()
+            JsonObject.builder()
                 .set("code", 400)
                 .set("message", "bad-request")
                 .set("boolean-value", true)
@@ -45,7 +45,7 @@ open class TestJsonController {
     }
 
     @RequestMapping("/v1/json-echo")
-    fun jsonEcho(@RequestBody body: HotNode<*>): ResponseEntity<HotNode<*>> {
+    fun jsonEcho(@RequestBody body: JsonNode<*>): ResponseEntity<JsonNode<*>> {
         return ResponseEntity.ok(body)
     }
 }

@@ -1,6 +1,7 @@
 package io.hamal.repository.memory.record.code
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.repository.api.Code
 import io.hamal.repository.api.CodeQueryRepository
@@ -22,7 +23,7 @@ internal class ProjectionCurrent : ProjectionMemory<CodeId, Code> {
             .filter {
                 if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId)
             }.dropWhile { it.id >= query.afterId }
-            .take(query.limit.value)
+            .take(query.limit.intValue)
             .toList()
     }
 

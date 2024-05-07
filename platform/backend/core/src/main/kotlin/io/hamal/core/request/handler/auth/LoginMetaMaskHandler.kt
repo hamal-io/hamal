@@ -4,7 +4,7 @@ import io.hamal.core.request.RequestHandler
 import io.hamal.core.request.handler.cmdId
 import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.request.AuthLoginMetaMaskRequested
-import io.hamal.lib.domain.vo.ExpiresAt
+import io.hamal.lib.domain.vo.ExpiresAt.Companion.ExpiresAt
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.AuthRepository

@@ -3,28 +3,35 @@ import React, {useEffect, useState} from "react";
 
 import * as z from "zod"
 import {zodResolver} from "@hookform/resolvers/zod";
-import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form.tsx";
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage
+} from "@/components/ui/form.tsx";
 import {useForm} from "react-hook-form";
 import {Loader2, Plus,} from "lucide-react";
 import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Input} from "@/components/ui/input.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {useHookCreate} from "@/hook";
 import {useUiState} from "@/hook/ui-state.ts";
+import {useTriggerHookCreate} from "@/hook";
 
 const formSchema = z.object({
     name: z.string().min(2).max(50),
-    // funcId: z.string().min(1, "Function required"),
+    funcId: z.string().min(1, "Function required"),
 })
 
 const Create = () => {
     const [uiState] = useUiState()
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
-    const props = {openModal: openDialog, setOpenModal: setOpenDialog}
     const [isLoading, setLoading] = useState(false)
 
-    const [createHook, submittedHook] = useHookCreate()
+    const [createHook, submittedHook] = useTriggerHookCreate()
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -35,11 +42,14 @@ const Create = () => {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
         try {
-            createHook(uiState.namespaceId, values.name)
+            createHook({
+                namespaceId: uiState.namespaceId,
+                name: values.name,
+                funcId: values.funcId
+            })
         } catch (e) {
             console.error(e)
-        } finally {
-        }
+        } finally { /* empty */ }
 
     }
 

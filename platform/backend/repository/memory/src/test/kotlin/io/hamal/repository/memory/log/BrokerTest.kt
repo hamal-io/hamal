@@ -1,8 +1,8 @@
 package io.hamal.repository.memory.log
 
-import io.hamal.lib.domain.vo.LogTopicId
-import io.hamal.repository.api.log.LogConsumerId
-import io.hamal.repository.api.log.LogEventId
+import io.hamal.lib.domain.vo.LogTopicId.Companion.LogTopicId
+import io.hamal.repository.api.log.LogConsumerId.Companion.LogConsumerId
+import io.hamal.repository.api.log.LogEventId.Companion.LogEventId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Nested

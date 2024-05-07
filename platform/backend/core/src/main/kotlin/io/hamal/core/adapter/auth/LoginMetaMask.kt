@@ -8,14 +8,13 @@ import io.hamal.core.component.GenerateToken
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatuses
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.AccountCreateMetaMaskRequest
 import io.hamal.lib.domain.request.AuthLogInMetaMaskRequest
 import io.hamal.lib.domain.request.AuthLoginMetaMaskRequested
-import io.hamal.lib.domain.vo.AccountId
-import io.hamal.lib.domain.vo.AuthId
-import io.hamal.lib.domain.vo.RequestId
-import io.hamal.lib.domain.vo.Web3Address
+import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import io.hamal.lib.web3.evm.EvmSignature
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.domain.EvmSignedMessage
@@ -54,7 +53,7 @@ class AuthLoginMetaMaskAdapter(
             return AuthLoginMetaMaskRequested(
                 requestId = generateDomainId(::RequestId),
                 requestedBy = SecurityContext.currentAuthId,
-                requestStatus = RequestStatus.Submitted,
+                requestStatus = RequestStatus(Submitted),
                 id = generateDomainId(::AuthId),
                 accountId = requested.id,
                 workspaceIds = listOf(requested.workspaceId),
@@ -72,7 +71,7 @@ class AuthLoginMetaMaskAdapter(
                 AuthLoginMetaMaskRequested(
                     requestId = generateDomainId(::RequestId),
                     requestedBy = SecurityContext.currentAuthId,
-                    requestStatus = RequestStatus.Submitted,
+                    requestStatus = RequestStatus(Submitted),
                     id = generateDomainId(::AuthId),
                     accountId = auth.accountId,
                     workspaceIds = workspaceList(
@@ -93,11 +92,11 @@ class AuthLoginMetaMaskAdapter(
 internal fun verifySignature(req: AuthLogInMetaMaskRequest) {
     val challenge = ChallengeMetaMask(req.address)
     val signedMessage = EvmSignedMessage(
-        data = challenge.value.toByteArray(),
-        signature = EvmSignature(EvmPrefixedHexString(req.signature.value))
+        data = challenge.stringValue.toByteArray(),
+        signature = EvmSignature(EvmPrefixedHexString(req.signature.stringValue))
     )
 
-    if (signedMessage.address.toPrefixedHexString().value.lowercase() != req.address.value.lowercase()) {
+    if (signedMessage.address.toPrefixedHexString().value.lowercase() != req.address.stringValue.lowercase()) {
         throw NoSuchElementException("Account not found")
     }
 }

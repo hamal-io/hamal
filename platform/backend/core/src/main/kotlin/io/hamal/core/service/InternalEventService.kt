@@ -4,7 +4,7 @@ import io.hamal.core.component.Scheduler
 import io.hamal.core.component.WorkerPool
 import io.hamal.core.event.InternalEventContainer
 import io.hamal.core.security.SecurityContext
-import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.logger
 import io.hamal.lib.domain.GenerateCmdId
 import io.hamal.lib.domain.vo.NamespaceId

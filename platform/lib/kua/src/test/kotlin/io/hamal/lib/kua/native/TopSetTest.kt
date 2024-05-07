@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.native
 
+import io.hamal.lib.kua.ErrorIllegalArgument
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -32,20 +33,20 @@ internal class TopSetTest : NativeBaseTest() {
 
     @Test
     fun `Tries to shrink the stack to be negative`() {
-        assertThrows<IllegalArgumentException> { testInstance.topSet(-10) }
+        assertThrows<ErrorIllegalArgument> { testInstance.topSet(-10) }
             .also { exception -> assertThat(exception.message, equalTo("Prevented stack underflow")) }
     }
 
 
     @Test
     fun `Tries to set stack size bigger than max stack size`() {
-        assertThrows<IllegalArgumentException> { testInstance.topSet(1000000) }
+        assertThrows<ErrorIllegalArgument> { testInstance.topSet(1000000) }
             .also { exception -> assertThat(exception.message, equalTo("Prevented stack overflow")) }
     }
 
     @Test
     fun `Tries to set negative stack size bigger than max stack size`() {
-        assertThrows<IllegalArgumentException> { testInstance.topSet(-1000000) }
+        assertThrows<ErrorIllegalArgument> { testInstance.topSet(-1000000) }
             .also { exception -> assertThat(exception.message, equalTo("Prevented stack underflow")) }
     }
 

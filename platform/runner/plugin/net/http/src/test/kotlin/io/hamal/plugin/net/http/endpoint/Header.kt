@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 open class TestHeaderController {
     @RequestMapping("/v1/headers")
-    fun execute(
-        @RequestHeader headers: HttpHeaders
-    ): ResponseEntity<Unit> {
+    fun execute(@RequestHeader headers: HttpHeaders): ResponseEntity<Unit> {
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
             .headers(headers)
             .build()

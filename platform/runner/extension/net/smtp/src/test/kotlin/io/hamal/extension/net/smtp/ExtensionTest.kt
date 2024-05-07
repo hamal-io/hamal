@@ -1,14 +1,17 @@
 package io.hamal.extension.net.smtp
 
-import io.hamal.lib.kua.type.KuaFalse
-import io.hamal.lib.kua.type.KuaNumber
-import io.hamal.lib.kua.type.KuaString
-import io.hamal.lib.kua.type.KuaTrue
+import io.hamal.extension.std.`throw`.ExtensionStdThrowFactory
+import io.hamal.lib.common.value.ValueFalse
+import io.hamal.lib.common.value.ValueNumber
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueTrue
+import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
 import io.hamal.plugin.net.smtp.Message
 import io.hamal.plugin.net.smtp.PluginSmtpFactory
 import io.hamal.plugin.net.smtp.Sender
 import io.hamal.plugin.net.smtp.SenderConfig
-import io.hamal.runner.test.AbstractRunnerTest
+import io.hamal.runner.test.RunnerFixture.createTestRunner
+import io.hamal.runner.test.RunnerFixture.unitOfWork
 import io.hamal.runner.test.TestFailConnector
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers
@@ -16,7 +19,7 @@ import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal object CreateAndSendTest : AbstractRunnerTest() {
+internal object CreateAndSendTest {
 
     @Test
     fun `Creates instance and send email`() {
@@ -24,7 +27,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionStdThrowFactory, ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -58,27 +61,27 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.defaultEncoding, equalTo(KuaString("default_encoding")))
-        assertThat(config.host, equalTo(KuaString("host")))
-        assertThat(config.port, equalTo(KuaNumber(123)))
-        assertThat(config.username, equalTo(KuaString("username")))
-        assertThat(config.password, equalTo(KuaString("password")))
-        assertThat(config.protocol, equalTo(KuaString("protocol")))
-        assertThat(config.debug, equalTo(KuaTrue))
-        assertThat(config.enableStarttls, equalTo(KuaTrue))
-        assertThat(config.testConnection, equalTo(KuaTrue))
+        assertThat(config.defaultEncoding, equalTo(ValueString("default_encoding")))
+        assertThat(config.host, equalTo(ValueString("host")))
+        assertThat(config.port, equalTo(ValueNumber(123)))
+        assertThat(config.username, equalTo(ValueString("username")))
+        assertThat(config.password, equalTo(ValueString("password")))
+        assertThat(config.protocol, equalTo(ValueString("protocol")))
+        assertThat(config.debug, equalTo(ValueTrue))
+        assertThat(config.enableStarttls, equalTo(ValueTrue))
+        assertThat(config.testConnection, equalTo(ValueTrue))
 
-        assertThat(config.connectionTimeout, equalTo(KuaNumber(1000)))
-        assertThat(config.timeout, equalTo(KuaNumber(2000)))
-        assertThat(config.writeTimeout, equalTo(KuaNumber(3000)))
+        assertThat(config.connectionTimeout, equalTo(ValueNumber(1000)))
+        assertThat(config.timeout, equalTo(ValueNumber(2000)))
+        assertThat(config.writeTimeout, equalTo(ValueNumber(3000)))
 
         val msg = fakeSender.message
-        assertThat(msg.from, equalTo(KuaString("from")))
-        assertThat(msg.to, equalTo(KuaString("to")))
-        assertThat(msg.subject, equalTo(KuaString("subject")))
-        assertThat(msg.content, equalTo(KuaString("content")))
-        assertThat(msg.contentType, equalTo(KuaString("content_type")))
-        assertThat(msg.priority, equalTo(KuaNumber(42)))
+        assertThat(msg.from, equalTo(ValueString("from")))
+        assertThat(msg.to, equalTo(ValueString("to")))
+        assertThat(msg.subject, equalTo(ValueString("subject")))
+        assertThat(msg.content, equalTo(ValueString("content")))
+        assertThat(msg.contentType, equalTo(ValueString("content_type")))
+        assertThat(msg.priority, equalTo(ValueNumber(42)))
 
     }
 
@@ -88,7 +91,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -109,7 +112,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.defaultEncoding, equalTo(KuaString("UTF-8")))
+        assertThat(config.defaultEncoding, equalTo(ValueString("UTF-8")))
     }
 
     @Test
@@ -118,9 +121,10 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory),
-            connector = TestFailConnector { _, result ->
-                assertThat(result.value.stringValue("message"), containsString("host not set"))
+            extensionFactories = listOf(ExtensionNetSmtpFactory),
+            connector = TestFailConnector { _, statusCode, result ->
+                assertThat(statusCode, equalTo(ExecStatusCode(400)))
+                assertThat(result.getString("message").stringValue, containsString("host not set"))
             }
         ).run(
             unitOfWork(
@@ -147,7 +151,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -168,7 +172,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.port, equalTo(KuaNumber(25)))
+        assertThat(config.port, equalTo(ValueNumber(25)))
     }
 
     @Test
@@ -177,7 +181,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -207,7 +211,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -237,7 +241,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -258,7 +262,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.protocol, equalTo(KuaString("smtp")))
+        assertThat(config.protocol, equalTo(ValueString("smtp")))
     }
 
     @Test
@@ -267,7 +271,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -288,7 +292,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.debug, equalTo(KuaFalse))
+        assertThat(config.debug, equalTo(ValueFalse))
     }
 
     @Test
@@ -297,7 +301,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -318,7 +322,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.enableStarttls, equalTo(KuaFalse))
+        assertThat(config.enableStarttls, equalTo(ValueFalse))
     }
 
     @Test
@@ -327,7 +331,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -348,7 +352,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.testConnection, equalTo(KuaFalse))
+        assertThat(config.testConnection, equalTo(ValueFalse))
     }
 
     @Test
@@ -357,8 +361,10 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            connector = TestFailConnector { _, result ->
-                assertThat(result.value.stringValue("message"), containsString("from not set"))
+            extensionFactories = listOf(ExtensionNetSmtpFactory),
+            connector = TestFailConnector { _, statusCode, result ->
+                assertThat(statusCode, equalTo(ExecStatusCode(400)))
+                assertThat(result.getString("message").stringValue, containsString("from not set"))
             }
         ).run(
             unitOfWork(
@@ -385,8 +391,10 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            connector = TestFailConnector { _, result ->
-                assertThat(result.value.stringValue("message"), containsString("to not set"))
+            extensionFactories = listOf(ExtensionStdThrowFactory, ExtensionNetSmtpFactory),
+            connector = TestFailConnector { _, statusCode, result ->
+                assertThat(statusCode, equalTo(ExecStatusCode(400)))
+                assertThat(result.getString("message").stringValue, containsString("to not set"))
             }
         ).run(
             unitOfWork(
@@ -413,8 +421,10 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            connector = TestFailConnector { _, result ->
-                assertThat(result.value.stringValue("message"), containsString("subject not set"))
+            extensionFactories = listOf(ExtensionNetSmtpFactory),
+            connector = TestFailConnector { _, statusCode, result ->
+                assertThat(statusCode, equalTo(ExecStatusCode(400)))
+                assertThat(result.getString("message").stringValue, containsString("subject not set"))
             }
         ).run(
             unitOfWork(
@@ -441,7 +451,9 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            connector = TestFailConnector { _, result ->
+            extensionFactories = listOf(ExtensionNetSmtpFactory),
+            connector = TestFailConnector { _, statusCode, result ->
+                assertThat(statusCode, equalTo(ExecStatusCode(400)))
                 assertThat(result.value.stringValue("message"), containsString("content not set"))
             }
         ).run(
@@ -468,7 +480,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -489,7 +501,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val message = fakeSender.message
-        assertThat(message.contentType, equalTo(KuaString("text/plain")))
+        assertThat(message.contentType, equalTo(ValueString("text/plain")))
     }
 
     @Test
@@ -498,7 +510,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -520,7 +532,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val message = fakeSender.message
-        assertThat(message.priority, equalTo(KuaNumber(1)))
+        assertThat(message.priority, equalTo(ValueNumber(1)))
     }
 
     @Test
@@ -529,7 +541,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -550,7 +562,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.connectionTimeout, equalTo(KuaNumber(5000)))
+        assertThat(config.connectionTimeout, equalTo(ValueNumber(5000)))
     }
 
     @Test
@@ -559,7 +571,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -580,7 +592,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.timeout, equalTo(KuaNumber(5000)))
+        assertThat(config.timeout, equalTo(ValueNumber(5000)))
     }
 
     @Test
@@ -589,7 +601,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf(ExtensionSmtpFactory)
+            extensionFactories = listOf(ExtensionNetSmtpFactory)
         ).run(
             unitOfWork(
                 """
@@ -610,7 +622,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
         )
 
         val config = fakeSender.config
-        assertThat(config.writeTimeout, equalTo(KuaNumber(3000)))
+        assertThat(config.writeTimeout, equalTo(ValueNumber(3000)))
     }
 }
 

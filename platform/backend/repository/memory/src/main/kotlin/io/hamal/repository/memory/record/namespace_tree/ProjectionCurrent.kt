@@ -1,6 +1,7 @@
 package io.hamal.repository.memory.record.namespace_tree
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceTreeId
 import io.hamal.repository.api.NamespaceTree
@@ -39,7 +40,7 @@ internal class ProjectionCurrent : ProjectionMemory<NamespaceTreeId, NamespaceTr
             .filter {
                 if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId)
             }.dropWhile { it.id >= query.afterId }
-            .take(query.limit.value)
+            .take(query.limit.intValue)
             .toList()
     }
 

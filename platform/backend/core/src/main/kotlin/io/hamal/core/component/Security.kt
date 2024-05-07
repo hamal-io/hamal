@@ -1,9 +1,12 @@
 package io.hamal.core.component
 
 import io.hamal.lib.domain.vo.AuthToken
+import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
 import io.hamal.lib.domain.vo.Password
 import io.hamal.lib.domain.vo.PasswordHash
+import io.hamal.lib.domain.vo.PasswordHash.Companion.PasswordHash
 import io.hamal.lib.domain.vo.PasswordSalt
+import io.hamal.lib.domain.vo.PasswordSalt.Companion.PasswordSalt
 import java.security.SecureRandom
 import java.util.*
 import javax.crypto.SecretKeyFactory
@@ -16,7 +19,7 @@ interface EncodePassword {
 object PBKDF2 : EncodePassword {
     override fun invoke(password: Password, salt: PasswordSalt): PasswordHash {
         val input = "${salt.value}${password.value}".toByteArray()
-        val spec = PBEKeySpec(password.value.toCharArray(), input, 210_000, 256)
+        val spec = PBEKeySpec(password.stringValue.toCharArray(), input, 210_000, 256)
         val key = factory.generateSecret(spec)
         return PasswordHash(HexFormat.of().formatHex(key.encoded))
     }

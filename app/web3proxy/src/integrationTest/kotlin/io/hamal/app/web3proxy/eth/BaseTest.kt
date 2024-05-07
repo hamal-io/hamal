@@ -4,11 +4,11 @@ import io.hamal.app.web3proxy.TestConfig
 import io.hamal.app.web3proxy.Web3Proxy
 import io.hamal.app.web3proxy.config.WebConfig
 import io.hamal.lib.http.HttpTemplateImpl
-import io.hamal.lib.http.JsonHttpSerdeFactory
+import io.hamal.lib.http.HttpSerdeJsonFactory
 import io.hamal.lib.web3.evm.abi.type.*
 import io.hamal.lib.web3.evm.chain.eth.domain.EthBlockData
 import io.hamal.lib.web3.evm.chain.eth.domain.EthTransactionData
-import io.hamal.lib.web3.json
+import io.hamal.lib.web3.serde
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.extension.ExtendWith
@@ -132,7 +132,7 @@ internal abstract class EthBaseTest {
     lateinit var localPort: Number
 
     protected val testTemplate by lazy {
-        HttpTemplateImpl(baseUrl = "", serdeFactory = JsonHttpSerdeFactory(json)).post("http://localhost:${localPort}/eth")
+        HttpTemplateImpl(baseUrl = "", serdeFactory = HttpSerdeJsonFactory(serde)).post("http://localhost:${localPort}/eth")
     }
 }
 

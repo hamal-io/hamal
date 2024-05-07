@@ -4,10 +4,14 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.domain.*
-import io.hamal.lib.common.serialization.JsonAdapter
+import io.hamal.lib.common.domain.Limit.Companion.Limit
+import io.hamal.lib.common.serialization.AdapterGeneric
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain._enum.ExecStates.*
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
+import io.hamal.lib.domain.vo.ExecStatus.Companion.ExecStatus
 
 interface ExecRepository : ExecCmdRepository, ExecQueryRepository
 
@@ -49,6 +53,7 @@ interface ExecCmdRepository : CmdRepository {
     data class CompleteCmd(
         val id: CmdId,
         val execId: ExecId,
+        val statusCode: ExecStatusCode,
         val result: ExecResult,
         val state: ExecState
     )
@@ -56,6 +61,7 @@ interface ExecCmdRepository : CmdRepository {
     data class FailCmd(
         val id: CmdId,
         val execId: ExecId,
+        val statusCode: ExecStatusCode,
         val result: ExecResult
     )
 }
@@ -93,8 +99,6 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
     abstract val inputs: ExecInputs
     abstract val code: ExecCode
 
-    val type: ExecType = ExecType(this::class.simpleName!!)
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -113,7 +117,7 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
         return result
     }
 
-    object Adapter : JsonAdapter<Exec> {
+    object Adapter : AdapterGeneric<Exec> {
         override fun serialize(
             src: Exec,
             typeOfSrc: java.lang.reflect.Type,
@@ -127,18 +131,20 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
             typeOfT: java.lang.reflect.Type,
             context: JsonDeserializationContext
         ): Exec {
-            val type = json.asJsonObject.get("type").asString
-            return context.deserialize(json, classMapping[type]!!.java)
+            val status = context.deserialize<ExecStatus>(
+                json.asJsonObject.get("status"), ExecStatus::class.java
+            )
+            return context.deserialize(json, classMapping[status.enumValue]!!.java)
         }
 
-        private val classMapping = listOf(
-            Planned::class,
-            Scheduled::class,
-            Queued::class,
-            Started::class,
-            Completed::class,
-            Failed::class
-        ).associateBy { it.simpleName }
+        private val classMapping = mapOf(
+            Planned to Exec.Planned::class,
+            Scheduled to Exec.Scheduled::class,
+            Queued to Exec.Queued::class,
+            Started to Exec.Started::class,
+            Completed to Exec.Completed::class,
+            Failed to Exec.Failed::class
+        )
     }
 
     class Planned(
@@ -151,69 +157,121 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
         override val correlation: Correlation?,
         override val inputs: ExecInputs,
         override val code: ExecCode,
-// FIXME    val plannedAt: PlannedAt
+        val plannedAt: ExecPlannedAt
     ) : Exec() {
-        override val status = ExecStatus.Planned
+        override val status = ExecStatus(Planned)
 
         override fun toString(): String {
             return "Planned($id)"
         }
-
     }
 
     class Scheduled(
         override val cmdId: CmdId,
         override val id: ExecId,
+        override val triggerId: TriggerId?,
         override val updatedAt: UpdatedAt,
-        val plannedExec: Planned,
+        override val namespaceId: NamespaceId,
+        override val workspaceId: WorkspaceId,
+        override val correlation: Correlation?,
+        override val inputs: ExecInputs,
+        override val code: ExecCode,
+        val plannedAt: ExecPlannedAt,
         val scheduledAt: ExecScheduledAt,
     ) : Exec() {
-        override val status = ExecStatus.Scheduled
-        override val triggerId get() = plannedExec.triggerId
-        override val namespaceId get() = plannedExec.namespaceId
-        override val workspaceId get() = plannedExec.workspaceId
-        override val correlation get() = plannedExec.correlation
-        override val inputs get() = plannedExec.inputs
-        override val code get() = plannedExec.code
+
+        constructor(cmdId: CmdId, exec: Planned, scheduledAt: ExecScheduledAt) : this(
+            cmdId = cmdId,
+            id = exec.id,
+            triggerId = exec.triggerId,
+            updatedAt = UpdatedAt(scheduledAt.value),
+            namespaceId = exec.namespaceId,
+            workspaceId = exec.workspaceId,
+            correlation = exec.correlation,
+            inputs = exec.inputs,
+            code = exec.code,
+            plannedAt = exec.plannedAt,
+            scheduledAt = scheduledAt
+        )
+
+        override val status = ExecStatus(Scheduled)
+
         override fun toString(): String {
             return "Scheduled($id)"
         }
-
     }
 
     class Queued(
         override val cmdId: CmdId,
         override val id: ExecId,
+        override val triggerId: TriggerId?,
         override val updatedAt: UpdatedAt,
-        val scheduledExec: Scheduled,
+        override val namespaceId: NamespaceId,
+        override val workspaceId: WorkspaceId,
+        override val correlation: Correlation?,
+        override val inputs: ExecInputs,
+        override val code: ExecCode,
+        val plannedAt: ExecPlannedAt,
+        val scheduledAt: ExecScheduledAt,
         val queuedAt: ExecQueuedAt,
     ) : Exec() {
-        override val status = ExecStatus.Queued
-        override val triggerId get() = scheduledExec.triggerId
-        override val namespaceId get() = scheduledExec.namespaceId
-        override val workspaceId get() = scheduledExec.workspaceId
-        override val correlation get() = scheduledExec.correlation
-        override val inputs get() = scheduledExec.inputs
-        override val code get() = scheduledExec.code
+
+        constructor(cmdId: CmdId, exec: Scheduled, queuedAt: ExecQueuedAt) : this(
+            cmdId = cmdId,
+            id = exec.id,
+            triggerId = exec.triggerId,
+            updatedAt = UpdatedAt(queuedAt.value),
+            namespaceId = exec.namespaceId,
+            workspaceId = exec.workspaceId,
+            correlation = exec.correlation,
+            inputs = exec.inputs,
+            code = exec.code,
+            plannedAt = exec.plannedAt,
+            scheduledAt = exec.scheduledAt,
+            queuedAt = queuedAt,
+        )
+
+        override val status = ExecStatus(Queued)
+
         override fun toString(): String {
             return "Queued($id)"
         }
     }
 
-
     class Started(
         override val cmdId: CmdId,
         override val id: ExecId,
+        override val triggerId: TriggerId?,
         override val updatedAt: UpdatedAt,
-        val queuedExec: Queued
+        override val namespaceId: NamespaceId,
+        override val workspaceId: WorkspaceId,
+        override val correlation: Correlation?,
+        override val inputs: ExecInputs,
+        override val code: ExecCode,
+        val plannedAt: ExecPlannedAt,
+        val scheduledAt: ExecScheduledAt,
+        val queuedAt: ExecQueuedAt,
+        val startedAt: ExecStartedAt
     ) : Exec() {
-        override val status = ExecStatus.Started
-        override val triggerId get() = queuedExec.triggerId
-        override val namespaceId get() = queuedExec.namespaceId
-        override val workspaceId get() = queuedExec.workspaceId
-        override val correlation get() = queuedExec.correlation
-        override val inputs get() = queuedExec.inputs
-        override val code get() = queuedExec.code
+
+        constructor(cmdId: CmdId, exec: Queued, startedAt: ExecStartedAt) : this(
+            cmdId = cmdId,
+            id = exec.id,
+            triggerId = exec.triggerId,
+            updatedAt = UpdatedAt(startedAt.value),
+            namespaceId = exec.namespaceId,
+            workspaceId = exec.workspaceId,
+            correlation = exec.correlation,
+            inputs = exec.inputs,
+            code = exec.code,
+            plannedAt = exec.plannedAt,
+            scheduledAt = exec.scheduledAt,
+            queuedAt = exec.queuedAt,
+            startedAt = startedAt
+        )
+
+        override val status = ExecStatus(Started)
+
         override fun toString(): String {
             return "Started($id)"
         }
@@ -222,19 +280,44 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
     class Completed(
         override val cmdId: CmdId,
         override val id: ExecId,
+        override val triggerId: TriggerId?,
         override val updatedAt: UpdatedAt,
-        val startedExec: Started,
+        override val namespaceId: NamespaceId,
+        override val workspaceId: WorkspaceId,
+        override val correlation: Correlation?,
+        override val inputs: ExecInputs,
+        override val code: ExecCode,
+        val plannedAt: ExecPlannedAt,
+        val scheduledAt: ExecScheduledAt,
+        val queuedAt: ExecQueuedAt,
+        val startedAt: ExecStartedAt,
         val completedAt: ExecCompletedAt,
+        val statusCode: ExecStatusCode,
         val result: ExecResult,
         val state: ExecState
     ) : Exec() {
-        override val status = ExecStatus.Completed
-        override val triggerId get() = startedExec.triggerId
-        override val namespaceId get() = startedExec.namespaceId
-        override val workspaceId get() = startedExec.workspaceId
-        override val correlation get() = startedExec.correlation
-        override val inputs get() = startedExec.inputs
-        override val code get() = startedExec.code
+
+        constructor(cmdId: CmdId, exec: Started, completedAt: ExecCompletedAt, statusCode: ExecStatusCode, result: ExecResult, state: ExecState) : this(
+            cmdId = cmdId,
+            id = exec.id,
+            triggerId = exec.triggerId,
+            updatedAt = UpdatedAt(completedAt.value),
+            namespaceId = exec.namespaceId,
+            workspaceId = exec.workspaceId,
+            correlation = exec.correlation,
+            inputs = exec.inputs,
+            code = exec.code,
+            plannedAt = exec.plannedAt,
+            scheduledAt = exec.scheduledAt,
+            queuedAt = exec.queuedAt,
+            startedAt = exec.startedAt,
+            completedAt = completedAt,
+            statusCode = statusCode,
+            result = result,
+            state = state
+        )
+
+        override val status = ExecStatus(Completed)
 
         override fun toString(): String {
             return "Completed($id)"
@@ -244,19 +327,43 @@ sealed class Exec : DomainObject<ExecId>, HasNamespaceId, HasWorkspaceId {
     class Failed(
         override val cmdId: CmdId,
         override val id: ExecId,
+        override val triggerId: TriggerId?,
         override val updatedAt: UpdatedAt,
-        val startedExec: Started,
-        //FIXME failedAt
+        override val namespaceId: NamespaceId,
+        override val workspaceId: WorkspaceId,
+        override val correlation: Correlation?,
+        override val inputs: ExecInputs,
+        override val code: ExecCode,
+        val plannedAt: ExecPlannedAt,
+        val scheduledAt: ExecScheduledAt,
+        val queuedAt: ExecQueuedAt,
+        val startedAt: ExecStartedAt,
         val failedAt: ExecFailedAt,
+        val statusCode: ExecStatusCode,
         val result: ExecResult
     ) : Exec() {
-        override val status = ExecStatus.Failed
-        override val triggerId get() = startedExec.triggerId
-        override val namespaceId get() = startedExec.namespaceId
-        override val workspaceId get() = startedExec.workspaceId
-        override val correlation get() = startedExec.correlation
-        override val inputs get() = startedExec.inputs
-        override val code get() = startedExec.code
+
+        constructor(cmdId: CmdId, exec: Started, failedAt: ExecFailedAt, statusCode: ExecStatusCode, result: ExecResult) : this(
+            cmdId = cmdId,
+            id = exec.id,
+            triggerId = exec.triggerId,
+            updatedAt = UpdatedAt(failedAt.value),
+            namespaceId = exec.namespaceId,
+            workspaceId = exec.workspaceId,
+            correlation = exec.correlation,
+            inputs = exec.inputs,
+            code = exec.code,
+            plannedAt = exec.plannedAt,
+            scheduledAt = exec.scheduledAt,
+            queuedAt = exec.queuedAt,
+            startedAt = exec.startedAt,
+            failedAt = failedAt,
+            statusCode = statusCode,
+            result = result
+        )
+
+        override val status = ExecStatus(Failed)
+
         override fun toString(): String {
             return "Failed($id)"
         }

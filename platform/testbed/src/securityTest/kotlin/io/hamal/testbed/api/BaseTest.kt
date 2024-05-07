@@ -1,6 +1,6 @@
 package io.hamal.testbed.api
 
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.testbed.BaseTest
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -21,7 +21,7 @@ abstract class ApiBaseSecurityTest(apiUrl: String) : BaseTest(apiUrl) {
             .map { testPath ->
                 val testName = generateTestName(testPath)
                 dynamicTest(testName) {
-                    val result = runTest(testPath, HotObject.empty)
+                    val result = runTest(testPath, ValueObject.empty)
                     if (result is TestResult.Failure) {
                         fail { result.message }
                     }
@@ -36,7 +36,7 @@ abstract class ApiBaseSecurityTest(apiUrl: String) : BaseTest(apiUrl) {
             .map { testPath ->
                 val testName = generateTestName(testPath)
                 dynamicTest(testName) {
-                    val result = runTest(testPath, HotObject.empty)
+                    val result = runTest(testPath, ValueObject.empty)
                     if (result is TestResult.Failure) {
                         fail { result.message }
                     }
@@ -58,7 +58,7 @@ abstract class ApiBaseSecurityTest(apiUrl: String) : BaseTest(apiUrl) {
                     dynamicTest("$testName - ${testParameter.name}") {
                         val result = runTest(
                             testFile = testPath,
-                            testEnv = HotObject.builder()
+                            testEnv = ValueObject.builder()
                                 .set("token", testParameter.token)
                                 .set("id", testParameter.id)
                                 .build()
@@ -81,7 +81,7 @@ abstract class ApiBaseSecurityTest(apiUrl: String) : BaseTest(apiUrl) {
                 dynamicTest(testName) {
                     val result = runTest(
                         testFile = testPath,
-                        testEnv = HotObject.builder()
+                        testEnv = ValueObject.builder()
                             .set("token", "1-token")
                             .set("id", "1")
                             .build()

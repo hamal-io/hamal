@@ -1,9 +1,15 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.Count
-import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
+import io.hamal.lib.common.domain.Count.Companion.Count
+import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
+import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
+import io.hamal.lib.domain.vo.ExtensionId.Companion.ExtensionId
+import io.hamal.lib.domain.vo.ExtensionName.Companion.ExtensionName
+import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.repository.api.ExtensionCmdRepository.CreateCmd
 import io.hamal.repository.api.ExtensionCmdRepository.UpdateCmd
 import io.hamal.repository.api.ExtensionCode
@@ -78,10 +84,7 @@ internal class ExtensionRepositoryTest : AbstractUnitTest() {
                     )
                 }
 
-                assertThat(
-                    exception.message,
-                    equalTo("ExtensionName(TestExt) already exists in workspace WorkspaceId(1)")
-                )
+                assertThat(exception.message, equalTo("TestExt already exists in workspace 1"))
                 verifyCount(1)
             }
 

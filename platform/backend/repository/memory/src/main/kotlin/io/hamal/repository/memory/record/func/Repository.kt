@@ -50,7 +50,7 @@ class FuncMemoryRepository : RecordMemoryRepository<FuncId, FuncRecord, Func>(
                 versionOf(funcId, cmd.id)
             } else {
                 val current = versionOf(funcId, cmd.id)
-                require(cmd.version <= current.code.version) { "${cmd.version} can not be deployed" }
+                require(cmd.version <= current.code.version) { "code version ${cmd.version} can not be deployed" }
                 store(
                     FuncRecord.Deployed(
                         cmdId = cmd.id,

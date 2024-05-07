@@ -4,7 +4,7 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.serialization.JsonAdapter
+import io.hamal.lib.common.serialization.AdapterJson
 import io.hamal.lib.web3.util.ByteWindow
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
@@ -36,7 +36,7 @@ sealed interface EvmType<VALUE : Any> {
 
     class Adapter<TYPE : EvmType<*>>(
         val ctor: (EvmPrefixedHexString) -> TYPE
-    ) : JsonAdapter<TYPE> {
+    ) : AdapterJson<TYPE> {
 
         override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {
             return ctor(EvmPrefixedHexString(json.asString))

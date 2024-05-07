@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {useSDK} from "@metamask/sdk-react";
-import {useMetaMaskChallenge, useMetaMaskToken} from "@/hooks/auth.ts";
+import {useMetaMaskChallenge, useMetaMaskToken} from "@/hook/auth.ts";
 import {Buffer} from "buffer";
 import ButtonPrimary from "@/components/old-ui/button/ButtonPrimary.tsx";
 

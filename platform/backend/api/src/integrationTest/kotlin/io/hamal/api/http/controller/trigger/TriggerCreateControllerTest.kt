@@ -1,16 +1,25 @@
 package io.hamal.api.http.controller.trigger
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain._enum.HookMethod
-import io.hamal.lib.domain._enum.HookMethod.Get
-import io.hamal.lib.domain._enum.HookMethod.Post
-import io.hamal.lib.domain._enum.TriggerStatus
-import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain._enum.TriggerType.Cron
-import io.hamal.lib.domain._enum.TriggerType.FixedRate
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
+import io.hamal.lib.common.domain.Limit.Companion.Limit
+import io.hamal.lib.domain._enum.TriggerStates
+import io.hamal.lib.domain._enum.TriggerTypes
+import io.hamal.lib.domain._enum.TriggerTypes.Cron
+import io.hamal.lib.domain._enum.TriggerTypes.FixedRate
 import io.hamal.lib.domain.request.TriggerCreateRequested
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CronPattern.Companion.CronPattern
+import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
+import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
+import io.hamal.lib.domain.vo.NamespaceFeatures
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
+import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
+import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
+import io.hamal.lib.domain.vo.TriggerDuration.Companion.TriggerDuration
+import io.hamal.lib.domain.vo.TriggerInputs
+import io.hamal.lib.domain.vo.TriggerName
+import io.hamal.lib.domain.vo.TriggerName.Companion.TriggerName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.*
 import io.hamal.lib.http.HttpSuccessResponse
@@ -53,7 +62,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
             assertThat(id, equalTo(result.id))
             assertThat(name, equalTo(TriggerName("trigger")))
             assertThat(namespace.name, equalTo(NamespaceName("hamal")))
-            assertThat(status, equalTo(TriggerStatus.Active))
+            assertThat(status, equalTo(TriggerStates.Active))
         }
     }
 
@@ -91,7 +100,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
         with(getTrigger(result.id)) {
             assertThat(id, equalTo(result.id))
-            assertThat(status, equalTo(TriggerStatus.Active))
+            assertThat(status, equalTo(TriggerStates.Active))
             assertThat(name, equalTo(TriggerName("trigger")))
             assertThat(namespace.id, equalTo(namespace.id))
             assertThat(namespace.name, equalTo(NamespaceName("hamal::namespace")))
@@ -185,7 +194,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
             val creationResponse = httpTemplate.post("/v1/namespaces/539/triggers").body(
                 ApiTriggerCreateReq(
-                    type = TriggerType.Event,
+                    type = TriggerTypes.Event,
                     name = TriggerName("event-trigger"),
                     funcId = funcId,
                     inputs = TriggerInputs(),
@@ -215,7 +224,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
             val creationResponse = httpTemplate.post("/v1/namespaces/539/triggers").body(
                 ApiTriggerCreateReq(
-                    type = TriggerType.Event,
+                    type = TriggerTypes.Event,
                     name = TriggerName("event-trigger"),
                     funcId = funcId,
                     inputs = TriggerInputs(),
@@ -237,7 +246,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
             val creationResponse = httpTemplate.post("/v1/namespaces/539/triggers").body(
                 ApiTriggerCreateReq(
-                    type = TriggerType.Event,
+                    type = TriggerTypes.Event,
                     name = TriggerName("event-trigger"),
                     funcId = funcId,
                     inputs = TriggerInputs(),
@@ -259,7 +268,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
 
             val creationResponse = httpTemplate.post("/v1/namespaces/539/triggers").body(
                 ApiTriggerCreateReq(
-                    type = TriggerType.Event,
+                    type = TriggerTypes.Event,
                     name = TriggerName("event-trigger"),
                     funcId = FuncId(1234),
                     inputs = TriggerInputs(),
@@ -280,17 +289,14 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
     inner class HookTriggerTest {
         @Test
         fun `Creates trigger`() {
-            val hookId = awaitCompleted(createHook(HookName("hook-name"))).id
             val funcId = awaitCompleted(createFunc(FuncName("hook-trigger-func"))).id
 
             val creationResponse = httpTemplate.post("/v1/namespaces/539/triggers").body(
                 ApiTriggerCreateReq(
-                    type = TriggerType.Hook,
+                    type = TriggerTypes.Hook,
                     name = TriggerName("hook-trigger"),
                     funcId = funcId,
-                    inputs = TriggerInputs(),
-                    hookId = hookId,
-                    hookMethod = Post
+                    inputs = TriggerInputs()
                 )
             ).execute()
 
@@ -306,49 +312,25 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
                 assertThat(inputs, equalTo(TriggerInputs()))
                 assertThat(this.funcId, equalTo(funcId))
                 require(this is Trigger.Hook) { "not HookTrigger" }
-                assertThat(this.hookId, equalTo(hookId))
-                assertThat(this.hookMethod, equalTo(Post))
             }
         }
 
 
         @Test
-        fun `Creates triggers with different hookId, funcId, hookMethod combinations`() {
-            val hook_one = awaitCompleted(createHook(HookName("hook-name-one"))).id
-            val hook_two = awaitCompleted(createHook(HookName("hook-name-two"))).id
+        fun `Creates triggers with different hookId, funcId combinations`() {
             val func_one = awaitCompleted(createFunc(FuncName("hook-trigger-func-one"))).id
             val func_two = awaitCompleted(createFunc(FuncName("hook-trigger-func-two"))).id
 
             awaitCompleted(
                 createHookTrigger(
-                    name = TriggerName("trigger1"),
-                    funcId = func_one,
-                    hookId = hook_one,
-                    hookMethod = Get
-                )
-            )
-            awaitCompleted(
-                createHookTrigger(
-                    name = TriggerName("trigger2"),
-                    funcId = func_one,
-                    hookId = hook_one,
-                    hookMethod = Post
-                )
-            )
-            awaitCompleted(
-                createHookTrigger(
                     name = TriggerName("trigger3"),
-                    funcId = func_two,
-                    hookId = hook_one,
-                    hookMethod = Get
+                    funcId = func_two
                 )
             )
             awaitCompleted(
                 createHookTrigger(
                     name = TriggerName("trigger4"),
-                    funcId = func_one,
-                    hookId = hook_two,
-                    hookMethod = Get
+                    funcId = func_one
                 )
             )
 
@@ -358,92 +340,21 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
                     TriggerQueryRepository.TriggerQuery(
                         workspaceIds = listOf(testWorkspace.id),
                         limit = Limit(10)
-
                     )
-                ), hasSize(4)
+                ), hasSize(2)
             )
         }
 
-        @Test
-        fun `Tries to create trigger but does not specify hook id`() {
-            val funcId = awaitCompleted(createFunc(FuncName("hook-trigger-func"))).id
-
-            val creationResponse = httpTemplate.post("/v1/namespaces/539/triggers").body(
-                ApiTriggerCreateReq(
-                    type = TriggerType.Hook,
-                    name = TriggerName("hook-trigger"),
-                    funcId = funcId,
-                    inputs = TriggerInputs(),
-                    hookId = null
-                )
-            ).execute()
-
-            assertThat(creationResponse.statusCode, equalTo(BadRequest))
-            require(creationResponse is HttpErrorResponse) { "request was successful" }
-
-            val result = creationResponse.error(ApiError::class)
-            assertThat(result.message, equalTo("hookId is missing"))
-            verifyNoRequests(TriggerCreateRequested::class)
-        }
-
-        @Test
-        fun `Tries to create trigger but does not specify hook method`() {
-            val hookId = awaitCompleted(createHook(HookName("hook-name"))).id
-            val funcId = awaitCompleted(createFunc(FuncName("hook-trigger-func"))).id
-
-            val creationResponse = httpTemplate.post("/v1/namespaces/539/triggers").body(
-                ApiTriggerCreateReq(
-                    type = TriggerType.Hook,
-                    name = TriggerName("hook-trigger"),
-                    funcId = funcId,
-                    inputs = TriggerInputs(),
-                    hookId = hookId,
-                    hookMethod = null
-                )
-            ).execute()
-
-            assertThat(creationResponse.statusCode, equalTo(BadRequest))
-            require(creationResponse is HttpErrorResponse) { "request was successful" }
-
-            val result = creationResponse.error(ApiError::class)
-            assertThat(result.message, equalTo("hookMethod is missing"))
-            verifyNoRequests(TriggerCreateRequested::class)
-        }
-
-        @Test
-        fun `Tries to create trigger but hook does not exist`() {
-            val funcId = awaitCompleted(createFunc(FuncName("hook-trigger-func"))).id
-
-            val creationResponse = httpTemplate.post("/v1/namespaces/539/triggers").body(
-                ApiTriggerCreateReq(
-                    type = TriggerType.Hook,
-                    name = TriggerName("hook-trigger"),
-                    funcId = funcId,
-                    inputs = TriggerInputs(),
-                    hookId = HookId(1234),
-                    hookMethod = Get
-                )
-            ).execute()
-
-            assertThat(creationResponse.statusCode, equalTo(NotFound))
-            require(creationResponse is HttpErrorResponse) { "request was successful" }
-
-            val result = creationResponse.error(ApiError::class)
-            assertThat(result.message, equalTo("Hook not found"))
-            verifyNoRequests(TriggerCreateRequested::class)
-        }
 
         @Test
         fun `Tries to create trigger but func does not exists`() {
-            val hookId = awaitCompleted(createHook(HookName("hook-name"))).id
 
             val creationResponse = httpTemplate.post("/v1/namespaces/539/triggers").body(
                 ApiTriggerCreateReq(
-                    type = TriggerType.Hook,
+                    type = TriggerTypes.Hook,
                     name = TriggerName("hook-trigger"),
                     funcId = FuncId(1234),
-                    inputs = TriggerInputs(),
-                    hookId = hookId
+                    inputs = TriggerInputs()
                 )
             ).execute()
 
@@ -495,7 +406,7 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
                 """{
                 |"type":"Cron",
                 |"name": "cron-trigger",
-                |"funcId": "${funcId.value.value.toString(16)}",
+                |"funcId": "${funcId.stringValue}",
                 |"inputs": {},
                 |"cron": "Invalid cron pattern"
                 |}""".trimMargin()
@@ -510,17 +421,13 @@ internal class TriggerCreateControllerTest : TriggerBaseControllerTest() {
     private fun createHookTrigger(
         name: TriggerName,
         funcId: FuncId,
-        hookId: HookId,
-        hookMethod: HookMethod
     ): ApiTriggerCreateRequested {
         val creationResponse = httpTemplate.post("/v1/namespaces/539/triggers").body(
             ApiTriggerCreateReq(
-                type = TriggerType.Hook,
+                type = TriggerTypes.Hook,
                 name = name,
                 funcId = funcId,
-                inputs = TriggerInputs(),
-                hookId = hookId,
-                hookMethod = hookMethod
+                inputs = TriggerInputs()
             )
         ).execute()
 

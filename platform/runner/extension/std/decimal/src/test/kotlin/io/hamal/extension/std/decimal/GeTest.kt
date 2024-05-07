@@ -1,18 +1,15 @@
 package io.hamal.extension.std.decimal
 
-import io.hamal.runner.test.AbstractRunnerTest
+import io.hamal.runner.test.RunnerFixture.unitOfWork
 import org.junit.jupiter.api.Test
 
-internal class GeTest : AbstractRunnerTest() {
+internal class GeTest : AbstractTest() {
     @Test
     fun `decimal, number`() {
-        val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionDecimalFactory)
-        )
-        runner.run(
+        runTest(
             unitOfWork(
                 """
-                local decimal = require('decimal')
+                local decimal = require('std.decimal').create()
                 local a = decimal.new('512')
                 local b = 1024
                 local c = 512
@@ -29,13 +26,10 @@ internal class GeTest : AbstractRunnerTest() {
 
     @Test
     fun `decimal, decimal`() {
-        val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionDecimalFactory)
-        )
-        runner.run(
+        runTest(
             unitOfWork(
                 """
-                local decimal = require('decimal')
+                local decimal = require('std.decimal').create()
                 local a = decimal.new('512')
                 local b = decimal.new(1024)
                 local c = decimal.new(512)
@@ -51,13 +45,10 @@ internal class GeTest : AbstractRunnerTest() {
 
     @Test
     fun `number, decimal`() {
-        val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionDecimalFactory)
-        )
-        runner.run(
+        runTest(
             unitOfWork(
                 """
-                local decimal = require('decimal')
+                local decimal = require('std.decimal').create()
                 local a = 512
                 local b = decimal.new(1024)
                 local c = decimal.new(512)

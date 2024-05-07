@@ -7,7 +7,7 @@ http = require('net.http').create({
 err, res = http.post({
     url = '/v1/namespaces/1/funcs',
     headers = { Authorization = 'Bearer ' .. context.env.token },
-    json = {
+    body =  {
         name = 'created',
         inputs = {},
         code = 'print("hamal rocks")',

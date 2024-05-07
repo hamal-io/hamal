@@ -1,5 +1,7 @@
 package io.hamal.lib.kua.native
 
+import io.hamal.lib.kua.ErrorIllegalArgument
+import io.hamal.lib.kua.ErrorIllegalState
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -24,7 +26,7 @@ internal class GlobalGetTableTest : NativeBaseTest() {
         testInstance.globalSet("answer")
         assertThat(testInstance.topGet(), equalTo(0))
 
-        assertThrows<IllegalStateException> { testInstance.globalGetTable("answer") }
+        assertThrows<ErrorIllegalState> { testInstance.globalGetTable("answer") }
             .also { exception ->
                 assertThat(
                     exception.message, equalTo("Expected type to be table but was number")
@@ -47,7 +49,7 @@ internal class GlobalGetTableTest : NativeBaseTest() {
         testInstance.tableCreate(0, 0)
         testInstance.globalSet("hamal")
         repeat(999999) { testInstance.booleanPush(true) }
-        assertThrows<IllegalArgumentException> { testInstance.globalGetTable("hamal") }
+        assertThrows<ErrorIllegalArgument> { testInstance.globalGetTable("hamal") }
             .also { exception -> assertThat(exception.message, equalTo("Prevented stack overflow")) }
     }
 

@@ -1,8 +1,9 @@
 package io.hamal.repository.sqlite.record.trigger
 
 import io.hamal.lib.common.domain.Count
-import io.hamal.lib.domain._enum.TriggerStatus
+import io.hamal.lib.domain._enum.TriggerStates.Active
 import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.domain.vo.TriggerStatus.Companion.TriggerStatus
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerCmdRepository.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
@@ -19,10 +20,7 @@ internal object CreateTrigger : CreateDomainObject<TriggerId, TriggerRecord, Tri
         val firstRecord = recs.first()
 
         check(
-            firstRecord is TriggerRecord.FixedRateCreated ||
-                    firstRecord is TriggerRecord.EventCreated ||
-                    firstRecord is TriggerRecord.HookCreated ||
-                    firstRecord is TriggerRecord.CronCreated
+            firstRecord is TriggerRecord.FixedRateCreated || firstRecord is TriggerRecord.EventCreated || firstRecord is TriggerRecord.HookCreated || firstRecord is TriggerRecord.CronCreated || firstRecord is TriggerRecord.EndpointCreated
         )
 
         var result = TriggerEntity(
@@ -47,7 +45,7 @@ class TriggerSqliteRepository(
     filename = "trigger.db",
     createDomainObject = CreateTrigger,
     recordClass = TriggerRecord::class,
-    projections = listOf(ProjectionCurrent, ProjectionUniqueName, ProjectionUniqueHook)
+    projections = listOf(ProjectionCurrent, ProjectionUniqueName)
 ), TriggerRepository {
 
     override fun create(cmd: CreateFixedRateCmd): Trigger.FixedRate {
@@ -72,8 +70,7 @@ class TriggerSqliteRepository(
                     )
                 )
 
-                (currentVersion(triggerId) as Trigger.FixedRate)
-                    .also { ProjectionCurrent.upsert(this, it) }
+                (currentVersion(triggerId) as Trigger.FixedRate).also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
             }
         }
@@ -101,8 +98,7 @@ class TriggerSqliteRepository(
                     )
                 )
 
-                (currentVersion(triggerId) as Trigger.Event)
-                    .also { ProjectionCurrent.upsert(this, it) }
+                (currentVersion(triggerId) as Trigger.Event).also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
             }
         }
@@ -125,8 +121,6 @@ class TriggerSqliteRepository(
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,
-                        hookId = cmd.hookId,
-                        hookMethod = cmd.hookMethod,
                         status = cmd.status,
                         correlationId = cmd.correlationId
                     )
@@ -135,7 +129,6 @@ class TriggerSqliteRepository(
                 (currentVersion(triggerId) as Trigger.Hook)
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
-                    .also { ProjectionUniqueHook.upsert(this, it) }
             }
         }
     }
@@ -162,7 +155,34 @@ class TriggerSqliteRepository(
                     )
                 )
 
-                (currentVersion(triggerId) as Trigger.Cron)
+                (currentVersion(triggerId) as Trigger.Cron).also { ProjectionCurrent.upsert(this, it) }
+                    .also { ProjectionUniqueName.upsert(this, it) }
+            }
+        }
+    }
+
+    override fun create(cmd: CreateEndpointCmd): Trigger.Endpoint {
+        val triggerId = cmd.triggerId
+        val cmdId = cmd.id
+        return tx {
+            if (commandAlreadyApplied(cmdId, triggerId)) {
+                versionOf(triggerId, cmdId) as Trigger.Endpoint
+            } else {
+                store(
+                    TriggerRecord.EndpointCreated(
+                        cmdId = cmdId,
+                        entityId = triggerId,
+                        workspaceId = cmd.workspaceId,
+                        funcId = cmd.funcId,
+                        namespaceId = cmd.namespaceId,
+                        name = cmd.name,
+                        inputs = cmd.inputs,
+                        status = cmd.status,
+                        correlationId = cmd.correlationId
+                    )
+                )
+
+                (currentVersion(triggerId) as Trigger.Endpoint)
                     .also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
             }
@@ -174,23 +194,20 @@ class TriggerSqliteRepository(
             if (commandAlreadyApplied(cmd.id, triggerId)) {
                 versionOf(triggerId, cmd.id)
             } else {
-                if (cmd.status == TriggerStatus.Active) {
+                if (cmd.status == TriggerStatus(Active)) {
                     store(
                         TriggerRecord.SetActive(
-                            cmdId = cmd.id,
-                            entityId = triggerId
+                            cmdId = cmd.id, entityId = triggerId
                         )
                     )
                 } else {
                     store(
                         TriggerRecord.SetInactive(
-                            cmdId = cmd.id,
-                            entityId = triggerId
+                            cmdId = cmd.id, entityId = triggerId
                         )
                     )
                 }
-                (currentVersion(triggerId))
-                    .also { ProjectionCurrent.upsert(this, it) }
+                (currentVersion(triggerId)).also { ProjectionCurrent.upsert(this, it) }
                     .also { ProjectionUniqueName.upsert(this, it) }
             }
         }

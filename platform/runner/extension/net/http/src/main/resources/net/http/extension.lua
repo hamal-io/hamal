@@ -1,8 +1,9 @@
 function extension_create()
-    local http_plugin = require_plugin('net.http')
     local export = { }
 
     function export.create(cfg)
+        local plugin = require_plugin('net.http')
+
         local cfg = cfg or {}
         local base_url = cfg.base_url or ''
 
@@ -11,7 +12,7 @@ function extension_create()
         }
 
         local function single_request(request)
-            local err, responses = http_plugin.execute({ request })
+            local err, responses = plugin.execute({ request })
 
             if err ~= nil then
                 return err, nil
@@ -22,15 +23,16 @@ function extension_create()
         end
 
         function instance.execute(requests)
-            return http_plugin.execute(requests)
+            return plugin.execute(requests)
         end
 
         function instance.requests.get(req)
-            return {
-                method = "GET",
+            return plugin.requests.get({
                 url = base_url .. (req.url or ''),
-                headers = req.headers or {}
-            }
+                headers = req.headers or {},
+                produces = "JSON",
+                consumes = "JSON"
+            })
         end
 
         function instance.get(req)
@@ -38,12 +40,13 @@ function extension_create()
         end
 
         function instance.requests.post(req)
-            return {
-                method = "POST",
+            return plugin.requests.post({
                 url = base_url .. (req.url or ''),
                 headers = req.headers or {},
-                json = req.json
-            }
+                body = req.body,
+                produces = "JSON",
+                consumes = "JSON"
+            })
         end
 
         function instance.post(req)
@@ -51,12 +54,13 @@ function extension_create()
         end
 
         function instance.requests.put(req)
-            return {
-                method = "PUT",
+            return plugin.requests.put({
                 url = base_url .. (req.url or ''),
                 headers = req.headers or {},
-                json = req.json
-            }
+                body = req.body,
+                produces = "JSON",
+                consumes = "JSON"
+            })
         end
 
         function instance.put(req)
@@ -64,12 +68,13 @@ function extension_create()
         end
 
         function instance.requests.patch(req)
-            return {
-                method = "PATCH",
+            return plugin.requests.patch({
                 url = base_url .. (req.url or ''),
                 headers = req.headers or {},
-                json = req.json
-            }
+                body = req.body,
+                produces = "JSON",
+                consumes = "JSON"
+            })
         end
 
         function instance.patch(req)
@@ -77,11 +82,12 @@ function extension_create()
         end
 
         function instance.requests.delete(req)
-            return {
-                method = "DELETE",
+            return plugin.requests.delete({
                 url = base_url .. (req.url or ''),
                 headers = req.headers or {},
-            }
+                produces = "JSON",
+                consumes = "JSON"
+            })
         end
 
         function instance.delete(req)

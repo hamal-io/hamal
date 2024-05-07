@@ -2,9 +2,13 @@ package io.hamal.repository.fixture
 
 import io.hamal.lib.common.domain.CreatedAt
 import io.hamal.lib.common.domain.UpdatedAt
-import io.hamal.lib.domain.vo.LogTopicId
+import io.hamal.lib.domain.vo.LogTopicId.Companion.LogTopicId
 import io.hamal.repository.api.*
-import io.hamal.repository.api.log.*
+import io.hamal.repository.api.log.LogBrokerRepository
+import io.hamal.repository.api.log.LogSegmentId.Companion.LogSegmentId
+import io.hamal.repository.api.log.LogSegmentRepository
+import io.hamal.repository.api.log.LogTopic
+import io.hamal.repository.api.log.LogTopicRepository
 import io.hamal.repository.memory.AuthMemoryRepository
 import io.hamal.repository.memory.ExecLogMemoryRepository
 import io.hamal.repository.memory.RequestMemoryRepository
@@ -14,16 +18,14 @@ import io.hamal.repository.memory.log.LogSegmentMemory
 import io.hamal.repository.memory.log.LogSegmentMemoryRepository
 import io.hamal.repository.memory.log.LogTopicMemoryRepository
 import io.hamal.repository.memory.record.account.AccountMemoryRepository
-import io.hamal.repository.memory.record.blueprint.BlueprintMemoryRepository
 import io.hamal.repository.memory.record.code.CodeMemoryRepository
-import io.hamal.repository.memory.record.endpoint.EndpointMemoryRepository
 import io.hamal.repository.memory.record.exec.ExecMemoryRepository
 import io.hamal.repository.memory.record.extension.ExtensionMemoryRepository
 import io.hamal.repository.memory.record.feedback.FeedbackMemoryRepository
 import io.hamal.repository.memory.record.func.FuncMemoryRepository
-import io.hamal.repository.memory.record.hook.HookMemoryRepository
 import io.hamal.repository.memory.record.namespace.NamespaceMemoryRepository
 import io.hamal.repository.memory.record.namespace_tree.NamespaceTreeMemoryRepository
+import io.hamal.repository.memory.record.recipe.RecipeMemoryRepository
 import io.hamal.repository.memory.record.topic.TopicMemoryRepository
 import io.hamal.repository.memory.record.trigger.TriggerMemoryRepository
 import io.hamal.repository.memory.record.workspace.MemoryWorkspaceRepository
@@ -34,16 +36,14 @@ object MemoryFixture : BaseTestFixture {
     override fun <REPO : Any> provideImplementation(interfaceClass: KClass<out REPO>): REPO = when (interfaceClass) {
         AccountRepository::class -> AccountMemoryRepository() as REPO
         AuthRepository::class -> AuthMemoryRepository() as REPO
-        BlueprintRepository::class -> BlueprintMemoryRepository() as REPO
+        RecipeRepository::class -> RecipeMemoryRepository() as REPO
         CodeRepository::class -> CodeMemoryRepository() as REPO
-        EndpointRepository::class -> EndpointMemoryRepository() as REPO
         ExecLogRepository::class -> ExecLogMemoryRepository() as REPO
         ExecRepository::class -> ExecMemoryRepository() as REPO
         ExtensionRepository::class -> ExtensionMemoryRepository() as REPO
         FeedbackRepository::class -> FeedbackMemoryRepository() as REPO
         FuncRepository::class -> FuncMemoryRepository() as REPO
         WorkspaceRepository::class -> MemoryWorkspaceRepository() as REPO
-        HookRepository::class -> HookMemoryRepository() as REPO
         NamespaceRepository::class -> NamespaceMemoryRepository() as REPO
         NamespaceTreeRepository::class -> NamespaceTreeMemoryRepository() as REPO
         RequestRepository::class -> RequestMemoryRepository() as REPO

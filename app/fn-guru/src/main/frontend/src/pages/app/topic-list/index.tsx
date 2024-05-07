@@ -4,23 +4,27 @@ import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
 import {GoToDocumentation} from "@/components/documentation.tsx";
 import Create from "@/pages/app/topic-list/components/create.tsx";
 import {useUiState} from "@/hook/ui-state.ts";
-import {useTopicsWithFuncs} from "@/pages/app/topic-list/components/hook.ts";
+// import {useTopicsWithFuncs} from "@/pages/app/topic-list/components/hook.ts";
 import TopicCard from "@/pages/app/topic-list/components/card.tsx";
+import {useTopicList} from "@/hook/topic.ts";
 
 
 const TopicListPage = () => {
     const [uiState] = useUiState()
     const [update, setUpdate] = useState(true)
-    const [getTopicsWithFuncs, topicsWithFuncs, loading, error] = useTopicsWithFuncs()
+    // const [getTopicsWithFuncs, topicsWithFuncs, loading, error] = useTopicsWithFuncs()
+    const [listTopics, topicList, loading, error] = useTopicList()
 
     useEffect(() => {
         if (update) {
-            getTopicsWithFuncs(uiState.namespaceId)
+            listTopics({
+                namespaceId: uiState.namespaceId
+            })
             setUpdate(false)
         }
     }, [update]);
 
-    if (topicsWithFuncs == null || loading) return "Loading..."
+    if (topicList == null || loading) return "Loading..."
     if (error) return "Error"
 
     return (
@@ -32,12 +36,14 @@ const TopicListPage = () => {
                     <Create onClose={() => setUpdate(true)}/>
                 ]}
             />
-            {topicsWithFuncs.length !== 0 ?
+            {topicList.topics.length !== 0 ?
                 <ul className="grid grid-cols-3 gap-4">
-                    {topicsWithFuncs.map(topic =>
-                        <li key={topic.topic.id}>
-                            <TopicCard namespaceId={uiState.namespaceId} topicWithFuncs={topic}
-                                       onChange={() => setUpdate(true)}/>
+                    {topicList.topics.map(topic =>
+                        <li key={topic.id}>
+                            <TopicCard
+                                namespaceId={uiState.namespaceId}
+                                topic={topic}
+                            />
                         </li>
                     )}
                 </ul> : <EmptyPlaceholder className="my-4 ">

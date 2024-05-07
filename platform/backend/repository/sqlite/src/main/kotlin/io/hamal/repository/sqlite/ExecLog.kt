@@ -1,8 +1,14 @@
 package io.hamal.repository.sqlite
 
 import io.hamal.lib.common.domain.Count
-import io.hamal.lib.domain._enum.ExecLogLevel
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.common.domain.Count.Companion.Count
+import io.hamal.lib.domain._enum.ExecLogLevels
+import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecLogId
+import io.hamal.lib.domain.vo.ExecLogLevel
+import io.hamal.lib.domain.vo.ExecLogMessage.Companion.ExecLogMessage
+import io.hamal.lib.domain.vo.ExecLogTimestamp.Companion.ExecLogTimestamp
+import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.NamedResultSet
 import io.hamal.lib.sqlite.SqliteBaseRepository
@@ -32,7 +38,6 @@ class ExecLogSqliteRepository(
                     message VARCHAR(255) NOT NULL,
                     timestamp INTEGER NOT NULL,
                     PRIMARY KEY (id)
-                    
                 );
             """.trimIndent()
             )
@@ -53,9 +58,9 @@ class ExecLogSqliteRepository(
                 set("id", cmd.execLogId)
                 set("exec_id", cmd.execId)
                 set("workspace_id", cmd.workspaceId)
-                set("message", cmd.message.value)
-                set("level", cmd.level.value)
-                set("timestamp", cmd.timestamp.value.toEpochMilli())
+                set("message", cmd.message)
+                set("level", cmd.level.enumValue.value)
+                set("timestamp", cmd.timestamp.instantValue.toEpochMilli())
             }
             map(NamedResultSet::toExecLog)
         }!!
@@ -133,7 +138,7 @@ private fun ExecLogQuery.ids(): String {
     return if (execLogIds.isEmpty()) {
         ""
     } else {
-        "AND id IN (${execLogIds.joinToString(",") { "${it.value.value}" }})"
+        "AND id IN (${execLogIds.joinToString(",") { "${it.longValue}" }})"
     }
 }
 
@@ -141,7 +146,7 @@ private fun ExecLogQuery.workspaceIds(): String {
     return if (workspaceIds.isEmpty()) {
         ""
     } else {
-        "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
+        "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.longValue}" }})"
     }
 }
 
@@ -149,7 +154,7 @@ private fun ExecLogQuery.execIds(): String {
     return if (execIds.isEmpty()) {
         ""
     } else {
-        "AND exec_id IN (${execIds.joinToString(",") { "${it.value.value}" }})"
+        "AND exec_id IN (${execIds.joinToString(",") { "${it.longValue}" }})"
     }
 }
 
@@ -158,7 +163,7 @@ private fun NamedResultSet.toExecLog(): ExecLog {
         id = getId("id", ::ExecLogId),
         execId = getId("exec_id", ::ExecId),
         workspaceId = getId("workspace_id", ::WorkspaceId),
-        level = ExecLogLevel.of(getInt("level")),
+        level = ExecLogLevel.ExecLogLevel(ExecLogLevels.of(getInt("level"))),
         message = ExecLogMessage(getString("message")),
         timestamp = ExecLogTimestamp(Instant.ofEpochMilli(getLong("timestamp")))
     )

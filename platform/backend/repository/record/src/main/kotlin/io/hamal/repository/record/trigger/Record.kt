@@ -1,8 +1,6 @@
 package io.hamal.repository.record.trigger
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain._enum.HookMethod
-import io.hamal.lib.domain._enum.TriggerStatus
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.record.Record
 import io.hamal.repository.record.RecordAdapter
@@ -21,6 +19,7 @@ sealed class TriggerRecord(
             EventCreated::class,
             HookCreated::class,
             CronCreated::class,
+            EndpointCreated::class,
             SetActive::class,
             SetInactive::class
         )
@@ -60,8 +59,6 @@ sealed class TriggerRecord(
         val namespaceId: NamespaceId,
         val name: TriggerName,
         val inputs: TriggerInputs,
-        val hookId: HookId,
-        val hookMethod: HookMethod,
         val status: TriggerStatus,
         val correlationId: CorrelationId? = null
     ) : TriggerRecord()
@@ -75,6 +72,18 @@ sealed class TriggerRecord(
         val name: TriggerName,
         val inputs: TriggerInputs,
         val cron: CronPattern,
+        val status: TriggerStatus,
+        val correlationId: CorrelationId? = null
+    ) : TriggerRecord()
+
+    data class EndpointCreated(
+        override val cmdId: CmdId,
+        override val entityId: TriggerId,
+        val workspaceId: WorkspaceId,
+        val funcId: FuncId,
+        val namespaceId: NamespaceId,
+        val name: TriggerName,
+        val inputs: TriggerInputs,
         val status: TriggerStatus,
         val correlationId: CorrelationId? = null
     ) : TriggerRecord()

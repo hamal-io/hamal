@@ -1,13 +1,14 @@
 package io.hamal.repository.sqlite.record.trigger
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
-import io.hamal.repository.record.json
 import io.hamal.repository.record.trigger.TriggerRecord
+import io.hamal.repository.sqlite.hon
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
@@ -26,7 +27,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
                 set("id", triggerId)
             }
             map { rs ->
-                json.decompressAndDeserialize(Trigger::class, rs.getBytes("data"))
+                hon.decompressAndRead(Trigger::class, rs.getBytes("data"))
             }
         }
     }
@@ -48,7 +49,6 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
                 ${query.funcIds()}
                 ${query.types()}
                 ${query.topicIds()}
-                ${query.hookIds()}
                 ${query.namespaceIds()}
             ORDER BY id DESC
             LIMIT :limit
@@ -59,7 +59,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
                 set("limit", query.limit)
             }
             map { rs ->
-                json.decompressAndDeserialize(Trigger::class, rs.getBytes("data"))
+                hon.decompressAndRead(Trigger::class, rs.getBytes("data"))
             }
         }
     }
@@ -82,7 +82,6 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
                 ${query.funcIds()}
                 ${query.types()}
                 ${query.topicIds()}
-                ${query.hookIds()}
                 ${query.namespaceIds()}
         """.trimIndent()
             ) {
@@ -100,9 +99,9 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
         tx.execute(
             """
                 INSERT OR REPLACE INTO current
-                    (id, workspace_id, func_id, topic_id, hook_id, namespace_id, type, data) 
+                    (id, workspace_id, func_id, topic_id, namespace_id, type, data) 
                 VALUES
-                    (:id, :workspaceId, :funcId, :topicId, :hookId, :namespaceId, :type, :data)
+                    (:id, :workspaceId, :funcId, :topicId, :namespaceId, :type, :data)
             """.trimIndent()
         ) {
             set("id", obj.id)
@@ -113,15 +112,9 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
             } else {
                 set("topicId", 0)
             }
-
-            if (obj is Trigger.Hook) {
-                set("hookId", obj.hookId)
-            } else {
-                set("hookId", 0)
-            }
             set("namespaceId", obj.namespaceId)
-            set("type", obj.type.value)
-            set("data", json.serializeAndCompress(obj))
+            set("type", obj.type.enumValue.value)
+            set("data", hon.writeAndCompress(obj))
         }
     }
 
@@ -130,12 +123,11 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
             """
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
-                 workspace_id       INTEGER NOT NULL,
+                 workspace_id   INTEGER NOT NULL,
                  func_id        INTEGER NOT NULL,
                  type           INTEGER NOT NULL,
                  topic_id       INTEGER NOT NULL,
-                 hook_id        INTEGER NOT NULL,
-                 namespace_id        INTEGER NOT NULL,
+                 namespace_id   INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
         );
@@ -151,7 +143,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
         return if (types.isEmpty()) {
             ""
         } else {
-            "AND type IN (${types.joinToString(",") { "${it.value}" }})"
+            "AND type IN (${types.joinToString(",") { "${it.enumValue.value}" }})"
         }
     }
 
@@ -159,7 +151,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
         return if (triggerIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${triggerIds.joinToString(",") { "${it.value.value}" }})"
+            "AND id IN (${triggerIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -167,7 +159,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
         return if (workspaceIds.isEmpty()) {
             ""
         } else {
-            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -175,7 +167,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
         return if (funcIds.isEmpty()) {
             ""
         } else {
-            "AND func_id IN (${funcIds.joinToString(",") { "${it.value.value}" }})"
+            "AND func_id IN (${funcIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -183,15 +175,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
         return if (topicIds.isEmpty()) {
             ""
         } else {
-            "AND topic_id IN (${topicIds.joinToString(",") { "${it.value.value}" }})"
-        }
-    }
-
-    private fun TriggerQuery.hookIds(): String {
-        return if (hookIds.isEmpty()) {
-            ""
-        } else {
-            "AND hook_id IN (${hookIds.joinToString(",") { "${it.value.value}" }})"
+            "AND topic_id IN (${topicIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -199,7 +183,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
         return if (namespaceIds.isEmpty()) {
             ""
         } else {
-            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 }

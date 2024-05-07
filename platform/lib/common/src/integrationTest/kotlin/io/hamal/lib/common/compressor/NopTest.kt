@@ -1,6 +1,6 @@
 package io.hamal.lib.common.compressor
 
-import io.hamal.lib.common.compress.NopCompressor
+import io.hamal.lib.common.compress.CompressorNop
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -22,10 +22,10 @@ internal object NopTest {
             }
     """.trimIndent()
 
-        val compressed = NopCompressor.compress(uncompressed)
+        val compressed = CompressorNop.compress(uncompressed)
         assertThat(compressed.size, equalTo(435))
 
-        val result = NopCompressor.toString(compressed)
+        val result = CompressorNop.toString(compressed)
         assertThat(result, equalTo(uncompressed))
 
     }
@@ -2395,10 +2395,10 @@ internal object NopTest {
         
     """.trimIndent()
 
-        val compressed = NopCompressor.compress(uncompressed)
+        val compressed = CompressorNop.compress(uncompressed)
         assertThat(compressed.size, equalTo(298635))
 
-        val result = NopCompressor.toString(compressed)
+        val result = CompressorNop.toString(compressed)
         assertThat(result, equalTo(uncompressed))
     }
 }

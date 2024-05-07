@@ -1,18 +1,40 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.ValueObjectHotObject
-import io.hamal.lib.common.domain.ValueObjectId
-import io.hamal.lib.common.domain.ValueObjectString
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.*
+import io.hamal.lib.domain._enum.TriggerStates
+import io.hamal.lib.domain._enum.TriggerTypes
 
-class TriggerId(override val value: SnowflakeId) : ValueObjectId() {
-    constructor(value: Int) : this(SnowflakeId(value.toLong()))
-    constructor(value: String) : this(SnowflakeId(value.toLong(16)))
+class TriggerId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
+    companion object {
+        fun TriggerId(value: SnowflakeId) = TriggerId(ValueSnowflakeId(value))
+        fun TriggerId(value: Int) = TriggerId(ValueSnowflakeId(SnowflakeId(value.toLong())))
+        fun TriggerId(value: String) = TriggerId(ValueSnowflakeId(SnowflakeId(value.toLong(16))))
+    }
 }
 
-class TriggerName(override val value: String) : ValueObjectString()
+class TriggerName(override val value: ValueString) : ValueVariableString() {
+    companion object {
+        fun TriggerName(value: String) = TriggerName(ValueString(value))
+    }
+}
 
-class TriggerInputs(override val value: HotObject = HotObject.empty) : ValueObjectHotObject()
+class TriggerStatus(override val value: ValueEnum) : ValueVariableEnum<TriggerStates>(TriggerStates::class) {
+    companion object {
+        fun TriggerStatus(value: Enum<TriggerStates>) = TriggerStatus(ValueEnum(value.name))
+    }
+}
 
-class TriggerDuration(override val value: String) : ValueObjectString()
+class TriggerType(override val value: ValueEnum) : ValueVariableEnum<TriggerTypes>(TriggerTypes::class) {
+    companion object {
+        fun TriggerType(value: Enum<TriggerTypes>) = TriggerType(ValueEnum(value.name))
+    }
+}
+
+class TriggerInputs(override val value: ValueObject = ValueObject.empty) : ValueVariableObject()
+
+class TriggerDuration(override val value: ValueString) : ValueVariableString() {
+    companion object {
+        fun TriggerDuration(value: String) = TriggerDuration(ValueString(value))
+    }
+}

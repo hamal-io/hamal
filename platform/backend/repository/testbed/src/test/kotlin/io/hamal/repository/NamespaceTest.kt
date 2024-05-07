@@ -1,20 +1,24 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.Count
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain._enum.NamespaceFeature.*
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
+import io.hamal.lib.common.domain.Count.Companion.Count
+import io.hamal.lib.common.domain.Limit.Companion.Limit
+import io.hamal.lib.domain._enum.Features.*
 import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.lib.domain.vo.WorkspaceId
+import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.repository.api.NamespaceCmdRepository.*
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import io.hamal.repository.api.NamespaceRepository
 import io.hamal.repository.fixture.AbstractUnitTest
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.Matchers
 import org.hamcrest.Matchers.*
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.TestFactory
@@ -42,10 +46,11 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
                 assertThat(id, equalTo(NamespaceId(234)))
                 assertThat(workspaceId, equalTo(WorkspaceId(1)))
                 assertThat(name, equalTo(NamespaceName("SomeNamespace")))
-                assertTrue(features.hasFeature(schedule))
-                assertTrue(features.hasFeature(webhook))
-                assertTrue(features.hasFeature(endpoint))
-                assertTrue(features.hasFeature(topic))
+
+                assertTrue(features.isActive(Schedule))
+                assertFalse(features.isActive(Webhook))
+                assertFalse(features.isActive(Endpoint))
+                assertFalse(features.isActive(Topic))
             }
 
             verifyCount(1)
@@ -279,7 +284,7 @@ internal class NamespaceRepositoryTest : AbstractUnitTest() {
             )
 
             val result = find(NamespaceId(111111))
-            assertThat(result, Matchers.nullValue())
+            assertThat(result, nullValue())
         }
     }
 

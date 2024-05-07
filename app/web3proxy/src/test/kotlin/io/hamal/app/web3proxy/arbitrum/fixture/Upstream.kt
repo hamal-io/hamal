@@ -8,7 +8,7 @@ import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumGetBlockResponse
 import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumResponse
 import io.hamal.lib.web3.evm.chain.arbitrum.http.ArbitrumBatchService
 import io.hamal.lib.web3.evm.domain.EvmRequestId
-import io.hamal.lib.web3.json
+import io.hamal.lib.web3.serde
 
 internal class ArbitrumBatchServiceFixture : ArbitrumBatchService<ArbitrumBatchServiceFixture> {
 
@@ -33,7 +33,7 @@ internal class ArbitrumBatchServiceFixture : ArbitrumBatchService<ArbitrumBatchS
             responses.add(
                 ArbitrumGetBlockResponse(
                     id = EvmRequestId(responses.size.toString()),
-                    result = json.deserialize(ArbitrumBlockData::class, String(blockData.readAllBytes()))
+                    result = serde.read(ArbitrumBlockData::class, String(blockData.readAllBytes()))
                 )
             )
         }

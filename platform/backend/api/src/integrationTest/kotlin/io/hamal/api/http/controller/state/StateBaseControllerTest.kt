@@ -1,10 +1,13 @@
 package io.hamal.api.http.controller.state
 
 import io.hamal.api.http.controller.BaseControllerTest
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain._enum.CodeType
+import io.hamal.lib.domain._enum.CodeTypes
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
+import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.HttpSuccessResponse
@@ -27,7 +30,7 @@ internal sealed class StateBaseControllerTest : BaseControllerTest() {
                     name = name,
                     inputs = FuncInputs(),
                     code = CodeValue(""),
-                    codeType = CodeType.Lua54
+                    codeType = CodeType.CodeType(CodeTypes.Lua54)
                 )
             )
             .execute()
@@ -43,6 +46,7 @@ internal sealed class StateBaseControllerTest : BaseControllerTest() {
             .body(
                 BridgeExecCompleteRequest(
                     state = state,
+                    statusCode = ExecStatusCode(210),
                     result = ExecResult(),
                     events = listOf()
                 )
@@ -58,7 +62,7 @@ internal sealed class StateBaseControllerTest : BaseControllerTest() {
     fun getState(funcId: FuncId, correlationId: CorrelationId): ApiCorrelatedState {
         val response = httpTemplate.get("/v1/funcs/{funcId}/states/{correlationId}")
             .path("funcId", funcId)
-            .path("correlationId", correlationId.value)
+            .path("correlationId", correlationId.stringValue)
             .execute()
         assertThat(response.statusCode, equalTo(Ok))
         require(response is HttpSuccessResponse) { "request was not successful" }
@@ -69,7 +73,7 @@ internal sealed class StateBaseControllerTest : BaseControllerTest() {
     fun setState(correlatedState: CorrelatedState): ApiStateSetRequested {
         val response = httpTemplate.put("/v1/funcs/{funcId}/states/{correlationId}")
             .path("funcId", correlatedState.correlation.funcId)
-            .path("correlationId", correlatedState.correlation.id.value)
+            .path("correlationId", correlatedState.correlation.id.stringValue)
             .body(correlatedState.value)
             .execute()
 

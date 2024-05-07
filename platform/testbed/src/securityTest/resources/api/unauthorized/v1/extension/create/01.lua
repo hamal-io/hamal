@@ -7,7 +7,7 @@ http = require('net.http').create({
 err, res = http.post({
     url = '/v1/workspaces/1/extensions',
     headers = { Authorization = 'Bearer ' .. context.env.token },
-    json = {
+    body =  {
         name = 'created',
         code = 'print("Hello extensions")'
     }

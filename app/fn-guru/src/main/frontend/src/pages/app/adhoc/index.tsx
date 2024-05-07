@@ -6,7 +6,8 @@ import {PageHeader} from "@/components/page-header.tsx";
 import {useUiState} from "@/hook/ui-state.ts";
 
 const AdhocPage = () => {
-    return (<NodesAdhocPage/>)
+    return <LuaAdhocPage/>
+    // return (<NodesAdhocPage/>)
 }
 
 export default AdhocPage;
@@ -14,7 +15,7 @@ export default AdhocPage;
 const LuaAdhocPage = () => {
     const [uiState] = useUiState()
     const [adhoc, data] = useAdhoc()
-    const [code, setCode] = useState("log = require('log').create({})\nlog.info('Let\\'s go..')")
+    const [code, setCode] = useState("log = require('std.log').create({})\nlog.info('Let\\'s go..')")
     const Run = () => (
         <Button onClick={() => {
             adhoc(uiState.namespaceId, code, "Lua54")

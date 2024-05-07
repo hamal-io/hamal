@@ -1,23 +1,21 @@
 import React, {FC, useEffect, useState} from "react";
 
-import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
+import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
-import {HookWithTriggers} from "@/pages/app/hook-list/type.tsx";
 import * as z from "zod";
-import {useAuth} from "@/hook/auth.ts";
 import {useNavigate} from "react-router-dom";
-import {useTriggerHookCreate, useTriggerListHook} from "@/hook";
+import {useTriggerEndpointCreate, useTriggerListEndpoint} from "@/hook";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Button} from "@/components/ui/button.tsx";
 import {Loader2, Plus} from "lucide-react";
 import {Form} from "@/components/ui/form.tsx";
-import {EndpointListItem, TriggerListItem} from "@/types";
+import { TriggerListItem} from "@/types";
 import FormFuncSelect from "@/components/form/func-select.tsx";
 import FormHttpMethodSelect from "@/components/form/http-method-select.tsx";
 
 type Prop = {
-    item: EndpointListItem
+    item: TriggerListItem
 }
 
 type HookTrigger = {}
@@ -77,11 +75,11 @@ type AddTriggerProps = {
     afterAdd: (triggerId: string) => void
 }
 
-const AddTrigger: FC<AddTriggerProps> = ({namespaceId, hookId, hookName, trigger, afterAdd}) => {
+const AddTrigger: FC<AddTriggerProps> = ({namespaceId,  hookName, trigger, afterAdd}) => {
     const navigate = useNavigate()
     const [openDialog, setOpenDialog] = useState<boolean>(false)
     const [loading, setLoading] = useState<boolean>(false)
-    const [createTrigger, submittedTrigger] = useTriggerHookCreate()
+    const [createTrigger, submittedTrigger] = useTriggerEndpointCreate()
 
     const formSchema = z.object({
         funcId: z.string().min(1, "Function required"),
@@ -99,14 +97,7 @@ const AddTrigger: FC<AddTriggerProps> = ({namespaceId, hookId, hookName, trigger
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setLoading(true)
         try {
-            createTrigger({
-                namespaceId: namespaceId,
-                funcId: values.funcId,
-                name: `${hookName}-${trigger.length + 1}`,
-                hookId: hookId,
-                hookMethod: values.httpMethod
-            })
-
+            createTrigger(namespaceId, values.funcId,`${hookName}-${trigger.length + 1}`)
         } catch (e) {
             console.error(e)
         } finally {

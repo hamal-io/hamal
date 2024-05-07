@@ -5,7 +5,11 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.FileUtils
-import io.hamal.repository.api.log.*
+import io.hamal.repository.api.log.LogEvent
+import io.hamal.repository.api.log.LogEventId
+import io.hamal.repository.api.log.LogSegmentId.Companion.LogSegmentId
+import io.hamal.repository.api.log.LogTopic
+import io.hamal.repository.api.log.LogTopicRepository
 import java.nio.file.Path
 import kotlin.io.path.Path
 
@@ -48,7 +52,7 @@ class LogTopicSqliteRepository(
         id = LogSegmentId(SnowflakeId(0)),
         topicId = topic.id,
         path = FileUtils.createDirectories(
-            path.resolve(Path(String.format("topics/%08d", topic.id.value.value)))
+            path.resolve(Path(String.format("topics/%08d", topic.id.longValue)))
         )
     )
 

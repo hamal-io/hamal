@@ -9,7 +9,10 @@ import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.topPop
-import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.value.*
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueNumber
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.domain.EvmHotGetBlockResponse
@@ -17,11 +20,11 @@ import io.hamal.lib.web3.evm.http.EvmHotHttpBatchService
 
 private val log = logger(EvmExecuteFunction::class)
 
-class EvmExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
+class EvmExecuteFunction : Function1In2Out<KuaTable, ValueError, KuaTable>(
     FunctionInput1Schema(KuaTable::class),
-    FunctionOutput2Schema(KuaError::class, KuaTable::class)
+    FunctionOutput2Schema(ValueError::class, KuaTable::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<KuaError?, KuaTable?> {
+    override fun invoke(ctx: FunctionContext, arg1: KuaTable): Pair<ValueError?, KuaTable?> {
         try {
 
             val url = arg1.getString("url")
@@ -36,12 +39,12 @@ class EvmExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
                         val request = ctx.tableGet(ctx.absIndex(-1))
                         ctx.checkpoint {
                             when (request.getString("type")) {
-                                KuaString("get_block") -> {
+                                ValueString("get_block") -> {
 
                                     val block = when (request.type("block")) {
-                                        KuaNumber::class -> batchService.getBlock(EvmUint64(request.getLong("block")))
+                                        ValueNumber::class -> batchService.getBlock(EvmUint64(request.getLong("block")))
                                         //FIXME support get by hash too
-                                        KuaString::class -> {
+                                        ValueString::class -> {
                                             val block = request.getString("block").stringValue
                                             if (block.isDecimal()) {
                                                 batchService.getBlock(EvmUint64(block.toBigInteger()))
@@ -70,7 +73,7 @@ class EvmExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
                             is EvmHotGetBlockResponse -> {
                                 result.append(
                                     ctx.tableCreate().also { result ->
-                                        result["id"] = KuaString(response.id.value)
+                                        result["id"] = ValueString(response.id.value)
                                         result["result"] = response.result.toKuaSnakeCase(ctx)
                                     }
                                 )
@@ -84,7 +87,7 @@ class EvmExecuteFunction : Function1In2Out<KuaTable, KuaError, KuaTable>(
 
         } catch (t: Throwable) {
             t.printStackTrace()
-            return KuaError(t.message ?: "Unknown error") to null
+            return ValueError(t.message ?: "Unknown error") to null
         }
     }
 }

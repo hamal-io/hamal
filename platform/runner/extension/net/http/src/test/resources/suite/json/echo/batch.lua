@@ -2,9 +2,9 @@ http = require('net.http').create({
     base_url = context.env.test_url
 })
 
-decimal = require('decimal')
+decimal = require('std.decimal').create()
 
-local json = {
+local body = {
     s = 'hamal',
     d = decimal.new('12.21'),
     n = 24,
@@ -15,9 +15,9 @@ local json = {
 }
 
 local err, response = http.execute({
-    http.requests.post({ url = '/v1/json-echo', json = json }),
-    http.requests.patch({ url = '/v1/json-echo', json = json }),
-    http.requests.put({ url = '/v1/json-echo', json = json }),
+    http.requests.post({ url = '/v1/json-echo', body = body }),
+    http.requests.patch({ url = '/v1/json-echo', body = body }),
+    http.requests.put({ url = '/v1/json-echo', body = body }),
 })
 
 assert(err == nil)

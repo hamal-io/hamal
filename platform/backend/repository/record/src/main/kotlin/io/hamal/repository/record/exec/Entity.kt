@@ -1,16 +1,17 @@
 package io.hamal.repository.api.record.exec
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain._enum.ExecStates.*
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.ExecStatus.Companion.ExecStatus
 import io.hamal.repository.api.Exec
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.RecordedAt
 import io.hamal.repository.record.exec.ExecRecord
-import java.time.Instant
 
 data class ExecEntity(
     override val cmdId: CmdId,
@@ -25,8 +26,13 @@ data class ExecEntity(
     var correlation: Correlation? = null,
     var inputs: ExecInputs? = null,
     var code: ExecCode? = null,
-    var plannedAt: Instant? = null,
-    var scheduledAt: Instant? = null,
+    var plannedAt: ExecPlannedAt? = null,
+    var scheduledAt: ExecScheduledAt? = null,
+    var queuedAt: ExecQueuedAt? = null,
+    var startedAt: ExecStartedAt? = null,
+    var completedAt: ExecCompletedAt? = null,
+    var failedAt: ExecFailedAt? = null,
+    var statusCode: ExecStatusCode? = null,
     var result: ExecResult? = null,
     var state: ExecState? = null
 
@@ -40,56 +46,57 @@ data class ExecEntity(
                 namespaceId = rec.namespaceId,
                 workspaceId = rec.workspaceId,
                 sequence = rec.sequence(),
-                status = ExecStatus.Planned,
+                status = ExecStatus(Planned),
                 correlation = rec.correlation,
                 inputs = rec.inputs,
                 code = rec.code,
-                plannedAt = Instant.now(), // FIXME
+                plannedAt = ExecPlannedAt(rec.recordedAt().value),
                 recordedAt = rec.recordedAt()
             )
 
             is ExecRecord.Scheduled -> copy(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                status = ExecStatus.Scheduled,
-                scheduledAt = Instant.now(), // FIXME
+                status = ExecStatus(Scheduled),
+                scheduledAt = ExecScheduledAt(rec.recordedAt().value),
                 recordedAt = rec.recordedAt()
             )
 
             is ExecRecord.Queued -> copy(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                status = ExecStatus.Queued,
-                recordedAt = rec.recordedAt()
-//                enqueuedAt = Instant.now() // FIXME
-
+                status = ExecStatus(Queued),
+                queuedAt = ExecQueuedAt(rec.recordedAt().value),
+                recordedAt = rec.recordedAt(),
             )
 
             is ExecRecord.Started -> copy(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                status = ExecStatus.Started,
+                status = ExecStatus(Started),
+                startedAt = ExecStartedAt(rec.recordedAt().value),
                 recordedAt = rec.recordedAt()
-//                startedAt = Instant.now() // FIXME
-                //picked by :platform:runner id..
             )
 
             is ExecRecord.Completed -> copy(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                status = ExecStatus.Completed,
-//                enqueuedAt = Instant.now() // FIXME
-                result = rec.result,
+                status = ExecStatus(Completed),
+                completedAt = ExecCompletedAt(rec.recordedAt().value),
                 recordedAt = rec.recordedAt(),
+                statusCode = rec.statusCode,
+                result = rec.result,
                 state = rec.state
             )
 
             is ExecRecord.Failed -> copy(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
-                status = ExecStatus.Failed,
-                result = rec.result,
-                recordedAt = rec.recordedAt()
+                status = ExecStatus(Failed),
+                failedAt = ExecFailedAt(rec.recordedAt().value),
+                recordedAt = rec.recordedAt(),
+                statusCode = rec.statusCode,
+                result = rec.result
             )
         }
     }
@@ -104,39 +111,50 @@ data class ExecEntity(
             namespaceId = namespaceId,
             workspaceId = workspaceId,
             correlation = correlation,
-            inputs = inputs ?: ExecInputs(HotObject.empty),
-            code = code ?: ExecCode()
+            inputs = inputs ?: ExecInputs(ValueObject.empty),
+            code = code ?: ExecCode(),
+            plannedAt = plannedAt!!
         )
 
-        if (status == ExecStatus.Planned) return plannedExec
+        if (status == ExecStatus(Planned)) return plannedExec
 
-        val scheduledExec = Exec.Scheduled(cmdId, id, recordedAt.toUpdatedAt(), plannedExec, ExecScheduledAt.now())
-        if (status == ExecStatus.Scheduled) return scheduledExec
+        val scheduledExec = Exec.Scheduled(
+            cmdId = cmdId,
+            exec = plannedExec,
+            scheduledAt = scheduledAt!!
+        )
+        if (status == ExecStatus(Scheduled)) return scheduledExec
 
-        val queuedExec = Exec.Queued(cmdId, id, recordedAt.toUpdatedAt(), scheduledExec, ExecQueuedAt.now())
-        if (status == ExecStatus.Queued) return queuedExec
+        val queuedExec = Exec.Queued(
+            cmdId = cmdId,
+            exec = scheduledExec,
+            queuedAt = queuedAt!!
+        )
+        if (status == ExecStatus(Queued)) return queuedExec
 
-        val startedExec = Exec.Started(cmdId, id, recordedAt.toUpdatedAt(), queuedExec)
-        if (status == ExecStatus.Started) return startedExec
+        val startedExec = Exec.Started(
+            cmdId = cmdId,
+            exec = queuedExec,
+            startedAt = startedAt!!
+        )
+        if (status == ExecStatus(Started)) return startedExec
 
         return when (status) {
-            ExecStatus.Completed -> Exec.Completed(
-                cmdId,
-                id,
-                recordedAt.toUpdatedAt(),
-                startedExec,
-                ExecCompletedAt.now(),
-                result!!,
-                state!!
+            ExecStatus(Completed) -> Exec.Completed(
+                cmdId = cmdId,
+                exec = startedExec,
+                completedAt = completedAt!!,
+                statusCode = statusCode!!,
+                result = result!!,
+                state = state!!
             )
 
-            ExecStatus.Failed -> Exec.Failed(
-                cmdId,
-                id,
-                recordedAt.toUpdatedAt(),
-                startedExec,
-                ExecFailedAt.now(),
-                result!!
+            ExecStatus(Failed) -> Exec.Failed(
+                cmdId = cmdId,
+                exec = startedExec,
+                failedAt = failedAt!!,
+                statusCode = statusCode!!,
+                result = result!!
             )
 
             else -> TODO()
@@ -150,19 +168,17 @@ fun List<ExecRecord>.createEntity(): ExecEntity {
     check(firstRecord is ExecRecord.Planned)
 
     var result = ExecEntity(
+        cmdId = firstRecord.cmdId,
         id = firstRecord.entityId,
-        triggerId = firstRecord.triggerId,
         namespaceId = firstRecord.namespaceId,
         workspaceId = firstRecord.workspaceId,
-        cmdId = firstRecord.cmdId,
+        triggerId = firstRecord.triggerId,
+        plannedAt = ExecPlannedAt(firstRecord.recordedAt().value),
         sequence = firstRecord.sequence(),
         recordedAt = firstRecord.recordedAt()
     )
 
-    forEach { record ->
-        result = result.apply(record)
-    }
-
+    forEach { record -> result = result.apply(record) }
 
     return result
 }

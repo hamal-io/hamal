@@ -1,4 +1,4 @@
-sys = require_plugin('sys')
+sys = require_plugin('std.sys')
 
 err, entries = sys.topics.list_entries('ABC')
 assert(err ~= nil)

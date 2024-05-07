@@ -1,7 +1,6 @@
 package io.hamal.api.http.controller.trigger
 
 import io.hamal.core.adapter.func.FuncGetPort
-import io.hamal.core.adapter.hook.HookGetPort
 import io.hamal.core.adapter.namespace.NamespaceGetPort
 import io.hamal.core.adapter.topic.TopicGetPort
 import io.hamal.core.adapter.trigger.TriggerGetPort
@@ -20,8 +19,7 @@ internal class TriggerGetController(
     private val triggerGet: TriggerGetPort,
     private val funcGet: FuncGetPort,
     private val namespaceGet: NamespaceGetPort,
-    private val topicGet: TopicGetPort,
-    private val hookGet: HookGetPort
+    private val topicGet: TopicGetPort
 ) {
     @GetMapping("/v1/triggers/{triggerId}")
     fun get(
@@ -84,13 +82,6 @@ internal class TriggerGetController(
                                 name = namespace.name
                             ),
                             inputs = trigger.inputs,
-                            hook = hookGet(trigger.hookId).let { hook ->
-                                ApiTrigger.Hook.Hook(
-                                    id = hook.id,
-                                    name = hook.name,
-                                    method = trigger.hookMethod
-                                )
-                            },
                             status = trigger.status
                         )
 
@@ -107,6 +98,21 @@ internal class TriggerGetController(
                             ),
                             inputs = trigger.inputs,
                             cron = trigger.cron,
+                            status = trigger.status
+                        )
+
+                        is Trigger.Endpoint -> ApiTrigger.Endpoint(
+                            id = trigger.id,
+                            name = trigger.name,
+                            func = ApiTrigger.Func(
+                                id = func.id,
+                                name = func.name
+                            ),
+                            namespace = ApiTrigger.Namespace(
+                                id = namespace.id,
+                                name = namespace.name
+                            ),
+                            inputs = trigger.inputs,
                             status = trigger.status
                         )
                     }

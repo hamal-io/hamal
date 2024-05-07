@@ -4,19 +4,52 @@ import io.hamal.core.component.DelayRetry
 import io.hamal.core.component.DelayRetryFixedTime
 import io.hamal.core.component.SetupInternalTopics
 import io.hamal.core.config.BackendBasePath
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain._enum.ExecLogLevel
-import io.hamal.lib.domain._enum.HookMethod
-import io.hamal.lib.domain._enum.TopicType
-import io.hamal.lib.domain._enum.TriggerStatus
+import io.hamal.lib.domain._enum.ExecLogLevels.Warn
+import io.hamal.lib.domain._enum.TopicTypes.*
+import io.hamal.lib.domain._enum.TopicTypes.Namespace
+import io.hamal.lib.domain._enum.TopicTypes.Workspace
+import io.hamal.lib.domain._enum.TriggerStates.Active
+import io.hamal.lib.domain._enum.TriggerStates.Inactive
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AccountId.Companion.AccountId
+import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
+import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
+import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
+import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
+import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
+import io.hamal.lib.domain.vo.CronPattern.Companion.CronPattern
+import io.hamal.lib.domain.vo.DeployMessage.Companion.DeployMessage
+import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
+import io.hamal.lib.domain.vo.ExecLogId.Companion.ExecLogId
+import io.hamal.lib.domain.vo.ExecLogLevel.Companion.ExecLogLevel
+import io.hamal.lib.domain.vo.ExecLogMessage.Companion.ExecLogMessage
+import io.hamal.lib.domain.vo.ExpiresAt.Companion.ExpiresAt
+import io.hamal.lib.domain.vo.ExtensionId.Companion.ExtensionId
+import io.hamal.lib.domain.vo.ExtensionName.Companion.ExtensionName
+import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
+import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
+import io.hamal.lib.domain.vo.LogTopicId.Companion.LogTopicId
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
+import io.hamal.lib.domain.vo.NamespaceTreeId.Companion.NamespaceTreeId
+import io.hamal.lib.domain.vo.PasswordSalt.Companion.PasswordSalt
+import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
+import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
+import io.hamal.lib.domain.vo.TopicType.Companion.TopicType
+import io.hamal.lib.domain.vo.TriggerDuration.Companion.TriggerDuration
+import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
+import io.hamal.lib.domain.vo.TriggerName.Companion.TriggerName
+import io.hamal.lib.domain.vo.TriggerStatus.Companion.TriggerStatus
+import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
+import io.hamal.lib.domain.vo.WorkspaceName.Companion.WorkspaceName
 import io.hamal.repository.api.*
-import io.hamal.repository.api.EndpointCmdRepository.CreateCmd
 import io.hamal.repository.api.ExecCmdRepository.PlanCmd
 import jakarta.annotation.PostConstruct
 import org.junit.jupiter.api.fail
@@ -154,17 +187,6 @@ class TestSetupConfig {
             )
         )
 
-        endpointRepository.create(
-            CreateCmd(
-                id = CmdId(id),
-                endpointId = EndpointId(id),
-                funcId = FuncId(id),
-                workspaceId = WorkspaceId(id),
-                namespaceId = NamespaceId(id),
-                name = EndpointName("$id-name"),
-            )
-        )
-
         execRepository.plan(
             PlanCmd(
                 id = CmdId(id),
@@ -188,7 +210,7 @@ class TestSetupConfig {
             ExecLogCmdRepository.AppendCmd(
                 execId = ExecId(id),
                 execLogId = ExecLogId(id),
-                level = ExecLogLevel.Warn,
+                level = ExecLogLevel(Warn),
                 message = ExecLogMessage("Hamal Rocks"),
                 workspaceId = WorkspaceId(id),
                 timestamp = ExecLogTimestamp.now()
@@ -208,16 +230,6 @@ class TestSetupConfig {
             )
         )
 
-        hookRepository.create(
-            HookCmdRepository.CreateCmd(
-                id = CmdId(id),
-                hookId = HookId(id),
-                name = HookName("$id-hook"),
-                namespaceId = NamespaceId(id),
-                workspaceId = WorkspaceId(id)
-            )
-        )
-
         stateRepository.set(
             StateCmdRepository.SetCmd(
                 id = CmdId(id),
@@ -226,7 +238,7 @@ class TestSetupConfig {
                         id = CorrelationId("correlationId"),
                         funcId = FuncId(id)
                     ),
-                    value = State(HotObject.builder().set("value", 1337).build())
+                    value = State(ValueObject.builder().set("value", 1337).build())
                 )
             )
         )
@@ -238,7 +250,7 @@ class TestSetupConfig {
                 name = TopicName("$id-namespace-topic"),
                 namespaceId = NamespaceId(id),
                 workspaceId = WorkspaceId(id),
-                type = TopicType.Namespace,
+                type = TopicType(Namespace),
                 logTopicId = LogTopicId(id)
             )
         )
@@ -250,7 +262,7 @@ class TestSetupConfig {
                 name = TopicName("$id-workspace-topic"),
                 namespaceId = NamespaceId(id),
                 workspaceId = WorkspaceId(id),
-                type = TopicType.Workspace,
+                type = TopicType(Workspace),
                 logTopicId = LogTopicId(id + 1)
             )
         )
@@ -262,7 +274,7 @@ class TestSetupConfig {
                 name = TopicName("$id-public-topic"),
                 namespaceId = NamespaceId(id),
                 workspaceId = WorkspaceId(id),
-                type = TopicType.Public,
+                type = TopicType(Public),
                 logTopicId = LogTopicId(id + 2)
             )
         )
@@ -276,7 +288,7 @@ class TestSetupConfig {
                 workspaceId = WorkspaceId(id),
                 namespaceId = NamespaceId(id),
                 inputs = TriggerInputs(),
-                status = TriggerStatus.Active,
+                status = TriggerStatus(Active),
                 duration = TriggerDuration("PT10S")
             )
         )
@@ -290,7 +302,7 @@ class TestSetupConfig {
                 workspaceId = WorkspaceId(id),
                 namespaceId = NamespaceId(id),
                 inputs = TriggerInputs(),
-                status = TriggerStatus.Active,
+                status = TriggerStatus(Active),
                 topicId = TopicId(id)
             )
         )
@@ -304,9 +316,7 @@ class TestSetupConfig {
                 workspaceId = WorkspaceId(id),
                 namespaceId = NamespaceId(id),
                 inputs = TriggerInputs(),
-                status = TriggerStatus.Inactive,
-                hookId = HookId(id),
-                hookMethod = HookMethod.Post
+                status = TriggerStatus(Inactive)
             )
         )
 
@@ -319,11 +329,10 @@ class TestSetupConfig {
                 workspaceId = WorkspaceId(id),
                 namespaceId = NamespaceId(id),
                 inputs = TriggerInputs(),
-                status = TriggerStatus.Active,
+                status = TriggerStatus(Active),
                 cron = CronPattern("0 0 * * * *")
             )
         )
-
     }
 
     @Autowired
@@ -336,9 +345,6 @@ class TestSetupConfig {
     lateinit var codeRepository: CodeRepository
 
     @Autowired
-    lateinit var endpointRepository: EndpointRepository
-
-    @Autowired
     lateinit var execRepository: ExecRepository
 
     @Autowired
@@ -349,9 +355,6 @@ class TestSetupConfig {
 
     @Autowired
     lateinit var funcRepository: FuncRepository
-
-    @Autowired
-    lateinit var hookRepository: HookRepository
 
     @Autowired
     lateinit var namespaceRepository: NamespaceRepository

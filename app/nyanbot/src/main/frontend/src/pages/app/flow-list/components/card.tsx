@@ -2,9 +2,8 @@ import React, {FC, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {Card, CardTitle} from "@/components/ui/card.tsx";
 import {Switch} from "@/components/ui/switch.tsx";
-import {useSetFlowStatus} from "@/hooks/flow.ts";
 import {Flow} from "@/types/flow.ts";
-
+import {useSetFlowStatus} from "@/hook/flow.ts";
 
 type Props = {
     flow: Flow
@@ -21,7 +20,8 @@ export const FlowCard: FC<Props> = ({flow}) => {
     function handleCheck() {
         const status = active === false ? 'activate' : 'deactivate'
         const abortController = new AbortController()
-        setFlowStatus(flow.id, status, abortController)
+        setFlowStatus(flow.triggerId, status, abortController)
+        return (() => abortController.abort())
     }
 
     useEffect(() => {

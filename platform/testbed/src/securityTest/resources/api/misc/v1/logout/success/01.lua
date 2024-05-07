@@ -6,7 +6,7 @@ http = require('net.http').create({
 
 err, res = http.post({
     url = '/v1/anonymous-accounts',
-    json = { }
+    body =  { }
 })
 assert(err == nil)
 

@@ -1,7 +1,7 @@
 package io.hamal.repository.record.topic
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain._enum.TopicType
+import io.hamal.lib.domain._enum.TopicTypes
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Topic
 import io.hamal.repository.record.CreateDomainObject
@@ -41,8 +41,8 @@ data class TopicEntity(
     }
 
     override fun toDomainObject(): Topic {
-        return when (type!!) {
-            TopicType.Internal -> Topic.Internal(
+        return when (type!!.enumValue) {
+            TopicTypes.Internal -> Topic.Internal(
                 cmdId = cmdId,
                 id = id,
                 name = name!!,
@@ -52,7 +52,7 @@ data class TopicEntity(
                 namespaceId = namespaceId!!
             )
 
-            TopicType.Namespace -> Topic.Namespace(
+            TopicTypes.Namespace -> Topic.Namespace(
                 cmdId = cmdId,
                 id = id,
                 name = name!!,
@@ -62,7 +62,7 @@ data class TopicEntity(
                 namespaceId = namespaceId!!
             )
 
-            TopicType.Workspace -> Topic.Workspace(
+            TopicTypes.Workspace -> Topic.Workspace(
                 cmdId = cmdId,
                 id = id,
                 name = name!!,
@@ -72,7 +72,7 @@ data class TopicEntity(
                 namespaceId = namespaceId!!
             )
 
-            TopicType.Public -> Topic.Public(
+            TopicTypes.Public -> Topic.Public(
                 cmdId = cmdId,
                 id = id,
                 name = name!!,

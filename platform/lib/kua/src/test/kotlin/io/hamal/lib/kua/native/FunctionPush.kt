@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.native
 
+import io.hamal.lib.kua.ErrorIllegalArgument
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
 import org.hamcrest.MatcherAssert.assertThat
@@ -20,7 +21,7 @@ internal class FunctionPushTest : NativeBaseTest() {
     fun `Tries to push too many items on the stack limited to 999_999`() {
         repeat(999999) { testInstance.booleanPush(true) }
 
-        assertThrows<IllegalArgumentException> { testInstance.functionPush(TestFunction) }
+        assertThrows<ErrorIllegalArgument> { testInstance.functionPush(TestFunction) }
             .also { exception -> assertThat(exception.message, equalTo("Prevented stack overflow")) }
     }
 

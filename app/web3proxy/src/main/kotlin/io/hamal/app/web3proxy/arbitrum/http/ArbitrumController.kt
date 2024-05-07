@@ -1,13 +1,13 @@
 package io.hamal.app.web3proxy.arbitrum.http
 
 import io.hamal.app.web3proxy.arbitrum.handler.HandleArbitrumRequest
-import io.hamal.lib.common.hot.HotArray
-import io.hamal.lib.common.hot.HotNode
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.serialization.json.JsonArray
+import io.hamal.lib.common.serialization.json.JsonNode
+import io.hamal.lib.common.serialization.json.JsonObject
 import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumRequest
 import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumResponse
 import io.hamal.lib.web3.evm.chain.arbitrum.domain.parseArbitrumRequest
-import io.hamal.lib.web3.json
+import io.hamal.lib.web3.serde
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -19,19 +19,19 @@ internal class ArbitrumController(
 ) {
 
     @PostMapping("/arbitrum")
-    fun handle(@RequestBody body: HotNode<*>): ResponseEntity<*> {
+    fun handle(@RequestBody body: JsonNode<*>): ResponseEntity<*> {
         return when (body) {
-            is HotArray -> handleArray(body)
-            is HotObject -> handleObject(body)
+            is JsonArray -> handleArray(body)
+            is JsonObject -> handleObject(body)
             else -> TODO()
         }
     }
 
-    private fun handleArray(requests: HotArray): ResponseEntity<List<ArbitrumResponse>> {
+    private fun handleArray(requests: JsonArray): ResponseEntity<List<ArbitrumResponse>> {
         val reqs = requests
-            .filterIsInstance<HotObject>()
+            .filterIsInstance<JsonObject>()
             .map { request ->
-                val (err, req) = parseArbitrumRequest(json, request)
+                val (err, req) = parseArbitrumRequest(serde, request)
                 if (err != null) {
                     err
                 } else {
@@ -45,8 +45,8 @@ internal class ArbitrumController(
         )
     }
 
-    private fun handleObject(request: HotObject): ResponseEntity<ArbitrumResponse> {
-        val (err, req) = parseArbitrumRequest(json, request)
+    private fun handleObject(request: JsonObject): ResponseEntity<ArbitrumResponse> {
+        val (err, req) = parseArbitrumRequest(serde, request)
         if (err != null) {
             return ResponseEntity.ok(err)
         }

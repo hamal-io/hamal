@@ -5,8 +5,8 @@ import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.type.KuaCode
-import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -17,8 +17,8 @@ internal class RegisterExtensionTest : BaseSandboxTest() {
     fun `Registers an extension and call function`() {
         testInstance.register(
             RunnerExtension(
-                name = KuaString("some_plugin"),
-                factoryCode = KuaCode(
+                name = ValueString("some_plugin"),
+                factoryCode = ValueCode(
                     """
                     function extension_create()
                         local export = { 
@@ -32,7 +32,7 @@ internal class RegisterExtensionTest : BaseSandboxTest() {
         )
 
         testInstance.codeLoad(
-            KuaCode(
+            ValueCode(
                 """
                 some_plugin = require('some_plugin')
                 some_plugin.magic()
@@ -57,8 +57,8 @@ internal class RegisterPluginTest : BaseSandboxTest() {
         val func = TestFunction()
         testInstance.register(
             RunnerPlugin(
-                name = KuaString("some_plugin"),
-                factoryCode = KuaCode(
+                name = ValueString("some_plugin"),
+                factoryCode = ValueCode(
                     """
                     function plugin_create(internal)
                         local export = { 
@@ -68,12 +68,12 @@ internal class RegisterPluginTest : BaseSandboxTest() {
                     end
                 """.trimIndent()
                 ),
-                internals = mapOf(KuaString("magic") to func)
+                internals = mapOf(ValueString("magic") to func)
             )
         )
 
         testInstance.codeLoad(
-            KuaCode(
+            ValueCode(
                 """
                 some_plugin = require_plugin('some_plugin')
                 some_plugin.magic()

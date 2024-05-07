@@ -3,10 +3,10 @@ package io.hamal.lib.sqlite
 //Inspired by: https://github.com/axiom-data-science/jdbc-named-parameters/blob/master/src/main/java/com/axiomalaska/jdbc/NamedParameterPreparedStatement.java
 
 import io.hamal.lib.common.KeyedOnce
-import io.hamal.lib.common.domain.ValueObjectId
-import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.util.TokenizerUtils
+import io.hamal.lib.common.value.ValueVariableSnowflakeId
+import io.hamal.lib.common.value.ValueVariableString
 import io.hamal.lib.sqlite.NamedPreparedStatement.ParseResult
 import java.math.BigInteger
 import java.sql.Connection
@@ -25,8 +25,8 @@ interface NamedPreparedStatement<STATEMENT> : AutoCloseable {
     operator fun set(parameter: String, value: Instant): STATEMENT
     operator fun set(parameter: String, value: String): STATEMENT
     operator fun set(parameter: String, value: SnowflakeId): STATEMENT
-    operator fun set(parameter: String, value: ValueObjectId): STATEMENT
-    operator fun set(parameter: String, value: ValueObjectString): STATEMENT
+    operator fun set(parameter: String, value: ValueVariableSnowflakeId): STATEMENT
+    operator fun set(parameter: String, value: ValueVariableString): STATEMENT
     operator fun set(parameter: String, value: ByteArray): STATEMENT
     fun execute(): NamedResultSet?
     fun executeUpdate(): Int
@@ -93,15 +93,15 @@ class DefaultNamedPreparedStatement(
         return this
     }
 
-    override fun set(parameter: String, value: ValueObjectId): DefaultNamedPreparedStatement {
+    override fun set(parameter: String, value: ValueVariableSnowflakeId): DefaultNamedPreparedStatement {
         parametersSet.add(parameter)
-        parseResult.parameterIndexesOf(parameter).forEach { delegate.setLong(it, value.value.value) }
+        parseResult.parameterIndexesOf(parameter).forEach { delegate.setLong(it, value.value.snowflakeIdValue.toLong()) }
         return this
     }
 
-    override fun set(parameter: String, value: ValueObjectString): DefaultNamedPreparedStatement {
+    override fun set(parameter: String, value: ValueVariableString): DefaultNamedPreparedStatement {
         parametersSet.add(parameter)
-        parseResult.parameterIndexesOf(parameter).forEach { delegate.setString(it, value.value) }
+        parseResult.parameterIndexesOf(parameter).forEach { delegate.setString(it, value.stringValue) }
         return this
     }
 

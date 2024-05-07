@@ -1,4 +1,4 @@
-sys = require_plugin('sys')
+sys = require_plugin('std.sys')
 
 local func_req = fail_on_error(sys.funcs.create({
     name = 'test-func',

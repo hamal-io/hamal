@@ -1,35 +1,32 @@
 package io.hamal.lib.nodes
 
-import io.hamal.lib.common.hot.HotObjectModule
-import io.hamal.lib.common.serialization.HotModule
-import io.hamal.lib.common.serialization.JsonFactoryBuilder
-import io.hamal.lib.common.serialization.ValueObjectIdAdapter
-import io.hamal.lib.common.serialization.ValueObjectStringAdapter
-import io.hamal.lib.domain.Json
-import io.hamal.lib.domain.vo.ValueObjectJsonModule
-import io.hamal.lib.nodes.control.Control
-import io.hamal.lib.typesystem.TypesystemHotModule
+import io.hamal.lib.common.serialization.Serde
+import io.hamal.lib.common.serialization.SerdeModuleJson
+import io.hamal.lib.common.value.serde.SerdeModuleValueJson
+import io.hamal.lib.common.value.serde.ValueVariableAdapters
+import io.hamal.lib.domain.vo.SerdeModuleValueVariable
 
 
-object NodesHotModule : HotModule() {
+object NodesHotModule : SerdeModuleJson() {
     init {
-        this[ConnectionId::class] = ValueObjectIdAdapter(::ConnectionId)
+        this[ConnectionId::class] = ValueVariableAdapters.SnowflakeId(::ConnectionId)
 
+        this[ControlIdentifier::class] = ValueVariableAdapters.String(::ControlIdentifier)
+        this[ControlType::class] = ValueVariableAdapters.String(::ControlType)
+        this[ControlInit.Config::class] = ValueVariableAdapters.Object(ControlInit::Config)
         this[Control::class] = Control.Adapter
+        this[TemplateControl::class] = TemplateControl.Adapter
 
-        this[NodeId::class] = ValueObjectIdAdapter(::NodeId)
-        this[NodeType::class] = ValueObjectStringAdapter(::NodeType)
-        this[NodeTitle::class] = ValueObjectStringAdapter(::NodeTitle)
+        this[NodeId::class] = ValueVariableAdapters.SnowflakeId(::NodeId)
+        this[NodeType::class] = ValueVariableAdapters.String(::NodeType)
+        this[NodeTitle::class] = ValueVariableAdapters.String(::NodeTitle)
 
-        this[PortId::class] = ValueObjectIdAdapter(::PortId)
+        this[PortId::class] = ValueVariableAdapters.SnowflakeId(::PortId)
     }
 }
 
 
-val json = Json(
-    JsonFactoryBuilder()
-        .register(HotObjectModule)
-        .register(ValueObjectJsonModule)
-        .register(NodesHotModule)
-        .register(TypesystemHotModule)
-)
+val serde = Serde.json()
+    .register(SerdeModuleValueJson)
+    .register(SerdeModuleValueVariable)
+    .register(NodesHotModule)

@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation(project(":platform:lib:common"))
+    api(project(":platform:lib:nodes"))
     testImplementation(external.junit)
     testImplementation(external.hamcrest)
 }

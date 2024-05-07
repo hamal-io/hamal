@@ -1,13 +1,14 @@
 package io.hamal.repository.sqlite.record.func
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.record.func.FuncRecord
-import io.hamal.repository.record.json
+import io.hamal.repository.sqlite.hon
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
@@ -28,7 +29,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
                 set("id", funcId)
             }
             map { rs ->
-                json.decompressAndDeserialize(Func::class, rs.getBytes("data"))
+                hon.decompressAndRead(Func::class, rs.getBytes("data"))
             }
         }
     }
@@ -54,7 +55,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
                 set("limit", query.limit)
             }
             map { rs ->
-                json.decompressAndDeserialize(Func::class, rs.getBytes("data"))
+                hon.decompressAndRead(Func::class, rs.getBytes("data"))
             }
         }
     }
@@ -96,7 +97,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
             set("id", obj.id)
             set("workspaceId", obj.workspaceId)
             set("namespaceId", obj.namespaceId)
-            set("data", json.serializeAndCompress(obj))
+            set("data", hon.writeAndCompress(obj))
         }
     }
 
@@ -122,7 +123,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
         return if (funcIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${funcIds.joinToString(",") { "${it.value.value}" }})"
+            "AND id IN (${funcIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -130,7 +131,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
         return if (workspaceIds.isEmpty()) {
             ""
         } else {
-            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -138,7 +139,7 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
         return if (namespaceIds.isEmpty()) {
             ""
         } else {
-            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 }

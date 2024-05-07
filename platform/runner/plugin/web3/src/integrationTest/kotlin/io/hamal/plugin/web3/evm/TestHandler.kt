@@ -1,7 +1,7 @@
 package io.hamal.plugin.web3.evm
 
-import io.hamal.lib.common.hot.HotArray
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.serialization.json.JsonArray
+import io.hamal.lib.common.serialization.json.JsonObject
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.domain.EvmRequest
 import io.hamal.lib.web3.evm.domain.EvmResponse
@@ -13,19 +13,19 @@ import io.hamal.lib.web3.evm.chain.eth.domain.EthBlockData
 import io.hamal.lib.web3.evm.chain.eth.domain.EthGetBlockByNumberRequest
 import io.hamal.lib.web3.evm.chain.eth.domain.EthGetBlockResponse
 import io.hamal.lib.web3.evm.chain.eth.domain.parseEthRequest
-import io.hamal.lib.web3.json
+import io.hamal.lib.web3.serde
 
 object TestHandler {
 
-    fun handle(chain: String, requests: HotArray): HotArray {
+    fun handle(chain: String, requests: JsonArray): JsonArray {
         val reqs = requests
-            .filterIsInstance<HotObject>()
+            .filterIsInstance<JsonObject>()
             .map { request ->
 
                 val (err, req) = if (chain == "eth") {
-                    parseEthRequest(json, request)
+                    parseEthRequest(serde, request)
                 } else {
-                    parseArbitrumRequest(json, request)
+                    parseArbitrumRequest(serde, request)
                 }
 
                 err ?: req
@@ -35,7 +35,7 @@ object TestHandler {
             .map { req -> handle(req) }
             .plus(reqs.filterIsInstance<EvmResponse>())
             .let { responses ->
-                json.deserialize(HotArray::class, json.serialize(responses))
+                serde.read(JsonArray::class, serde.write(responses))
             }
     }
 
@@ -62,9 +62,9 @@ object TestHandler {
 
     private fun getArbitrumBlock(id: EvmUint64): ArbitrumBlockData? =
         this.javaClass.getResourceAsStream("/fixture/arbitrum/block_${id.value}_full.json")
-            ?.let { json.deserialize(ArbitrumBlockData::class, it) }
+            ?.let { serde.read(ArbitrumBlockData::class, it) }
 
     private fun getEthBlock(id: EvmUint64): EthBlockData? =
         this.javaClass.getResourceAsStream("/fixture/eth/block_${id.value}_full.json")
-            ?.let { json.deserialize(EthBlockData::class, it) }
+            ?.let { serde.read(EthBlockData::class, it) }
 }

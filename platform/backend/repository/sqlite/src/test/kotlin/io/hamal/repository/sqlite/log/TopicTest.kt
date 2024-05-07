@@ -3,7 +3,7 @@ package io.hamal.repository.sqlite.log
 import io.hamal.lib.common.domain.CreatedAt
 import io.hamal.lib.common.domain.UpdatedAt
 import io.hamal.lib.common.util.FileUtils
-import io.hamal.lib.domain.vo.LogTopicId
+import io.hamal.lib.domain.vo.LogTopicId.Companion.LogTopicId
 import io.hamal.repository.api.log.LogTopic
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach

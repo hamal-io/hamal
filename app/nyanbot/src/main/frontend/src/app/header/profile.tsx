@@ -3,7 +3,7 @@ import ImageW from "@/types/image.tsx";
 
 import {Popover, Transition} from "@headlessui/react";
 import logoImg from "@/images/placeholder.png";
-import {useLogout} from "@/hooks/auth.ts";
+import {useAuth, useLogout} from "@/hook/auth.ts";
 
 
 interface AvatarProps {
@@ -101,6 +101,11 @@ const Logout = () => {
 
 
 export const Profile = () => {
+    const [auth] = useAuth()
+
+    const address = auth.address.slice(0, 7) + "..." + auth.address.slice(-5)
+
+
     return (
         <div className="AvatarDropdown relative flex">
             <Popover className="self-center">
@@ -122,15 +127,17 @@ export const Profile = () => {
                             leaveFrom="opacity-100 translate-y-0"
                             leaveTo="opacity-0 translate-y-1"
                         >
-                            <Popover.Panel className="absolute z-10 w-screen max-w-[260px] px-4 top-full -right-2 sm:right-0 sm:px-0">
+                            <Popover.Panel
+                                className="absolute z-10 w-screen max-w-[260px] px-4 top-full -right-2 sm:right-0 sm:px-0">
                                 <div className="overflow-hidden rounded-3xl shadow-lg ring-1 ring-black ring-opacity-5">
-                                    <div className="relative grid grid-cols-1 gap-6 bg-white dark:bg-neutral-800 py-7 px-6">
+                                    <div
+                                        className="relative grid grid-cols-1 gap-6 bg-white dark:bg-neutral-800 py-7 px-6">
                                         <div className="flex items-center space-x-3">
                                             <Avatar sizeClass="w-12 h-12"/>
 
                                             <div className="flex-grow">
                                                 <h4 className="font-semibold">TO BE DONE</h4>
-                                                <p className="text-xs mt-0.5">0xsome...address</p>
+                                                <p className="text-xs mt-0.5">{address}</p>
                                             </div>
                                         </div>
 

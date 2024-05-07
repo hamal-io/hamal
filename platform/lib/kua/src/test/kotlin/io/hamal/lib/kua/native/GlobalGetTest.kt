@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.native
 
+import io.hamal.lib.kua.ErrorIllegalArgument
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -35,7 +36,7 @@ internal class GlobalGetTest : NativeBaseTest() {
         testInstance.numberPush(42.0)
         testInstance.globalSet("hamal")
         repeat(999999) { testInstance.booleanPush(true) }
-        assertThrows<IllegalArgumentException> { testInstance.globalGet("hamal") }
+        assertThrows<ErrorIllegalArgument> { testInstance.globalGet("hamal") }
             .also { exception -> assertThat(exception.message, equalTo("Prevented stack overflow")) }
     }
 

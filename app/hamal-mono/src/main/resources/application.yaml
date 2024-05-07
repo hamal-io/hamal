@@ -15,6 +15,7 @@ spring:
 
 io:
   hamal:
+    instance: ${INSTANCE:1}
     runner:
       http:
         poll-every-ms: ${HTTP_POLL_EVERY_MS:1000}

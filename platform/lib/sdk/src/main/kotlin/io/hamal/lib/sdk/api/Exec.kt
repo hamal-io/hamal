@@ -1,8 +1,6 @@
 package io.hamal.lib.sdk.api
 
-import io.hamal.lib.domain._enum.RequestStatus
-import io.hamal.lib.domain._enum.TriggerStatus
-import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.sdk.fold
@@ -62,7 +60,7 @@ data class ApiExec(
     data class Code(
         val id: CodeId?,
         val version: CodeVersion?,
-        val value: CodeValue?
+        val value: ValueCode?
     )
 }
 

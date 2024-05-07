@@ -2,16 +2,21 @@ package io.hamal.repository.api.log
 
 import io.hamal.lib.common.domain.BatchSize
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueSnowflakeId
+import io.hamal.lib.common.value.ValueVariableSnowflakeId
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.lib.domain.vo.TopicEventId
 import io.hamal.lib.domain.vo.TopicEventPayload
 import io.hamal.repository.api.TopicEvent
 import kotlin.reflect.KClass
 
-class LogConsumerId(override val value: SnowflakeId) : ValueObjectId() {
-    constructor(value: Int) : this(SnowflakeId(value))
+class LogConsumerId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
+    companion object {
+        fun LogConsumerId(value: SnowflakeId) = LogConsumerId(ValueSnowflakeId(value))
+        fun LogConsumerId(value: Int) = LogConsumerId(ValueSnowflakeId(SnowflakeId(value.toLong())))
+        fun LogConsumerId(value: String) = LogConsumerId(ValueSnowflakeId(SnowflakeId(value.toLong(16))))
+    }
 }
 
 interface LogConsumer<VALUE : Any> {
@@ -43,7 +48,7 @@ class LogConsumerImpl<Value : Any>(
             fn(
                 index,
                 event.id,
-                json.decompressAndDeserialize(valueClass, event.bytes)
+                serde.decompressAndRead(valueClass, event.bytes)
             )
             repository.commit(consumerId, topicId, event.id)
         }
@@ -68,7 +73,7 @@ class LogConsumerBatchImpl<Value : Any>(
         }
 
         val batch = eventsToConsume.map { chunk ->
-            json.decompressAndDeserialize(valueClass, chunk.bytes)
+            serde.decompressAndRead(valueClass, chunk.bytes)
         }
 
         block(batch)
@@ -95,7 +100,7 @@ class TopicEventConsumerBatchImpl(
         val batch = eventsToConsume.map { evt ->
             TopicEvent(
                 id = TopicEventId(evt.id.value),
-                payload = json.decompressAndDeserialize(TopicEventPayload::class, evt.bytes)
+                payload = serde.decompressAndRead(TopicEventPayload::class, evt.bytes)
             )
         }
 

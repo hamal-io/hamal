@@ -2,6 +2,7 @@ package io.hamal.repository.sqlite.log
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.common.domain.Count.Companion.None
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.Limit.Companion.one
@@ -23,7 +24,7 @@ class LogSegmentSqliteRepository(
     private val segment: LogSegmentSqlite
 ) : SqliteBaseRepository(
     path = segment.path,
-    filename = String.format("%020d.db", segment.id.value.toLong())
+    filename = String.format("%020d.db", segment.id.longValue)
 ), LogSegmentRepository {
 
     override fun setupConnection(connection: Connection) {
@@ -66,7 +67,7 @@ class LogSegmentSqliteRepository(
             """SELECT id, bytes, instant FROM events WHERE id >= :firstId LIMIT :limit """.trimIndent()
         ) {
             query {
-                set("firstId", firstId.value)
+                set("firstId", firstId)
                 set("limit", limit)
             }
             map {

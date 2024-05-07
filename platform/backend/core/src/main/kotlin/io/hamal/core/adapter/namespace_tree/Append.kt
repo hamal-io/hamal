@@ -4,11 +4,12 @@ import io.hamal.core.adapter.namespace.NamespaceGetPort
 import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.NamespaceAppendRequest
 import io.hamal.lib.domain.request.NamespaceAppendRequested
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import org.springframework.stereotype.Component
 
 fun interface NamespaceTreeAppendPort {
@@ -26,7 +27,7 @@ class NamespaceTreeAppendAdapter(
         return NamespaceAppendRequested(
             requestId = generateDomainId(::RequestId),
             requestedBy = SecurityContext.currentAuthId,
-            requestStatus = RequestStatus.Submitted,
+            requestStatus = RequestStatus(Submitted),
             parentId = parent.id,
             id = generateDomainId(::NamespaceId),
             workspaceId = parent.workspaceId,

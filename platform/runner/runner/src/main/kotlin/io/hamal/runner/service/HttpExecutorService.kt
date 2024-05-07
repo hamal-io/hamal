@@ -37,8 +37,7 @@ class HttpExecutorService(
                     val unitsOfWork = connector.poll()
                     // FIXME core-60 -- backoff if empty or if exception got thrown
                     unitsOfWork.forEach { uow ->
-                        CodeRunnerImpl(connector, sandboxFactory, runnerEnvFactory)
-                            .run(uow)
+                        CodeRunnerImpl(connector, sandboxFactory, runnerEnvFactory).run(uow)
                     }
                 }, pollEveryMs.milliseconds.toJavaDuration())
             )

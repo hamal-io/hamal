@@ -6,7 +6,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
 
-class SolidityTypeTest {
+class SolidityValueTypeTest {
     @TestFactory
     fun `Solidity Type`() = listOf(
         EvmAddress::class,

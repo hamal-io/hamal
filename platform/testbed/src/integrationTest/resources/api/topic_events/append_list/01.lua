@@ -1,4 +1,4 @@
-sys = require_plugin('sys')
+sys = require_plugin('std.sys')
 
 req = fail_on_error(sys.topics.create({ name = "topic-one" }))
 sys.await(req)

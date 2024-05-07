@@ -2,11 +2,16 @@ package io.hamal.repository
 
 import io.hamal.lib.common.TreeNode
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.domain.vo.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceTreeId
+import io.hamal.lib.domain.vo.NamespaceTreeId.Companion.NamespaceTreeId
 import io.hamal.lib.domain.vo.WorkspaceId
+import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.repository.api.NamespaceTreeCmdRepository.AppendCmd
 import io.hamal.repository.api.NamespaceTreeCmdRepository.CreateCmd
 import io.hamal.repository.api.NamespaceTreeQueryRepository.NamespaceTreeQuery

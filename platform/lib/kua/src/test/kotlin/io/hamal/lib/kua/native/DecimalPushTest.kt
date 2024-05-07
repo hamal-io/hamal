@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.native
 
+import io.hamal.lib.kua.ErrorIllegalArgument
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -17,7 +18,7 @@ internal class DecimalPushTest : NativeBaseTest() {
     @Test
     fun `Tries to push too many items on the stack limited to 999_999`() {
         repeat(999997) { testInstance.decimalPush(it.toString()) }
-        assertThrows<IllegalArgumentException> { testInstance.decimalPush("1") }
+        assertThrows<ErrorIllegalArgument> { testInstance.decimalPush("1") }
             .also { exception -> assertThat(exception.message, equalTo("Prevented stack overflow")) }
     }
 }

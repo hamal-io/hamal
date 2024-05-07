@@ -2,9 +2,11 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.TreeNode
 import io.hamal.lib.common.domain.*
+import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceTreeId
+import io.hamal.lib.domain.vo.NamespaceTreeId.Companion.NamespaceTreeId
 import io.hamal.lib.domain.vo.WorkspaceId
 
 data class NamespaceSubTree(

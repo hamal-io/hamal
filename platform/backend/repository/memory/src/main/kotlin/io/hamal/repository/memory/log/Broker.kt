@@ -2,9 +2,12 @@ package io.hamal.repository.memory.log
 
 import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.domain.*
+import io.hamal.lib.common.domain.Count.Companion.Count
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.LogTopicId
 import io.hamal.repository.api.log.*
 import io.hamal.repository.api.log.LogBrokerRepository.*
+import io.hamal.repository.api.log.LogEventId.Companion.LogEventId
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 
@@ -17,7 +20,7 @@ class LogBrokerMemoryRepository : LogBrokerRepository {
     override fun commit(consumerId: LogConsumerId, topicId: LogTopicId, eventId: LogEventId) {
         return lock.withLock {
             consumers.putIfAbsent(Pair(consumerId, topicId), LogEventId(0))
-            consumers[Pair(consumerId, topicId)] = LogEventId(eventId.value.toInt() + 1)
+            consumers[Pair(consumerId, topicId)] = LogEventId(SnowflakeId(eventId.longValue + 1))
             consumers[Pair(consumerId, topicId)]
         }
     }
@@ -78,7 +81,7 @@ class LogBrokerMemoryRepository : LogBrokerRepository {
                 .reversed()
                 .asSequence()
                 .dropWhile { it.id >= query.afterId }
-                .take(query.limit.value)
+                .take(query.limit.intValue)
                 .toList()
         }
     }

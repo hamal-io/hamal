@@ -3,7 +3,7 @@ package io.hamal.core.request
 import io.hamal.core.adapter.auth.AuthGetPort
 import io.hamal.core.component.WorkerPool
 import io.hamal.core.security.SecurityContext
-import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.repository.api.RequestCmdRepository
 import org.springframework.context.ApplicationListener
 import org.springframework.context.event.ContextRefreshedEvent

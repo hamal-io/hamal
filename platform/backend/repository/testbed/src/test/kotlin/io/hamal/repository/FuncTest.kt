@@ -1,10 +1,18 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.Count
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
+import io.hamal.lib.common.domain.Count.Companion.Count
+import io.hamal.lib.common.domain.Limit.Companion.Limit
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
+import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
+import io.hamal.lib.domain.vo.DeployMessage.Companion.DeployMessage
+import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
+import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
+import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.*
 import io.hamal.repository.api.FuncCode
@@ -32,7 +40,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     workspaceId = WorkspaceId(1),
                     namespaceId = NamespaceId(234),
                     name = FuncName("SomeFunc"),
-                    inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
+                    inputs = FuncInputs(ValueObject.builder().set("hamal", "rocks").build()),
                     codeId = CodeId(5),
                     codeVersion = CodeVersion(1)
                 )
@@ -43,7 +51,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 assertThat(workspaceId, equalTo(WorkspaceId(1)))
                 assertThat(namespaceId, equalTo(NamespaceId(234)))
                 assertThat(name, equalTo(FuncName("SomeFunc")))
-                assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(FuncInputs(ValueObject.builder().set("hamal", "rocks").build())))
                 assertThat(
                     code, equalTo(
                         FuncCode(
@@ -89,7 +97,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
 
                 assertThat(
                     exception.message,
-                    equalTo("FuncName(first-func-name) already exists in namespace NamespaceId(2)")
+                    equalTo("first-func-name already exists in namespace 2")
                 )
 
                 verifyCount(1)
@@ -176,7 +184,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     assertThat(workspaceId, equalTo(WorkspaceId(3)))
                     assertThat(namespaceId, equalTo(NamespaceId(2)))
                     assertThat(name, equalTo(FuncName("first-func-name")))
-                    assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
+                    assertThat(inputs, equalTo(FuncInputs(ValueObject.builder().set("hamal", "rocks").build())))
                     assertThat(
                         code, equalTo(
                             FuncCode(
@@ -213,7 +221,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 FuncId(1), UpdateCmd(
                     id = CmdId(2),
                     name = FuncName("Updated"),
-                    inputs = FuncInputs(HotObject.builder().set("answer", 42).build()),
+                    inputs = FuncInputs(ValueObject.builder().set("answer", 42).build()),
                     codeVersion = CodeVersion(3),
                 )
             )
@@ -223,7 +231,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(FuncName("Updated")))
-                assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("answer", 42).build())))
+                assertThat(inputs, equalTo(FuncInputs(ValueObject.builder().set("answer", 42).build())))
                 assertThat(
                     code, equalTo(
                         FuncCode(
@@ -265,7 +273,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(FuncName("func-name")))
-                assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(FuncInputs(ValueObject.builder().set("hamal", "rocks").build())))
                 assertThat(
                     code, equalTo(
                         FuncCode(
@@ -310,10 +318,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     )
                 }
 
-                assertThat(
-                    exception.message,
-                    equalTo("FuncName(already-exists) already exists in namespace NamespaceId(2)")
-                )
+                assertThat(exception.message, equalTo("already-exists already exists in namespace 2"))
 
                 with(get(FuncId(2))) {
                     assertThat(id, equalTo(FuncId(2)))
@@ -430,7 +435,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                     )
                 )
             }
-            assertThat(exception.message, equalTo("CodeVersion(500) can not be deployed"))
+            assertThat(exception.message, equalTo("code version 500.0 can not be deployed"))
         }
     }
 
@@ -484,7 +489,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(FuncName("SomeFunc")))
-                assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(FuncInputs(ValueObject.builder().set("hamal", "rocks").build())))
                 assertThat(
                     code, equalTo(
                         FuncCode(
@@ -532,7 +537,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 assertThat(workspaceId, equalTo(WorkspaceId(3)))
                 assertThat(namespaceId, equalTo(NamespaceId(2)))
                 assertThat(name, equalTo(FuncName("SomeFunc")))
-                assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(FuncInputs(ValueObject.builder().set("hamal", "rocks").build())))
                 assertThat(
                     code, equalTo(
                         FuncCode(
@@ -733,7 +738,7 @@ internal class FuncRepositoryTest : AbstractUnitTest() {
                 workspaceId = workspaceId,
                 namespaceId = namespaceId,
                 name = name,
-                inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
+                inputs = FuncInputs(ValueObject.builder().set("hamal", "rocks").build()),
                 codeId = codeId,
                 codeVersion = codeVersion
             )

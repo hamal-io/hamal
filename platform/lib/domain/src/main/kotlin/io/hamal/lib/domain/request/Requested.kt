@@ -3,11 +3,12 @@ package io.hamal.lib.domain.request
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.serialization.JsonAdapter
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.common.serialization.AdapterGeneric
 import io.hamal.lib.domain.vo.AuthId
 import io.hamal.lib.domain.vo.RequestClass
+import io.hamal.lib.domain.vo.RequestClass.Companion.RequestClass
 import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.RequestStatus
 import java.lang.reflect.Type
 
 
@@ -17,7 +18,7 @@ sealed class Requested {
     abstract val requestStatus: RequestStatus
     val `class`: RequestClass = RequestClass(this::class.java.simpleName)
 
-    object Adapter : JsonAdapter<Requested> {
+    object Adapter : AdapterGeneric<Requested> {
         override fun serialize(
             src: Requested,
             typeOfSrc: Type,
@@ -31,7 +32,11 @@ sealed class Requested {
             typeOfT: Type,
             context: JsonDeserializationContext
         ): Requested {
-            val requestClass = json.asJsonObject.get("class").asString
+
+            val requestClass = context.deserialize<RequestClass>(
+                json.asJsonObject.get("class"), RequestClass::class.java
+            )
+
             return context.deserialize(json, classMapping[requestClass]!!.java)
         }
 
@@ -44,10 +49,6 @@ sealed class Requested {
             AuthLoginEmailRequested::class,
             AuthLogoutRequested::class,
             AuthUpdatePasswordRequested::class,
-            BlueprintCreateRequested::class,
-            BlueprintUpdateRequested::class,
-            EndpointCreateRequested::class,
-            EndpointUpdateRequested::class,
             ExecCompleteRequested::class,
             ExecFailRequested::class,
             ExecInvokeRequested::class,
@@ -57,18 +58,17 @@ sealed class Requested {
             FuncCreateRequested::class,
             FuncDeployRequested::class,
             FuncUpdateRequested::class,
-            HookCreateRequested::class,
-            HookInvokeRequested::class,
-            HookUpdateRequested::class,
             NamespaceAppendRequested::class,
             NamespaceUpdateRequested::class,
             NamespaceDeleteRequested::class,
+            RecipeCreateRequested::class,
+            RecipeUpdateRequested::class,
             StateSetRequested::class,
             TestRequested::class,
             TopicAppendEventRequested::class,
             TopicCreateRequested::class,
             TriggerCreateRequested::class,
             TriggerStatusRequested::class,
-        ).associateBy { it.simpleName }
+        ).associateBy { RequestClass(it.simpleName!!) }
     }
 }

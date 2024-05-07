@@ -1,12 +1,22 @@
 package io.hamal.repository
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.Count
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
+import io.hamal.lib.common.domain.Count.Companion.Count
+import io.hamal.lib.common.domain.Limit.Companion.Limit
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.Correlation
+import io.hamal.lib.domain._enum.ExecStates
+import io.hamal.lib.domain._enum.ExecStates.*
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.domain.vo.ExecStatus.*
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
+import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
+import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
+import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
+import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
+import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
+import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.repository.api.Exec
 import io.hamal.repository.api.ExecCmdRepository.*
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
@@ -37,7 +47,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                         id = CorrelationId("some-correlation-id"), funcId = FuncId(23)
                     ),
                     inputs = ExecInputs(
-                        HotObject.builder()
+                        ValueObject.builder()
                             .set("hamal", "rocks")
                             .build()
                     ),
@@ -94,14 +104,14 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to schedule exec but not planned`() =
-            ExecStatus.values().filter { it != Planned }.flatMap { status ->
+            entries.filter { it != Planned }.flatMap { status ->
                 runWith(ExecRepository::class, status.name) {
                     createExec(ExecId(23), status)
 
                     val exception = assertThrows<IllegalStateException> {
                         schedule(ScheduleCmd(CmdId(4), ExecId(23)))
                     }
-                    assertThat(exception.message, equalTo("ExecId(23) not planned"))
+                    assertThat(exception.message, equalTo("17 not planned"))
 
                     verifyCount(1)
                 }
@@ -141,14 +151,14 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
 
         @TestFactory
         fun `Tries to queue exec but not scheduled`() =
-            ExecStatus.values().filter { it != Scheduled }.flatMap { status ->
+            entries.filter { it != Scheduled }.flatMap { status ->
                 runWith(ExecRepository::class, status.name) {
                     createExec(ExecId(23), status)
 
                     val exception = assertThrows<IllegalStateException> {
                         queue(QueueCmd(CmdId(4), ExecId(23)))
                     }
-                    assertThat(exception.message, equalTo("ExecId(23) not scheduled"))
+                    assertThat(exception.message, equalTo("17 not scheduled"))
 
                     verifyCount(1)
                 }
@@ -192,7 +202,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         }
 
         @TestFactory
-        fun `Nothing to start`() = ExecStatus.values().filter { it != Queued }.flatMap { status ->
+        fun `Nothing to start`() = entries.filter { it != Queued }.flatMap { status ->
             runWith(ExecRepository::class, status.name) {
                 createExec(ExecId(23), status)
 
@@ -210,7 +220,10 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
         @TestFactory
         fun `Complete started exec`() = runWith(ExecRepository::class) {
             planExec(
-                cmdId = CmdId(1), execId = ExecId(2), workspaceId = WorkspaceId(3), namespaceId = NamespaceId(4)
+                cmdId = CmdId(1),
+                execId = ExecId(2),
+                workspaceId = WorkspaceId(3),
+                namespaceId = NamespaceId(4)
             )
 
             schedule(ScheduleCmd(CmdId(2), ExecId(2)))
@@ -221,29 +234,31 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 CompleteCmd(
                     CmdId(5),
                     ExecId(2),
-                    ExecResult(HotObject.builder().set("answer", 42).build()),
-                    ExecState(HotObject.builder().set("state", 1337).build())
+                    ExecStatusCode(200),
+                    ExecResult(ValueObject.builder().set("answer", 42).build()),
+                    ExecState(ValueObject.builder().set("state", 1337).build())
                 )
             )
 
             assertBaseExec(result)
+            assertThat(result.statusCode, equalTo(ExecStatusCode(200)))
             assertThat(result.status, equalTo(Completed))
-            assertThat(result.result, equalTo(ExecResult(HotObject.builder().set("answer", 42).build())))
-            assertThat(result.state, equalTo(ExecState(HotObject.builder().set("state", 1337).build())))
+            assertThat(result.result, equalTo(ExecResult(ValueObject.builder().set("answer", 42).build())))
+            assertThat(result.state, equalTo(ExecState(ValueObject.builder().set("state", 1337).build())))
 
             verifyCount(1)
         }
 
         @TestFactory
         fun `Tries to complete exec but not started`() =
-            ExecStatus.values().filter { it != Started }.flatMap { status ->
+            entries.filter { it != Started }.flatMap { status ->
                 runWith(ExecRepository::class, status.name) {
                     createExec(ExecId(23), status)
 
                     val exception = assertThrows<IllegalStateException> {
-                        complete(CompleteCmd(CmdId(4), ExecId(23), ExecResult(), ExecState()))
+                        complete(CompleteCmd(CmdId(4), ExecId(23), ExecStatusCode(0), ExecResult(), ExecState()))
                     }
-                    assertThat(exception.message, equalTo("ExecId(23) not started"))
+                    assertThat(exception.message, equalTo("17 not started"))
 
                     verifyCount(1)
                 }
@@ -258,7 +273,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             start(StartCmd(CmdId(4)))
 
             val exception = assertThrows<NoSuchElementException> {
-                complete(CompleteCmd(CmdId(4), ExecId(23), ExecResult(), ExecState()))
+                complete(CompleteCmd(CmdId(4), ExecId(23), ExecStatusCode(0), ExecResult(), ExecState()))
             }
             assertThat(exception.message, equalTo("Exec not found"))
 
@@ -279,24 +294,23 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             queue(QueueCmd(CmdId(3), ExecId(2)))
             start(StartCmd(CmdId(4)))
 
-            val result =
-                fail(FailCmd(CmdId(5), ExecId(2), ExecResult(HotObject.builder().set("message", "SomeError").build())))
+            val result = fail(FailCmd(CmdId(5), ExecId(2), ExecStatusCode(0), ExecResult(ValueObject.builder().set("message", "SomeError").build())))
             assertBaseExec(result)
             assertThat(result.status, equalTo(Failed))
-            assertThat(result.result, equalTo(ExecResult(HotObject.builder().set("message", "SomeError").build())))
+            assertThat(result.result, equalTo(ExecResult(ValueObject.builder().set("message", "SomeError").build())))
 
             verifyCount(1)
         }
 
         @TestFactory
-        fun `Tries to fail exec but not started`() = ExecStatus.values().filter { it != Started }.flatMap { status ->
+        fun `Tries to fail exec but not started`() = entries.filter { it != Started }.flatMap { status ->
             runWith(ExecRepository::class, status.name) {
                 createExec(ExecId(23), status)
 
                 val exception = assertThrows<IllegalStateException> {
-                    fail(FailCmd(CmdId(4), ExecId(23), ExecResult()))
+                    fail(FailCmd(CmdId(4), ExecId(23), ExecStatusCode(0), ExecResult()))
                 }
-                assertThat(exception.message, equalTo("ExecId(23) not started"))
+                assertThat(exception.message, equalTo("17 not started"))
 
                 verifyCount(1)
             }
@@ -311,7 +325,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
             start(StartCmd(CmdId(4)))
 
             val exception = assertThrows<NoSuchElementException> {
-                fail(FailCmd(CmdId(4), ExecId(23), ExecResult()))
+                fail(FailCmd(CmdId(4), ExecId(23), ExecStatusCode(0), ExecResult()))
             }
             assertThat(exception.message, equalTo("Exec not found"))
 
@@ -355,7 +369,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 assertThat(workspaceId, equalTo(WorkspaceId(333)))
                 assertThat(correlation?.id, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation?.funcId, equalTo(FuncId(444)))
-                assertThat(inputs, equalTo(ExecInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(ExecInputs(ValueObject.builder().set("hamal", "rocks").build())))
                 assertThat(code, equalTo(ExecCode(value = CodeValue("'13'..'37'"))))
             }
         }
@@ -387,7 +401,7 @@ internal class ExecRepositoryTest : AbstractUnitTest() {
                 assertThat(workspaceId, equalTo(WorkspaceId(333)))
                 assertThat(correlation?.id, equalTo(CorrelationId("SomeCorrelationId")))
                 assertThat(correlation?.funcId, equalTo(FuncId(444)))
-                assertThat(inputs, equalTo(ExecInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(ExecInputs(ValueObject.builder().set("hamal", "rocks").build())))
                 assertThat(code, equalTo(ExecCode(value = CodeValue("'13'..'37'"))))
             }
         }
@@ -609,7 +623,7 @@ private fun ExecRepository.planExec(
         correlation = Correlation(
             id = CorrelationId("some-correlation-id"), funcId = FuncId(23)
         ),
-        inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
+        inputs = ExecInputs(ValueObject.builder().set("hamal", "rocks").build()),
         code = ExecCode(value = CodeValue("40 + 2")),
     )
 )
@@ -625,7 +639,7 @@ private fun ExecRepository.verifyCount(expected: Int, block: ExecQuery.() -> Uni
 
 fun ExecRepository.createExec(
     execId: ExecId,
-    status: ExecStatus,
+    status: ExecStates,
     namespaceId: NamespaceId = NamespaceId(444),
     workspaceId: WorkspaceId = WorkspaceId(333),
     correlation: Correlation? = null
@@ -639,7 +653,7 @@ fun ExecRepository.createExec(
             namespaceId = namespaceId,
             workspaceId = workspaceId,
             correlation = correlation,
-            inputs = ExecInputs(HotObject.builder().set("hamal", "rocks").build()),
+            inputs = ExecInputs(ValueObject.builder().set("hamal", "rocks").build()),
             code = ExecCode(value = CodeValue("'13'..'37'")),
         )
     )
@@ -648,22 +662,13 @@ fun ExecRepository.createExec(
         return planedExec
     }
 
-    val scheduled = schedule(
-        ScheduleCmd(
-            id = CmdId(101),
-            execId = planedExec.id,
-        )
-    )
+    val scheduled = schedule(ScheduleCmd(id = CmdId(101), execId = planedExec.id))
 
     if (status == Scheduled) {
         return scheduled
     }
 
-    val queued = queue(
-        QueueCmd(
-            id = CmdId(102), execId = scheduled.id
-        )
-    )
+    val queued = queue(QueueCmd(id = CmdId(102), execId = scheduled.id))
     if (status == Queued) {
         return queued
     }
@@ -678,8 +683,9 @@ fun ExecRepository.createExec(
             CompleteCmd(
                 id = CmdId(104),
                 execId = startedExec.id,
-                result = ExecResult(HotObject.builder().set("answer", 42).build()),
-                state = ExecState(HotObject.builder().set("state", 1337).build())
+                statusCode = ExecStatusCode(200),
+                result = ExecResult(ValueObject.builder().set("answer", 42).build()),
+                state = ExecState(ValueObject.builder().set("state", 1337).build())
             )
         )
 
@@ -687,7 +693,8 @@ fun ExecRepository.createExec(
             FailCmd(
                 id = CmdId(104),
                 execId = startedExec.id,
-                result = ExecResult(HotObject.builder().set("message", "ExecTest").build())
+                statusCode = ExecStatusCode(500),
+                result = ExecResult(ValueObject.builder().set("message", "ExecTest").build())
             )
         )
 

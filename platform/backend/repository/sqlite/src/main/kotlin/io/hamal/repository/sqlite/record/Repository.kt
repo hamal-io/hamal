@@ -1,7 +1,7 @@
 package io.hamal.repository.sqlite.record
 
 import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.ValueObjectId
+import io.hamal.lib.common.value.ValueVariableSnowflakeId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.record.CreateDomainObject
@@ -10,7 +10,7 @@ import java.nio.file.Path
 import kotlin.reflect.KClass
 
 
-abstract class RecordSqliteRepository<ID : ValueObjectId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
+abstract class RecordSqliteRepository<ID : ValueVariableSnowflakeId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
     path: Path,
     filename: String,
     private val createDomainObject: CreateDomainObject<ID, RECORD, OBJ>,

@@ -2,7 +2,9 @@ package io.hamal.core.adapter.auth
 
 import io.hamal.lib.domain.request.AuthLogInMetaMaskRequest
 import io.hamal.lib.domain.vo.Web3Address
+import io.hamal.lib.domain.vo.Web3Address.Companion.Web3Address
 import io.hamal.lib.domain.vo.Web3Signature
+import io.hamal.lib.domain.vo.Web3Signature.Companion.Web3Signature
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.DynamicTest.dynamicTest

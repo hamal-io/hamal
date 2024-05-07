@@ -1,13 +1,15 @@
 package io.hamal.plugin.net.http
 
-import io.hamal.extension.std.decimal.ExtensionDecimalFactory
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.extension.std.decimal.ExtensionStdDecimalFactory
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.RunnerEnv
 import io.hamal.plugin.net.http.endpoint.TestHeaderController
+import io.hamal.plugin.net.http.endpoint.TestHonController
 import io.hamal.plugin.net.http.endpoint.TestJsonController
 import io.hamal.plugin.net.http.endpoint.TestStatusController
 import io.hamal.plugin.net.http.fixture.TestWebConfig
-import io.hamal.runner.test.AbstractRunnerTest
+import io.hamal.runner.test.RunnerFixture.createTestRunner
+import io.hamal.runner.test.RunnerFixture.unitOfWork
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
 import org.junit.jupiter.api.TestFactory
@@ -25,25 +27,27 @@ import kotlin.io.path.name
         TestWebConfig::class,
         TestHeaderController::class,
         TestJsonController::class,
+        TestHonController::class,
         TestStatusController::class
     ], webEnvironment = RANDOM_PORT
 )
-class PluginHttpTest(@LocalServerPort var localServerPort: Int) : AbstractRunnerTest() {
+class PluginHttpTest(@LocalServerPort var localServerPort: Int) {
 
     @TestFactory
     fun run(): List<DynamicTest> {
         return collectFiles().map { testFile ->
             dynamicTest("${testFile.parent.parent.name}/${testFile.parent.name}/${testFile.name}") {
-                val runner = createTestRunner(
+                createTestRunner(
                     pluginFactories = listOf(PluginHttpFactory()),
-                    extensionFactories = listOf(ExtensionDecimalFactory),
+                    extensionFactories = listOf(ExtensionStdDecimalFactory),
                     env = RunnerEnv(
-                        HotObject.builder()
+                        ValueObject.builder()
                             .set("test_url", "http://localhost:$localServerPort")
                             .build()
                     )
-                )
-                runner.run(unitOfWork(String(Files.readAllBytes(testFile))))
+                ).also { runner ->
+                    runner.run(unitOfWork(String(Files.readAllBytes(testFile))))
+                }
             }
         }.toList()
     }

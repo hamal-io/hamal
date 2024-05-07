@@ -1,20 +1,35 @@
 package io.hamal.lib.domain.vo
 
-import io.hamal.lib.common.domain.ValueObjectId
-import io.hamal.lib.common.domain.ValueObjectInt
-import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.*
+import io.hamal.lib.domain._enum.CodeTypes
 
-class CodeId(override val value: SnowflakeId) : ValueObjectId() {
-    constructor(value: Int) : this(SnowflakeId(value.toLong()))
-    constructor(value: String) : this(SnowflakeId(value.toLong(16)))
+class CodeId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
+    companion object {
+        fun CodeId(value: SnowflakeId) = CodeId(ValueSnowflakeId(value))
+        fun CodeId(value: Int) = CodeId(ValueSnowflakeId(SnowflakeId(value.toLong())))
+        fun CodeId(value: String) = CodeId(ValueSnowflakeId(SnowflakeId(value.toLong(16))))
+    }
 }
 
-class CodeValue(override val value: String) : ValueObjectString()
-
-
-class CodeVersion(override val value: Int) : ValueObjectInt() {
+class CodeVersion(override val value: ValueNumber) : ValueVariableNumber() {
     init {
-        require(value > 0) { "CodeVersion must be positive" }
+        require(value > ValueNumber(0)) { "CodeVersion must be positive" }
+    }
+
+    companion object {
+        fun CodeVersion(value: Int) = CodeVersion(ValueNumber(value))
+    }
+}
+
+class CodeType(override val value: ValueEnum) : ValueVariableEnum<CodeTypes>(CodeTypes::class) {
+    companion object {
+        fun CodeType(value: Enum<CodeTypes>) = CodeType(ValueEnum(value.name))
+    }
+}
+
+class CodeValue(override val value: ValueCode) : ValueVariableCode() {
+    companion object {
+        fun CodeValue(value: String) = CodeValue(ValueCode(value))
     }
 }

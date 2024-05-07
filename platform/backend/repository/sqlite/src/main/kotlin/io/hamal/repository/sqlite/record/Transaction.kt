@@ -2,16 +2,22 @@ package io.hamal.repository.sqlite.record
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
+import io.hamal.lib.common.value.ValueNumber
+import io.hamal.lib.common.value.ValueVariableSnowflakeId
 import io.hamal.lib.sqlite.NamedPreparedStatementDelegate
 import io.hamal.lib.sqlite.NamedPreparedStatementResultSetDelegate
 import io.hamal.lib.sqlite.Transaction
-import io.hamal.repository.record.*
+import io.hamal.repository.record.CreateDomainObject
+import io.hamal.repository.record.Record
+import io.hamal.repository.record.RecordRepository
+import io.hamal.repository.record.RecordSequence
+import io.hamal.repository.record.RecordedAt.Companion.RecordedAt
+import io.hamal.repository.sqlite.hon
 import kotlin.reflect.KClass
 
 
-class RecordTransactionSqlite<ID : ValueObjectId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
+class RecordTransactionSqlite<ID : ValueVariableSnowflakeId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
     private val createDomainObject: CreateDomainObject<ID, RECORD, OBJ>,
     private val recordClass: KClass<RECORD>,
     private val delegate: Transaction,
@@ -28,7 +34,7 @@ class RecordTransactionSqlite<ID : ValueObjectId, RECORD : Record<ID>, OBJ : Dom
         ) {
             set("cmdId", record.cmdId)
             set("entityId", record.entityId)
-            set("data", json.serializeAndCompress(record))
+            set("data", hon.writeAndCompress(record))
         }
 
         return record
@@ -44,8 +50,8 @@ class RecordTransactionSqlite<ID : ValueObjectId, RECORD : Record<ID>, OBJ : Dom
                 set("entityId", id)
             }
             map {
-                json.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
-                    record.recordSequence = RecordSequence(it.getInt("sequence"))
+                hon.decompressAndRead(recordClass, it.getBytes("data")).also { record ->
+                    record.recordSequence = RecordSequence(ValueNumber(it.getInt("sequence")))
                     record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }
             }
@@ -62,8 +68,8 @@ class RecordTransactionSqlite<ID : ValueObjectId, RECORD : Record<ID>, OBJ : Dom
                 set("entityId", id)
             }
             map {
-                json.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
-                    record.recordSequence = RecordSequence(it.getInt("sequence"))
+                hon.decompressAndRead(recordClass, it.getBytes("data")).also { record ->
+                    record.recordSequence = RecordSequence(ValueNumber(it.getInt("sequence")))
                     record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }
             }
@@ -88,11 +94,11 @@ class RecordTransactionSqlite<ID : ValueObjectId, RECORD : Record<ID>, OBJ : Dom
         ) {
             query {
                 set("entityId", id)
-                set("sequence", sequence.value)
+                set("sequence", sequence.intValue)
             }
             map {
-                json.decompressAndDeserialize(recordClass, it.getBytes("data")).also { record ->
-                    record.recordSequence = RecordSequence(it.getInt("sequence"))
+                hon.decompressAndRead(recordClass, it.getBytes("data")).also { record ->
+                    record.recordSequence = RecordSequence(ValueNumber(it.getInt("sequence")))
                     record.recordedAt = RecordedAt(it.getInstant("timestamp"))
                 }
             }

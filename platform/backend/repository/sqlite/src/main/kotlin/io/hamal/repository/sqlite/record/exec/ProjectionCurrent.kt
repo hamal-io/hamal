@@ -1,14 +1,15 @@
 package io.hamal.repository.sqlite.record.exec
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.ExecId
-import io.hamal.lib.domain.vo.FuncId
+import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Exec
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import io.hamal.repository.record.exec.ExecRecord
-import io.hamal.repository.record.json
+import io.hamal.repository.sqlite.hon
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
@@ -28,7 +29,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
                 set("id", execId)
             }
             map { rs ->
-                json.decompressAndDeserialize(Exec::class, rs.getBytes("data"))
+                hon.decompressAndRead(Exec::class, rs.getBytes("data"))
             }
         }
     }
@@ -55,7 +56,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
                 set("limit", query.limit)
             }
             map { rs ->
-                json.decompressAndDeserialize(Exec::class, rs.getBytes("data"))
+                hon.decompressAndRead(Exec::class, rs.getBytes("data"))
             }
         }
     }
@@ -99,11 +100,11 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
             """.trimIndent()
         ) {
             set("id", obj.id)
-            set("status", obj.status.value)
+            set("status", obj.status)
             set("namespaceId", obj.namespaceId)
             set("workspaceId", obj.workspaceId)
             set("funcId", obj.correlation?.funcId ?: FuncId(0))
-            set("data", json.serializeAndCompress(obj))
+            set("data", hon.writeAndCompress(obj))
         }
     }
 
@@ -113,9 +114,9 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
                  status         INTEGER NOT NULL,
-                 workspace_id       INTEGER NOT NULL,
+                 workspace_id   INTEGER NOT NULL,
                  func_id        INTEGER NOT NULL,
-                 namespace_id        INTEGER NOT NULL,
+                 namespace_id   INTEGER NOT NULL,
                  data           BLOB NOT NULL,
                  PRIMARY KEY    (id)
             );
@@ -131,7 +132,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
         return if (execIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${execIds.joinToString(",") { "${it.value.value}" }})"
+            "AND id IN (${execIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -139,7 +140,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
         return if (workspaceIds.isEmpty()) {
             ""
         } else {
-            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -147,7 +148,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
         return if (funcIds.isEmpty()) {
             ""
         } else {
-            "AND func_id IN (${funcIds.joinToString(",") { "${it.value.value}" }})"
+            "AND func_id IN (${funcIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -155,7 +156,7 @@ internal object ProjectionCurrent : ProjectionSqlite<ExecId, ExecRecord, Exec> {
         return if (namespaceIds.isEmpty()) {
             ""
         } else {
-            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 }

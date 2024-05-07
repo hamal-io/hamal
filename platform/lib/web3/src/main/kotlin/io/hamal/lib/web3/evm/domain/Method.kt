@@ -4,7 +4,7 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonPrimitive
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.serialization.JsonAdapter
+import io.hamal.lib.common.serialization.AdapterJson
 import java.lang.reflect.Type
 
 
@@ -18,7 +18,7 @@ enum class EvmMethod(val value: String) {
         }
     }
 
-    object Adapter : JsonAdapter<EvmMethod> {
+    object Adapter : AdapterJson<EvmMethod> {
         override fun serialize(p0: EvmMethod, p1: Type?, p2: JsonSerializationContext?): JsonElement {
             return JsonPrimitive(p0.value)
         }
