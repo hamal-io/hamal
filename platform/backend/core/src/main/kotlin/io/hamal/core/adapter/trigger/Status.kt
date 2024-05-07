@@ -3,9 +3,10 @@ package io.hamal.core.adapter.trigger
 import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.TriggerStatusRequested
 import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.domain.vo.TriggerStatus
 import org.springframework.stereotype.Component
@@ -25,7 +26,7 @@ class TriggerSetStatusAdapter(
         return TriggerStatusRequested(
             requestId = generateDomainId(::RequestId),
             requestedBy = SecurityContext.currentAuthId,
-            requestStatus = RequestStatus.Submitted,
+            requestStatus = RequestStatus(Submitted),
             id = triggerId,
             status = triggerStatus
         ).also(requestEnqueue::invoke)

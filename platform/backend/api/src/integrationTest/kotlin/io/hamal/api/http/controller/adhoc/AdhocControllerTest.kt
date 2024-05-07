@@ -3,8 +3,8 @@ package io.hamal.api.http.controller.adhoc
 import io.hamal.api.http.controller.BaseControllerTest
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.CodeTypes.Lua54
-import io.hamal.lib.domain._enum.RequestStatus.Processing
-import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatuses.Processing
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
 import io.hamal.lib.domain.vo.ExecCode
 import io.hamal.lib.domain.vo.ExecId

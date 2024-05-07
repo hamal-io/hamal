@@ -3,10 +3,11 @@ package io.hamal.plugin.std.sys.topic
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.domain._enum.TopicType
+import io.hamal.lib.domain._enum.TopicTypes.Namespace
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.domain.vo.TopicType.Companion.TopicType
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
@@ -30,15 +31,15 @@ class TopicCreateFunction(
                     ?: ctx[NamespaceId::class],
                 ApiTopicCreateRequest(
                     name = TopicName(arg1.getString("name")),
-                    type = TopicType.Namespace
+                    type = TopicType(Namespace)
                 )
             )
 
             null to ctx.tableCreate(
                 "request_id" to ValueString(res.requestId.stringValue),
-                "request_status" to ValueString(res.requestStatus.name),
+                "request_status" to ValueString(res.requestStatus.stringValue),
                 "id" to ValueString(res.id.stringValue),
-                "type" to ValueString(res.type.name),
+                "type" to ValueString(res.type.stringValue),
                 "workspace_id" to ValueString(res.workspaceId.stringValue),
                 "namespace_id" to ValueString(res.namespaceId.stringValue)
             )

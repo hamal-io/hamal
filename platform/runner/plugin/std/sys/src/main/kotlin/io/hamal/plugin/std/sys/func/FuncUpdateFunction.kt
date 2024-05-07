@@ -34,7 +34,7 @@ class FuncUpdateFunction(
             )
             null to ctx.tableCreate(
                 "request_id" to res.requestId,
-                "request_status" to ValueString(res.requestStatus.name),
+                "request_status" to ValueString(res.requestStatus.stringValue),
                 "id" to ValueString(res.id.stringValue)
             )
 

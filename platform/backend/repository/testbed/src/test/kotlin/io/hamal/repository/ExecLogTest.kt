@@ -44,7 +44,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
                     assertThat(id, equalTo(ExecLogId(2)))
                     assertThat(execId, equalTo(ExecId(3)))
                     assertThat(workspaceId, equalTo(WorkspaceId(4)))
-                    assertThat(level.enumValue, equalTo(Info))
+                    assertThat(level, equalTo(Info))
                     assertThat(message, equalTo(ExecLogMessage("Some Message")))
                     assertThat(timestamp, equalTo(ExecLogTimestamp(Instant.ofEpochMilli(12345678))))
 
@@ -80,7 +80,7 @@ internal class ExecLogRepositoryTest : AbstractUnitTest() {
                     assertThat(id, equalTo(ExecLogId(2)))
                     assertThat(execId, equalTo(ExecId(3)))
                     assertThat(workspaceId, equalTo(WorkspaceId(4)))
-                    assertThat(level.enumValue, equalTo(Info))
+                    assertThat(level, equalTo(Info))
                     assertThat(message, equalTo(ExecLogMessage("Second Message")))
                     assertThat(timestamp, equalTo(ExecLogTimestamp(Instant.ofEpochMilli(12345678))))
 

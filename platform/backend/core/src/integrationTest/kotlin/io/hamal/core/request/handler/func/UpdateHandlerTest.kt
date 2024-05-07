@@ -4,7 +4,7 @@ import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.core.request.handler.NextCommandId
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueObject
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.FuncUpdateRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.CodeId
@@ -14,6 +14,7 @@ import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
 import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import io.hamal.repository.api.CodeCmdRepository
 import io.hamal.repository.api.FuncCmdRepository
 import io.hamal.repository.api.FuncCode
@@ -53,7 +54,7 @@ internal class FuncUpdateHandlerTest : BaseRequestHandlerTest() {
         FuncUpdateRequested(
             requestId = RequestId(500),
             requestedBy = AuthId(2),
-            requestStatus = RequestStatus.Submitted,
+            requestStatus = RequestStatus(Submitted),
             workspaceId = testWorkspace.id,
             id = FuncId(1),
             name = FuncName("Func-update"),

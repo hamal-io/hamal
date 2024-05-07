@@ -6,7 +6,7 @@ import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain._enum.ExecStates
 import io.hamal.lib.domain._enum.ExecStates.Completed
 import io.hamal.lib.domain._enum.ExecStates.Started
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.ExecCompleteRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.EventPayload
@@ -16,6 +16,7 @@ import io.hamal.lib.domain.vo.ExecResult
 import io.hamal.lib.domain.vo.ExecState
 import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
 import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import io.hamal.repository.api.Exec
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
@@ -68,7 +69,7 @@ internal class ExecCompleteHandlerTest : BaseRequestHandlerTest() {
         ExecCompleteRequested(
             requestId = RequestId(10),
             requestedBy = AuthId(20),
-            requestStatus = RequestStatus.Submitted,
+            requestStatus = RequestStatus(Submitted),
             id = ExecId(1234),
             statusCode = ExecStatusCode(200),
             result = ExecResult(ValueObject.builder().set("hamal", "rocks").build()),

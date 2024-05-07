@@ -4,7 +4,7 @@ import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueObject
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.RecipeUpdateRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.RecipeDescription.Companion.RecipeDescription
@@ -12,6 +12,7 @@ import io.hamal.lib.domain.vo.RecipeId.Companion.RecipeId
 import io.hamal.lib.domain.vo.RecipeInputs
 import io.hamal.lib.domain.vo.RecipeName.Companion.RecipeName
 import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import io.hamal.repository.api.RecipeCmdRepository
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
@@ -50,7 +51,7 @@ internal class RecipeUpdateHandlerTest : BaseRequestHandlerTest() {
         RecipeUpdateRequested(
             requestId = RequestId(2),
             requestedBy = AuthId(3),
-            requestStatus = RequestStatus.Submitted,
+            requestStatus = RequestStatus(Submitted),
             id = RecipeId(123),
             name = RecipeName("UpdatedRecipe"),
             inputs = RecipeInputs(ValueObject.builder().set("hamal", "updates").build()),

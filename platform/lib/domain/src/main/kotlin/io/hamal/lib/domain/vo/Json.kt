@@ -70,10 +70,12 @@ object SerdeModuleValueVariable : SerdeModuleGeneric() {
 
         this[FeedbackId::class] = SnowflakeId(::FeedbackId)
         this[FeedbackMessage::class] = String(::FeedbackMessage)
+        this[FeedbackMood::class] = Enum(::FeedbackMood)
 
         this[NamespaceId::class] = SnowflakeId(::NamespaceId)
         this[NamespaceTreeId::class] = SnowflakeId(::NamespaceTreeId)
         this[NamespaceName::class] = String(::NamespaceName)
+        this[NamespaceFeature::class] = Enum(::NamespaceFeature)
         this[NamespaceFeatures::class] = Object(::NamespaceFeatures)
 
 
@@ -94,6 +96,7 @@ object SerdeModuleValueVariable : SerdeModuleGeneric() {
 
         this[RequestId::class] = SnowflakeId(::RequestId)
         this[RequestClass::class] = String(::RequestClass)
+        this[RequestStatus::class] = Enum(::RequestStatus)
 
         this[RunnerId::class] = SnowflakeId(::RunnerId)
 
@@ -104,6 +107,7 @@ object SerdeModuleValueVariable : SerdeModuleGeneric() {
         this[TopicName::class] = String(::TopicName)
         this[TopicEventId::class] = SnowflakeId(::TopicEventId)
         this[TopicEventPayload::class] = Object(::TopicEventPayload)
+        this[TopicType::class] = Enum(::TopicType)
 
         this[TriggerId::class] = SnowflakeId(::TriggerId)
         this[TriggerDuration::class] = String(::TriggerDuration)

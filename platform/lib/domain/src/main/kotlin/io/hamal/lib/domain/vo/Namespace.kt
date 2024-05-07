@@ -2,8 +2,8 @@ package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.*
-import io.hamal.lib.domain._enum.NamespaceFeature
-import io.hamal.lib.domain._enum.NamespaceFeature.*
+import io.hamal.lib.domain._enum.Features
+import io.hamal.lib.domain._enum.Features.*
 
 class NamespaceId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
     companion object {
@@ -22,32 +22,37 @@ class NamespaceName(override val value: ValueString) : ValueVariableString() {
     }
 }
 
+class NamespaceFeature(override val value: ValueEnum) : ValueVariableEnum<Features>(Features::class) {
+    companion object {
+        fun NamespaceFeature(value: Enum<Features>) = NamespaceFeature(ValueEnum(value.name))
+    }
+}
 
 class NamespaceFeatures(override var value: ValueObject = ValueObject.empty) : ValueVariableObject() {
 
     init {
-        value.values.forEach { (key, value) ->
+        value.values.forEach { (feature, value) ->
             require(
-                NamespaceFeature.entries.any { validFeatures ->
-                    validFeatures.name == key
-                }
-            ) { IllegalArgumentException("$key is not a valid feature.") }
+                Features.entries.any { validFeatures -> validFeatures.name.lowercase() == feature }
+            ) { IllegalArgumentException("$feature is not a valid feature") }
         }
     }
 
-    fun hasFeature(feature: NamespaceFeature): Boolean {
-        return value.values.map { it.key }.contains(feature.name)
+    fun isActive(feature: Features): Boolean {
+        return value.findBoolean(feature.name.lowercase()) == ValueTrue
     }
 
     companion object {
         val default = NamespaceFeatures(
             ValueObject.builder()
-                .set(schedule.name, true)
-                .set(topic.name, false)
-                .set(webhook.name, false)
-                .set(endpoint.name, false)
+                .set(Schedule.name.lowercase(), true)
+                .set(Topic.name.lowercase(), false)
+                .set(Webhook.name.lowercase(), false)
+                .set(Endpoint.name.lowercase(), false)
                 .build()
         )
     }
 }
+
+
 

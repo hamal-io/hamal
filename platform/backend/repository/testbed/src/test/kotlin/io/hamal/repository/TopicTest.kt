@@ -5,12 +5,13 @@ import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.Limit.Companion.Limit
-import io.hamal.lib.domain._enum.TopicType
+import io.hamal.lib.domain._enum.TopicTypes.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.LogTopicId.Companion.LogTopicId
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
+import io.hamal.lib.domain.vo.TopicType.Companion.TopicType
 import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.repository.api.TopicCmdRepository.TopicCreateCmd
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
@@ -23,6 +24,7 @@ import org.junit.jupiter.api.TestFactory
 import org.junit.jupiter.api.assertThrows
 import kotlin.math.abs
 import kotlin.random.Random
+
 
 internal class TopicRepositoryTest : AbstractUnitTest() {
 
@@ -39,7 +41,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
                     workspaceId = WorkspaceId(4),
                     namespaceId = NamespaceId(5),
                     name = TopicName("topic-name"),
-                    type = TopicType.Workspace
+                    type = TopicType(Workspace)
                 )
             )
 
@@ -49,7 +51,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
                 assertThat(workspaceId, equalTo(WorkspaceId(4)))
                 assertThat(namespaceId, equalTo(NamespaceId(5)))
                 assertThat(name, equalTo(TopicName("topic-name")))
-                assertThat(type, equalTo(TopicType.Workspace))
+                assertThat(type, equalTo(Workspace))
             }
 
             verifyCount(1)
@@ -74,7 +76,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
                         workspaceId = WorkspaceId(3),
                         namespaceId = NamespaceId(5),
                         name = TopicName("topic-name"),
-                        type = TopicType.Public
+                        type = TopicType(Public)
                     )
                 )
             }.also { exception ->
@@ -102,7 +104,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
                     workspaceId = WorkspaceId(14),
                     namespaceId = NamespaceId(15),
                     name = TopicName("first-topic-name"),
-                    type = TopicType.Public
+                    type = TopicType(Public)
                 )
             )
 
@@ -120,7 +122,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
                     logTopicId = LogTopicId(4),
                     namespaceId = NamespaceId(5),
                     name = TopicName("first-topic"),
-                    type = TopicType.Internal
+                    type = TopicType(Internal)
                 )
 
                 val result = create(
@@ -131,7 +133,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
                         logTopicId = LogTopicId(4444),
                         namespaceId = NamespaceId(5555),
                         name = TopicName("second-topic"),
-                        type = TopicType.Workspace
+                        type = TopicType(Workspace)
                     )
                 )
 
@@ -141,7 +143,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
                     assertThat(logTopicId, equalTo(LogTopicId(4)))
                     assertThat(namespaceId, equalTo(NamespaceId(5)))
                     assertThat(name, equalTo(TopicName("first-topic")))
-                    assertThat(type, equalTo(TopicType.Internal))
+                    assertThat(type, equalTo(Internal))
                 }
 
                 verifyCount(1)
@@ -456,7 +458,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
             setup()
 
             val query = TopicQuery(
-                types = listOf(TopicType.Internal),
+                types = listOf(TopicType(Internal)),
                 limit = Limit.all
             )
 
@@ -541,7 +543,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
                 name = TopicName("topic-four"),
                 logTopicId = LogTopicId(34),
                 namespaceId = NamespaceId(35),
-                type = TopicType.Internal
+                type = TopicType(Internal)
             )
         }
     }
@@ -552,7 +554,7 @@ internal class TopicRepositoryTest : AbstractUnitTest() {
         logTopicId: LogTopicId = LogTopicId(3),
         workspaceId: WorkspaceId = WorkspaceId(4),
         namespaceId: NamespaceId = NamespaceId(5),
-        type: TopicType = TopicType.Namespace,
+        type: TopicType = TopicType(Namespace),
         cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
     ) = create(
         TopicCreateCmd(

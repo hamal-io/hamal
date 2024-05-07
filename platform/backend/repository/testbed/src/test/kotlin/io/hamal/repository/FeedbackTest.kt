@@ -2,11 +2,12 @@ package io.hamal.repository
 
 import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.common.domain.Limit.Companion.Limit
-import io.hamal.lib.domain._enum.FeedbackMood
+import io.hamal.lib.domain._enum.FeedbackMoods.Angry
 import io.hamal.lib.domain.vo.AccountId.Companion.AccountId
 import io.hamal.lib.domain.vo.FeedbackId
 import io.hamal.lib.domain.vo.FeedbackId.Companion.FeedbackId
 import io.hamal.lib.domain.vo.FeedbackMessage.Companion.FeedbackMessage
+import io.hamal.lib.domain.vo.FeedbackMood.Companion.FeedbackMood
 import io.hamal.repository.api.Feedback
 import io.hamal.repository.api.FeedbackCmdRepository.CreateCmd
 import io.hamal.repository.api.FeedbackQueryRepository.FeedbackQuery
@@ -30,7 +31,7 @@ internal class FeedbackTest : AbstractUnitTest() {
                 CreateCmd(
                     id = CmdGen(),
                     feedbackId = FeedbackId(1),
-                    mood = FeedbackMood.Angry,
+                    mood = FeedbackMood(Angry),
                     message = FeedbackMessage("Please let me pay for this"),
                     accountId = AccountId(2)
                 )
@@ -38,7 +39,7 @@ internal class FeedbackTest : AbstractUnitTest() {
 
             with(result) {
                 assertThat(id, equalTo(FeedbackId(1)))
-                assertThat(mood, equalTo(FeedbackMood.Angry))
+                assertThat(mood, equalTo(Angry))
                 assertThat(message, equalTo(FeedbackMessage("Please let me pay for this")))
                 assertThat(accountId, equalTo(AccountId(2)))
             }
@@ -158,7 +159,7 @@ internal class FeedbackTest : AbstractUnitTest() {
             CreateCmd(
                 id = CmdGen(),
                 feedbackId = feedbackId,
-                mood = FeedbackMood.Angry,
+                mood = FeedbackMood(Angry),
                 message = FeedbackMessage("feedback-message"),
                 accountId = AccountId(2)
             )
@@ -168,7 +169,7 @@ internal class FeedbackTest : AbstractUnitTest() {
 
     private fun verifyFeedback(feedback: Feedback) {
         with(feedback) {
-            assertThat(mood, equalTo(FeedbackMood.Angry))
+            assertThat(mood, equalTo(Angry))
             assertThat(message, equalTo(FeedbackMessage("feedback-message")))
             assertThat(accountId, equalTo(AccountId(2)))
         }
