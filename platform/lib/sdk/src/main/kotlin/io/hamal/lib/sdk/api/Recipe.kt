@@ -1,7 +1,6 @@
 package io.hamal.lib.sdk.api
 
 import io.hamal.lib.common.value.ValueCode
-import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.RecipeCreateRequest
 import io.hamal.lib.domain.request.RecipeUpdateRequest
 import io.hamal.lib.domain.vo.*

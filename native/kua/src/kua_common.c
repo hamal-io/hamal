@@ -30,7 +30,7 @@ typename(enum type type) {
         case DECIMAL_TYPE:
             return "decimal";
         default:
-            throw_illegal_state("typename not implemented");
+            throw_error_invalid_state("typename not implemented");
     }
 }
 

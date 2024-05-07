@@ -5,7 +5,6 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.CodeType
-import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.ExecCompleteRequest
 import io.hamal.lib.domain.request.ExecFailRequest
 import io.hamal.lib.domain.vo.*

@@ -3,10 +3,10 @@ package io.hamal.lib.domain.request
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.AuthId
-import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.RequestStatus
+import io.hamal.lib.domain.vo.WorkspaceId
 
 interface StateSetRequest {
     val correlation: Correlation

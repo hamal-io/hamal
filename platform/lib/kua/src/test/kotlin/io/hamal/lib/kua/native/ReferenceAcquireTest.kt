@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.native
 
+import io.hamal.lib.kua.ErrorIllegalArgument
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -26,7 +27,7 @@ internal class ReferenceAcquireTest : NativeBaseTest() {
 
     @Test
     fun `Tries to acquire reference on empty stack`() {
-        assertThrows<IllegalArgumentException> { testInstance.referenceAcquire() }
+        assertThrows<ErrorIllegalArgument> { testInstance.referenceAcquire() }
             .also { exception -> assertThat(exception.message, equalTo("Prevented stack underflow")) }
     }
 

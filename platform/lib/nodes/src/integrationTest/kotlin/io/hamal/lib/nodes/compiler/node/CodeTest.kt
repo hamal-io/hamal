@@ -19,7 +19,7 @@ internal class CodeTest : AbstractIntegrationTest() {
 
     @Test
     fun `Code invoked with object`() {
-        createTestRunner().run(
+        runTest(
             unitOfWork(
                 initValue = ValueObject.builder().set("address", "0x001").build(),
                 graph = NodesGraph(
@@ -41,7 +41,6 @@ internal class CodeTest : AbstractIntegrationTest() {
                 )
             )
         )
-
 
         assertThat(testContext.captorOne.resultString, equalTo(ValueString("0x001")))
     }

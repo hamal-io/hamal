@@ -7,7 +7,7 @@ import io.hamal.lib.nodes.TemplateNode
 import io.hamal.lib.nodes.compiler.node.NodeCompiler
 
 
-interface RunnerExtensionFactory {
+fun interface RunnerExtensionFactory {
     fun create(sandbox: Sandbox): RunnerExtension
 }
 

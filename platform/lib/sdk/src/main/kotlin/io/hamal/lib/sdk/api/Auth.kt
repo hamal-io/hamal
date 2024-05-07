@@ -1,6 +1,5 @@
 package io.hamal.lib.sdk.api
 
-import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.AuthChallengeMetaMaskRequest
 import io.hamal.lib.domain.request.AuthLogInEmailRequest
 import io.hamal.lib.domain.request.AuthLogInMetaMaskRequest

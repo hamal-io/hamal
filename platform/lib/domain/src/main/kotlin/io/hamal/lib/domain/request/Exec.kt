@@ -1,7 +1,6 @@
 package io.hamal.lib.domain.request
 
 import io.hamal.lib.domain.EventToSubmit
-import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.*
 
 data class ExecInvokeRequested(

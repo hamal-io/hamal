@@ -1,5 +1,7 @@
 package io.hamal.lib.kua.native
 
+import io.hamal.lib.kua.ErrorIllegalArgument
+import io.hamal.lib.kua.ErrorIllegalState
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -35,7 +37,7 @@ internal class TableFieldGetTest : NativeBaseTest() {
     @Test
     fun `Tries to get a value but not a table`() {
         testInstance.numberPush(2.34)
-        assertThrows<IllegalStateException> { testInstance.tableFieldGet(1, "key") }
+        assertThrows<ErrorIllegalState> { testInstance.tableFieldGet(1, "key") }
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was number")) }
     }
 
@@ -47,7 +49,7 @@ internal class TableFieldGetTest : NativeBaseTest() {
 
         repeat(999998) { testInstance.booleanPush(true) }
 
-        assertThrows<IllegalArgumentException> { testInstance.tableFieldGet(1, "key") }
+        assertThrows<ErrorIllegalArgument> { testInstance.tableFieldGet(1, "key") }
             .also { exception -> assertThat(exception.message, equalTo("Prevented stack overflow")) }
     }
 }

@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.native
 
+import io.hamal.lib.kua.ErrorIllegalState
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -62,7 +63,7 @@ internal class TableRawSetTest : NativeBaseTest() {
     @Test
     fun `Tries to set raw value but not a table`() {
         testInstance.numberPush(2.34)
-        assertThrows<IllegalStateException> {
+        assertThrows<ErrorIllegalState> {
             testInstance.stringPush("key")
             testInstance.stringPush("value")
             testInstance.tableRawSet(1)

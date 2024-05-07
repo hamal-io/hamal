@@ -2,6 +2,7 @@ package io.hamal.lib.kua.state
 
 import io.hamal.lib.common.value.ValueDecimal
 import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.kua.ErrorIllegalState
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.decimalGet
 import org.hamcrest.MatcherAssert.assertThat
@@ -36,7 +37,7 @@ internal class DecimalGetTest : StateBaseTest() {
     @TestFactory
     fun `Not a decimal`() = runTest { testInstance ->
         testInstance.stringPush(ValueString("Not  a boolean"))
-        assertThrows<IllegalStateException> {
+        assertThrows<ErrorIllegalState> {
             testInstance.decimalGet(1)
         }.also { exception ->
             assertThat(

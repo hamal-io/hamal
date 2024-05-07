@@ -53,12 +53,8 @@ setup_references(JNIEnv* env)
 	//FIXME throw error / panic
 
 	//@formatter:off
-    current_jni_ref.illegal_argument_exception_class = load_class(env, "java/lang/IllegalArgumentException");
-    current_jni_ref.illegal_state_exception_class = load_class(env, "java/lang/IllegalStateException");
-    current_jni_ref.error_class = load_class(env, "java/lang/Error");
-
-    current_jni_ref.error_extension_class = load_class(env, "io/hamal/lib/kua/ErrorExtension");
-    current_jni_ref.error_extension_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.error_extension_class ,"<init>","(Ljava/lang/Throwable;)V");
+    current_jni_ref.error_plugin_class = load_class(env, "io/hamal/lib/kua/ErrorPlugin");
+    current_jni_ref.error_plugin_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.error_plugin_class ,"<init>","(Ljava/lang/Throwable;)V");
 
     current_jni_ref.error_decimal_class = load_class(env, "io/hamal/lib/kua/ErrorDecimal");
     current_jni_ref.error_decimal_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.error_decimal_class ,"<init>","(Ljava/lang/String;)V");
@@ -72,8 +68,8 @@ setup_references(JNIEnv* env)
 	current_jni_ref.error_illegal_argument_class = load_class(env, "io/hamal/lib/kua/ErrorIllegalArgument");
 	current_jni_ref.error_illegal_argument_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.error_illegal_argument_class ,"<init>","(Ljava/lang/String;)V");
 
-	current_jni_ref.error_invalid_state_class = load_class(env, "io/hamal/lib/kua/ErrorInvalidState");
-	current_jni_ref.error_invalid_state_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.error_invalid_state_class ,"<init>","(Ljava/lang/String;)V");
+	current_jni_ref.error_illegal_state_class = load_class(env, "io/hamal/lib/kua/ErrorIllegalState");
+	current_jni_ref.error_illegal_state_ctor_id =  (*env)->GetMethodID(env,  current_jni_ref.error_illegal_state_class ,"<init>","(Ljava/lang/String;)V");
 
     current_jni_ref.error_assertion_class = load_class(env, "io/hamal/lib/kua/ErrorAssertion");
 
@@ -146,10 +142,8 @@ init_connection(JNIEnv* env, jobject K)
 
 static void unload_jni_ref(JNIEnv* env)
 {
-	(*env)->DeleteGlobalRef(env, current_jni_ref.illegal_argument_exception_class);
-	(*env)->DeleteGlobalRef(env, current_jni_ref.illegal_state_exception_class);
-	(*env)->DeleteGlobalRef(env, current_jni_ref.error_class);
-	(*env)->DeleteGlobalRef(env, current_jni_ref.error_extension_class);
+	// FIXME
+	(*env)->DeleteGlobalRef(env, current_jni_ref.error_plugin_class);
 	(*env)->DeleteGlobalRef(env, current_jni_ref.kua_func_class);
 }
 

@@ -32,7 +32,7 @@ class ExtensionCreateFunction(
 
             null to ctx.tableCreate(
                 "request_id" to res.requestId,
-                "request_status" to ValueString(res.requestStatus.name),
+                "request_status" to ValueString(res.requestStatus.stringValue),
                 "id" to res.id,
                 "workspace_id" to res.workspaceId
             )

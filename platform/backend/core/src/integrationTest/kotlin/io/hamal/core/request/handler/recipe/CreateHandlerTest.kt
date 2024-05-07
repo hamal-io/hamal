@@ -3,7 +3,7 @@ package io.hamal.core.request.handler.recipe
 import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueObject
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.RecipeCreateRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.RecipeDescription.Companion.RecipeDescription
@@ -11,6 +11,7 @@ import io.hamal.lib.domain.vo.RecipeId.Companion.RecipeId
 import io.hamal.lib.domain.vo.RecipeInputs
 import io.hamal.lib.domain.vo.RecipeName.Companion.RecipeName
 import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -35,7 +36,7 @@ internal class RecipeCreateHandlerTest : BaseRequestHandlerTest() {
         RecipeCreateRequested(
             requestId = RequestId(1),
             requestedBy = AuthId(2),
-            requestStatus = RequestStatus.Submitted,
+            requestStatus = RequestStatus(Submitted),
             id = RecipeId(123),
             name = RecipeName("TestRecipe"),
             inputs = RecipeInputs(ValueObject.builder().set("hamal", "rocks").build()),
