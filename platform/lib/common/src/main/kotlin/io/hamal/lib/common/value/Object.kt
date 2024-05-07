@@ -12,6 +12,9 @@ data class ValueObject(val values: LinkedHashMap<String, ValueSerializable>) : V
 
     operator fun get(identifier: String): Value = values[identifier] ?: ValueNil
 
+    fun findBoolean(identifier: String): ValueBoolean? = values[identifier]?.let { it as ValueBoolean }
+    fun getBoolean(identifier: String): ValueBoolean = findBoolean(identifier) ?: throw NoSuchElementException(identifier)
+
     fun findNumber(identifier: String): ValueNumber? = values[identifier]?.let { it as ValueNumber }
     fun getNumber(identifier: String): ValueNumber = findNumber(identifier) ?: throw NoSuchElementException(identifier)
 

@@ -7,7 +7,7 @@ import io.hamal.lib.domain._enum.CodeType
 import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
-import io.hamal.lib.domain.vo.NamespaceFeaturesMap
+import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.lib.http.HttpErrorResponse
@@ -61,7 +61,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
                 namespaceId = NamespaceId(2345),
                 workspaceId = testWorkspace.id,
                 name = NamespaceName("hamal::namespace"),
-                features = NamespaceFeaturesMap.default
+                features = NamespaceFeatures.default
             )
         )
 

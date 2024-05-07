@@ -6,7 +6,7 @@ import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain._enum.RequestStatus.Submitted
 import io.hamal.lib.domain.request.NamespaceAppendRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
-import io.hamal.lib.domain.vo.NamespaceFeaturesMap
+import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
@@ -36,7 +36,7 @@ internal class NamespaceAppendHandlerTest : BaseRequestHandlerTest() {
                 namespaceId = NamespaceId.root,
                 name = NamespaceName("root"),
                 workspaceId = testWorkspace.id,
-                features = NamespaceFeaturesMap.default
+                features = NamespaceFeatures.default
             )
         )
         namespaceTreeRepository.create(
@@ -63,13 +63,13 @@ internal class NamespaceAppendHandlerTest : BaseRequestHandlerTest() {
             with(namespaces[0]) {
                 assertThat(id, equalTo(NamespaceId(12345)))
                 assertThat(name, equalTo(NamespaceName("awesome-namespace")))
-                assertThat(features, equalTo(NamespaceFeaturesMap.default))
+                assertThat(features, equalTo(NamespaceFeatures.default))
             }
 
             with(namespaces[1]) {
                 assertThat(id, equalTo(NamespaceId.root))
                 assertThat(name, equalTo(NamespaceName("root")))
-                assertThat(features, equalTo(NamespaceFeaturesMap.default))
+                assertThat(features, equalTo(NamespaceFeatures.default))
             }
         }
     }

@@ -3,7 +3,7 @@ package io.hamal.repository.api
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.domain.vo.NamespaceFeaturesMap
+import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName
@@ -15,7 +15,7 @@ data class Namespace(
     override val updatedAt: UpdatedAt,
     override val workspaceId: WorkspaceId,
     val name: NamespaceName,
-    val features: NamespaceFeaturesMap
+    val features: NamespaceFeatures
 ) : DomainObject<NamespaceId>, HasNamespaceId, HasWorkspaceId {
     override val namespaceId: NamespaceId get() = id
 }
@@ -33,13 +33,13 @@ interface NamespaceCmdRepository : CmdRepository {
         val namespaceId: NamespaceId,
         val workspaceId: WorkspaceId,
         val name: NamespaceName,
-        val features: NamespaceFeaturesMap
+        val features: NamespaceFeatures
     )
 
     data class UpdateCmd(
         val id: CmdId,
         val name: NamespaceName? = null,
-        val features: NamespaceFeaturesMap? = null
+        val features: NamespaceFeatures? = null
     )
 }
 

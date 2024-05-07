@@ -1,9 +1,8 @@
 package io.hamal.api.http.controller.namespace
 
 import io.hamal.lib.common.value.ValueObject
-import io.hamal.lib.domain._enum.NamespaceFeatures.*
-import io.hamal.lib.domain.vo.NamespaceFeature.Companion.NamespaceFeature
-import io.hamal.lib.domain.vo.NamespaceFeaturesMap
+import io.hamal.lib.domain._enum.Features.*
+import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
@@ -22,9 +21,7 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
     @Test
     fun `Tries to update namespace which does not exists`() {
         val getNamespaceResponse = httpTemplate.patch("/v1/namespaces/33333333")
-            .body(
-                ApiNamespaceUpdateRequest(NamespaceName("update"))
-            )
+            .body(ApiNamespaceUpdateRequest(NamespaceName("update")))
             .execute()
 
         assertThat(getNamespaceResponse.statusCode, equalTo(NotFound))
@@ -36,46 +33,27 @@ internal class NamespaceUpdateControllerTest : NamespaceBaseControllerTest() {
 
     @Test
     fun `Updates namespace name and features`() {
-        val updatedFeatures = NamespaceFeaturesMap(
+        val updatedFeatures = NamespaceFeatures(
             ValueObject.builder()
-                .set(NamespaceFeature(schedule).stringValue, 0)
-                .set(webhook.name, 0)
+                .set(Endpoint.name.lowercase(), true)
+                .set(Schedule.name.lowercase(), false)
+                .set(Webhook.name.lowercase(), false)
                 .build()
         )
 
-        val namespaceId = awaitCompleted(
-            appendNamespace(
-                ApiNamespaceAppendRequest(NamespaceName("created-name"))
-            )
-        ).id
+        val namespaceId = awaitCompleted(appendNamespace(ApiNamespaceAppendRequest(NamespaceName("created-name"), NamespaceFeatures.default))).id
 
-
-
-        awaitCompleted(
-            updateNamespace(
-                namespaceId,
-                ApiNamespaceUpdateRequest(
-                    features = updatedFeatures
-                )
-            )
-        )
-
-        awaitCompleted(
-            updateNamespace(
-                namespaceId,
-                ApiNamespaceUpdateRequest(
-                    name = NamespaceName("updated-name")
-                )
-            )
-        )
+        awaitCompleted(updateNamespace(namespaceId, ApiNamespaceUpdateRequest(
+            name = NamespaceName("updated-name"),
+            features = updatedFeatures
+        )))
 
         with(getNamespace(namespaceId)) {
             assertThat(id, equalTo(namespaceId))
             assertThat(name, equalTo(NamespaceName("updated-name")))
-            assertTrue(features.hasFeature(NamespaceFeature(schedule)))
-            assertTrue(features.hasFeature(NamespaceFeature(webhook)))
-            assertFalse(features.hasFeature(NamespaceFeature(endpoint)))
-            assertFalse(features.hasFeature(NamespaceFeature(topic)))
+            assertTrue(features.isActive(Endpoint))
+            assertFalse(features.isActive(Schedule))
+            assertFalse(features.isActive(Webhook))
         }
     }
 }

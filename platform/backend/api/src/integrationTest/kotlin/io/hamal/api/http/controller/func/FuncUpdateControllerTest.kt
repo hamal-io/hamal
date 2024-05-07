@@ -8,7 +8,7 @@ import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
-import io.hamal.lib.domain.vo.NamespaceFeaturesMap
+import io.hamal.lib.domain.vo.NamespaceFeatures
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.lib.http.HttpErrorResponse
@@ -51,7 +51,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                 namespaceId = NamespaceId(2),
                 workspaceId = testWorkspace.id,
                 name = NamespaceName("createdNamespace"),
-                features = NamespaceFeaturesMap.default
+                features = NamespaceFeatures.default
             )
         )
 
@@ -214,7 +214,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                 namespaceId = NamespaceId(2),
                 workspaceId = testWorkspace.id,
                 name = NamespaceName("createdNamespace"),
-                features = NamespaceFeaturesMap.default
+                features = NamespaceFeatures.default
             )
         )
 
