@@ -35,7 +35,7 @@ internal class AdhocControllerTest : BaseControllerTest() {
         require(response is HttpSuccessResponse) { "request was not successful" }
 
         val result = awaitCompleted(response.result(ApiExecInvokeRequested::class))
-        assertThat(result.requestStatus.enumValue, oneOf(Submitted, Processing))
+        assertThat(result.requestStatus, oneOf(Submitted, Processing))
 
         verifyReqCompleted(result.requestId)
         verifyExecQueued(result.id)

@@ -55,7 +55,7 @@ class RequestMemoryRepository : RequestRepository {
     override fun complete(reqId: RequestId) {
         lock.withLock {
             val req = get(reqId)
-            check(req.requestStatus.enumValue == Processing) { "Request not processing" }
+            check(req.requestStatus.equals(Processing)) { "Request not processing" }
             store[req.requestId] = req.apply {
                 statusField(this::class).also { field -> field.set(this, RequestStatus(Completed)) }
             }
@@ -65,7 +65,7 @@ class RequestMemoryRepository : RequestRepository {
     override fun fail(reqId: RequestId) {
         lock.withLock {
             val req = get(reqId)
-            check(req.requestStatus.enumValue == Processing) { "Request not processing" }
+            check(req.requestStatus.equals(Processing)) { "Request not processing" }
             store[req.requestId] = req.apply {
                 statusField(this::class).also { field -> field.set(this, RequestStatus(Failed)) }
             }

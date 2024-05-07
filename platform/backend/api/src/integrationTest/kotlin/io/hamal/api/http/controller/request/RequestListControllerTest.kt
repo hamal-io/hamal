@@ -27,7 +27,7 @@ internal class RequestListControllerTest : RequestBaseControllerTest() {
 
             with(requests.first()) {
                 assertThat(requestId, equalTo(adhocResponse.requestId))
-                assertThat(requestStatus.enumValue, equalTo(Completed))
+                assertThat(requestStatus, equalTo(Completed))
                 assertThat(this, instanceOf(ApiExecInvokeRequested::class.java))
             }
         }

@@ -46,10 +46,10 @@ internal abstract class BaseControllerTest : BaseTest() {
     fun awaitCompleted(id: RequestId) {
         while (true) {
             requestQueryRepository.find(id)?.let {
-                if (it.requestStatus.enumValue == Completed) {
+                if (it.requestStatus.equals(Completed)) {
                     return
                 }
-                if (it.requestStatus.enumValue == Failed) {
+                if (it.requestStatus.equals(Failed)) {
                     throw IllegalStateException("expected $id to complete but failed")
                 }
             }
@@ -73,11 +73,11 @@ internal abstract class BaseControllerTest : BaseTest() {
     fun awaitFailed(id: RequestId) {
         while (true) {
             requestQueryRepository.find(id)?.let {
-                if (it.requestStatus.enumValue == Failed) {
+                if (it.requestStatus.equals(Failed)) {
                     return
                 }
 
-                if (it.requestStatus.enumValue == Completed) {
+                if (it.requestStatus.equals(Completed)) {
                     throw IllegalStateException("expected $id to fail but completed")
                 }
             }

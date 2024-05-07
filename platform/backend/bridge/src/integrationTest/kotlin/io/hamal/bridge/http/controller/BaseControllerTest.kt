@@ -8,8 +8,9 @@ import io.hamal.lib.domain.vo.RequestId
 import io.hamal.lib.http.HttpTemplateImpl
 import io.hamal.lib.sdk.api.ApiRequested
 import io.hamal.repository.api.RequestQueryRepository.RequestQuery
-import org.hamcrest.MatcherAssert
-import org.hamcrest.Matchers
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.empty
+import org.hamcrest.Matchers.equalTo
 import kotlin.reflect.KClass
 
 internal abstract class BaseControllerTest : BaseTest() {
@@ -25,21 +26,15 @@ internal abstract class BaseControllerTest : BaseTest() {
 
     fun verifyReqCompleted(id: RequestId) {
         with(requestQueryRepository.find(id)!!) {
-            MatcherAssert.assertThat(id, Matchers.equalTo(id))
-            MatcherAssert.assertThat(
-                requestStatus.enumValue,
-                Matchers.equalTo(Completed)
-            )
+            assertThat(id, equalTo(id))
+            assertThat(requestStatus, equalTo(Completed))
         }
     }
 
     fun verifyReqFailed(id: RequestId) {
         with(requestQueryRepository.find(id)!!) {
-            MatcherAssert.assertThat(id, Matchers.equalTo(id))
-            MatcherAssert.assertThat(
-                requestStatus.enumValue,
-                Matchers.equalTo(Failed)
-            )
+            assertThat(id, equalTo(id))
+            assertThat(requestStatus, equalTo(Failed))
         }
     }
 
@@ -47,10 +42,10 @@ internal abstract class BaseControllerTest : BaseTest() {
     fun awaitCompleted(id: RequestId) {
         while (true) {
             requestQueryRepository.find(id)?.let {
-                if (it.requestStatus.enumValue == Completed) {
+                if (it.requestStatus.equals(Completed)) {
                     return
                 }
-                if (it.requestStatus.enumValue == Failed) {
+                if (it.requestStatus.equals(Failed)) {
                     throw IllegalStateException("expected $id to complete but failed")
                 }
             }
@@ -74,11 +69,11 @@ internal abstract class BaseControllerTest : BaseTest() {
     fun awaitFailed(id: RequestId) {
         while (true) {
             requestQueryRepository.find(id)?.let {
-                if (it.requestStatus.enumValue == Failed) {
+                if (it.requestStatus.equals(Failed)) {
                     return
                 }
 
-                if (it.requestStatus.enumValue == Completed) {
+                if (it.requestStatus.equals(Completed)) {
                     throw IllegalStateException("expected $id to fail but completed")
                 }
             }
@@ -98,12 +93,12 @@ internal abstract class BaseControllerTest : BaseTest() {
 
     fun verifyNoRequests() {
         val requests = requestQueryRepository.list(RequestQuery())
-        MatcherAssert.assertThat(requests, Matchers.empty())
+        assertThat(requests, empty())
     }
 
     fun <SUBMITTED_REQ : Requested> verifyNoRequests(clazz: KClass<SUBMITTED_REQ>) {
         val requests = requestQueryRepository.list(RequestQuery()).filterIsInstance(clazz.java)
-        MatcherAssert.assertThat(requests, Matchers.empty())
+        assertThat(requests, empty())
     }
 
 }

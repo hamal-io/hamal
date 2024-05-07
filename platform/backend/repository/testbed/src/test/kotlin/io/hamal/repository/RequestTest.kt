@@ -94,7 +94,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
             complete(RequestId(234))
 
             with(get(RequestId(234))) {
-                assertThat(requestStatus.enumValue, equalTo(Completed))
+                assertThat(requestStatus, equalTo(Completed))
             }
 
             verifyCount(1)
@@ -112,7 +112,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
                     assertThat(exception.message, equalTo("Request not processing"))
 
                     with(get(RequestId(234))) {
-                        assertThat(requestStatus.enumValue, equalTo(reqStatus))
+                        assertThat(requestStatus, equalTo(reqStatus))
                     }
                 }
             }
@@ -138,7 +138,7 @@ internal class RequestRepositoryTest : AbstractUnitTest() {
             fail(RequestId(234))
 
             with(get(RequestId(234))) {
-                assertThat(requestStatus.enumValue, equalTo(Failed))
+                assertThat(requestStatus, equalTo(Failed))
             }
 
             verifyCount(1)

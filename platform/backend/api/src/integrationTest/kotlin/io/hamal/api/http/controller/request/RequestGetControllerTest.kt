@@ -24,7 +24,7 @@ internal class RequestGetControllerTest : RequestBaseControllerTest() {
         require(response is HttpSuccessResponse) { "request was not successful" }
 
         val result = response.result(ApiExecInvokeRequested::class)
-        assertThat(result.requestStatus.enumValue, equalTo(Completed))
+        assertThat(result.requestStatus, equalTo(Completed))
     }
 
     @Test
