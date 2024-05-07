@@ -1,12 +1,18 @@
 package io.hamal.bridge.http.controller.exec
 
-import io.hamal.lib.common.domain.BatchSize
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.domain.BatchSize.Companion.BatchSize
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
+import io.hamal.lib.domain._enum.ExecStates
+import io.hamal.lib.domain._enum.ExecStates.Completed
+import io.hamal.lib.domain._enum.ExecStates.Started
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.domain.vo.ExecStatus.Started
+import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
+import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
+import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
+import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
@@ -17,7 +23,7 @@ import io.hamal.lib.sdk.bridge.BridgeExecCompleteRequest
 import io.hamal.lib.sdk.bridge.BridgeExecCompleteRequested
 import io.hamal.repository.api.Exec
 import io.hamal.repository.api.log.LogConsumerBatchImpl
-import io.hamal.repository.api.log.LogConsumerId
+import io.hamal.repository.api.log.LogConsumerId.Companion.LogConsumerId
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -28,7 +34,7 @@ import org.junit.jupiter.api.TestFactory
 internal class ExecCompleteControllerTest : BaseExecControllerTest() {
 
     @TestFactory
-    fun `Can not complete exec which is not started`() = ExecStatus.values()
+    fun `Can not complete exec which is not started`() = ExecStates.values()
         .filterNot { it == Started }
         .map { execStatus ->
             dynamicTest("Can not complete: $execStatus") {
@@ -83,6 +89,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
             .body(
                 BridgeExecCompleteRequest(
                     state = ExecState(),
+                    statusCode = ExecStatusCode(1),
                     result = ExecResult(),
                     events = listOf()
                 )
@@ -99,8 +106,9 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
     private fun verifyExecCompleted(execId: ExecId) {
         with(execQueryRepository.get(execId) as Exec.Completed) {
             assertThat(id, equalTo(execId))
-            assertThat(status, equalTo(ExecStatus.Completed))
-            assertThat(result, equalTo(ExecResult(HotObject.builder().set("hamal", "rocks").build())))
+            assertThat(status, equalTo(Completed))
+            assertThat(statusCode, equalTo(ExecStatusCode(201)))
+            assertThat(result, equalTo(ExecResult(ValueObject.builder().set("hamal", "rocks").build())))
         }
     }
 
@@ -108,7 +116,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
         val exec = (execQueryRepository.get(execId) as Exec.Completed)
         with(stateQueryRepository.get(exec.correlation!!)) {
             assertThat(correlation, equalTo(exec.correlation))
-            assertThat(value, equalTo(State(HotObject.builder().set("value", 13.37).build())))
+            assertThat(value, equalTo(State(ValueObject.builder().set("value", 13.37).build())))
         }
     }
 
@@ -132,7 +140,7 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
             assertThat(eventPayloads, hasSize(1))
 
             val payload = eventPayloads.first()
-            assertThat(payload, equalTo(EventPayload(HotObject.builder().set("value", 42).build())))
+            assertThat(payload, equalTo(EventPayload(ValueObject.builder().set("value", 42).build())))
         }
     }
 
@@ -141,12 +149,13 @@ internal class ExecCompleteControllerTest : BaseExecControllerTest() {
             .path("execId", execId)
             .body(
                 BridgeExecCompleteRequest(
-                    state = ExecState(HotObject.builder().set("value", 13.37).build()),
-                    result = ExecResult(HotObject.builder().set("hamal", "rocks").build()),
+                    state = ExecState(ValueObject.builder().set("value", 13.37).build()),
+                    statusCode = ExecStatusCode(201),
+                    result = ExecResult(ValueObject.builder().set("hamal", "rocks").build()),
                     events = listOf(
                         EventToSubmit(
                             topicName = TopicName("test-completion"),
-                            payload = EventPayload(HotObject.builder().set("value", 42).build())
+                            payload = EventPayload(ValueObject.builder().set("value", 42).build())
                         )
                     )
                 )

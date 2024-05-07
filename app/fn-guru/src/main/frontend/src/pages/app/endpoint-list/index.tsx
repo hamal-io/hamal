@@ -1,32 +1,28 @@
-import React, {FC, useContext, useEffect} from "react";
-import {useEndpointList} from "@/hook/endpoint.ts";
+import React, {FC,  useEffect} from "react";
+import {useTriggerListEndpoint} from "@/hook/trigger.ts";
 import {PageHeader} from "@/components/page-header.tsx";
 import Create from "@/pages/app/endpoint-list/components/create.tsx";
-import {Separator} from "@/components/ui/separator.tsx";
-import {EndpointListItem} from "@/types";
-import {useNavigate} from "react-router-dom";
+import { TriggerListItem} from "@/types";
 import Detail from "@/pages/app/endpoint-list/components/detail.tsx";
 import {EmptyPlaceholder} from "@/components/empty-placeholder.tsx";
 import {GoToDocumentation} from "@/components/documentation.tsx";
 import {useUiState} from "@/hook/ui-state.ts";
 
 type Props = {}
-const EndpointListPage: FC<Props> = ({}) => {
+const EndpointListPage: FC<Props> = () => {
     const [uiState] = useUiState()
-    const [listEndpoints, endpointList, endpointsLoading, endpointsError] = useEndpointList()
-    const [listTriggers, triggerList, triggerLoading, triggerError] = useEndpointList()
+    const [listTriggers, triggerList, triggerLoading, triggerError] = useTriggerListEndpoint()
 
     useEffect(() => {
         const abortController = new AbortController();
-        listEndpoints(uiState.namespaceId, abortController)
         listTriggers(uiState.namespaceId, abortController)
         return () => {
             abortController.abort();
         };
     }, [uiState.namespaceId]);
 
-    if (endpointsError || triggerError) return `Error`
-    if (endpointList == null || triggerList == null || endpointsLoading || triggerLoading) return "Loading..."
+    if (triggerError || triggerError) return `Error`
+    if (listTriggers == null || triggerList == null || triggerLoading) return "Loading..."
 
     return (
         <div className="pt-2 px-2">
@@ -36,28 +32,27 @@ const EndpointListPage: FC<Props> = ({}) => {
                 actions={[<Create/>]}
             />
             {
-                endpointList.endpoints.length ? (<Content endpoints={endpointList.endpoints}/>) : (<NoContent/>)
+                triggerList.triggers.length ? (<Content triggers={triggerList.triggers}/>) : (<NoContent/>)
             }
         </div>
     );
 }
 
 type ContentProps = {
-    endpoints: Array<EndpointListItem>
+    triggers: Array<TriggerListItem>
 }
 
-const Content: FC<ContentProps> = ({endpoints}) => {
-    const navigate = useNavigate()
+const Content: FC<ContentProps> = ({triggers}) => {
     return (
         <ul className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-1 xl:grid-cols-3">
-            {endpoints.map((endpoint) => (
-                <Detail key={endpoint.id} item={endpoint}/>
+            {triggers.map((trigger) => (
+                <Detail key={trigger.id} item={trigger}/>
             ))}
         </ul>
     )
 }
 
-const NoContent = ({}) => (
+const NoContent = () => (
     <EmptyPlaceholder className="my-4 ">
         <EmptyPlaceholder.Icon>
             {/*<Code />*/}

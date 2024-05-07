@@ -1,13 +1,14 @@
 package io.hamal.repository.sqlite.record.workspace
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.WorkspaceName
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Workspace
 import io.hamal.repository.api.WorkspaceQueryRepository.WorkspaceQuery
-import io.hamal.repository.record.json
+import io.hamal.repository.sqlite.hon
 import io.hamal.repository.record.workspace.WorkspaceRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
@@ -27,7 +28,7 @@ internal object ProjectionCurrent : ProjectionSqlite<WorkspaceId, WorkspaceRecor
             ) {
                 set("id", obj.id)
                 set("creatorId", obj.creatorId)
-                set("data", json.serializeAndCompress(obj))
+                set("data", hon.writeAndCompress(obj))
             }
         } catch (e: SQLiteException) {
             if (e.message!!.contains("UNIQUE constraint failed: current.name)")) {
@@ -52,10 +53,10 @@ internal object ProjectionCurrent : ProjectionSqlite<WorkspaceId, WorkspaceRecor
             """.trimIndent()
         ) {
             query {
-                set("name", workspaceName.value)
+                set("name", workspaceName)
             }
             map { rs ->
-                json.decompressAndDeserialize(Workspace::class, rs.getBytes("data"))
+                hon.decompressAndRead(Workspace::class, rs.getBytes("data"))
             }
         }
     }
@@ -93,7 +94,7 @@ internal object ProjectionCurrent : ProjectionSqlite<WorkspaceId, WorkspaceRecor
                 set("id", workspaceId)
             }
             map { rs ->
-                json.decompressAndDeserialize(Workspace::class, rs.getBytes("data"))
+                hon.decompressAndRead(Workspace::class, rs.getBytes("data"))
             }
         }
     }
@@ -118,7 +119,7 @@ internal object ProjectionCurrent : ProjectionSqlite<WorkspaceId, WorkspaceRecor
                 set("limit", query.limit)
             }
             map { rs ->
-                json.decompressAndDeserialize(Workspace::class, rs.getBytes("data"))
+                hon.decompressAndRead(Workspace::class, rs.getBytes("data"))
             }
         }
     }
@@ -151,7 +152,7 @@ internal object ProjectionCurrent : ProjectionSqlite<WorkspaceId, WorkspaceRecor
         return if (workspaceIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND id IN (${workspaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -159,7 +160,7 @@ internal object ProjectionCurrent : ProjectionSqlite<WorkspaceId, WorkspaceRecor
         return if (accountIds.isEmpty()) {
             ""
         } else {
-            "AND creator_id IN (${accountIds.joinToString(",") { "${it.value.value}" }})"
+            "AND creator_id IN (${accountIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 }

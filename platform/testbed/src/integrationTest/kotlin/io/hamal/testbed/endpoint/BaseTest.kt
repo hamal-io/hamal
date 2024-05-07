@@ -5,12 +5,18 @@ import io.hamal.core.component.DelayRetryFixedTime
 import io.hamal.core.component.SetupInternalTopics
 import io.hamal.core.config.BackendBasePath
 import io.hamal.core.service.InternalEventService
-import io.hamal.extension.net.http.ExtensionHttpFactory
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.extension.net.http.ExtensionNetHttpFactory
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
+import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
+import io.hamal.lib.domain.vo.ExpiresAt.Companion.ExpiresAt
+import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
+import io.hamal.lib.domain.vo.PasswordSalt.Companion.PasswordSalt
+import io.hamal.lib.domain.vo.WorkspaceName.Companion.WorkspaceName
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
@@ -23,7 +29,8 @@ import io.hamal.repository.api.*
 import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
-import io.hamal.runner.test.AbstractRunnerTest
+import io.hamal.runner.test.RunnerFixture.createTestRunner
+import io.hamal.runner.test.RunnerFixture.unitOfWork
 import jakarta.annotation.PostConstruct
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.DynamicTest.dynamicTest
@@ -54,7 +61,7 @@ class TestSandboxConfig {
     fun envFactory(@Value("\${io.hamal.runner.api.host}") apiHost: String): EnvFactory =
         object : EnvFactory {
             override fun create() = RunnerEnv(
-                HotObject.builder()
+                ValueObject.builder()
                     .set("api_host", apiHost)
                     .build()
             )
@@ -102,16 +109,14 @@ class ClearController {
         accountRepository.clear()
         authRepository.clear()
         codeRepository.clear()
-        endpointRepository.clear()
         extensionRepository.clear()
         requestRepository.clear()
         execRepository.clear()
         funcRepository.clear()
         workspaceRepository.clear()
-        hookRepository.clear()
 
         namespaceRepository.clear()
-        blueprintRepository.clear()
+        recipeRepository.clear()
         triggerRepository.clear()
 
         testAccount = accountRepository.create(
@@ -154,9 +159,6 @@ class ClearController {
     }
 
     @Autowired
-    lateinit var blueprintRepository: BlueprintRepository
-
-    @Autowired
     lateinit var accountRepository: AccountRepository
 
     @Autowired
@@ -164,9 +166,6 @@ class ClearController {
 
     @Autowired
     lateinit var codeRepository: CodeRepository
-
-    @Autowired
-    lateinit var endpointRepository: EndpointRepository
 
     @Autowired
     lateinit var execRepository: ExecRepository
@@ -181,10 +180,10 @@ class ClearController {
     lateinit var workspaceRepository: WorkspaceRepository
 
     @Autowired
-    lateinit var hookRepository: HookRepository
+    lateinit var namespaceRepository: NamespaceRepository
 
     @Autowired
-    lateinit var namespaceRepository: NamespaceRepository
+    lateinit var recipeRepository: RecipeRepository
 
     @Autowired
     lateinit var requestRepository: RequestRepository
@@ -194,18 +193,6 @@ class ClearController {
 
     @Autowired
     lateinit var generateDomainId: GenerateDomainId
-
-    @Autowired
-    lateinit var logBrokerRepository: LogBrokerRepository
-
-    @Autowired
-    lateinit var topicRepository: TopicRepository
-
-    @Autowired
-    lateinit var setupInternalTopics: SetupInternalTopics
-
-    @Autowired
-    lateinit var internalEvenService: InternalEventService
 
     private lateinit var testAccount: Account
     private lateinit var testAccountAuthToken: AuthToken
@@ -227,7 +214,6 @@ class TestConfig {
         topicRepository.clear()
         logBrokerRepository.clear()
         setupInternalTopics()
-//        internalEvenService.reload()
 
         try {
             testAccount = accountRepository.create(
@@ -303,7 +289,7 @@ class TestConfig {
 }
 
 
-abstract class BaseEndpointTest : AbstractRunnerTest() {
+abstract class BaseEndpointTest {
 
     abstract val sdk: ApiSdkImpl
 
@@ -322,10 +308,10 @@ abstract class BaseEndpointTest : AbstractRunnerTest() {
                             PluginHttpFactory()
                         ),
                         extensionFactories = listOf(
-                            ExtensionHttpFactory
+                            ExtensionNetHttpFactory
                         ),
                         env = RunnerEnv(
-                            HotObject.builder()
+                            ValueObject.builder()
                                 .set("api_host", sdk.template.baseUrl)
                                 .build()
                         )

@@ -5,8 +5,8 @@ import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.type.KuaCode
-import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -18,7 +18,7 @@ class AssertTest {
     @Test
     fun `Assertion passes`() {
         sandbox.codeLoad(
-            KuaCode(
+            ValueCode(
                 """
             assert(1 == 1)
         """.trimIndent()
@@ -28,9 +28,9 @@ class AssertTest {
 
     @Test
     fun `Assertion fails`() {
-        val error = assertThrows<AssertionError> {
+        val error = assertThrows<ErrorAssertion> {
             sandbox.codeLoad(
-                KuaCode(
+                ValueCode(
                     """
                 local provide_answer = function() return 24 end
                 
@@ -44,9 +44,9 @@ class AssertTest {
 
     @Test
     fun `Assertion failure interrupts script execution`() {
-        assertThrows<AssertionError> {
+        assertThrows<ErrorAssertion> {
             sandbox.codeLoad(
-                KuaCode(
+                ValueCode(
                     """
                 assert(true == false)
                 require('test').call()
@@ -58,9 +58,9 @@ class AssertTest {
 
     @Test
     fun `Throws an error if error happen within assert - length of nil`() {
-        val error = assertThrows<ScriptError> {
+        val error = assertThrows<ErrorInternal> {
             sandbox.codeLoad(
-                KuaCode(
+                ValueCode(
                     """
                 local value = nil
                 assert(#value == 0)
@@ -85,8 +85,8 @@ class AssertTest {
         Sandbox(SandboxContextNop).also {
             it.register(
                 RunnerPlugin(
-                    KuaString("test"),
-                    factoryCode = KuaCode(
+                    ValueString("test"),
+                    factoryCode = ValueCode(
                         """
                             function plugin_create(internal)
                                 local export = {
@@ -96,7 +96,7 @@ class AssertTest {
                             end
                     """.trimIndent()
                     ),
-                    internals = mapOf(KuaString("call") to CallbackFunction())
+                    internals = mapOf(ValueString("call") to CallbackFunction())
                 )
             )
         }

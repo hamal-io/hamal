@@ -1,26 +1,31 @@
 package io.hamal.lib.kua.extend.extension
 
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.kua.Sandbox
-import io.hamal.lib.kua.type.KuaCode
-import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.nodes.TemplateNode
+import io.hamal.lib.nodes.compiler.node.NodeCompiler
 
 
-interface RunnerExtensionFactory {
+fun interface RunnerExtensionFactory {
     fun create(sandbox: Sandbox): RunnerExtension
 }
 
 class RunnerExtension(
-    val name: KuaString,
-    val factoryCode: KuaCode = loadFactoryCodeFromResources(name)
+    val name: ValueString,
+    val factoryCode: ValueCode = loadFactoryCodeFromResources(name),
+    val nodes: List<TemplateNode> = listOf(),
+    val nodeCompilers: List<NodeCompiler> = listOf(),
+    val dependencies: List<RunnerExtensionFactory> = listOf()
 ) {
     companion object {
         @JvmStatic
-        private fun loadFactoryCodeFromResources(extensionName: KuaString): KuaCode {
+        private fun loadFactoryCodeFromResources(extensionName: ValueString): ValueCode {
             val path = "${extensionName.stringValue.replace(".", "/")}/extension.lua"
             val classLoader = this::class.java.classLoader
             val resource = classLoader.getResource(path)
             checkNotNull(resource) { "Unable to load: $path" }
-            return KuaCode(String(resource.readBytes()))
+            return ValueCode(String(resource.readBytes()))
         }
     }
 }

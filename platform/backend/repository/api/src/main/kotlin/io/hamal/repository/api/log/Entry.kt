@@ -1,12 +1,17 @@
 package io.hamal.repository.api.log
 
-import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueSnowflakeId
+import io.hamal.lib.common.value.ValueVariableSnowflakeId
 import io.hamal.lib.domain.vo.LogTopicId
 import java.time.Instant
 
-class LogEventId(override val value: SnowflakeId) : ValueObjectId() {
-    constructor(value: Int) : this(SnowflakeId(value.toLong()))
+class LogEventId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
+    companion object {
+        fun LogEventId(value: SnowflakeId) = LogEventId(ValueSnowflakeId(value))
+        fun LogEventId(value: Int) = LogEventId(ValueSnowflakeId(SnowflakeId(value.toLong())))
+        fun LogEventId(value: String) = LogEventId(ValueSnowflakeId(SnowflakeId(value.toLong(16))))
+    }
 }
 
 data class LogEvent(

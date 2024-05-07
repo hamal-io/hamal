@@ -2,6 +2,7 @@ package io.hamal.api.http.controller.request
 
 import io.hamal.api.http.controller.BaseControllerTest
 import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.HttpSuccessResponse

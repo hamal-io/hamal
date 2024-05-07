@@ -4,6 +4,7 @@ import io.hamal.api.ApiConfig
 import io.hamal.bridge.BridgeConfig
 import io.hamal.core.CoreConfig
 import io.hamal.lib.domain.vo.AuthToken
+import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.runner.RunnerConfig
 import org.springframework.boot.Banner

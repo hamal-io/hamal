@@ -14,7 +14,7 @@ func_one = fail_on_error(sys.funcs.create({
 }))
 sys.await_completed(func_one)
 
-requested_endpoint = fail_on_error(sys.endpoints.create({
+requested_endpoint = fail_on_error(sys.triggers.create_endpoint({
     namespace_id = namespace.namespace_id,
     func_id = func_one.id,
     name = 'test-endpoint'
@@ -34,7 +34,6 @@ content = res.content
 assert(content.id ~= nil)
 assert(content.status == 'Completed')
 
-assert(content.invocation.method == 'Put')
+assert(content.invocation.method == 'Post')
+
 assert(content.result.answer == 42.0)
-
-

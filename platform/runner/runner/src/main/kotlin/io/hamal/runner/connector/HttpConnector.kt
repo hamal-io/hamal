@@ -4,6 +4,7 @@ import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecResult
 import io.hamal.lib.domain.vo.ExecState
+import io.hamal.lib.domain.vo.ExecStatusCode
 import io.hamal.lib.http.HttpException
 import io.hamal.lib.sdk.BridgeSdk
 import java.net.SocketException
@@ -21,6 +22,7 @@ class HttpConnector(
                     execToken = it.execToken,
                     namespaceId = it.namespaceId,
                     workspaceId = it.workspaceId,
+                    triggerId = it.triggerId,
                     inputs = it.inputs,
                     state = it.state,
                     code = it.code,
@@ -41,17 +43,19 @@ class HttpConnector(
 
     override fun complete(
         execId: ExecId,
+        statusCode: ExecStatusCode,
         result: ExecResult,
         state: ExecState,
         events: List<EventToSubmit>
     ) {
-        sdk.exec.complete(execId, result, state, events)
+        sdk.exec.complete(execId, statusCode, result, state, events)
     }
 
     override fun fail(
         execId: ExecId,
+        statusCode: ExecStatusCode,
         result: ExecResult
     ) {
-        sdk.exec.fail(execId, result)
+        sdk.exec.fail(execId, statusCode, result)
     }
 }

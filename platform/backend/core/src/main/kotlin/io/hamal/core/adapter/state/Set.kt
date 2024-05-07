@@ -5,10 +5,11 @@ import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.StateSetRequest
 import io.hamal.lib.domain.request.StateSetRequested
 import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import org.springframework.stereotype.Component
 
 fun interface StateSetPort {
@@ -27,7 +28,7 @@ class StateAdapter(
         return StateSetRequested(
             requestId = generateDomainId(::RequestId),
             requestedBy = SecurityContext.currentAuthId,
-            requestStatus = RequestStatus.Submitted,
+            requestStatus = RequestStatus(Submitted),
             workspaceId = func.workspaceId,
             state = CorrelatedState(
                 correlation = req.correlation,

@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.topic
 
 
-import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
 import org.junit.jupiter.api.Test

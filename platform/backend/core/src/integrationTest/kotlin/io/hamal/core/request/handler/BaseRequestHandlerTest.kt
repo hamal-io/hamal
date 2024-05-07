@@ -2,10 +2,17 @@ package io.hamal.core.request.handler
 
 import io.hamal.core.BaseTest
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain._enum.TopicType
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
+import io.hamal.lib.domain._enum.TopicTypes.Namespace
 import io.hamal.lib.domain.vo.*
-import io.hamal.repository.api.*
+import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
+import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
+import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
+import io.hamal.lib.domain.vo.TopicType.Companion.TopicType
+import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncCmdRepository.CreateCmd
+import io.hamal.repository.api.Topic
+import io.hamal.repository.api.TopicCmdRepository
 import java.util.concurrent.atomic.AtomicInteger
 
 internal object NextCommandId {
@@ -47,27 +54,10 @@ internal abstract class BaseRequestHandlerTest : BaseTest() {
                 name = name,
                 workspaceId = testWorkspace.id,
                 namespaceId = testNamespace.id,
-                type = TopicType.Namespace,
+                type = TopicType(Namespace),
                 logTopicId = generateDomainId(::LogTopicId)
             )
         )
     }
-
-    fun createHook(
-        id: HookId,
-        name: HookName = HookName("SomeName"),
-        namespaceId: NamespaceId = generateDomainId(::NamespaceId),
-    ): Hook {
-        return hookRepository.create(
-            HookCmdRepository.CreateCmd(
-                id = NextCommandId(),
-                workspaceId = testWorkspace.id,
-                hookId = id,
-                name = name,
-                namespaceId = namespaceId,
-            )
-        )
-    }
-
 
 }

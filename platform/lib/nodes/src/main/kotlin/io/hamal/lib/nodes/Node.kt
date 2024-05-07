@@ -1,20 +1,30 @@
 package io.hamal.lib.nodes
 
-import io.hamal.lib.common.domain.ValueObjectId
-import io.hamal.lib.common.domain.ValueObjectString
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.kua.type.KuaCode
-import io.hamal.lib.nodes.control.Control
+import io.hamal.lib.common.value.*
 
 
-class NodeId(override val value: SnowflakeId) : ValueObjectId() {
-    constructor(value: Int) : this(SnowflakeId(value.toLong()))
-    constructor(value: String) : this(SnowflakeId(value.toLong(16)))
+class NodeId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
+    companion object {
+        fun NodeId(value: SnowflakeId) = NodeId(ValueSnowflakeId(value))
+        fun NodeId(value: Int) = NodeId(ValueSnowflakeId(SnowflakeId(value.toLong())))
+        fun NodeId(value: String) = NodeId(ValueSnowflakeId(SnowflakeId(value.toLong(16))))
+    }
 }
 
-class NodeTitle(override val value: String) : ValueObjectString()
+class NodeTitle(override val value: ValueString) : ValueVariableString() {
+    companion object {
+        fun NodeTitle(value: String) = NodeTitle(ValueString(value))
+    }
+}
 
-class NodeType(override val value: String) : ValueObjectString()
+class NodeType(override val value: ValueString) : ValueVariableString() {
+    companion object {
+        fun NodeType(value: String) = NodeType(ValueString(value))
+    }
+}
+
+class NodeProperties(override val value: ValueObject = ValueObject.empty) : ValueVariableObject()
 
 data class Node(
     val id: NodeId,
@@ -22,23 +32,14 @@ data class Node(
     val title: NodeTitle,
     val position: Position,
     val size: Size,
-    val controls: List<Control> = listOf(),
+    val properties: NodeProperties = NodeProperties(),
     val outputs: List<PortOutput> = listOf()
 )
 
-interface NodeRegistry {
-
-    operator fun get(type: NodeType): Item
-
-    interface Item {
-        val type: NodeType
-        val title: NodeTitle
-        val size: Size
-//    val control: List<ControlTemplate>
-//    val outputs: List<NodeOutput>
-
-        fun toCode(): KuaCode
-    }
-
-}
-
+data class TemplateNode(
+    val type: NodeType,
+    val title: NodeTitle,
+    val size: Size,
+    val controls: List<TemplateControl>,
+    val outputs: List<TemplatePortOutput>
+)

@@ -2,7 +2,14 @@ package io.hamal.repository.sqlite
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
+import io.hamal.lib.domain.vo.Email.Companion.Email
+import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
+import io.hamal.lib.domain.vo.ExpiresAt.Companion.ExpiresAt
+import io.hamal.lib.domain.vo.PasswordHash.Companion.PasswordHash
+import io.hamal.lib.domain.vo.Web3Address.Companion.Web3Address
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.NamedResultSet
 import io.hamal.lib.sqlite.SqliteBaseRepository
@@ -60,8 +67,8 @@ class AuthSqliteRepository(
                         set("cmdId", cmd.id)
                         set("id", cmd.authId)
                         set("entityId", cmd.accountId)
-                        set("email", cmd.email.value)
-                        set("password", cmd.hash.value)
+                        set("email", cmd.email)
+                        set("password", cmd.hash)
                     }
                     map(NamedResultSet::toAuth)
                 }!!
@@ -78,7 +85,7 @@ class AuthSqliteRepository(
                         set("cmdId", cmd.id)
                         set("id", cmd.authId)
                         set("entityId", cmd.accountId)
-                        set("address", cmd.address.value)
+                        set("address", cmd.address)
                     }
                     map(NamedResultSet::toAuth)
                 }!!
@@ -96,7 +103,7 @@ class AuthSqliteRepository(
                         set("id", cmd.authId)
                         set("entityId", cmd.accountId)
                         set("token", cmd.token)
-                        set("expiresAt", cmd.expiresAt.value)
+                        set("expiresAt", cmd.expiresAt)
                     }
                     map(NamedResultSet::toAuth)
                 }!!
@@ -201,7 +208,7 @@ class AuthSqliteRepository(
         """.trimIndent()
         ) {
             query {
-                set("email", email.value)
+                set("email", email)
             }
             map(NamedResultSet::toAuth)
         }
@@ -220,7 +227,7 @@ class AuthSqliteRepository(
         """.trimIndent()
         ) {
             query {
-                set("address", address.value)
+                set("address", address)
             }
             map(NamedResultSet::toAuth)
         }
@@ -366,7 +373,7 @@ private fun AuthQuery.ids(): String {
     return if (authIds.isEmpty()) {
         ""
     } else {
-        "AND id IN (${authIds.joinToString(",") { "${it.value.value}" }})"
+        "AND id IN (${authIds.joinToString(",") { "${it.longValue}" }})"
     }
 }
 
@@ -374,6 +381,6 @@ private fun AuthQuery.accountIds(): String {
     return if (accountIds.isEmpty()) {
         ""
     } else {
-        "AND entity_id IN (${accountIds.joinToString(",") { "${it.value.value}" }})"
+        "AND entity_id IN (${accountIds.joinToString(",") { "${it.longValue}" }})"
     }
 }

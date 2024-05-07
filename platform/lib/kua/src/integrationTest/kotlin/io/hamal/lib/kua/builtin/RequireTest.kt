@@ -4,8 +4,8 @@ import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.extension.RunnerExtension
-import io.hamal.lib.kua.type.KuaCode
-import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueString
 import org.junit.jupiter.api.Test
 
 
@@ -14,7 +14,7 @@ internal object ExtensionTest {
     @Test
     fun `Creates a new instance - everytime it gets invoked`() {
         sandbox.codeLoad(
-            KuaCode(
+            ValueCode(
                 """
             local one = require('test')
             assert( one.some_number == 42 )
@@ -34,8 +34,8 @@ internal object ExtensionTest {
         Sandbox(SandboxContextNop).also { sb ->
             sb.register(
                 RunnerExtension(
-                    name = KuaString("test"),
-                    factoryCode = KuaCode(
+                    name = ValueString("test"),
+                    factoryCode = ValueCode(
                         """
                             function extension_create()
                                local export = { some_number = 42 }

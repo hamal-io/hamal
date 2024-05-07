@@ -3,14 +3,15 @@ package io.hamal.core.service
 import io.hamal.core.adapter.trigger.TriggerInvokePort
 import io.hamal.core.component.WorkerPool
 import io.hamal.core.security.SecurityContext
-import io.hamal.lib.common.domain.BatchSize
-import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.BatchSize.Companion.BatchSize
+import io.hamal.lib.common.domain.Limit.Companion.Limit
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain._enum.TriggerTypes.Event
 import io.hamal.lib.domain.request.TriggerInvokeRequest
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.InvocationInputs
-import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.domain.vo.TriggerType.Companion.TriggerType
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.Trigger
@@ -42,34 +43,37 @@ internal class EventTriggerService(
 
         triggerQueryRepository.list(
             TriggerQuery(
-//                            afterId = TriggerId(SnowflakeId(Long.MAX_VALUE)),
-                types = listOf(TriggerType.Event),
+                types = listOf(TriggerType(Event)),
                 limit = Limit(1000),
                 workspaceIds = listOf()
             )
         ).forEach { trigger ->
             require(trigger is Trigger.Event)
 
-            val topic = topicRepository.get(trigger.topicId)
-            val consumer = TopicEventConsumerBatchImpl(
-                consumerId = LogConsumerId(trigger.id.value),
-                topicId = topic.logTopicId,
-                repository = logBrokerRepository
-            )
 
-            triggerConsumers[trigger.id] = consumer
+//            triggerConsumers[trigger.id] = consumer
 
             scheduledTasks.add(
                 workerPool.atFixedDelay(100.milliseconds) {
                     if (!shutdown.get()) {
                         try {
                             SecurityContext.with(Auth.System) {
+                                val topic = topicRepository.get(trigger.topicId)
+                                val consumer = TopicEventConsumerBatchImpl(
+                                    consumerId = LogConsumerId(trigger.id.value),
+                                    topicId = topic.logTopicId,
+                                    repository = logBrokerRepository
+                                )
+
+
                                 consumer.consumeBatch(BatchSize(1)) { events ->
                                     triggerInvoke(
                                         trigger.id,
                                         object : TriggerInvokeRequest {
                                             override val correlationId = trigger.correlationId ?: CorrelationId.default
-                                            override val inputs = InvocationInputs()
+                                            override val inputs = InvocationInputs(
+                                                ValueObject.builder().set("event", events.first().payload.value).build()
+                                            )
                                         }
                                     )
                                 }
@@ -93,5 +97,5 @@ internal class EventTriggerService(
 
     private val shutdown = AtomicBoolean(false)
     private val scheduledTasks = mutableListOf<ScheduledFuture<*>>()
-    private val triggerConsumers = mutableMapOf<TriggerId, TopicEventConsumerBatchImpl>()
+//    private val triggerConsumers = mutableMapOf<TriggerId, TopicEventConsumerBatchImpl>()
 }

@@ -1,10 +1,7 @@
 package io.hamal.plugin.net.http.endpoint
 
-import com.google.gson.JsonArray
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
-import io.hamal.lib.common.hot.HotArray
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueArray
+import io.hamal.lib.common.value.ValueObject
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -13,20 +10,20 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 open class TestJsonController {
 
-    @RequestMapping("/v1/json-empty-object")
-    fun jsonEmptyObject(): ResponseEntity<JsonObject> {
-        return ResponseEntity.ok(JsonObject())
+    @RequestMapping("/v1/json-empty-object", produces = ["application/json"])
+    fun jsonEmptyObject(): ResponseEntity<ValueObject> {
+        return ResponseEntity.ok(ValueObject.empty)
     }
 
-    @RequestMapping("/v1/json-empty-array")
-    fun jsonEmptyArray(): ResponseEntity<JsonArray> {
-        return ResponseEntity.ok(JsonArray())
+    @RequestMapping("/v1/json-empty-array", produces = ["application/json"])
+    fun jsonEmptyArray(): ResponseEntity<ValueArray> {
+        return ResponseEntity.ok(ValueArray.empty)
     }
 
-    @RequestMapping("/v1/json-array")
-    fun jsonArray(): ResponseEntity<HotArray> {
+    @RequestMapping("/v1/json-array", produces = ["application/json"])
+    fun jsonArray(): ResponseEntity<ValueArray> {
         return ResponseEntity.ok(
-            HotArray.builder()
+            ValueArray.builder()
                 .append(23)
                 .append(true)
                 .append("24.23")
@@ -35,11 +32,11 @@ open class TestJsonController {
         )
     }
 
-    @RequestMapping("/v1/json-error")
-    fun jsonError(): ResponseEntity<HotObject> {
+    @RequestMapping("/v1/json-error", produces = ["application/json"])
+    fun jsonError(): ResponseEntity<ValueObject> {
 
         return ResponseEntity.badRequest().body(
-            HotObject.builder()
+            ValueObject.builder()
                 .set("code", 400)
                 .set("message", "bad-request")
                 .set("boolean-value", true)
@@ -47,8 +44,8 @@ open class TestJsonController {
         )
     }
 
-    @RequestMapping("/v1/json-echo")
-    fun jsonEcho(@RequestBody body: JsonElement): ResponseEntity<JsonElement> {
+    @RequestMapping("/v1/json-echo", produces = ["application/json"])
+    fun jsonEcho(@RequestBody body: ValueObject): ResponseEntity<ValueObject> {
         return ResponseEntity.ok(body)
     }
 }

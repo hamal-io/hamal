@@ -1,13 +1,14 @@
 package io.hamal.repository.log
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain.CmdIdGeneratorImpl
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
+import io.hamal.lib.common.domain.Limit.Companion.Limit
+import io.hamal.lib.common.snowflake.PartitionSourceImpl
+import io.hamal.lib.common.snowflake.SnowflakeGenerator
 import io.hamal.lib.domain.GenerateCmdId
-import io.hamal.lib.domain.vo.LogTopicId
+import io.hamal.lib.domain.vo.LogTopicId.Companion.LogTopicId
 import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.repository.api.log.LogBrokerRepository.CreateTopicCmd
-import io.hamal.repository.api.log.LogConsumerId
+import io.hamal.repository.api.log.LogConsumerId.Companion.LogConsumerId
 import io.hamal.repository.api.log.LogConsumerImpl
 import io.hamal.repository.api.log.LogTopicAppenderImpl
 import io.hamal.repository.fixture.AbstractIntegrationTest
@@ -79,6 +80,9 @@ class LogConsumerTest : AbstractIntegrationTest() {
         assertThat(collected, hasSize(1_000))
     }
 
-    private val generateCmdId: GenerateCmdId = CmdIdGeneratorImpl
+    private val generateCmdId: GenerateCmdId = object : GenerateCmdId {
+        override fun invoke() = CmdId(generator.next())
+        private val generator = SnowflakeGenerator(PartitionSourceImpl(1))
+    }
 
 }

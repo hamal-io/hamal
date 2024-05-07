@@ -3,10 +3,11 @@ package io.hamal.lib.sdk.api
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.serialization.JsonAdapter
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.common.serialization.AdapterJson
 import io.hamal.lib.domain.vo.RequestClass
+import io.hamal.lib.domain.vo.RequestClass.Companion.RequestClass
 import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.RequestStatus
 
 data class ApiRequestList(
     val requests: List<ApiRequested>
@@ -17,7 +18,7 @@ sealed class ApiRequested {
     abstract val requestStatus: RequestStatus
     val `class`: RequestClass = RequestClass(this::class.java.simpleName)
 
-    object Adapter : JsonAdapter<ApiRequested> {
+    object Adapter : AdapterJson<ApiRequested> {
         override fun serialize(
             src: ApiRequested,
             typeOfSrc: java.lang.reflect.Type,
@@ -40,11 +41,9 @@ sealed class ApiRequested {
 
         private val classMapping = listOf(
             ApiAccountConvertRequested::class,
-            ApiBlueprintCreateRequested::class,
-            ApiBlueprintUpdateRequested::class,
+            ApiRecipeCreateRequested::class,
+            ApiRecipeUpdateRequested::class,
             ApiExecInvokeRequested::class,
-            ApiEndpointCreateRequested::class,
-            ApiEndpointUpdateRequested::class,
             ApiExtensionCreateRequested::class,
             ApiExtensionUpdateRequested::class,
             ApiNamespaceAppendRequested::class,
@@ -52,8 +51,6 @@ sealed class ApiRequested {
             ApiFuncCreateRequested::class,
             ApiFuncDeployRequested::class,
             ApiFuncUpdateRequested::class,
-            ApiHookCreateRequested::class,
-            ApiHookUpdateRequested::class,
             ApiTopicAppendRequested::class,
             ApiTopicCreateRequested::class,
             ApiTriggerCreateRequested::class,

@@ -3,13 +3,13 @@ package io.hamal.lib.web3.evm.chain.eth.domain
 import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
-import io.hamal.lib.common.hot.HotArray
-import io.hamal.lib.common.hot.HotNull
-import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.common.hot.HotString
 import io.hamal.lib.common.serialization.GsonTransform
-import io.hamal.lib.common.serialization.JsonAdapter
-import io.hamal.lib.domain.Json
+import io.hamal.lib.common.serialization.AdapterJson
+import io.hamal.lib.common.serialization.SerdeJson
+import io.hamal.lib.common.serialization.json.JsonArray
+import io.hamal.lib.common.serialization.json.JsonNull
+import io.hamal.lib.common.serialization.json.JsonObject
+import io.hamal.lib.common.serialization.json.JsonString
 import io.hamal.lib.web3.evm.abi.type.EvmAddress
 import io.hamal.lib.web3.evm.abi.type.EvmPrefixedHexString
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
@@ -26,16 +26,16 @@ sealed interface EthRequest : EvmRequest {
     override val id: EvmRequestId
     override val method: EvmMethod
 
-    object Adapter : JsonAdapter<EthRequest> {
+    object Adapter : AdapterJson<EthRequest> {
         override fun serialize(request: EthRequest, type: Type, ctx: JsonSerializationContext): JsonElement {
             return when (request) {
                 is EthGetBlockByNumberRequest -> GsonTransform.fromNode(
-                    HotObject.builder()
+                    JsonObject.builder()
                         .set("id", GsonTransform.toNode(ctx.serialize(request.id)))
                         .set("method", GsonTransform.toNode(ctx.serialize(request.method)))
                         .set(
-                            "params", HotArray.builder()
-                                .append(HotString(request.number.toPrefixedHexString().value))
+                            "params", JsonArray.builder()
+                                .append(JsonString(request.number.toPrefixedHexString().value))
                                 .append(request.fullTransaction)
                                 .build()
                         )
@@ -70,22 +70,22 @@ data class EthCallRequest(
 ) : EthRequest {
     override val method: EvmMethod = Call
 
-    object Adapter : JsonAdapter<EthCallRequest> {
+    object Adapter : AdapterJson<EthCallRequest> {
         override fun serialize(request: EthCallRequest, typeOfSrc: Type, ctx: JsonSerializationContext): JsonElement {
             return GsonTransform.fromNode(
-                HotObject.builder()
+                JsonObject.builder()
                     .set("id", GsonTransform.toNode(ctx.serialize(request.id)))
                     .set("method", GsonTransform.toNode(ctx.serialize(request.method)))
                     .set(
-                        "params", HotArray.builder()
+                        "params", JsonArray.builder()
                             .append(
-                                HotObject.builder()
-                                    .set("from", request.from?.toPrefixedHexString()?.value?.let(::HotString) ?: HotNull)
+                                JsonObject.builder()
+                                    .set("from", request.from?.toPrefixedHexString()?.value?.let(::JsonString) ?: JsonNull)
                                     .set("to", request.to.toPrefixedHexString().value)
                                     .set("data", request.data.value)
                                     .build()
                             )
-                            .append(HotString(request.number.toPrefixedHexString().value))
+                            .append(JsonString(request.number.toPrefixedHexString().value))
                             .build()
                     )
                     .build()
@@ -113,15 +113,15 @@ data class EthGetBlockByNumberRequest(
 ) : EthRequest {
     override val method: EvmMethod = GetBlockByNumber
 
-    object Adapter : JsonAdapter<EthGetBlockByNumberRequest> {
+    object Adapter : AdapterJson<EthGetBlockByNumberRequest> {
         override fun serialize(request: EthGetBlockByNumberRequest, type: Type, ctx: JsonSerializationContext): JsonElement {
             return GsonTransform.fromNode(
-                HotObject.builder()
+                JsonObject.builder()
                     .set("id", GsonTransform.toNode(ctx.serialize(request.id)))
                     .set("method", GsonTransform.toNode(ctx.serialize(request.method)))
                     .set(
-                        "params", HotArray.builder()
-                            .append(HotString(request.number.toPrefixedHexString().value))
+                        "params", JsonArray.builder()
+                            .append(JsonString(request.number.toPrefixedHexString().value))
                             .append(request.fullTransaction)
                             .build()
                     )
@@ -140,9 +140,9 @@ data class EthGetBlockByNumberRequest(
     }
 }
 
-fun parseEthRequest(json: Json, request: HotObject): Pair<EthErrorResponse?, EthRequest?> {
+fun parseEthRequest(serde: SerdeJson, request: JsonObject): Pair<EthErrorResponse?, EthRequest?> {
     return try {
-        val ethRequest = json.deserialize(EthRequest::class, json.serialize(request))
+        val ethRequest = serde.read(EthRequest::class, serde.write(request))
         null to ethRequest
     } catch (e: Throwable) {
         e.printStackTrace()

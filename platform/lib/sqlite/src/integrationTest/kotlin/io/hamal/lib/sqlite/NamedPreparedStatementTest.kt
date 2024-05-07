@@ -1,9 +1,11 @@
 package io.hamal.lib.sqlite
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.domain.ValueObjectId
-import io.hamal.lib.common.domain.ValueObjectString
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueSnowflakeId
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueVariableSnowflakeId
+import io.hamal.lib.common.value.ValueVariableString
 import io.hamal.lib.sqlite.DefaultNamedPreparedStatement.Companion.prepare
 import org.hamcrest.CoreMatchers.*
 import org.hamcrest.MatcherAssert.assertThat
@@ -277,13 +279,13 @@ class NamedPreparedStatementTest {
         }
 
         @Test
-        fun `Sets named parameter of type domain name`() {
-            class TestValueObjectString(override val value: String) : ValueObjectString()
+        fun `Sets named parameter of type value string`() {
+            class TestValueVariableString(override val value: ValueString) : ValueVariableString()
 
             connection.prepare("INSERT INTO domain_name_table(value, another_value) VALUES(:some_value, :another_value)")
                 .use {
-                    it["some_value"] = TestValueObjectString("hamal")
-                    it["another_value"] = TestValueObjectString("rocks")
+                    it["some_value"] = TestValueVariableString(ValueString("hamal"))
+                    it["another_value"] = TestValueVariableString(ValueString("rocks"))
                     it.execute()
                 }
             verifyIsOne("SELECT COUNT(*) FROM domain_name_table WHERE value = 'hamal'")
@@ -340,7 +342,7 @@ class NamedPreparedStatementTest {
         }
     }
 
-    private class TestDomainId(override val value: SnowflakeId) : ValueObjectId() {
-        constructor(value: Int) : this(SnowflakeId(value.toLong()))
+    private class TestDomainId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
+        constructor(value: Int) : this(ValueSnowflakeId(SnowflakeId(value.toLong())))
     }
 }

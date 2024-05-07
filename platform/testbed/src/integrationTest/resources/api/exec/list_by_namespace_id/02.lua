@@ -1,17 +1,18 @@
-sys = require_plugin('sys')
+sys = require_plugin('std.sys')
+table = require('std.table').create()
 
 --COLLECT EXECS
 execs = fail_on_error(sys.execs.list())
 
-exec_one = find_in_list(execs, 'correlation_id', 'func-1-invoke')
-exec_two = find_in_list(execs, 'correlation_id', 'func-2-invoke')
+exec_one = table.find(execs, 'correlation_id', 'func-1-invoke')
+exec_two = table.find(execs, 'correlation_id', 'func-2-invoke')
 
 assert(exec_one ~= nil)
 assert(exec_two ~= nil)
 
 namespaces = fail_on_error(sys.namespaces.list())
-namespace_one = find_in_list(namespaces, 'name', 'root-namespace::namespace-1')
-namespace_two = find_in_list(namespaces, 'name', 'root-namespace::namespace-2')
+namespace_one = table.find(namespaces, 'name', 'root-namespace::namespace-1')
+namespace_two = table.find(namespaces, 'name', 'root-namespace::namespace-2')
 
 assert(namespace_one ~= nil)
 assert(namespace_two ~= nil)

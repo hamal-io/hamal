@@ -1,6 +1,6 @@
 --hamal-64
 
-sys = require_plugin('sys')
+sys = require_plugin('std.sys')
 
 -- CREATE NAMESPACES
 local namespace_one_req = fail_on_error(sys.namespaces.append({

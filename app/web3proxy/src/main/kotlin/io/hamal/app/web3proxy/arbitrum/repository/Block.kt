@@ -1,13 +1,11 @@
 package io.hamal.app.web3proxy.arbitrum.repository
 
-import io.hamal.lib.common.compress.BzipCompressor
-import io.hamal.lib.common.hot.HotObjectModule
-import io.hamal.lib.common.serialization.JsonFactoryBuilder
-import io.hamal.lib.domain.Json
-import io.hamal.lib.domain.vo.ValueObjectJsonModule
+import io.hamal.lib.common.serialization.Serde
+import io.hamal.lib.common.value.serde.SerdeModuleValueJson
+import io.hamal.lib.domain.vo.SerdeModuleValueVariable
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
-import io.hamal.lib.web3.evm.EvmHotModule
+import io.hamal.lib.web3.evm.SerdeModuleJsonEvm
 import io.hamal.lib.web3.evm.abi.type.EvmAddress
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.chain.arbitrum.domain.ArbitrumBlockData
@@ -67,7 +65,7 @@ internal class ArbitrumBlockRepositoryImpl(
                 query {
                     set("number", blockNumber.value)
                 }
-                map { rs -> json.decompressAndDeserialize(BlockEntity::class, rs.getBytes("data")) }
+                map { rs -> serde.decompressAndRead(BlockEntity::class, rs.getBytes("data")) }
             }
         }
     }
@@ -78,7 +76,7 @@ internal class ArbitrumBlockRepositoryImpl(
                 execute("INSERT OR REPLACE INTO block(number, hash, data) VALUES( :number, :hash, :data )") {
                     set("number", block.number.value)
                     set("hash", block.hash.toPrefixedHexString().value)
-                    set("data", json.serializeAndCompress(block))
+                    set("data", serde.writeAndCompress(block))
                 }
             }
         }
@@ -110,13 +108,10 @@ internal class ArbitrumBlockRepositoryImpl(
         connection.execute("DELETE FROM block")
     }
 
-    private val json = Json(
-        factory = JsonFactoryBuilder()
-            .register(EvmHotModule)
-            .register(HotObjectModule)
-            .register(ValueObjectJsonModule),
-        compressor = BzipCompressor
-    )
+    private val serde = Serde.json()
+        .register(SerdeModuleJsonEvm)
+        .register(SerdeModuleValueJson)
+        .register(SerdeModuleValueVariable)
 }
 
 private fun collectArbitrumAddresses(blocks: List<ArbitrumBlockData>): Set<EvmAddress> {

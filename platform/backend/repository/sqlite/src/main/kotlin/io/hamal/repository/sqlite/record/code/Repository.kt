@@ -78,15 +78,15 @@ class CodeSqliteRepository(
                 versionOf(codeId, cmdId)
             } else {
                 val currentVersion = versionOf(codeId, cmdId)
-                val codeValue = cmd.value
-                if (codeValue == null || codeValue == currentVersion.value) {
+                val ValueCode = cmd.value
+                if (ValueCode == null || ValueCode == currentVersion.value) {
                     currentVersion
                 } else {
                     store(
                         CodeRecord.Updated(
                             cmdId = cmdId,
                             entityId = codeId,
-                            value = codeValue
+                            value = ValueCode
                         )
                     )
                     currentVersion(codeId)

@@ -1,6 +1,5 @@
 package io.hamal.lib.sdk.api
 
-import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.AuthChallengeMetaMaskRequest
 import io.hamal.lib.domain.request.AuthLogInEmailRequest
 import io.hamal.lib.domain.request.AuthLogInMetaMaskRequest
@@ -41,7 +40,8 @@ data class ApiTokenRequested(
     override val requestStatus: RequestStatus,
     val id: AccountId,
     val workspaceIds: List<WorkspaceId>,
-    val token: AuthToken
+    val token: AuthToken,
+    val address: Web3Address? = null,
 ) : ApiRequested()
 
 data class ApiAccountConvertRequested(

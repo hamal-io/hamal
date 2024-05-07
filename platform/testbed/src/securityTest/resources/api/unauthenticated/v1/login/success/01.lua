@@ -5,7 +5,7 @@ http = require('net.http').create({
     base_url = context.env.test_api
 })
 
-err, res = http.post({ url = '/v1/anonymous-accounts', json = { } })
+err, res = http.post({ url = '/v1/anonymous-accounts', body =  { } })
 assert(err == nil)
 
 assert(res.status_code == 202)

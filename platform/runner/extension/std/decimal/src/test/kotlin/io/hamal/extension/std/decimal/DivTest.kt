@@ -1,20 +1,16 @@
 package io.hamal.extension.std.decimal
 
-import io.hamal.runner.test.AbstractRunnerTest
+import io.hamal.runner.test.RunnerFixture.unitOfWork
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
-internal class DivTest : AbstractRunnerTest() {
+internal class DivTest : AbstractTest() {
     @Test
     fun `decimal, number`() {
-        val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionDecimalFactory)
-        )
-
-        runner.run(
+        runTest(
             unitOfWork(
                 """
-                local decimal = require('decimal')
+                local decimal = require('std.decimal').create()
                 local x = decimal.new('3.14')
                 local y = 2
                 local result = x / y
@@ -28,14 +24,10 @@ internal class DivTest : AbstractRunnerTest() {
 
     @Test
     fun `decimal, decimal`() {
-        val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionDecimalFactory)
-        )
-
-        runner.run(
+        runTest(
             unitOfWork(
                 """
-                local decimal = require('decimal')
+                local decimal = require('std.decimal').create()
                 local x = decimal.new('3.14')
                 local y = decimal.new(2)
                 local result = x / y
@@ -49,14 +41,10 @@ internal class DivTest : AbstractRunnerTest() {
     @Disabled //204-breaks all tests
     @Test
     fun `number, decimal`() {
-        val runner = createTestRunner(
-            extensionFactories = listOf(ExtensionDecimalFactory)
-        )
-
-        runner.run(
+        runTest(
             unitOfWork(
                 """
-                local decimal = require('decimal')
+                local decimal = require('std.decimal').create()
                 local x = 3.14
                 local y = decimal.new(2)
                 local result = x / y

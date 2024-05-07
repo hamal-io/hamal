@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.namespace
 
 import io.hamal.lib.domain.vo.NamespaceFeatures
-import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.HttpStatusCode.Ok

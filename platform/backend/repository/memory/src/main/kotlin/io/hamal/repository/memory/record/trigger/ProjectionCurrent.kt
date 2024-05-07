@@ -1,6 +1,7 @@
 package io.hamal.repository.memory.record.trigger
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
@@ -46,19 +47,8 @@ internal class ProjectionCurrent : ProjectionMemory<TriggerId, Trigger> {
                     }
                 }
             }
-            .filter {
-                if (query.hookIds.isEmpty()) {
-                    true
-                } else {
-                    if (it is Trigger.Hook) {
-                        query.hookIds.contains(it.hookId)
-                    } else {
-                        false
-                    }
-                }
-            }
             .dropWhile { it.id >= query.afterId }
-            .take(query.limit.value)
+            .take(query.limit.intValue)
             .toList()
     }
 
@@ -78,17 +68,6 @@ internal class ProjectionCurrent : ProjectionMemory<TriggerId, Trigger> {
                     } else {
                         if (it is Trigger.Event) {
                             query.topicIds.contains(it.topicId)
-                        } else {
-                            false
-                        }
-                    }
-                }
-                .filter {
-                    if (query.hookIds.isEmpty()) {
-                        true
-                    } else {
-                        if (it is Trigger.Hook) {
-                            query.hookIds.contains(it.hookId)
                         } else {
                             false
                         }

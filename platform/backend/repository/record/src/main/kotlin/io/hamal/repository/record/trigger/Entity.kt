@@ -1,12 +1,12 @@
 package io.hamal.repository.record.trigger
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain._enum.HookMethod
-import io.hamal.lib.domain._enum.TriggerStatus
-import io.hamal.lib.domain._enum.TriggerType
-import io.hamal.lib.domain._enum.TriggerType.*
-import io.hamal.lib.domain._enum.TriggerType.Event
+import io.hamal.lib.domain._enum.TriggerStates.Active
+import io.hamal.lib.domain._enum.TriggerStates.Inactive
+import io.hamal.lib.domain._enum.TriggerTypes
+import io.hamal.lib.domain._enum.TriggerTypes.*
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.TriggerStatus.Companion.TriggerStatus
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.RecordEntity
@@ -24,15 +24,12 @@ data class TriggerEntity(
     var funcId: FuncId? = null,
     var namespaceId: NamespaceId? = null,
     var name: TriggerName? = null,
-    var type: TriggerType? = null,
+    var type: TriggerTypes? = null,
     var inputs: TriggerInputs? = null,
     var correlationId: CorrelationId? = null,
 
     var topicId: TopicId? = null,
     var duration: TriggerDuration? = null,
-    var hookId: HookId? = null,
-    var hookMethod: HookMethod? = null,
-
     var cron: CronPattern? = null,
 
     var status: TriggerStatus? = null
@@ -84,8 +81,6 @@ data class TriggerEntity(
                 type = Hook,
                 inputs = rec.inputs,
                 correlationId = rec.correlationId,
-                hookId = rec.hookId,
-                hookMethod = rec.hookMethod,
                 recordedAt = rec.recordedAt(),
                 status = rec.status
             )
@@ -106,16 +101,31 @@ data class TriggerEntity(
                 status = rec.status
             )
 
+            is TriggerRecord.EndpointCreated -> copy(
+                cmdId = rec.cmdId,
+                id = rec.entityId,
+                workspaceId = rec.workspaceId,
+                sequence = rec.sequence(),
+                name = rec.name,
+                funcId = rec.funcId,
+                namespaceId = rec.namespaceId,
+                type = Endpoint,
+                inputs = rec.inputs,
+                correlationId = rec.correlationId,
+                recordedAt = rec.recordedAt(),
+                status = rec.status
+            )
+
             is TriggerRecord.SetActive -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
-                status = TriggerStatus.Active
+                status = TriggerStatus(Active)
             )
 
             is TriggerRecord.SetInactive -> copy(
                 cmdId = rec.cmdId,
                 id = rec.entityId,
-                status = TriggerStatus.Inactive
+                status = TriggerStatus(Inactive)
             )
         }
     }
@@ -160,8 +170,6 @@ data class TriggerEntity(
                 correlationId = correlationId,
                 name = name!!,
                 inputs = inputs!!,
-                hookId = hookId!!,
-                hookMethod = hookMethod!!,
                 status = status!!
             )
 
@@ -178,6 +186,19 @@ data class TriggerEntity(
                 cron = cron!!,
                 status = status!!
             )
+
+            Endpoint -> Trigger.Endpoint(
+                cmdId = cmdId,
+                id = id,
+                updatedAt = recordedAt.toUpdatedAt(),
+                workspaceId = workspaceId!!,
+                funcId = funcId!!,
+                namespaceId = namespaceId!!,
+                correlationId = correlationId,
+                name = name!!,
+                inputs = inputs!!,
+                status = status!!
+            )
         }
     }
 }
@@ -190,7 +211,8 @@ fun List<TriggerRecord>.createEntity(): TriggerEntity {
         firstRecord is TriggerRecord.FixedRateCreated ||
                 firstRecord is TriggerRecord.EventCreated ||
                 firstRecord is TriggerRecord.HookCreated ||
-                firstRecord is TriggerRecord.CronCreated
+                firstRecord is TriggerRecord.CronCreated ||
+                firstRecord is TriggerRecord.EndpointCreated
     )
 
     var result = TriggerEntity(

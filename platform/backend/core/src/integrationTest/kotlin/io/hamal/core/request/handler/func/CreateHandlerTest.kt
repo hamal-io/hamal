@@ -1,12 +1,25 @@
 package io.hamal.core.request.handler.func
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.domain._enum.CodeType
-import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueObject
+import io.hamal.lib.domain._enum.CodeTypes.Lua54
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.FuncCreateRequested
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
+import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
+import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
+import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
+import io.hamal.lib.domain.vo.DeployMessage.Companion.DeployMessage
+import io.hamal.lib.domain.vo.DeployedAt.Companion.DeployedAt
+import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
+import io.hamal.lib.domain.vo.FuncInputs
+import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
+import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import io.hamal.repository.api.FuncCode
 import io.hamal.repository.api.FuncDeployment
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
@@ -30,7 +43,7 @@ internal class FuncCreateHandlerTest : BaseRequestHandlerTest() {
                 with(funcs.first()) {
                     assertThat(id, equalTo(FuncId(12345)))
                     assertThat(name, equalTo(FuncName("awesome-func")))
-                    assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "rocks").build())))
+                    assertThat(inputs, equalTo(FuncInputs(ValueObject.builder().set("hamal", "rocks").build())))
                     assertThat(deployment.version, equalTo(codeQueryRepository.get(CodeId(34567)).version))
 
                     assertThat(
@@ -64,15 +77,15 @@ internal class FuncCreateHandlerTest : BaseRequestHandlerTest() {
         FuncCreateRequested(
             requestId = RequestId(1),
             requestedBy = AuthId(2),
-            requestStatus = Submitted,
+            requestStatus = RequestStatus(Submitted),
             workspaceId = testWorkspace.id,
             id = FuncId(12345),
             namespaceId = NamespaceId(23456),
             name = FuncName("awesome-func"),
-            inputs = FuncInputs(HotObject.builder().set("hamal", "rocks").build()),
+            inputs = FuncInputs(ValueObject.builder().set("hamal", "rocks").build()),
             codeId = CodeId(34567),
             code = CodeValue("some code"),
-            codeType = CodeType.Lua54
+            codeType = CodeType(Lua54)
         )
     }
 }

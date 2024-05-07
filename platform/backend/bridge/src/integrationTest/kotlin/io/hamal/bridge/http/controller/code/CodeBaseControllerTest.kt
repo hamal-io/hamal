@@ -24,7 +24,7 @@ internal sealed class CodeBaseControllerTest : BaseControllerTest() {
     fun getCode(codeId: CodeId, codeVersion: CodeVersion): BridgeCode {
         val getCodeResponse = httpTemplate.get("/b1/code/{id}")
             .path("id", codeId)
-            .parameter("version", codeVersion.value)
+            .parameter("version", codeVersion.intValue)
             .execute()
 
         assertThat(getCodeResponse.statusCode, equalTo(Ok))

@@ -1,14 +1,13 @@
 package io.hamal.lib.sdk
 
-import io.hamal.lib.common.hot.HotObjectModule
-import io.hamal.lib.common.serialization.JsonFactoryBuilder
-import io.hamal.lib.domain.Json
+import io.hamal.lib.common.serialization.Serde
+import io.hamal.lib.common.value.serde.SerdeModuleValueJson
 import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.ExecToken
-import io.hamal.lib.domain.vo.ValueObjectJsonModule
+import io.hamal.lib.domain.vo.SerdeModuleValueVariable
+import io.hamal.lib.http.HttpSerdeJsonFactory
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.http.HttpTemplateImpl
-import io.hamal.lib.http.JsonHttpSerdeFactory
 import io.hamal.lib.sdk.api.*
 
 interface ApiSdk {
@@ -17,15 +16,13 @@ interface ApiSdk {
     val adhoc: ApiAdhocService
     val await: ApiAwaitService
     val code: ApiCodeService
-    val endpoint: ApiEndpointService
     val exec: ApiExecService
     val execLog: ApiExecLogService
     val extension: ApiExtensionService
     val func: ApiFuncService
     val workspace: ApiWorkspaceService
-    val hook: ApiHookService
     val namespace: ApiNamespaceService
-    val blueprint: ApiBlueprintService
+    val recipe: ApiRecipeService
     val topic: ApiTopicService
     val trigger: ApiTriggerService
 }
@@ -37,32 +34,27 @@ class ApiSdkImpl : ApiSdk {
         token: AuthToken,
         execToken: ExecToken
     ) {
-        val json = Json(
-            JsonFactoryBuilder()
-                .register(ApiJsonModule)
-                .register(HotObjectModule)
-                .register(ValueObjectJsonModule)
-        )
+        val serde = Serde.json()
+            .register(SerdeModuleJsonApi)
+            .register(SerdeModuleValueJson)
+            .register(SerdeModuleValueVariable)
 
         template = HttpTemplateImpl(
             baseUrl = apiHost,
             headerFactory = {
                 this["accept"] = "application/json"
                 this["authorization"] = "Bearer ${token.value}"
-                this["x-exec-token"] = execToken.value
+                this["x-exec-token"] = execToken.stringValue
             },
-            serdeFactory = JsonHttpSerdeFactory(json)
+            serdeFactory = HttpSerdeJsonFactory(serde)
         )
     }
 
-
     constructor(apiHost: String, token: AuthToken) {
-        val json = Json(
-            JsonFactoryBuilder()
-                .register(ApiJsonModule)
-                .register(HotObjectModule)
-                .register(ValueObjectJsonModule)
-        )
+        val serde = Serde.json()
+            .register(SerdeModuleJsonApi)
+            .register(SerdeModuleValueJson)
+            .register(SerdeModuleValueVariable)
 
         template = HttpTemplateImpl(
             baseUrl = apiHost,
@@ -70,7 +62,7 @@ class ApiSdkImpl : ApiSdk {
                 this["accept"] = "application/json"
                 this["authorization"] = "Bearer ${token.value}"
             },
-            serdeFactory = JsonHttpSerdeFactory(json)
+            serdeFactory = HttpSerdeJsonFactory(serde)
         )
     }
 
@@ -98,10 +90,6 @@ class ApiSdkImpl : ApiSdk {
         ApiCodeServiceImpl(template)
     }
 
-    override val endpoint: ApiEndpointService by lazy {
-        ApiEndpointServiceImpl(template)
-    }
-
     override val exec: ApiExecService by lazy {
         ApiExecServiceImpl(template)
     }
@@ -122,16 +110,12 @@ class ApiSdkImpl : ApiSdk {
         ApiWorkspaceServiceImpl(template)
     }
 
-    override val hook: ApiHookService by lazy {
-        ApiHookServiceImpl(template)
-    }
-
     override val namespace: ApiNamespaceService by lazy {
         ApiNamespaceServiceImpl(template)
     }
 
-    override val blueprint: ApiBlueprintService by lazy {
-        ApiBlueprintServiceImpl(template)
+    override val recipe: ApiRecipeService by lazy {
+        ApiRecipeServiceImpl(template)
     }
 
     override val topic: ApiTopicService by lazy {

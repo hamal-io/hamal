@@ -1,10 +1,11 @@
 package io.hamal.api.http.controller.func
 
-import io.hamal.lib.domain._enum.CodeType
-import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.domain._enum.CodeTypes.Lua54
+import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.FuncInputs
-import io.hamal.lib.domain.vo.FuncName
-import io.hamal.lib.domain.vo.NamespaceName
+import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
+import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.lib.sdk.api.ApiFuncCreateRequest
 import io.hamal.lib.sdk.api.ApiFuncList
 import org.hamcrest.MatcherAssert.assertThat
@@ -26,7 +27,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
                     name = FuncName("func-one"),
                     inputs = FuncInputs(),
                     code = CodeValue(""),
-                    codeType = CodeType.Lua54
+                    codeType = CodeType(Lua54)
                 )
             )
         ).id
@@ -49,7 +50,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
                         name = FuncName("func-$it"),
                         inputs = FuncInputs(),
                         code = CodeValue(""),
-                        codeType = CodeType.Lua54
+                        codeType = CodeType(Lua54)
                     )
                 )
             }
@@ -75,7 +76,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
                     name = FuncName("func-$it"),
                     inputs = FuncInputs(),
                     code = CodeValue(""),
-                    codeType = CodeType.Lua54
+                    codeType = CodeType(Lua54)
                 )
             )
         }

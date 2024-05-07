@@ -1,7 +1,7 @@
 local http = require_plugin('net.http')
-local decimal = require('decimal')
+local decimal = require('std.decimal').create()
 
-local json = {
+local body = {
     s = 'hamal',
     d = decimal.new('12.21'),
     n = 24,
@@ -14,9 +14,9 @@ local json = {
 local url = context.env.test_url .. '/v1/json-echo'
 
 local err, response = http.execute({
-    http.requests.post({ url = url, json = json }),
-    http.requests.patch({ url = url, json = json }),
-    http.requests.put({ url = url, json = json }),
+    http.requests.post({ url = url, body = body, produces = "JSON", consumes = "JSON" }),
+    http.requests.patch({ url = url, body = body, produces = "JSON", consumes = "JSON" }),
+    http.requests.put({ url = url, body = body, produces = "JSON", consumes = "JSON" }),
 })
 
 assert(err == nil)

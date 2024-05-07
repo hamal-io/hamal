@@ -1,13 +1,23 @@
 package io.hamal.core.request.handler.exec
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.EventToSubmit
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.ExecStates
+import io.hamal.lib.domain._enum.ExecStates.Completed
+import io.hamal.lib.domain._enum.ExecStates.Started
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.ExecCompleteRequested
-import io.hamal.lib.domain.vo.*
-import io.hamal.lib.domain.vo.ExecStatus.Completed
-import io.hamal.lib.domain.vo.ExecStatus.Started
+import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
+import io.hamal.lib.domain.vo.EventPayload
+import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
+import io.hamal.lib.domain.vo.ExecResult
+import io.hamal.lib.domain.vo.ExecState
+import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
+import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
+import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import io.hamal.repository.api.Exec
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import org.hamcrest.MatcherAssert.assertThat
@@ -36,7 +46,7 @@ internal class ExecCompleteHandlerTest : BaseRequestHandlerTest() {
     }
 
     @TestFactory
-    fun `Tries to complete exec, but not in status Started`() = ExecStatus.values()
+    fun `Tries to complete exec, but not in status Started`() = ExecStates.values()
         .filterNot { it == Started }
         .map { execStatus ->
             dynamicTest("Can not complete: $execStatus") {
@@ -59,14 +69,15 @@ internal class ExecCompleteHandlerTest : BaseRequestHandlerTest() {
         ExecCompleteRequested(
             requestId = RequestId(10),
             requestedBy = AuthId(20),
-            requestStatus = RequestStatus.Submitted,
+            requestStatus = RequestStatus(Submitted),
             id = ExecId(1234),
-            result = ExecResult(HotObject.builder().set("hamal", "rocks").build()),
-            state = ExecState(HotObject.builder().set("counter", 1).build()),
+            statusCode = ExecStatusCode(200),
+            result = ExecResult(ValueObject.builder().set("hamal", "rocks").build()),
+            state = ExecState(ValueObject.builder().set("counter", 1).build()),
             events = listOf(
                 EventToSubmit(
                     topicName = TopicName("test-completion"),
-                    payload = EventPayload(HotObject.builder().set("ich", "habFertsch").build())
+                    payload = EventPayload(ValueObject.builder().set("ich", "habFertsch").build())
                 )
             ),
         )
@@ -79,7 +90,8 @@ internal class ExecCompleteHandlerTest : BaseRequestHandlerTest() {
                 require(this is Exec.Completed)
                 assertThat(id, equalTo(ExecId(1234)))
                 assertThat(status, equalTo(Completed))
-                assertThat(result, equalTo(ExecResult(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(statusCode, equalTo(ExecStatusCode(200)))
+                assertThat(result, equalTo(ExecResult(ValueObject.builder().set("hamal", "rocks").build())))
             }
         }
     }

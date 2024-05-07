@@ -6,7 +6,7 @@ import io.hamal.core.component.GenerateSalt
 import io.hamal.core.component.GenerateToken
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatuses
 import io.hamal.lib.domain.request.AccountCreateRequested
 import io.hamal.lib.domain.request.AccountCreateRootRequest
 import io.hamal.lib.domain.vo.*
@@ -32,7 +32,7 @@ class AccountCreateRootAdapter(
                 AccountCreateRequested(
                     requestId = generateDomainId(::RequestId),
                     requestedBy = SecurityContext.currentAuthId,
-                    requestStatus = RequestStatus.Submitted,
+                    requestStatus = RequestStatus.RequestStatus(RequestStatuses.Submitted),
                     accountId = AccountId.root,
                     accountType = AccountType.Root,
                     workspaceId = WorkspaceId.root,

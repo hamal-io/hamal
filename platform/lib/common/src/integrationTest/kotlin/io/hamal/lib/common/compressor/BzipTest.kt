@@ -1,6 +1,6 @@
 package io.hamal.lib.common.compressor
 
-import io.hamal.lib.common.compress.BzipCompressor
+import io.hamal.lib.common.compress.CompressorBzip
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -22,10 +22,10 @@ internal object BzipTest {
             }
     """.trimIndent()
 
-        val compressed = BzipCompressor.compress(uncompressed)
+        val compressed = CompressorBzip.compress(uncompressed)
         assertThat(compressed.size, equalTo(256))
 
-        val result = BzipCompressor.toString(compressed)
+        val result = CompressorBzip.toString(compressed)
         assertThat(result, equalTo(uncompressed))
 
     }
@@ -2395,10 +2395,10 @@ internal object BzipTest {
         
     """.trimIndent()
 
-        val compressed = BzipCompressor.compress(uncompressed)
+        val compressed = CompressorBzip.compress(uncompressed)
         assertThat(compressed.size, equalTo(63141))
 
-        val result = BzipCompressor.toString(compressed)
+        val result = CompressorBzip.toString(compressed)
         assertThat(result, equalTo(uncompressed))
     }
 }

@@ -1,6 +1,7 @@
 package io.hamal.repository.sqlite.record.topic
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -8,8 +9,8 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Topic
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
-import io.hamal.repository.record.json
 import io.hamal.repository.record.topic.TopicRecord
+import io.hamal.repository.sqlite.hon
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
@@ -28,7 +29,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
                 set("id", topicId)
             }
             map { rs ->
-                json.decompressAndDeserialize(Topic::class, rs.getBytes("data"))
+                hon.decompressAndRead(Topic::class, rs.getBytes("data"))
             }
         }
     }
@@ -48,7 +49,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
                 set("topicName", topicName)
             }
             map { rs ->
-                json.decompressAndDeserialize(Topic::class, rs.getBytes("data"))
+                hon.decompressAndRead(Topic::class, rs.getBytes("data"))
             }
         }
     }
@@ -79,7 +80,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
                 set("limit", query.limit)
             }
             map { rs ->
-                json.decompressAndDeserialize(Topic::class, rs.getBytes("data"))
+                hon.decompressAndRead(Topic::class, rs.getBytes("data"))
             }
         }
     }
@@ -126,9 +127,9 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
             set("id", obj.id)
             set("workspaceId", obj.workspaceId)
             set("namespaceId", obj.namespaceId)
-            set("type", obj.type.value)
+            set("type", obj.type.enumValue.value)
             set("name", obj.name)
-            set("data", json.serializeAndCompress(obj))
+            set("data", hon.writeAndCompress(obj))
         }
     }
 
@@ -137,7 +138,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
             """
             CREATE TABLE IF NOT EXISTS current (
                  id             INTEGER NOT NULL,
-                 workspace_id       INTEGER NOT NULL,
+                 workspace_id   INTEGER NOT NULL,
                  namespace_id   INTEGER NOT NULL,
                  type           INTEGER NOT NULL,
                  name           VARCHAR(255) NOT NULL,
@@ -156,15 +157,16 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
         return if (types.isEmpty()) {
             ""
         } else {
-            "AND type IN (${types.joinToString(",") { "${it.value}" }})"
+            "AND type IN (${types.joinToString(",") { "${it.enumValue.value}" }})"
         }
     }
+
 
     private fun TopicQuery.ids(): String {
         return if (topicIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${topicIds.joinToString(",") { "${it.value.value}" }})"
+            "AND id IN (${topicIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -172,7 +174,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
         return if (workspaceIds.isEmpty()) {
             ""
         } else {
-            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -180,7 +182,7 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
         return if (namespaceIds.isEmpty()) {
             ""
         } else {
-            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 

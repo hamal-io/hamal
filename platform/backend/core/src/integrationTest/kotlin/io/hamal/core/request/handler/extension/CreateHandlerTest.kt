@@ -1,9 +1,15 @@
 package io.hamal.core.request.handler.extension
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.ExtensionCreateRequested
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
+import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
+import io.hamal.lib.domain.vo.ExtensionId.Companion.ExtensionId
+import io.hamal.lib.domain.vo.ExtensionName.Companion.ExtensionName
+import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -29,7 +35,7 @@ internal class ExtensionCreateHandlerTest : BaseRequestHandlerTest() {
         ExtensionCreateRequested(
             requestId = RequestId(1),
             requestedBy = AuthId(2),
-            requestStatus = RequestStatus.Submitted,
+            requestStatus = RequestStatus(Submitted),
             workspaceId = testWorkspace.id,
             id = ExtensionId(1234),
             name = ExtensionName("TestExtension"),

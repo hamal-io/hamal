@@ -12,7 +12,7 @@ class LogTopicAppenderImpl<VALUE : Any>(
 ) : LogTopicAppender<VALUE> {
 
     override fun append(cmdId: CmdId, topicId: LogTopicId, value: VALUE) {
-        val encoded = json.serialize(value).toByteArray()
+        val encoded = serde.write(value).toByteArray()
         repository.append(cmdId, topicId, encoded)
     }
 }

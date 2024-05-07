@@ -1,7 +1,7 @@
 package io.hamal.api.http.controller.extension
 
-import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.domain.vo.ExtensionName
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
+import io.hamal.lib.domain.vo.ExtensionName.Companion.ExtensionName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.http.body

@@ -6,7 +6,7 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 
-object BzipCompressor : Compressor {
+object CompressorBzip : Compressor {
 
     override fun compress(uncompressed: ByteArray): ByteArray {
         val byteStream = ByteArrayOutputStream(uncompressed.size)

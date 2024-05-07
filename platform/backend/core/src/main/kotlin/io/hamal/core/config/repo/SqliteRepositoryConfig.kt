@@ -8,16 +8,14 @@ import io.hamal.repository.sqlite.RequestSqliteRepository
 import io.hamal.repository.sqlite.StateSqliteRepository
 import io.hamal.repository.sqlite.log.LogBrokerSqliteRepository
 import io.hamal.repository.sqlite.record.account.AccountSqliteRepository
-import io.hamal.repository.sqlite.record.blueprint.BlueprintSqliteRepository
 import io.hamal.repository.sqlite.record.code.CodeSqliteRepository
-import io.hamal.repository.sqlite.record.endpoint.EndpointSqliteRepository
 import io.hamal.repository.sqlite.record.exec.ExecSqliteRepository
 import io.hamal.repository.sqlite.record.extension.ExtensionSqliteRepository
 import io.hamal.repository.sqlite.record.feedback.FeedbackSqliteRepository
 import io.hamal.repository.sqlite.record.func.FuncSqliteRepository
-import io.hamal.repository.sqlite.record.hook.HookSqliteRepository
 import io.hamal.repository.sqlite.record.namespace.NamespaceSqliteRepository
 import io.hamal.repository.sqlite.record.namespace_tree.NamespaceTreeSqliteRepository
+import io.hamal.repository.sqlite.record.recipe.RecipeSqliteRepository
 import io.hamal.repository.sqlite.record.topic.TopicSqliteRepository
 import io.hamal.repository.sqlite.record.trigger.TriggerSqliteRepository
 import io.hamal.repository.sqlite.record.workspace.WorkspaceSqliteRepository
@@ -50,15 +48,6 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
     open fun authCmdRepository() = authRepository()
 
     @Bean
-    open fun blueprintRepository() = BlueprintSqliteRepository(path)
-
-    @Bean
-    open fun blueprintCmdRepository(): BlueprintCmdRepository = blueprintRepository()
-
-    @Bean
-    open fun blueprintQueryRepository(): BlueprintQueryRepository = blueprintRepository()
-
-    @Bean
     open fun codeRepository() = CodeSqliteRepository(path)
 
     @Bean
@@ -66,15 +55,6 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
 
     @Bean
     open fun codeQueryRepository() = codeRepository()
-
-    @Bean
-    open fun endpointRepository() = EndpointSqliteRepository(path)
-
-    @Bean
-    open fun endpointCmdRepository() = endpointRepository()
-
-    @Bean
-    open fun endpointQueryRepository() = endpointRepository()
 
     @Bean
     open fun extensionRepository() = ExtensionSqliteRepository(path)
@@ -111,15 +91,6 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
 
     @Bean
     open fun workspaceCmdRepository() = workspaceRepository()
-
-    @Bean
-    open fun hookRepository() = HookSqliteRepository(path)
-
-    @Bean
-    open fun hookQueryRepository() = hookRepository()
-
-    @Bean
-    open fun hookCmdRepository() = hookRepository()
 
     @Bean
     open fun namespaceRepository() = NamespaceSqliteRepository(path)
@@ -161,6 +132,33 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
     open fun logBrokerRepository() = LogBrokerSqliteRepository(path)
 
     @Bean
+    open fun recipeRepository() = RecipeSqliteRepository(path)
+
+    @Bean
+    open fun recipeCmdRepository(): RecipeCmdRepository = recipeRepository()
+
+    @Bean
+    open fun recipeQueryRepository(): RecipeQueryRepository = recipeRepository()
+
+    @Bean
+    open fun requestRepository(): RequestRepository = RequestSqliteRepository(path)
+
+    @Bean
+    open fun requestCmdRepository(): RequestCmdRepository = requestRepository()
+
+    @Bean
+    open fun requestQueryRepository(): RequestQueryRepository = requestRepository()
+
+    @Bean
+    open fun stateRepository() = StateSqliteRepository(path)
+
+    @Bean
+    open fun stateCmdRepository(): StateCmdRepository = stateRepository()
+
+    @Bean
+    open fun stateQueryRepository(): StateQueryRepository = stateRepository()
+
+    @Bean
     open fun topicRepository(): TopicRepository = TopicSqliteRepository(
         path = path,
         logBrokerRepository = logBrokerRepository(),
@@ -180,24 +178,6 @@ open class SqliteRepositoryConfig(backendBasePath: BackendBasePath) {
 
     @Bean
     open fun triggerQueryRepository(): TriggerQueryRepository = triggerRepository()
-
-    @Bean
-    open fun stateRepository() = StateSqliteRepository(path)
-
-    @Bean
-    open fun stateCmdRepository(): StateCmdRepository = stateRepository()
-
-    @Bean
-    open fun stateQueryRepository(): StateQueryRepository = stateRepository()
-
-    @Bean
-    open fun requestRepository(): RequestRepository = RequestSqliteRepository(path)
-
-    @Bean
-    open fun requestCmdRepository(): RequestCmdRepository = requestRepository()
-
-    @Bean
-    open fun requestQueryRepository(): RequestQueryRepository = requestRepository()
 
     private val path = Path(backendBasePath.value)
 }

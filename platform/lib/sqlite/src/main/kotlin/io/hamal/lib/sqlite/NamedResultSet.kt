@@ -1,7 +1,8 @@
 package io.hamal.lib.sqlite
 
-import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueSnowflakeId
+import io.hamal.lib.common.value.ValueVariableSnowflakeId
 import java.sql.ResultSet
 import java.time.Instant
 
@@ -11,8 +12,8 @@ interface NamedResultSet : AutoCloseable {
     fun getLong(parameter: String): Long
     fun getString(parameter: String): String
     fun getInstant(parameter: String): Instant
-    fun getSnowflakeId(parameter: String): SnowflakeId
-    fun <ID : ValueObjectId> getId(parameter: String, ctor: (SnowflakeId) -> ID): ID
+    fun getSnowflakeId(parameter: String): ValueSnowflakeId
+    fun <ID : ValueVariableSnowflakeId> getId(parameter: String, ctor: (ValueSnowflakeId) -> ID): ID
     fun getBytes(parameter: String): ByteArray
     fun <T : Any> map(mapper: (NamedResultSet) -> T): List<T>
 }
@@ -46,12 +47,12 @@ class DefaultNamedResultSet(
         return delegate.getTimestamp(parameter).toInstant()
     }
 
-    override fun getSnowflakeId(parameter: String): SnowflakeId {
+    override fun getSnowflakeId(parameter: String): ValueSnowflakeId {
         ensureParameterExists(parameter)
-        return SnowflakeId(delegate.getLong(parameter))
+        return ValueSnowflakeId(SnowflakeId(delegate.getLong(parameter)))
     }
 
-    override fun <ID : ValueObjectId> getId(parameter: String, ctor: (SnowflakeId) -> ID): ID {
+    override fun <ID : ValueVariableSnowflakeId> getId(parameter: String, ctor: (ValueSnowflakeId) -> ID): ID {
         ensureParameterExists(parameter)
         return ctor(getSnowflakeId(parameter))
     }

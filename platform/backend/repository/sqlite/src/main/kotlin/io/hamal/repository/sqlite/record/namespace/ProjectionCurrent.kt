@@ -1,12 +1,13 @@
 package io.hamal.repository.sqlite.record.namespace
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
-import io.hamal.repository.record.json
+import io.hamal.repository.sqlite.hon
 import io.hamal.repository.record.namespace.NamespaceRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
@@ -28,7 +29,7 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceId, NamespaceRecor
                 set("id", namespaceId)
             }
             map { rs ->
-                json.decompressAndDeserialize(Namespace::class, rs.getBytes("data"))
+                hon.decompressAndRead(Namespace::class, rs.getBytes("data"))
             }
         }
     }
@@ -53,7 +54,7 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceId, NamespaceRecor
                 set("limit", query.limit)
             }
             map { rs ->
-                json.decompressAndDeserialize(Namespace::class, rs.getBytes("data"))
+                hon.decompressAndRead(Namespace::class, rs.getBytes("data"))
             }
         }
     }
@@ -93,7 +94,7 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceId, NamespaceRecor
         ) {
             set("id", obj.id)
             set("workspaceId", obj.workspaceId)
-            set("data", json.serializeAndCompress(obj))
+            set("data", hon.writeAndCompress(obj))
         }
     }
 
@@ -131,7 +132,7 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceId, NamespaceRecor
         return if (workspaceIds.isEmpty()) {
             ""
         } else {
-            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -139,7 +140,7 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceId, NamespaceRecor
         return if (namespaceIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${namespaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND id IN (${namespaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 }

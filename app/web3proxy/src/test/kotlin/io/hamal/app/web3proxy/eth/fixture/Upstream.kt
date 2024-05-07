@@ -8,7 +8,7 @@ import io.hamal.lib.web3.evm.chain.eth.domain.EthGetBlockResponse
 import io.hamal.lib.web3.evm.chain.eth.domain.EthResponse
 import io.hamal.lib.web3.evm.chain.eth.http.EthBatchService
 import io.hamal.lib.web3.evm.domain.EvmRequestId
-import io.hamal.lib.web3.json
+import io.hamal.lib.web3.serde
 
 internal class EthBatchServiceFixture : EthBatchService<EthBatchServiceFixture> {
 
@@ -33,7 +33,7 @@ internal class EthBatchServiceFixture : EthBatchService<EthBatchServiceFixture> 
             responses.add(
                 EthGetBlockResponse(
                     id = EvmRequestId(responses.size.toString()),
-                    result = json.deserialize(EthBlockData::class, String(blockData.readAllBytes()))
+                    result = serde.read(EthBlockData::class, String(blockData.readAllBytes()))
                 )
             )
         }

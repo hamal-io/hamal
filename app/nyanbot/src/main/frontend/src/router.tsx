@@ -2,14 +2,14 @@ import React from "react";
 import {createBrowserRouter} from "react-router-dom";
 import './global.css'
 
-// public
 import LandingPage from "./pages/landing";
 import NotFoundPage from "@/app/not-found.tsx";
 import RootLayout from "@/app/root-layout.tsx";
 import {TestPage} from "@/pages/test"
-import {TestEditorPage} from "@/pages/test-editor";
 import FlowListPage from "@/pages/app/flow-list";
 import FlowDetailPage from "@/pages/app/flow-detail";
+import RecipeListPage from "@/pages/app/recipe-list";
+import RecipeDetailPage from "@/pages/app/recipe-detail";
 
 export const router = createBrowserRouter([
     {
@@ -31,15 +31,21 @@ export const router = createBrowserRouter([
             </RootLayout>
     },
     {
-        path: "/test", element:
+        path: "/recipes", element:
             <RootLayout>
-                <TestPage/>
+                <RecipeListPage/>
             </RootLayout>
     },
     {
-        path: "/test-editor", element:
+        path: "recipes/:recipeId", element:
             <RootLayout>
-                <TestEditorPage/>
+                <RecipeDetailPage/>
+            </RootLayout>
+    },
+    {
+        path: "/test", element:
+            <RootLayout>
+                <TestPage/>
             </RootLayout>
     },
     {path: "*", element: <NotFoundPage/>}

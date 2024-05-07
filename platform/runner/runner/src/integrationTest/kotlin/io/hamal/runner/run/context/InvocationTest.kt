@@ -1,35 +1,71 @@
 package io.hamal.runner.run.context
 
-import io.hamal.lib.common.hot.HotArray
-import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.common.hot.HotString
-import io.hamal.lib.domain.Event
-import io.hamal.lib.domain.EventTopic
+import io.hamal.lib.common.value.*
 import io.hamal.lib.domain.State
-import io.hamal.lib.domain._enum.CodeType
-import io.hamal.lib.domain.toHot
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain._enum.CodeTypes.Lua54
+import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
+import io.hamal.lib.domain.vo.EventId.Companion.EventId
+import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
+import io.hamal.lib.domain.vo.ExecInputs
+import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
+import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
+import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
+import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
+import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.runner.connector.UnitOfWork
-import io.hamal.runner.run.AbstractExecuteTest
+import io.hamal.runner.run.AbstractTest
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal object EventInvocationTest : AbstractExecuteTest() {
+internal object EventInvocationTest : AbstractTest() {
+
 
     @Test
     fun `Events available in code`() {
-        val testExecutor = createTestRunner()
-        testExecutor.run(
+        runTest(
             UnitOfWork(
                 id = ExecId(1234),
                 execToken = ExecToken("ExecToken"),
                 namespaceId = NamespaceId(9876),
                 workspaceId = WorkspaceId(5432),
-                inputs = ExecInputs(HotObject.builder().set("events", events.toHot()).build()),
+                triggerId = TriggerId(4567),
+                inputs = ExecInputs(
+                    ValueObject.builder()
+                        .set(
+                            "events", ValueArray.builder()
+                                .append(
+                                    ValueObject.builder()
+                                        .set("id", EventId(1234))
+                                        .set(
+                                            "topic", ValueObject.builder()
+                                                .set("id", TopicId(1))
+                                                .set("name", TopicName("Topic-One"))
+                                                .build()
+                                        )
+                                        .set("payload", ValueObject.builder().set("block", 43).build())
+                                        .build()
+                                )
+                                .append(
+                                    ValueObject.builder()
+                                        .set("id", EventId(4321))
+                                        .set(
+                                            "topic", ValueObject.builder()
+                                                .set("id", TopicId(23))
+                                                .set("name", TopicName("Topic-Two"))
+                                                .build()
+                                        )
+                                        .set("payload", ValueObject.builder().set("block", 44).build())
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .build()
+                ),
                 state = State(),
                 code = CodeValue(
                     """
@@ -49,7 +85,7 @@ internal object EventInvocationTest : AbstractExecuteTest() {
 
                 """.trimIndent()
                 ),
-                codeType = CodeType.Lua54
+                codeType = CodeType(Lua54)
             )
         )
     }
@@ -58,65 +94,87 @@ internal object EventInvocationTest : AbstractExecuteTest() {
     fun `Events available in function`() {
         val testFn = TestFunction()
 
-        val testExecutor = createTestRunner(KuaString("fn") to testFn)
-        testExecutor.run(
+        runTest(
             UnitOfWork(
                 id = ExecId(1234),
                 execToken = ExecToken("ExecToken"),
                 namespaceId = NamespaceId(9876),
                 workspaceId = WorkspaceId(5432),
-                inputs = ExecInputs(HotObject.builder().set("events", events.toHot()).build()),
+                triggerId = TriggerId(4567),
+                inputs = ExecInputs(
+                    ValueObject.builder()
+                        .set(
+                            "events", ValueArray.builder()
+                                .append(
+                                    ValueObject.builder()
+                                        .set("id", EventId(1234))
+                                        .set(
+                                            "topic", ValueObject.builder()
+                                                .set("id", TopicId(1))
+                                                .set("name", TopicName("Topic-One"))
+                                                .build()
+                                        )
+                                        .set("payload", ValueObject.builder().set("block", 43).build())
+                                        .build()
+                                )
+                                .append(
+                                    ValueObject.builder()
+                                        .set("id", EventId(4321))
+                                        .set(
+                                            "topic", ValueObject.builder()
+                                                .set("id", TopicId(23))
+                                                .set("name", TopicName("Topic-Two"))
+                                                .build()
+                                        )
+                                        .set("payload", ValueObject.builder().set("block", 44).build())
+                                        .build()
+                                )
+                                .build()
+                        )
+                        .build()
+                ),
                 state = State(),
                 code = CodeValue("require_plugin('test').fn()"),
-                codeType = CodeType.Lua54
-            )
+                codeType = CodeType(Lua54)
+            ),
+            testPlugins = mapOf(ValueString("fn") to testFn)
         )
-        assertThat(testFn.result?.size, equalTo(2))
 
-        assertThat(testFn.result!![0].asObject()["id"].stringValue, equalTo("4d2"))
-        assertThat(testFn.result!![0].asObject()["topic"].asObject()["id"].stringValue, equalTo("1"))
-        assertThat(testFn.result!![0].asObject()["topic"].asObject()["name"].stringValue, equalTo("Topic-One"))
-        assertThat(testFn.result!![0].asObject()["payload"].asObject()["block"].intValue, equalTo(43))
+        assertThat(testFn.result?.value?.size, equalTo(2))
+
+        assertThat(testFn.result!!.asObject(0).getSnowflakeId("id"), equalTo(ValueSnowflakeId("4d2")))
+        assertThat(testFn.result!!.asObject(0).getObject("topic").getSnowflakeId("id"), equalTo(ValueSnowflakeId("1")))
+        assertThat(testFn.result!!.asObject(0).getObject("topic").getString("name"), equalTo(ValueString("Topic-One")))
+        assertThat(testFn.result!!.asObject(1).getObject("topic").getString("name"), equalTo(ValueString("Topic-Two")))
+        assertThat(testFn.result!!.asObject(0).getObject("payload").getNumber("block"), equalTo(ValueNumber(43)))
     }
 
-    class TestFunction(var result: HotArray? = null) : Function0In0Out() {
+    class TestFunction(var result: ValueArray? = null) : Function0In0Out() {
         override fun invoke(ctx: FunctionContext) {
             val inputs = ctx[ExecInputs::class]
-            result = inputs.value.asArray("events")
+            result = inputs.value["events"] as ValueArray
         }
     }
-
-    private val events = listOf(
-        Event(
-            topic = EventTopic(
-                id = TopicId(1), name = TopicName("Topic-One")
-            ), id = EventId(1234), payload = EventPayload(HotObject.builder().set("block", 43).build())
-        ), Event(
-            topic = EventTopic(
-                id = TopicId(23), name = TopicName("Topic-Two")
-            ), id = EventId(4321), payload = EventPayload(HotObject.builder().set("block", 44).build())
-        )
-    )
 }
 
-internal object HookInvocationTest : AbstractExecuteTest() {
+internal object HookInvocationTest : AbstractTest() {
 
     @Test
     fun `Hook available in code`() {
-        val testExecutor = createTestRunner()
-        testExecutor.run(
+        runTest(
             UnitOfWork(
                 id = ExecId(1234),
                 execToken = ExecToken("ExecToken"),
                 namespaceId = NamespaceId(9876),
                 workspaceId = WorkspaceId(5432),
+                triggerId = TriggerId(4567),
                 inputs = ExecInputs(
-                    HotObject.builder().set(
-                        "hook", HotObject.builder()
+                    ValueObject.builder().set(
+                        "hook", ValueObject.builder()
                             .set("method", "Delete")
-                            .set("headers", HotObject.builder().set("content-type", "application/json").build())
-                            .set("parameters", HotObject.builder().set("answer", 42).build())
-                            .set("content", HotObject.builder().set("hamal", "rocks").build())
+                            .set("headers", ValueObject.builder().set("content-type", "application/json").build())
+                            .set("parameters", ValueObject.builder().set("answer", 42).build())
+                            .set("content", ValueObject.builder().set("hamal", "rocks").build())
                             .build()
                     ).build()
                 ),
@@ -141,7 +199,7 @@ internal object HookInvocationTest : AbstractExecuteTest() {
 
                 """.trimIndent()
                 ),
-                codeType = CodeType.Lua54
+                codeType = CodeType(Lua54)
             )
         )
     }
@@ -150,69 +208,70 @@ internal object HookInvocationTest : AbstractExecuteTest() {
     fun `Hook available in function`() {
         val testFn = TestFunction()
 
-        val testExecutor = createTestRunner(KuaString("fn") to testFn)
-        testExecutor.run(
+        runTest(
             UnitOfWork(
                 id = ExecId(1234),
                 execToken = ExecToken("ExecToken"),
                 namespaceId = NamespaceId(9876),
                 workspaceId = WorkspaceId(5432),
+                triggerId = TriggerId(4567),
                 inputs = ExecInputs(
-                    HotObject.builder().set(
-                        "hook", HotObject.builder()
+                    ValueObject.builder().set(
+                        "hook", ValueObject.builder()
                             .set("method", "Delete")
-                            .set("headers", HotObject.builder().set("content-type", "application/json").build())
-                            .set("parameters", HotObject.builder().set("answer", 42).build())
-                            .set("content", HotObject.builder().set("hamal", "rocks").build())
+                            .set("headers", ValueObject.builder().set("content-type", "application/json").build())
+                            .set("parameters", ValueObject.builder().set("answer", 42).build())
+                            .set("content", ValueObject.builder().set("hamal", "rocks").build())
                             .build()
                     ).build()
                 ),
                 state = State(),
                 code = CodeValue("require_plugin('test').fn()"),
-                codeType = CodeType.Lua54
-            )
+                codeType = CodeType(Lua54)
+            ),
+            testPlugins = mapOf(ValueString("fn") to testFn)
         )
-        assertThat(testFn.method, equalTo(HotString("Delete")))
-        assertThat(testFn.headers, equalTo(HotObject.builder().set("content-type", "application/json").build()))
-        assertThat(testFn.parameters, equalTo(HotObject.builder().set("answer", 42).build()))
-        assertThat(testFn.content, equalTo(HotObject.builder().set("hamal", "rocks").build()))
+        assertThat(testFn.method, equalTo(ValueString("Delete")))
+        assertThat(testFn.headers, equalTo(ValueObject.builder().set("content-type", "application/json").build()))
+        assertThat(testFn.parameters, equalTo(ValueObject.builder().set("answer", 42).build()))
+        assertThat(testFn.content, equalTo(ValueObject.builder().set("hamal", "rocks").build()))
     }
 
     class TestFunction(
-        var method: HotString? = null,
-        var headers: HotObject? = null,
-        var parameters: HotObject? = null,
-        var content: HotObject? = null
+        var method: ValueString? = null,
+        var headers: ValueObject? = null,
+        var parameters: ValueObject? = null,
+        var content: ValueObject? = null
     ) : Function0In0Out() {
         override fun invoke(ctx: FunctionContext) {
             val inputs = ctx[ExecInputs::class]
-            method = inputs.value["hook"].asObject()["method"].asString()
-            headers = inputs.value["hook"].asObject()["headers"].asObject()
-            parameters = inputs.value["hook"].asObject()["parameters"].asObject()
-            content = inputs.value["hook"].asObject()["content"].asObject()
+            method = inputs.value.getObject("hook").getString("method")
+            headers = inputs.value.getObject("hook").getObject("headers")
+            parameters = inputs.value.getObject("hook").getObject("parameters")
+            content = inputs.value.getObject("hook").getObject("content")
         }
     }
 
 }
 
-internal object EndpointInvocationTest : AbstractExecuteTest() {
+internal object EndpointInvocationTest : AbstractTest() {
 
     @Test
     fun `Endpoint available in code`() {
-        val testExecutor = createTestRunner()
-        testExecutor.run(
+        runTest(
             UnitOfWork(
                 id = ExecId(1234),
                 execToken = ExecToken("ExecToken"),
                 namespaceId = NamespaceId(9876),
                 workspaceId = WorkspaceId(5432),
+                triggerId = TriggerId(4567),
                 inputs = ExecInputs(
-                    HotObject.builder().set(
-                        "endpoint", HotObject.builder()
+                    ValueObject.builder().set(
+                        "endpoint", ValueObject.builder()
                             .set("method", "Delete")
-                            .set("headers", HotObject.builder().set("content-type", "application/json").build())
-                            .set("parameters", HotObject.builder().set("answer", "42").build())
-                            .set("content", HotObject.builder().set("hamal", "rocks").build())
+                            .set("headers", ValueObject.builder().set("content-type", "application/json").build())
+                            .set("parameters", ValueObject.builder().set("answer", "42").build())
+                            .set("content", ValueObject.builder().set("hamal", "rocks").build())
                             .build()
                     ).build()
                 ),
@@ -237,7 +296,7 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
 
                 """.trimIndent()
                 ),
-                codeType = CodeType.Lua54
+                codeType = CodeType(Lua54)
             )
         )
     }
@@ -246,46 +305,47 @@ internal object EndpointInvocationTest : AbstractExecuteTest() {
     fun `Endpoint available in function`() {
         val testFn = TestFunction()
 
-        val testExecutor = createTestRunner(KuaString("fn") to testFn)
-        testExecutor.run(
+        runTest(
             UnitOfWork(
                 id = ExecId(1234),
                 execToken = ExecToken("ExecToken"),
                 namespaceId = NamespaceId(9876),
                 workspaceId = WorkspaceId(5432),
+                triggerId = TriggerId(4567),
                 inputs = ExecInputs(
-                    HotObject.builder().set(
-                        "endpoint", HotObject.builder()
+                    ValueObject.builder().set(
+                        "endpoint", ValueObject.builder()
                             .set("method", "Delete")
-                            .set("headers", HotObject.builder().set("content-type", "application/json").build())
-                            .set("parameters", HotObject.builder().set("answer", "42").build())
-                            .set("content", HotObject.builder().set("hamal", "rocks").build())
+                            .set("headers", ValueObject.builder().set("content-type", "application/json").build())
+                            .set("parameters", ValueObject.builder().set("answer", "42").build())
+                            .set("content", ValueObject.builder().set("hamal", "rocks").build())
                             .build()
                     ).build()
                 ),
                 state = State(),
                 code = CodeValue("require_plugin('test').fn()"),
-                codeType = CodeType.Lua54
-            )
+                codeType = CodeType(Lua54)
+            ),
+            testPlugins = mapOf(ValueString("fn") to testFn)
         )
-        assertThat(testFn.method, equalTo(HotString("Delete")))
-        assertThat(testFn.headers, equalTo(HotObject.builder().set("content-type", "application/json").build()))
-        assertThat(testFn.parameters, equalTo(HotObject.builder().set("answer", "42").build()))
-        assertThat(testFn.content, equalTo(HotObject.builder().set("hamal", "rocks").build()))
+        assertThat(testFn.method, equalTo(ValueString("Delete")))
+        assertThat(testFn.headers, equalTo(ValueObject.builder().set("content-type", "application/json").build()))
+        assertThat(testFn.parameters, equalTo(ValueObject.builder().set("answer", "42").build()))
+        assertThat(testFn.content, equalTo(ValueObject.builder().set("hamal", "rocks").build()))
     }
 
     class TestFunction(
-        var method: HotString? = null,
-        var headers: HotObject? = null,
-        var parameters: HotObject? = null,
-        var content: HotObject? = null
+        var method: ValueString? = null,
+        var headers: ValueObject? = null,
+        var parameters: ValueObject? = null,
+        var content: ValueObject? = null
     ) : Function0In0Out() {
         override fun invoke(ctx: FunctionContext) {
             val inputs = ctx[ExecInputs::class]
-            method = inputs.value["endpoint"].asObject()["method"].asString()
-            headers = inputs.value["endpoint"].asObject()["headers"].asObject()
-            parameters = inputs.value["endpoint"].asObject()["parameters"].asObject()
-            content = inputs.value["endpoint"].asObject()["content"].asObject()
+            method = inputs.value.getObject("endpoint").getString("method")
+            headers = inputs.value.getObject("endpoint").getObject("headers")
+            parameters = inputs.value.getObject("endpoint").getObject("parameters")
+            content = inputs.value.getObject("endpoint").getObject("content")
         }
     }
 

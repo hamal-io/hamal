@@ -1,6 +1,5 @@
 package io.hamal.lib.sdk.api
 
-import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.request.ExtensionCreateRequest
 import io.hamal.lib.domain.request.ExtensionUpdateRequest
 import io.hamal.lib.domain.vo.*

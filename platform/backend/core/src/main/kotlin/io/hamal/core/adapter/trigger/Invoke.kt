@@ -5,14 +5,16 @@ import io.hamal.core.adapter.func.FuncGetPort
 import io.hamal.core.adapter.request.RequestEnqueuePort
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatuses
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.request.TriggerInvokeRequest
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import org.springframework.stereotype.Component
 
 fun interface TriggerInvokePort {
-    operator fun invoke(triggerId: TriggerId, req: TriggerInvokeRequest): ExecInvokeRequested
+    operator fun invoke(id: TriggerId, req: TriggerInvokeRequest): ExecInvokeRequested
 }
 
 @Component
@@ -25,20 +27,20 @@ class TriggerInvokeAdapter(
 ) : TriggerInvokePort {
 
     override fun invoke(
-        triggerId: TriggerId,
+        id: TriggerId,
         req: TriggerInvokeRequest
     ): ExecInvokeRequested {
 
-        val trigger = triggerGet(triggerId)
+        val trigger = triggerGet(id)
         val func = funcGet(trigger.funcId)
         val code = codeGet(func.deployment.id, func.deployment.version)
 
         return ExecInvokeRequested(
             requestId = generateDomainId(::RequestId),
             requestedBy = SecurityContext.currentAuthId,
-            requestStatus = RequestStatus.Submitted,
+            requestStatus = RequestStatus(Submitted),
             id = generateDomainId(::ExecId),
-            triggerId = triggerId,
+            triggerId = id,
             namespaceId = func.namespaceId,
             workspaceId = func.workspaceId,
             funcId = func.id,

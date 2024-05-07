@@ -1,13 +1,12 @@
 package io.hamal.app.web3proxy.eth.repository
 
-import io.hamal.lib.common.compress.BzipCompressor
-import io.hamal.lib.common.hot.HotObjectModule
-import io.hamal.lib.common.serialization.JsonFactoryBuilder
-import io.hamal.lib.domain.Json
-import io.hamal.lib.domain.vo.ValueObjectJsonModule
+import io.hamal.lib.common.compress.CompressorBzip
+import io.hamal.lib.common.serialization.Serde
+import io.hamal.lib.common.value.serde.SerdeModuleValueJson
+import io.hamal.lib.domain.vo.SerdeModuleValueVariable
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
-import io.hamal.lib.web3.evm.EvmHotModule
+import io.hamal.lib.web3.evm.SerdeModuleJsonEvm
 import io.hamal.lib.web3.evm.abi.type.EvmAddress
 import io.hamal.lib.web3.evm.abi.type.EvmUint64
 import io.hamal.lib.web3.evm.chain.eth.domain.EthBlockData
@@ -67,7 +66,7 @@ internal class EthBlockRepositoryImpl(
                 query {
                     set("number", blockNumber.value)
                 }
-                map { rs -> json.decompressAndDeserialize(BlockEntity::class, rs.getBytes("data")) }
+                map { rs -> serde.decompressAndRead(BlockEntity::class, rs.getBytes("data")) }
             }
         }
     }
@@ -78,7 +77,7 @@ internal class EthBlockRepositoryImpl(
                 execute("INSERT OR REPLACE INTO block(number, hash, data) VALUES( :number, :hash, :data )") {
                     set("number", block.number.value)
                     set("hash", block.hash.toPrefixedHexString().value)
-                    set("data", json.serializeAndCompress(block))
+                    set("data", serde.writeAndCompress(block))
                 }
             }
         }
@@ -110,13 +109,10 @@ internal class EthBlockRepositoryImpl(
         connection.execute("DELETE FROM block")
     }
 
-    private val json = Json(
-        factory = JsonFactoryBuilder()
-            .register(EvmHotModule)
-            .register(HotObjectModule)
-            .register(ValueObjectJsonModule),
-        compressor = BzipCompressor
-    )
+    private val serde = Serde.json(CompressorBzip)
+        .register(SerdeModuleJsonEvm)
+        .register(SerdeModuleValueJson)
+        .register(SerdeModuleValueVariable)
 }
 
 private fun collectEthAddresses(blocks: List<EthBlockData>): Set<EvmAddress> {

@@ -1,9 +1,10 @@
 package io.hamal.bridge.http.controller.code
 
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.domain.vo.CodeId
-import io.hamal.lib.domain.vo.CodeValue
-import io.hamal.lib.domain.vo.CodeVersion
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
+import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
+import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
 import io.hamal.lib.sdk.api.ApiError
@@ -49,12 +50,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
         )
 
         repeat(10) { iter ->
-            codeCmdRepository.update(
-                CodeId(2), CodeCmdRepository.UpdateCmd(
-                    CmdGen(),
-                    CodeValue("40 + ${2 + iter}")
-                )
-            )
+            codeCmdRepository.update(CodeId(2), CodeCmdRepository.UpdateCmd(CmdGen(), CodeValue("40 + ${2 + iter}")))
         }
 
         val r = getCode(CodeId(2), CodeVersion(4))
@@ -78,12 +74,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
         )
 
         repeat(20) { iter ->
-            codeCmdRepository.update(
-                CodeId(3), CodeCmdRepository.UpdateCmd(
-                    CmdGen(),
-                    CodeValue("40 + $iter")
-                )
-            )
+            codeCmdRepository.update(CodeId(3), CodeCmdRepository.UpdateCmd(CmdGen(), CodeValue("40 + $iter")))
             assertThat(getCode(CodeId(3)).version, equalTo(CodeVersion(iter + 2)))
         }
 

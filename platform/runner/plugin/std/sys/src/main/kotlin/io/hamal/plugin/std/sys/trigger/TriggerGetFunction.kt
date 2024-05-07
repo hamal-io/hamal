@@ -1,106 +1,118 @@
 package io.hamal.plugin.std.sys.trigger
 
-import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import io.hamal.lib.kua.function.Function1In2Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput2Schema
-import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaString
-import io.hamal.lib.kua.type.KuaTable
+import io.hamal.lib.kua.value.KuaTable
 import io.hamal.lib.sdk.ApiSdk
 import io.hamal.lib.sdk.api.ApiTrigger
 
 class TriggerGetFunction(
     private val sdk: ApiSdk
-) : Function1In2Out<KuaString, KuaError, KuaTable>(
-    FunctionInput1Schema(KuaString::class),
-    FunctionOutput2Schema(KuaError::class, KuaTable::class)
+) : Function1In2Out<ValueString, ValueError, KuaTable>(
+    FunctionInput1Schema(ValueString::class),
+    FunctionOutput2Schema(ValueError::class, KuaTable::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaString): Pair<KuaError?, KuaTable?> {
+    override fun invoke(ctx: FunctionContext, arg1: ValueString): Pair<ValueError?, KuaTable?> {
         return try {
             null to sdk.trigger.get(TriggerId(arg1.stringValue))
                 .let { trigger ->
                     when (trigger) {
                         is ApiTrigger.FixedRate ->
                             ctx.tableCreate(
-                                "id" to KuaString(trigger.id.value.value.toString(16)),
-                                "type" to KuaString("FixedRate"),
-                                "name" to KuaString(trigger.name.value),
+                                "id" to ValueString(trigger.id.stringValue),
+                                "type" to ValueString("FixedRate"),
+                                "name" to trigger.name,
                                 "namespace" to ctx.tableCreate(
-                                    "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
-                                    "name" to KuaString(trigger.namespace.name.value)
+                                    "id" to ValueString(trigger.namespace.id.stringValue),
+                                    "name" to trigger.namespace.name
                                 ),
                                 "func" to ctx.tableCreate(
-                                    "id" to KuaString(trigger.func.id.value.value.toString(16)),
-                                    "name" to KuaString(trigger.func.name.value)
+                                    "id" to ValueString(trigger.func.id.stringValue),
+                                    "name" to trigger.func.name.value
                                 ),
-                                "duration" to KuaString(trigger.duration.value),
-                                "status" to KuaString(trigger.status.name),
+                                "duration" to trigger.duration,
+                                "status" to trigger.status,
                             )
 
                         is ApiTrigger.Event -> {
                             ctx.tableCreate(
-                                "id" to KuaString(trigger.id.value.value.toString(16)),
-                                "type" to KuaString("Event"),
-                                "name" to KuaString(trigger.name.value),
+                                "id" to ValueString(trigger.id.stringValue),
+                                "type" to ValueString("Event"),
+                                "name" to trigger.name,
                                 "namespace" to ctx.tableCreate(
-                                    "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
-                                    "name" to KuaString(trigger.namespace.name.value)
+                                    "id" to ValueString(trigger.namespace.id.stringValue),
+                                    "name" to trigger.namespace.name
                                 ),
                                 "func" to ctx.tableCreate(
-                                    "id" to KuaString(trigger.func.id.value.value.toString(16)),
-                                    "name" to KuaString(trigger.func.name.value)
+                                    "id" to ValueString(trigger.func.id.stringValue),
+                                    "name" to trigger.func.name
                                 ),
                                 "topic" to ctx.tableCreate(
-                                    "id" to KuaString(trigger.topic.id.value.value.toString(16)),
-                                    "name" to KuaString(trigger.topic.name.value)
+                                    "id" to ValueString(trigger.topic.id.stringValue),
+                                    "name" to trigger.topic.name
                                 ),
-                                "status" to KuaString(trigger.status.name),
+                                "status" to trigger.status,
                             )
                         }
 
                         is ApiTrigger.Hook -> {
                             ctx.tableCreate(
-                                "id" to KuaString(trigger.id.value.value.toString(16)),
-                                "type" to KuaString("Hook"),
-                                "name" to KuaString(trigger.name.value),
+                                "id" to ValueString(trigger.id.stringValue),
+                                "type" to ValueString("Hook"),
+                                "name" to trigger.name,
                                 "namespace" to ctx.tableCreate(
-                                    "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
-                                    "name" to KuaString(trigger.namespace.name.value)
+                                    "id" to ValueString(trigger.namespace.id.stringValue),
+                                    "name" to trigger.namespace.name
                                 ),
                                 "func" to ctx.tableCreate(
-                                    "id" to KuaString(trigger.func.id.value.value.toString(16)),
-                                    "name" to KuaString(trigger.func.name.value)
+                                    "id" to ValueString(trigger.func.id.stringValue),
+                                    "name" to trigger.func.name
                                 ),
-                                "hook" to ctx.tableCreate(
-                                    "id" to KuaString(trigger.hook.id.value.value.toString(16)),
-                                    "name" to KuaString(trigger.hook.name.value),
-                                    "method" to KuaString(trigger.hook.method.name)
-                                ),
-                                "status" to KuaString(trigger.status.name),
+                                "status" to trigger.status,
                             )
                         }
 
                         is ApiTrigger.Cron -> ctx.tableCreate(
-                            "id" to KuaString(trigger.id.value.value.toString(16)),
-                            "type" to KuaString("Cron"),
-                            "name" to KuaString(trigger.name.value),
+                            "id" to ValueString(trigger.id.stringValue),
+                            "type" to ValueString("Cron"),
+                            "name" to trigger.name,
                             "namespace" to ctx.tableCreate(
-                                "id" to KuaString(trigger.namespace.id.value.value.toString(16)),
-                                "name" to KuaString(trigger.namespace.name.value)
+                                "id" to ValueString(trigger.namespace.id.stringValue),
+                                "name" to trigger.namespace.name
                             ),
                             "func" to ctx.tableCreate(
-                                "id" to KuaString(trigger.func.id.value.value.toString(16)),
-                                "name" to KuaString(trigger.func.name.value)
+                                "id" to ValueString(trigger.func.id.stringValue),
+                                "name" to trigger.func.name
                             ),
-                            "cron" to KuaString(trigger.cron.value),
-                            "status" to KuaString(trigger.status.name)
+                            "cron" to trigger.cron,
+                            "status" to trigger.status
                         )
+
+                        is ApiTrigger.Endpoint -> {
+                            ctx.tableCreate(
+                                "id" to ValueString(trigger.id.stringValue),
+                                "type" to ValueString("Endpoint"),
+                                "name" to trigger.name,
+                                "namespace" to ctx.tableCreate(
+                                    "id" to ValueString(trigger.namespace.id.stringValue),
+                                    "name" to trigger.namespace.name
+                                ),
+                                "func" to ctx.tableCreate(
+                                    "id" to ValueString(trigger.func.id.stringValue),
+                                    "name" to trigger.func.name
+                                ),
+                                "status" to trigger.status,
+                            )
+                        }
                     }
                 }
         } catch (t: Throwable) {
-            KuaError(t.message!!) to null
+            ValueError(t.message!!) to null
         }
     }
 }

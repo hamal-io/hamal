@@ -7,8 +7,8 @@ import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.kua.type.KuaCode
-import io.hamal.lib.kua.type.KuaString
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -18,7 +18,7 @@ internal class PluginTest {
     @Test
     fun `Invokes function of test plugin`() {
         sandbox.codeLoad(
-            KuaCode(
+            ValueCode(
                 """
             local test = require_plugin('test')
             for x=1,10 do
@@ -33,7 +33,7 @@ internal class PluginTest {
     @Test
     fun `Able to access fields of plugin`() {
         sandbox.codeLoad(
-            KuaCode(
+            ValueCode(
                 """
             local test = require_plugin('test')
             assert( test.some_number == 42 )
@@ -48,8 +48,8 @@ internal class PluginTest {
         Sandbox(SandboxContextNop).also { sb ->
             sb.register(
                 RunnerPlugin(
-                    name = KuaString("test"),
-                    factoryCode = KuaCode(
+                    name = ValueString("test"),
+                    factoryCode = ValueCode(
                         """
                             function plugin_create(internal)
                                 local export = {
@@ -62,7 +62,7 @@ internal class PluginTest {
                     """.trimIndent()
                     ),
                     internals = mapOf(
-                        KuaString("test_call") to TestCall0In0OutFunction
+                        ValueString("test_call") to TestCall0In0OutFunction
                     )
                 )
             )

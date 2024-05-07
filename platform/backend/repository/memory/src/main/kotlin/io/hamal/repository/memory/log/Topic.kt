@@ -4,7 +4,11 @@ import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.repository.api.log.*
+import io.hamal.repository.api.log.LogEvent
+import io.hamal.repository.api.log.LogEventId
+import io.hamal.repository.api.log.LogSegmentId.Companion.LogSegmentId
+import io.hamal.repository.api.log.LogTopic
+import io.hamal.repository.api.log.LogTopicRepository
 
 // FIXME just a pass through for now - replace with proper implementation,
 // like supporting multiple partitions, partitioning by key

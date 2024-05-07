@@ -1,19 +1,21 @@
 package io.hamal.plugin.net.smtp
 
+import io.hamal.lib.common.value.ValueBoolean
+import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.kua.function.Function1In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
-import io.hamal.lib.kua.type.*
+import io.hamal.lib.kua.value.*
 
 class SmtpSendFunction(
     private val sender: Sender
-) : Function1In1Out<KuaTable, KuaError>(
+) : Function1In1Out<KuaTable, ValueError>(
     FunctionInput1Schema(KuaTable::class),
-    FunctionOutput1Schema(KuaError::class)
+    FunctionOutput1Schema(ValueError::class)
 ) {
 
-    override fun invoke(ctx: FunctionContext, arg1: KuaTable): KuaError? {
+    override fun invoke(ctx: FunctionContext, arg1: KuaTable): ValueError? {
 
         sender.send(
             SenderConfig(
@@ -25,7 +27,7 @@ class SmtpSendFunction(
                 protocol = arg1.getString("protocol"),
                 debug = arg1.getBoolean("debug"),
                 testConnection = arg1.getBoolean("test_connection"),
-                auth = KuaBoolean.of(arg1.findString("username") != null || arg1.findString("password") != null),
+                auth = ValueBoolean(arg1.findString("username") != null || arg1.findString("password") != null),
                 enableStarttls = arg1.getBoolean("enable_starttls"),
                 connectionTimeout = arg1.getNumber("connection_timeout"),
                 timeout = arg1.getNumber("timeout"),

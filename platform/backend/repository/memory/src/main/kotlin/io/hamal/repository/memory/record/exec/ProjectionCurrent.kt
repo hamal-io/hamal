@@ -1,6 +1,7 @@
 package io.hamal.repository.memory.record.exec
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.repository.api.Exec
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
@@ -23,7 +24,7 @@ internal class ProjectionCurrent : ProjectionMemory<ExecId, Exec> {
             .filter { if (query.funcIds.isEmpty()) true else (it.correlation != null && query.funcIds.contains(it.correlation!!.funcId)) }
             .filter { if (query.namespaceIds.isEmpty()) true else query.namespaceIds.contains(it.namespaceId) }
             .dropWhile { it.id >= query.afterId }
-            .take(query.limit.value)
+            .take(query.limit.intValue)
             .toList()
     }
 

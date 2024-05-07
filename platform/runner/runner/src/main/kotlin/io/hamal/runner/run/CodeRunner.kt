@@ -1,19 +1,18 @@
 package io.hamal.runner.run
 
-import io.hamal.lib.common.hot.HotNumber
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.logger
-import io.hamal.lib.domain._enum.CodeType
+import io.hamal.lib.common.value.*
+import io.hamal.lib.domain._enum.CodeTypes.*
 import io.hamal.lib.domain.vo.*
-import io.hamal.lib.kua.AssertionError
-import io.hamal.lib.kua.ExitError
-import io.hamal.lib.kua.ExtensionError
-import io.hamal.lib.kua.tableCreate
-import io.hamal.lib.kua.type.*
-import io.hamal.lib.nodes.Compiler
-import io.hamal.lib.nodes.Graph
-import io.hamal.lib.nodes.generator.GeneratorRegistry
-import io.hamal.lib.nodes.json
+import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
+import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
+import io.hamal.lib.kua.*
+import io.hamal.lib.kua.value.KuaFunction
+import io.hamal.lib.kua.value.KuaTable
+import io.hamal.lib.kua.value.toValueObject
+import io.hamal.lib.nodes.NodesGraph
+import io.hamal.lib.nodes.compiler.graph.GraphCompiler
+import io.hamal.lib.nodes.serde
 import io.hamal.runner.config.EnvFactory
 import io.hamal.runner.config.SandboxFactory
 import io.hamal.runner.connector.Connector
@@ -35,119 +34,130 @@ class CodeRunnerImpl(
 
     override fun run(unitOfWork: UnitOfWork) {
         val execId = unitOfWork.id
-        try {
-            log.debug("Start execution: $execId")
 
+        log.debug("Start execution: $execId")
 
-            runnerContext = RunnerContext(
-                unitOfWork.state,
-                unitOfWork.inputs
-            )
-            runnerContext[ExecId::class] = unitOfWork.id
-            runnerContext[WorkspaceId::class] = unitOfWork.workspaceId
-            runnerContext[NamespaceId::class] = unitOfWork.namespaceId
-            runnerContext[ExecToken::class] = unitOfWork.execToken
-            runnerContext[RunnerEnv::class] = envFactory.create()
+        runnerContext = RunnerContext(unitOfWork.state, unitOfWork.inputs)
+        runnerContext[ExecId::class] = unitOfWork.id
+        runnerContext[WorkspaceId::class] = unitOfWork.workspaceId
+        runnerContext[NamespaceId::class] = unitOfWork.namespaceId
+        runnerContext[TriggerId::class] = unitOfWork.triggerId
+        runnerContext[ExecToken::class] = unitOfWork.execToken
+        runnerContext[RunnerEnv::class] = envFactory.create()
 
-            sandboxFactory.create(runnerContext)
-                .use { sandbox ->
+        sandboxFactory.create(runnerContext)
+            .use { sandbox ->
+                try {
+                    val contextExtension = RunnerContextFactory(runnerContext).create(sandbox)
 
-                    try {
-                        val contextExtension = RunnerContextFactory(runnerContext).create(sandbox)
-
-                        val internalTable = sandbox.tableCreate(0, contextExtension.internals.size)
-                        contextExtension.internals.forEach { entry ->
-                            when (val value = entry.value) {
-                                is KuaNil -> {}
-                                is KuaString -> internalTable[entry.key] = value
-                                is KuaNumber -> internalTable[entry.key] = value
-                                is KuaFunction<*, *, *, *> -> internalTable[entry.key] = value
-                                is KuaTable -> internalTable[entry.key] = value
-                                else -> TODO()
-                            }
+                    val internalTable = sandbox.tableCreate(0, contextExtension.internals.size)
+                    contextExtension.internals.forEach { entry ->
+                        when (val value = entry.value) {
+                            is ValueNil -> {}
+                            is ValueString -> internalTable[entry.key] = value
+                            is ValueNumber -> internalTable[entry.key] = value
+                            is KuaFunction<*, *, *, *> -> internalTable[entry.key] = value
+                            is KuaTable -> internalTable[entry.key] = value
+                            else -> TODO()
                         }
-                        sandbox.globalSet(KuaString("_internal"), internalTable)
-                        sandbox.codeLoad(contextExtension.factoryCode)
-//
-                        sandbox.codeLoad(KuaCode("${contextExtension.name} = plugin_create(_internal)"))
-                        sandbox.globalUnset(KuaString("_internal"))
+                    }
+                    sandbox.globalSet(ValueString("_internal"), internalTable)
+                    sandbox.codeLoad(contextExtension.factoryCode)
 
-                        when (unitOfWork.codeType) {
-                            CodeType.None -> TODO()
-                            CodeType.Lua54 -> {
-                                sandbox.codeLoad(KuaCode(unitOfWork.code.value))
-                            }
+                    sandbox.codeLoad(ValueCode("${contextExtension.name} = plugin_create(_internal)"))
+                    sandbox.globalUnset(ValueString("_internal"))
 
-                            CodeType.Nodes -> {
-                                // FIXME load graph from code
-                                val graph = json.deserialize(Graph::class, unitOfWork.code.value)
-                                val compiledCode = Compiler(GeneratorRegistry(listOf())).compile(graph)
-                                sandbox.codeLoad(compiledCode)
-                            }
+                    when (unitOfWork.codeType) {
+                        CodeType(None) -> TODO()
+                        CodeType(Lua54) -> {
+                            sandbox.codeLoad(unitOfWork.code.value)
                         }
 
+                        CodeType(Nodes) -> {
+                            // FIXME load graph from code
+                            val graph = serde.read(NodesGraph::class, unitOfWork.code.stringValue)
+                            val compiledCode = GraphCompiler(sandbox.generatorNodeCompilerRegistry).compile(graph)
+                            sandbox.codeLoad(compiledCode)
+                        }
+                    }
 
-                        val ctx = sandbox.globalGetTable(KuaString("context"))
+                    sandbox.codeLoad(ValueCode("""context.complete({})"""))
 
-                        // FIXME nodes can have state as well
-                        val stateToSubmit = if (unitOfWork.codeType == CodeType.Lua54) {
-                            ctx.getTable(KuaString("state")).toHotObject()
-                        } else {
-                            HotObject.empty
+                } catch (e: ErrorPlugin) {
+                    val cause = e.cause
+                    when (cause) {
+                        is ExitComplete -> {
+
+                            val ctx = sandbox.globalGetTable(ValueString("context"))
+                            val stateToSubmit = ctx.getTable(ValueString("state")).toValueObject()
+
+                            connector.complete(
+                                execId,
+                                ExecStatusCode(cause.statusCode),
+                                ExecResult(cause.result),
+                                ExecState(stateToSubmit),
+                                runnerContext.eventsToSubmit
+                            )
+                            log.debug("Completed exec: $execId")
+
                         }
 
-                        connector.complete(
-                            execId,
-                            ExecResult(),
-                            ExecState(stateToSubmit),
-                            runnerContext.eventsToSubmit
-                        )
-                        log.debug("Completed exec: $execId")
-                    } catch (e: ExtensionError) {
-                        val cause = e.cause
-                        if (cause is ExitError) {
-                            if (cause.status == HotNumber(0.0)) {
-
-                                val ctx = sandbox.globalGetTable(KuaString("context"))
-                                val stateToSubmit = ctx.getTable(KuaString("state")).toHotObject()
-
-                                connector.complete(
-                                    execId,
-                                    ExecResult(cause.result),
-                                    ExecState(stateToSubmit),
-                                    runnerContext.eventsToSubmit
-                                )
-                                log.debug("Completed exec: $execId")
-                            } else {
-                                connector.fail(execId, ExecResult(cause.result))
-                                log.debug("Failed exec: $execId")
-                            }
-
-                        } else {
+                        is ExitFailure -> {
                             e.printStackTrace()
                             connector.fail(
                                 execId,
-                                ExecResult(HotObject.builder().set("message", e.message ?: "Unknown reason").build())
+                                ExecStatusCode(cause.statusCode),
+                                ExecResult(cause.result)
                             )
                             log.debug("Failed exec: $execId")
                         }
+
+                        else -> {
+                            e.printStackTrace()
+                            connector.fail(
+                                execId,
+                                ExecStatusCode(500),
+                                ExecResult(ValueObject.builder().set("message", e.message ?: "Unknown reason").build())
+                            )
+                        }
                     }
+                } catch (e: ErrorAssertion) {
+                    e.printStackTrace()
+                    connector.fail(
+                        execId,
+                        ExecStatusCode(500),
+                        ExecResult(ValueObject.builder().set("message", e.message ?: "Unknown reason").build())
+                    )
+                } catch (e: ErrorIllegalArgument) {
+                    e.printStackTrace()
+                    connector.fail(
+                        execId,
+                        ExecStatusCode(400),
+                        ExecResult(ValueObject.builder().set("message", e.message ?: "Unknown reason").build())
+                    )
+                } catch (e: ErrorIllegalState) {
+                    e.printStackTrace()
+                    connector.fail(
+                        execId,
+                        ExecStatusCode(409),
+                        ExecResult(ValueObject.builder().set("message", e.message ?: "Unknown reason").build())
+                    )
+                } catch (e: ErrorNotFound) {
+                    e.printStackTrace()
+                    connector.fail(
+                        execId,
+                        ExecStatusCode(404),
+                        ExecResult(ValueObject.builder().set("message", e.message ?: "Unknown reason").build())
+                    )
+                } catch (t: Throwable) {
+                    t.printStackTrace()
+                    connector.fail(
+                        execId,
+                        ExecStatusCode(500),
+                        ExecResult(ValueObject.builder().set("message", t.message ?: "Unknown reason").build())
+                    )
                 }
-        } catch (a: AssertionError) {
-            a.printStackTrace()
-            connector.fail(
-                execId,
-                ExecResult(HotObject.builder().set("message", a.message ?: "Unknown reason").build())
-            )
-            log.debug("Assertion error: $execId - ${a.message}")
-        } catch (t: Throwable) {
-            t.printStackTrace()
-            connector.fail(
-                execId,
-                ExecResult(HotObject.builder().set("message", t.message ?: "Unknown reason").build())
-            )
-            log.debug("Failed exec: $execId")
-        }
+            }
     }
 
     companion object {

@@ -1,13 +1,14 @@
 package io.hamal.repository.sqlite.record.code
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Code
 import io.hamal.repository.api.CodeQueryRepository.CodeQuery
 import io.hamal.repository.record.code.CodeRecord
-import io.hamal.repository.record.json
+import io.hamal.repository.sqlite.hon
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
@@ -28,7 +29,7 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
                 set("id", codeId)
             }
             map { rs ->
-                json.decompressAndDeserialize(Code::class, rs.getBytes("data"))
+                hon.decompressAndRead(Code::class, rs.getBytes("data"))
             }
         }
     }
@@ -54,7 +55,7 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
                 set("limit", query.limit)
             }
             map { rs ->
-                json.decompressAndDeserialize(Code::class, rs.getBytes("data"))
+                hon.decompressAndRead(Code::class, rs.getBytes("data"))
             }
         }
     }
@@ -94,7 +95,7 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
         ) {
             set("id", obj.id)
             set("workspaceId", obj.workspaceId)
-            set("data", json.serializeAndCompress(obj))
+            set("data", hon.writeAndCompress(obj))
         }
     }
 
@@ -119,7 +120,7 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
         return if (workspaceIds.isEmpty()) {
             ""
         } else {
-            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -127,7 +128,7 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
         return if (codeIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${codeIds.joinToString(",") { "${it.value.value}" }})"
+            "AND id IN (${codeIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 }

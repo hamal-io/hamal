@@ -1,13 +1,23 @@
 package io.hamal.core.request.handler.trigger
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
-import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.domain._enum.HookMethod.Get
-import io.hamal.lib.domain._enum.RequestStatus.Submitted
-import io.hamal.lib.domain._enum.TriggerType.*
-import io.hamal.lib.domain._enum.TriggerType.Event
+import io.hamal.lib.common.value.ValueObject
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
+import io.hamal.lib.domain._enum.TriggerTypes.*
 import io.hamal.lib.domain.request.TriggerCreateRequested
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
+import io.hamal.lib.domain.vo.CronPattern.Companion.CronPattern
+import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
+import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
+import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
+import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
+import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
+import io.hamal.lib.domain.vo.TriggerDuration.Companion.TriggerDuration
+import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
+import io.hamal.lib.domain.vo.TriggerInputs
+import io.hamal.lib.domain.vo.TriggerName.Companion.TriggerName
+import io.hamal.lib.domain.vo.TriggerType.Companion.TriggerType
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import org.hamcrest.MatcherAssert.assertThat
@@ -82,41 +92,9 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
 
         @Test
         fun `Creates trigger`() {
-            createHook(HookId(1111))
             createFunc(FuncId(2222), FuncName("SomeFunc"))
 
             testInstance(submitCreateHookTriggerReq)
-
-            verifySingleHookTriggerExists()
-        }
-
-        @Test
-        fun `Tries to create a trigger when hookId, funcId, hookMethod already exist`() {
-            createHook(HookId(1111))
-            createFunc(FuncId(2222), FuncName("SomeFunc"))
-            testInstance(submitCreateHookTriggerReq)
-
-            val exception = assertThrows<IllegalArgumentException> {
-                testInstance(
-                    TriggerCreateRequested(
-                        requestId = RequestId(12345),
-                        requestedBy = AuthId(2345),
-                        requestStatus = Submitted,
-                        type = Hook,
-                        id = TriggerId(2),
-                        namespaceId = testNamespace.id,
-                        workspaceId = testWorkspace.id,
-                        funcId = FuncId(2222),
-                        hookId = HookId(1111),
-                        name = TriggerName("HookTriggerInvalid"),
-                        inputs = TriggerInputs(
-                            HotObject.builder().set("hamal", "rocks").build(),
-                        ),
-                        hookMethod = Get
-                    )
-                )
-            }
-            assertThat(exception.message, equalTo("Trigger already exists"))
 
             verifySingleHookTriggerExists()
         }
@@ -127,18 +105,6 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
                 testInstance(submitCreateHookTriggerReq)
             }
             assertThat(exception.message, equalTo("Func not found"))
-
-            verifyNoTriggerExists()
-        }
-
-        @Test
-        fun `Tries to create trigger, but hook does not exist`() {
-            createFunc(FuncId(2222), FuncName("SomeFunc"))
-
-            val exception = assertThrows<NoSuchElementException> {
-                testInstance(submitCreateHookTriggerReq)
-            }
-            assertThat(exception.message, equalTo("Hook not found"))
 
             verifyNoTriggerExists()
         }
@@ -165,7 +131,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
     }
 
     private fun verifySingleFixedRateTriggerExists() {
-        triggerQueryRepository.list(TriggerQuery(types = listOf(FixedRate), workspaceIds = listOf())).also { triggers ->
+        triggerQueryRepository.list(TriggerQuery(types = listOf(TriggerType(FixedRate)), workspaceIds = listOf())).also { triggers ->
             assertThat(triggers, hasSize(1))
 
             with(triggers.first()) {
@@ -174,13 +140,13 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
                 assertThat(name, equalTo(TriggerName("FixedRateTrigger")))
                 assertThat(funcId, equalTo(FuncId(2222)))
                 assertThat(duration, equalTo(TriggerDuration("PT42S")))
-                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
             }
         }
     }
 
     private fun verifySingleEventTriggerExists() {
-        triggerQueryRepository.list(TriggerQuery(types = listOf(Event), workspaceIds = listOf())).also { triggers ->
+        triggerQueryRepository.list(TriggerQuery(types = listOf(TriggerType(Event)), workspaceIds = listOf())).also { triggers ->
             assertThat(triggers, hasSize(1))
 
             with(triggers.first()) {
@@ -189,13 +155,13 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
                 assertThat(name, equalTo(TriggerName("EventTrigger")))
                 assertThat(funcId, equalTo(FuncId(2222)))
                 assertThat(topicId, equalTo(TopicId(1111)))
-                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
             }
         }
     }
 
     private fun verifySingleHookTriggerExists() {
-        triggerQueryRepository.list(TriggerQuery(types = listOf(Hook), workspaceIds = listOf())).also { triggers ->
+        triggerQueryRepository.list(TriggerQuery(types = listOf(TriggerType(Hook)), workspaceIds = listOf())).also { triggers ->
             assertThat(triggers, hasSize(1))
 
             with(triggers.first()) {
@@ -203,14 +169,13 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
                 assertThat(id, equalTo(TriggerId(1234)))
                 assertThat(name, equalTo(TriggerName("HookTrigger")))
                 assertThat(funcId, equalTo(FuncId(2222)))
-                assertThat(hookId, equalTo(HookId(1111)))
-                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
             }
         }
     }
 
     private fun verifySingleCronTriggerExists() {
-        triggerQueryRepository.list(TriggerQuery(types = listOf(Cron), workspaceIds = listOf())).also { triggers ->
+        triggerQueryRepository.list(TriggerQuery(types = listOf(TriggerType(Cron)), workspaceIds = listOf())).also { triggers ->
             assertThat(triggers, hasSize(1))
 
             with(triggers.first()) {
@@ -219,7 +184,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
                 assertThat(name, equalTo(TriggerName("CronTrigger")))
                 assertThat(funcId, equalTo(FuncId(2222)))
                 assertThat(cron, equalTo(CronPattern("0 0 * * * *")))
-                assertThat(inputs, equalTo(TriggerInputs(HotObject.builder().set("hamal", "rocks").build())))
+                assertThat(inputs, equalTo(TriggerInputs(ValueObject.builder().set("hamal", "rocks").build())))
             }
         }
     }
@@ -238,7 +203,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
         TriggerCreateRequested(
             requestId = RequestId(1),
             requestedBy = AuthId(2),
-            requestStatus = Submitted,
+            requestStatus = RequestStatus(Submitted),
             type = FixedRate,
             id = TriggerId(1234),
             namespaceId = testNamespace.id,
@@ -247,7 +212,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
             name = TriggerName("FixedRateTrigger"),
             duration = TriggerDuration(42.seconds.toIsoString()),
             inputs = TriggerInputs(
-                HotObject.builder().set("hamal", "rocks").build()
+                ValueObject.builder().set("hamal", "rocks").build()
             ),
         )
     }
@@ -256,7 +221,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
         TriggerCreateRequested(
             requestId = RequestId(1),
             requestedBy = AuthId(2),
-            requestStatus = Submitted,
+            requestStatus = RequestStatus(Submitted),
             type = Event,
             id = TriggerId(1234),
             namespaceId = testNamespace.id,
@@ -265,7 +230,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
             topicId = TopicId(1111),
             name = TriggerName("EventTrigger"),
             inputs = TriggerInputs(
-                HotObject.builder().set("hamal", "rocks").build(),
+                ValueObject.builder().set("hamal", "rocks").build(),
             )
         )
     }
@@ -274,18 +239,16 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
         TriggerCreateRequested(
             requestId = RequestId(1),
             requestedBy = AuthId(2),
-            requestStatus = Submitted,
+            requestStatus = RequestStatus(Submitted),
             type = Hook,
             id = TriggerId(1234),
             namespaceId = testNamespace.id,
             workspaceId = testWorkspace.id,
             funcId = FuncId(2222),
-            hookId = HookId(1111),
             name = TriggerName("HookTrigger"),
             inputs = TriggerInputs(
-                HotObject.builder().set("hamal", "rocks").build(),
-            ),
-            hookMethod = Get
+                ValueObject.builder().set("hamal", "rocks").build(),
+            )
         )
     }
 
@@ -293,7 +256,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
         TriggerCreateRequested(
             requestId = RequestId(1),
             requestedBy = AuthId(2),
-            requestStatus = Submitted,
+            requestStatus = RequestStatus(Submitted),
             type = Cron,
             id = TriggerId(1234),
             namespaceId = testNamespace.id,
@@ -302,7 +265,7 @@ internal class TriggerCreateHandlerTest : BaseRequestHandlerTest() {
             name = TriggerName("CronTrigger"),
             cron = CronPattern("0 0 * * * *"),
             inputs = TriggerInputs(
-                HotObject.builder().set("hamal", "rocks").build()
+                ValueObject.builder().set("hamal", "rocks").build()
             ),
         )
     }

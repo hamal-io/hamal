@@ -3,11 +3,23 @@ package io.hamal.testbed.api
 import io.hamal.core.component.DelayRetry
 import io.hamal.core.component.DelayRetryFixedTime
 import io.hamal.core.config.BackendBasePath
-import io.hamal.extension.net.http.ExtensionHttpFactory
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.extension.net.http.ExtensionNetHttpFactory
+import io.hamal.extension.std.memoize.ExtensionStdMemoizeFactory
+import io.hamal.extension.std.table.ExtensionStdTableFactory
+import io.hamal.extension.std.`throw`.ExtensionStdThrowFactory
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.common.value.ValueObject
+import io.hamal.lib.domain._enum.ExecStates
+import io.hamal.lib.domain._enum.ExecStates.Completed
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
+import io.hamal.lib.domain.vo.ExecStatus.Companion.ExecStatus
+import io.hamal.lib.domain.vo.ExpiresAt.Companion.ExpiresAt
+import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
+import io.hamal.lib.domain.vo.PasswordSalt.Companion.PasswordSalt
+import io.hamal.lib.domain.vo.WorkspaceName.Companion.WorkspaceName
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContext
@@ -52,7 +64,7 @@ class TestSandboxConfig {
     fun envFactory(@Value("\${io.hamal.runner.api.host}") apiHost: String): EnvFactory =
         object : EnvFactory {
             override fun create() = RunnerEnv(
-                HotObject.builder()
+                ValueObject.builder()
                     .set("api_host", apiHost)
                     .build()
             )
@@ -72,6 +84,11 @@ class TestRunnerSandboxFactory(
         )
 
         return Sandbox(ctx)
+            .registerExtensions(
+                ExtensionStdTableFactory,
+                ExtensionStdThrowFactory,
+                ExtensionStdMemoizeFactory,
+            )
             .registerPlugins(
                 PluginLogFactory(sdk.execLog),
                 PluginDebugFactory(),
@@ -79,7 +96,8 @@ class TestRunnerSandboxFactory(
                 PluginHttpFactory()
             )
             .registerExtensions(
-                ExtensionHttpFactory
+                ExtensionStdTableFactory,
+                ExtensionNetHttpFactory
             )
     }
 }
@@ -103,16 +121,14 @@ class ClearController {
         accountRepository.clear()
         authRepository.clear()
         codeRepository.clear()
-        endpointRepository.clear()
         extensionRepository.clear()
         requestRepository.clear()
         execRepository.clear()
         funcRepository.clear()
         workspaceRepository.clear()
-        hookRepository.clear()
         namespaceRepository.clear()
         namespaceTreeRepository.clear()
-        blueprintRepository.clear()
+        recipeRepository.clear()
         triggerRepository.clear()
 
         testAccount = accountRepository.create(
@@ -164,9 +180,6 @@ class ClearController {
     }
 
     @Autowired
-    lateinit var blueprintRepository: BlueprintRepository
-
-    @Autowired
     lateinit var accountRepository: AccountRepository
 
     @Autowired
@@ -174,9 +187,6 @@ class ClearController {
 
     @Autowired
     lateinit var codeRepository: CodeRepository
-
-    @Autowired
-    lateinit var endpointRepository: EndpointRepository
 
     @Autowired
     lateinit var execRepository: ExecRepository
@@ -191,13 +201,13 @@ class ClearController {
     lateinit var workspaceRepository: WorkspaceRepository
 
     @Autowired
-    lateinit var hookRepository: HookRepository
-
-    @Autowired
     lateinit var namespaceRepository: NamespaceRepository
 
     @Autowired
     lateinit var namespaceTreeRepository: NamespaceTreeRepository
+
+    @Autowired
+    lateinit var recipeRepository: RecipeRepository
 
     @Autowired
     lateinit var requestRepository: RequestRepository
@@ -341,10 +351,10 @@ abstract class BaseApiTest {
 
             while (wait) {
                 with(sdk.exec.get(execReq.id)) {
-                    if (status == ExecStatus.Completed) {
+                    if (status == ExecStatus(Completed)) {
                         wait = false
                     } else {
-                        if (status == ExecStatus.Failed) {
+                        if (status == ExecStatus(ExecStates.Failed)) {
                             return Failed(message = "Execution failed: ${this.result!!.value["message"]}")
                         } else if (startedAt.plusSeconds(1).isBefore(TimeUtils.now())) {
                             return Timeout

@@ -258,7 +258,7 @@ internal object Uint256Test {
     }
 }
 
-internal object StringTest {
+internal object SerdeStringTest {
     @Test
     fun `Short string out`() {
         val window = createByteWindow(

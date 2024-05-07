@@ -1,8 +1,8 @@
 package io.hamal.repository.memory.record.topic
 
 import io.hamal.lib.common.domain.Count
-import io.hamal.lib.common.hot.HotObject
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Topic
 import io.hamal.repository.api.TopicCmdRepository.TopicCreateCmd
@@ -12,9 +12,9 @@ import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import io.hamal.repository.api.TopicRepository
 import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.repository.api.log.LogBrokerRepository.CreateTopicCmd
-import io.hamal.repository.api.log.LogEventId
+import io.hamal.repository.api.log.LogEventId.Companion.LogEventId
+import io.hamal.repository.memory.hon
 import io.hamal.repository.memory.record.RecordMemoryRepository
-import io.hamal.repository.record.json
 import io.hamal.repository.record.topic.CreateTopicFromRecords
 import io.hamal.repository.record.topic.TopicRecord
 import java.util.concurrent.locks.ReentrantLock
@@ -65,13 +65,13 @@ class TopicMemoryRepository(
         return lock.withLock {
             val topic = get(query.topicId)
             logBrokerRepository.read(
-                firstId = LogEventId(SnowflakeId(query.afterId.value.value + 1)),
+                firstId = LogEventId(SnowflakeId(query.afterId.longValue + 1)),
                 topicId = topic.logTopicId,
                 limit = query.limit
             ).map { evt ->
                 TopicEvent(
                     id = TopicEventId(evt.id.value),
-                    payload = TopicEventPayload(json.decompressAndDeserialize(HotObject::class, evt.bytes))
+                    payload = TopicEventPayload(hon.decompressAndRead(ValueObject::class, evt.bytes))
                 )
             }
         }

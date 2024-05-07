@@ -1,4 +1,4 @@
-sys = require_plugin('sys')
+sys = require_plugin('std.sys')
 
 func = fail_on_error(sys.funcs.create({
     namespace_id = '539',

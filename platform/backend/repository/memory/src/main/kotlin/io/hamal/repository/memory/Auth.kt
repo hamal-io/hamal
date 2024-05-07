@@ -1,6 +1,7 @@
 package io.hamal.repository.memory
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.*
 import io.hamal.repository.api.Auth
 import io.hamal.repository.api.AuthCmdRepository.*
@@ -66,7 +67,7 @@ class AuthMemoryRepository : AuthRepository {
             .asSequence()
             .filter { if (query.authIds.isEmpty()) true else query.authIds.contains(it.id) }
             .dropWhile { it.id >= query.afterId }
-            .take(query.limit.value)
+            .take(query.limit.intValue)
             .toList()
     }
 

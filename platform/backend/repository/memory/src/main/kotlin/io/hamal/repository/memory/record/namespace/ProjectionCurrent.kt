@@ -28,12 +28,12 @@ internal class ProjectionCurrent : ProjectionMemory<NamespaceId, Namespace> {
             .filter {
                 if (query.workspaceIds.isEmpty()) true else query.workspaceIds.contains(it.workspaceId)
             }.dropWhile { it.id >= query.afterId }
-            .take(query.limit.value)
+            .take(query.limit.intValue)
             .toList()
     }
 
     fun count(query: NamespaceQuery): Count {
-        return Count(
+        return Count.Count(
             projection.filter { query.namespaceIds.isEmpty() || it.key in query.namespaceIds }
                 .map { it.value }
                 .reversed()

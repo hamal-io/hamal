@@ -7,7 +7,7 @@ http = require('net.http').create({
 err, res = http.patch({
     url = '/v1/namespaces/1',
     headers = { Authorization = 'Bearer ' .. context.env.token },
-    json = { name = 'updated' }
+    body =  { name = 'updated' }
 })
 
 assert(err == nil)

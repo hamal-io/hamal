@@ -1,6 +1,6 @@
 import {FC, ReactNode, useEffect} from "react";
 import Header from "@/app/header/index.tsx";
-import {useUiState} from "@/hooks/ui.ts";
+import {useUiState} from "@/hook/ui.ts";
 import {MetaMaskProvider} from "@metamask/sdk-react";
 
 type Props = {

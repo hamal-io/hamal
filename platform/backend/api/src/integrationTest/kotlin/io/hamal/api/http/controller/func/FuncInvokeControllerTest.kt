@@ -1,9 +1,17 @@
 package io.hamal.api.http.controller.func
 
+import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.Correlation
-import io.hamal.lib.domain._enum.CodeType
+import io.hamal.lib.domain._enum.CodeTypes.Lua54
 import io.hamal.lib.domain.request.ExecInvokeRequested
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
+import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
+import io.hamal.lib.domain.vo.CorrelationId
+import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
+import io.hamal.lib.domain.vo.FuncInputs
+import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
+import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
@@ -24,7 +32,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                     name = FuncName("test"),
                     inputs = FuncInputs(),
                     code = CodeValue("x = 10"),
-                    codeType = CodeType.Lua54
+                    codeType = CodeType(Lua54)
                 )
             )
         )
@@ -64,7 +72,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                     name = FuncName("test"),
                     inputs = FuncInputs(),
                     code = CodeValue(""),
-                    codeType = CodeType.Lua54
+                    codeType = CodeType(Lua54)
                 )
             )
         )
@@ -102,7 +110,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                     name = FuncName("test"),
                     inputs = FuncInputs(),
                     code = CodeValue(""),
-                    codeType = CodeType.Lua54
+                    codeType = CodeType(Lua54)
                 )
             )
         )
@@ -135,7 +143,6 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
         awaitCompleted(result)
 
         with(execQueryRepository.get(result.id)) {
-            //assertThat(code.value, equalTo(CodeValue("code-6")))
             assertThat(code.version, equalTo(CodeVersion(5)))
         }
     }
@@ -148,7 +155,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                     name = FuncName("funcName"),
                     inputs = FuncInputs(),
                     code = CodeValue("createCode"),
-                    codeType = CodeType.Lua54
+                    codeType = CodeType(Lua54)
                 )
             )
         )
@@ -192,7 +199,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                     name = FuncName("test"),
                     inputs = FuncInputs(),
                     code = CodeValue(""),
-                    codeType = CodeType.Lua54
+                    codeType = CodeType(Lua54)
                 )
             )
         )

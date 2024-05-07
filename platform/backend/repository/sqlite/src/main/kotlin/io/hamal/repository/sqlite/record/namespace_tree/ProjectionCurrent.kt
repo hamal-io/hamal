@@ -1,13 +1,14 @@
 package io.hamal.repository.sqlite.record.namespace_tree
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceTreeId
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.NamespaceTree
 import io.hamal.repository.api.NamespaceTreeQueryRepository
-import io.hamal.repository.record.json
+import io.hamal.repository.sqlite.hon
 import io.hamal.repository.record.namespace_tree.NamespaceTreeRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
@@ -31,7 +32,7 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceTreeId, NamespaceT
                 set("namespaceId", namespaceId)
             }
             map { rs ->
-                json.decompressAndDeserialize(NamespaceTree::class, rs.getBytes("data"))
+                hon.decompressAndRead(NamespaceTree::class, rs.getBytes("data"))
             }
         }
     }
@@ -56,7 +57,7 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceTreeId, NamespaceT
                 set("limit", query.limit)
             }
             map { rs ->
-                json.decompressAndDeserialize(NamespaceTree::class, rs.getBytes("data"))
+                hon.decompressAndRead(NamespaceTree::class, rs.getBytes("data"))
             }
         }
     }
@@ -100,7 +101,7 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceTreeId, NamespaceT
         ) {
             set("id", obj.id)
             set("workspaceId", obj.workspaceId)
-            set("data", json.serializeAndCompress(obj))
+            set("data", hon.writeAndCompress(obj))
         }
 
         obj.root.preorder().forEach { namespaceId ->
@@ -150,7 +151,7 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceTreeId, NamespaceT
         return if (workspaceIds.isEmpty()) {
             ""
         } else {
-            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.value.value}" }})"
+            "AND workspace_id IN (${workspaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 
@@ -158,7 +159,7 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceTreeId, NamespaceT
         return if (treeIds.isEmpty()) {
             ""
         } else {
-            "AND id IN (${treeIds.joinToString(",") { "${it.value.value}" }})"
+            "AND id IN (${treeIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
 }

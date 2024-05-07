@@ -1,8 +1,10 @@
 package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.*
+import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.ExtensionId.Companion.ExtensionId
 
 data class Extension(
     override val id: ExtensionId,

@@ -8,10 +8,10 @@ import {
     GlobeIcon,
     Layers3Icon,
     LucideIcon,
-    LucideProps,
     Play,
     Settings,
-    TimerIcon, User,
+    TimerIcon,
+    User,
     WebhookIcon
 } from "lucide-react";
 import React, {FC, useEffect, useState} from "react";
@@ -109,8 +109,8 @@ const Sidebar: React.FC<Props> = ({className}) => {
 
         {
             icon: ClipboardPaste,
-            href: '/blueprints',
-            label: "Blueprints"
+            href: '/recipes',
+            label: "Recipes"
         },
         {
             icon: Settings,

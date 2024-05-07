@@ -1,6 +1,7 @@
 package io.hamal.repository.memory.record.topic
 
 import io.hamal.lib.common.domain.Count
+import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
@@ -50,7 +51,9 @@ internal class ProjectionCurrent : ProjectionMemory<TopicId, Topic>{
                     query.namespaceIds.contains(it.namespaceId)
                 }
             }
-            .dropWhile { it.id >= query.afterId }.take(query.limit.value).toList()
+            .dropWhile { it.id >= query.afterId }
+            .take(query.limit.intValue)
+            .toList()
     }
 
     fun count(query: TopicQuery): Count {

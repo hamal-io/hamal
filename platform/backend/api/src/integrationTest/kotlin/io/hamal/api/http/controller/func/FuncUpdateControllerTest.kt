@@ -1,9 +1,18 @@
 package io.hamal.api.http.controller.func
 
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.domain._enum.CodeType
-import io.hamal.lib.domain.vo.*
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
+import io.hamal.lib.common.value.ValueObject
+import io.hamal.lib.domain._enum.CodeTypes.Lua54
+import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
+import io.hamal.lib.domain.vo.CodeValue
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
+import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
+import io.hamal.lib.domain.vo.FuncInputs
+import io.hamal.lib.domain.vo.FuncName
+import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
+import io.hamal.lib.domain.vo.NamespaceFeatures
+import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
+import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.NotFound
@@ -53,9 +62,9 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                 namespaceId = createdNamespace.id,
                 req = ApiFuncCreateRequest(
                     name = FuncName("created-name"),
-                    inputs = FuncInputs(HotObject.builder().set("hamal", "createdInputs").build()),
+                    inputs = FuncInputs(ValueObject.builder().set("hamal", "createdInputs").build()),
                     code = CodeValue("createdCode"),
-                    codeType = CodeType.Lua54
+                    codeType = CodeType(Lua54)
                 )
             )
         )
@@ -65,7 +74,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             .body(
                 ApiFuncUpdateRequest(
                     name = FuncName("updated-name"),
-                    inputs = FuncInputs(HotObject.builder().set("hamal", "updatedInputs").build()),
+                    inputs = FuncInputs(ValueObject.builder().set("hamal", "updatedInputs").build()),
                     code = CodeValue("updatedCode")
                 )
             )
@@ -83,7 +92,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             assertThat(id, equalTo(funcId))
             assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
             assertThat(name, equalTo(FuncName("updated-name")))
-            assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "updatedInputs").build())))
+            assertThat(inputs, equalTo(FuncInputs(ValueObject.builder().set("hamal", "updatedInputs").build())))
 
             assertThat(code.version, equalTo(CodeVersion(2)))
             assertThat(code.value, equalTo(CodeValue("updatedCode")))
@@ -95,10 +104,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
     @Test
     fun `Updates func without updating values`() {
-        val funcId = createFuncInNamespace(
-            FuncName("created-name"),
-            CodeValue("createdCode")
-        ).id
+        val funcId = createFuncInNamespace(FuncName("created-name"), CodeValue("createdCode")).id
 
         val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
             .path("funcId", funcId)
@@ -121,7 +127,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
             assertThat(id, equalTo(funcId))
             assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
             assertThat(name, equalTo(FuncName("created-name")))
-            assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "createdInputs").build())))
+            assertThat(inputs, equalTo(FuncInputs(ValueObject.builder().set("hamal", "createdInputs").build())))
 
             assertThat(code.version, equalTo(CodeVersion(1)))
             assertThat(code.value, equalTo(CodeValue("createdCode")))
@@ -133,10 +139,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
     @Test
     fun `Does not increment code version if req code is null`() {
-        val funcId = createFuncInNamespace(
-            FuncName("created-name"),
-            CodeValue("createdCode")
-        ).id
+        val funcId = createFuncInNamespace(FuncName("created-name"), CodeValue("createdCode")).id
 
         val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
             .path("funcId", funcId)
@@ -165,17 +168,14 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
 
     @Test
     fun `Does not increment code version if req code is equal to existing`() {
-        val funcId = createFuncInNamespace(
-            FuncName("func-1"),
-            CodeValue("createdCode")
-        ).id
+        val funcId = createFuncInNamespace(FuncName("func-1"), CodeValue("createdCode")).id
 
         val updateFuncResponse = httpTemplate.patch("/v1/funcs/{funcId}")
             .path("funcId", funcId)
             .body(
                 ApiFuncUpdateRequest(
                     name = FuncName("updated-name"),
-                    inputs = FuncInputs(HotObject.builder().set("hamal", "updatedInputs").build()),
+                    inputs = FuncInputs(ValueObject.builder().set("hamal", "updatedInputs").build()),
                     code = CodeValue("createdCode")
                 )
             )
@@ -190,7 +190,7 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
         with(getFunc(funcId)) {
             assertThat(namespace.name, equalTo(NamespaceName("createdNamespace")))
             assertThat(name, equalTo(FuncName("updated-name")))
-            assertThat(inputs, equalTo(FuncInputs(HotObject.builder().set("hamal", "updatedInputs").build())))
+            assertThat(inputs, equalTo(FuncInputs(ValueObject.builder().set("hamal", "updatedInputs").build())))
 
             assertThat(code.version, equalTo(CodeVersion(1)))
             assertThat(code.value, equalTo(CodeValue("createdCode")))
@@ -216,9 +216,9 @@ internal class FuncUpdateControllerTest : FuncBaseControllerTest() {
                 namespaceId = createdNamespace.id,
                 req = ApiFuncCreateRequest(
                     name = name,
-                    inputs = FuncInputs(HotObject.builder().set("hamal", "createdInputs").build()),
+                    inputs = FuncInputs(ValueObject.builder().set("hamal", "createdInputs").build()),
                     code = code,
-                    codeType = CodeType.Lua54
+                    codeType = CodeType(Lua54)
                 )
             )
         )

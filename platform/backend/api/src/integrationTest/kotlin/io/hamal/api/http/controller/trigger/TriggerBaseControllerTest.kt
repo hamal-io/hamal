@@ -1,10 +1,14 @@
 package io.hamal.api.http.controller.trigger
 
 import io.hamal.api.http.controller.BaseControllerTest
-import io.hamal.lib.domain._enum.CodeType
-import io.hamal.lib.domain._enum.TopicType
-import io.hamal.lib.domain._enum.TriggerType
+import io.hamal.lib.domain._enum.CodeTypes.Lua54
+import io.hamal.lib.domain._enum.TopicTypes.Namespace
+import io.hamal.lib.domain._enum.TriggerTypes
 import io.hamal.lib.domain.vo.*
+import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
+import io.hamal.lib.domain.vo.TopicType.Companion.TopicType
+import io.hamal.lib.domain.vo.TriggerDuration.Companion.TriggerDuration
 import io.hamal.lib.http.HttpStatusCode.Accepted
 import io.hamal.lib.http.HttpStatusCode.Ok
 import io.hamal.lib.http.HttpSuccessResponse
@@ -23,7 +27,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
                     name = name,
                     inputs = FuncInputs(),
                     code = CodeValue(""),
-                    codeType = CodeType.Lua54
+                    codeType = CodeType(Lua54)
                 )
             )
             .execute()
@@ -36,7 +40,7 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
 
     fun createTopic(topicName: TopicName): ApiTopicCreateRequested {
         val createTopicResponse = httpTemplate.post("/v1/namespaces/539/topics")
-            .body(ApiTopicCreateRequest(topicName, TopicType.Namespace))
+            .body(ApiTopicCreateRequest(topicName, TopicType(Namespace)))
             .execute()
 
         assertThat(createTopicResponse.statusCode, equalTo(Accepted))
@@ -45,24 +49,13 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
         return createTopicResponse.result(ApiTopicCreateRequested::class)
     }
 
-    fun createHook(hookName: HookName): ApiHookCreateRequested {
-        val createHookResponse = httpTemplate.post("/v1/namespaces/539/hooks")
-            .body(ApiHookCreateRequest(hookName))
-            .execute()
-
-        assertThat(createHookResponse.statusCode, equalTo(Accepted))
-        require(createHookResponse is HttpSuccessResponse) { "request was not successful" }
-
-        return createHookResponse.result(ApiHookCreateRequested::class)
-    }
-
     fun createFixedRateTrigger(name: TriggerName): ApiTriggerCreateRequested {
         val funcId = awaitCompleted(createFunc(FuncName(name.value))).id
 
         val creationResponse = httpTemplate.post("/v1/namespaces/539/triggers")
             .body(
                 ApiTriggerCreateReq(
-                    type = TriggerType.FixedRate,
+                    type = TriggerTypes.FixedRate,
                     name = name,
                     funcId = funcId,
                     inputs = TriggerInputs(),

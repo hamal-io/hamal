@@ -3,11 +3,11 @@ local http = require_plugin('net.http')
 local url = context.env.test_url .. '/v1/json-error'
 
 local err, response = http.execute({
-    http.requests.get({ url = url }),
-    http.requests.post({ url = url }),
-    http.requests.patch({ url = url }),
-    http.requests.put({ url = url }),
-    http.requests.delete({ url = url }),
+    http.requests.get({ url = url, produces = "JSON", consumes = "JSON" }),
+    http.requests.post({ url = url, produces = "JSON", consumes = "JSON" }),
+    http.requests.patch({ url = url, produces = "JSON", consumes = "JSON" }),
+    http.requests.put({ url = url, produces = "JSON", consumes = "JSON" }),
+    http.requests.delete({ url = url, produces = "JSON", consumes = "JSON" }),
 })
 
 assert(err == nil)

@@ -1,13 +1,24 @@
 package io.hamal.bridge
 
 import io.hamal.core.CoreConfig
-import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain._enum.ExecStates
+import io.hamal.lib.domain._enum.ExecStates.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
+import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
+import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
+import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
+import io.hamal.lib.domain.vo.ExpiresAt.Companion.ExpiresAt
+import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
+import io.hamal.lib.domain.vo.PasswordSalt.Companion.PasswordSalt
+import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
+import io.hamal.lib.domain.vo.WorkspaceName.Companion.WorkspaceName
 import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.CreateExecTokenAuthCmd
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
@@ -162,7 +173,7 @@ internal abstract class BaseTest {
 
     fun createExec(
         execId: ExecId,
-        status: ExecStatus,
+        status: ExecStates,
         correlation: Correlation? = null,
         codeId: CodeId? = null,
         codeVersion: CodeVersion? = null,
@@ -196,7 +207,7 @@ internal abstract class BaseTest {
         )
 
 
-        if (status == ExecStatus.Planned) {
+        if (status == Planned) {
             return planedExec
         }
 
@@ -207,7 +218,7 @@ internal abstract class BaseTest {
             )
         )
 
-        if (status == ExecStatus.Scheduled) {
+        if (status == Scheduled) {
             return scheduled
         }
 
@@ -217,35 +228,37 @@ internal abstract class BaseTest {
                 execId = scheduled.id
             )
         )
-        if (status == ExecStatus.Queued) {
+        if (status == Queued) {
             return queued
         }
 
         val startedExec = execCmdRepository.start(StartCmd(CmdId(4))).first()
-        if (status == ExecStatus.Started) {
+        if (status == Started) {
             return startedExec
         }
 
         return when (status) {
-            ExecStatus.Completed -> execCmdRepository.complete(
+            Completed -> execCmdRepository.complete(
                 ExecCmdRepository.CompleteCmd(
                     id = CmdId(5),
                     execId = startedExec.id,
+                    statusCode = ExecStatusCode(200),
                     result = ExecResult(
-                        HotObject.builder().set("hamal", "Great success").build()
+                        ValueObject.builder().set("hamal", "Great success").build()
                     ),
                     state = ExecState(
-                        HotObject.builder().set("persisted", "Instate").build()
+                        ValueObject.builder().set("persisted", "Instate").build()
                     )
                 )
             )
 
-            ExecStatus.Failed -> execCmdRepository.fail(
+            Failed -> execCmdRepository.fail(
                 ExecCmdRepository.FailCmd(
                     id = CmdId(5),
                     execId = startedExec.id,
+                    statusCode = ExecStatusCode(400),
                     result = ExecResult(
-                        HotObject.builder().set("message", "BaseTest.kt").build()
+                        ValueObject.builder().set("message", "BaseTest.kt").build()
                     )
                 )
             )

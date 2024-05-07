@@ -1,7 +1,0 @@
-name: blueprint_id
-in: path
-required: true
-schema:
-  $ref: ../schemas/blueprint_id.yaml
-style: simple
-example: da6ea0a001000

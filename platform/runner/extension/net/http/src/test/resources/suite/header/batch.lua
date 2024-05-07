@@ -2,7 +2,7 @@ http = require('net.http').create({
     base_url = context.env.test_url
 })
 
-decimal = require('decimal')
+decimal = require('std.decimal').create()
 
 req_headers = {}
 req_headers['Auth-ori-zation'] = 'Bearer ey.SecretToken'
@@ -26,7 +26,6 @@ assert(#res == 5)
 for idx = 1, 5 do
     headers = res[idx].headers
 
-    assert(headers['accept'] == 'application/json')
     assert(headers['auth-ori-zation'] == 'Bearer ey.SecretToken')
 
     assert(headers['s'] == 'HamalRocks')

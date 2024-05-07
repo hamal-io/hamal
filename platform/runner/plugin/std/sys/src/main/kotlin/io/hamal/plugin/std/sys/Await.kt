@@ -1,30 +1,31 @@
 package io.hamal.plugin.std.sys
 
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.common.value.ValueError
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.domain._enum.RequestStatuses.Completed
+import io.hamal.lib.domain._enum.RequestStatuses.Failed
 import io.hamal.lib.http.HttpTemplate
 import io.hamal.lib.kua.function.Function1In1Out
 import io.hamal.lib.kua.function.FunctionContext
 import io.hamal.lib.kua.function.FunctionInput1Schema
 import io.hamal.lib.kua.function.FunctionOutput1Schema
-import io.hamal.lib.kua.type.KuaError
-import io.hamal.lib.kua.type.KuaString
 import io.hamal.lib.sdk.api.ApiRequested
 
 class AwaitFunction(
     private val httpTemplate: HttpTemplate
-) : Function1In1Out<KuaString, KuaError>(
-    FunctionInput1Schema(KuaString::class),
-    FunctionOutput1Schema(KuaError::class)
+) : Function1In1Out<ValueString, ValueError>(
+    FunctionInput1Schema(ValueString::class),
+    FunctionOutput1Schema(ValueError::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaString): KuaError? {
+    override fun invoke(ctx: FunctionContext, arg1: ValueString): ValueError? {
         while (true) {
             httpTemplate.get("/v1/requests/{request_id}")
                 .path("request_id", arg1.stringValue)
                 .execute(ApiRequested::class)
                 .let {
-                    when (it.requestStatus) {
-                        RequestStatus.Completed,
-                        RequestStatus.Failed -> {
+                    when (it.requestStatus.enumValue) {
+                        Completed,
+                        Failed -> {
                             return null
                         }
 
@@ -40,23 +41,23 @@ class AwaitFunction(
 
 class AwaitCompletedFunction(
     private val httpTemplate: HttpTemplate
-) : Function1In1Out<KuaString, KuaError>(
-    FunctionInput1Schema(KuaString::class),
-    FunctionOutput1Schema(KuaError::class)
+) : Function1In1Out<ValueString, ValueError>(
+    FunctionInput1Schema(ValueString::class),
+    FunctionOutput1Schema(ValueError::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaString): KuaError? {
+    override fun invoke(ctx: FunctionContext, arg1: ValueString): ValueError? {
         while (true) {
             httpTemplate.get("/v1/requests/{request_id}")
                 .path("request_id", arg1.stringValue)
                 .execute(ApiRequested::class)
                 .let {
-                    when (it.requestStatus) {
-                        RequestStatus.Completed -> {
+                    when (it.requestStatus.enumValue) {
+                        Completed -> {
                             return null
                         }
 
-                        RequestStatus.Failed -> {
-                            return KuaError("expected $arg1 to complete but failed")
+                        Failed -> {
+                            return ValueError("expected $arg1 to complete but failed")
                         }
 
                         else -> {
@@ -70,22 +71,22 @@ class AwaitCompletedFunction(
 
 class AwaitFailedFunction(
     private val httpTemplate: HttpTemplate
-) : Function1In1Out<KuaString, KuaError>(
-    FunctionInput1Schema(KuaString::class),
-    FunctionOutput1Schema(KuaError::class)
+) : Function1In1Out<ValueString, ValueError>(
+    FunctionInput1Schema(ValueString::class),
+    FunctionOutput1Schema(ValueError::class)
 ) {
-    override fun invoke(ctx: FunctionContext, arg1: KuaString): KuaError? {
+    override fun invoke(ctx: FunctionContext, arg1: ValueString): ValueError? {
         while (true) {
             httpTemplate.get("/v1/requests/{request_id}")
                 .path("request_id", arg1.stringValue)
                 .execute(ApiRequested::class)
                 .let {
-                    when (it.requestStatus) {
-                        RequestStatus.Completed -> {
-                            return KuaError("expected $arg1 to fail but completed")
+                    when (it.requestStatus.enumValue) {
+                        Completed -> {
+                            return ValueError("expected $arg1 to fail but completed")
                         }
 
-                        RequestStatus.Failed -> {
+                        Failed -> {
                             return null
                         }
 

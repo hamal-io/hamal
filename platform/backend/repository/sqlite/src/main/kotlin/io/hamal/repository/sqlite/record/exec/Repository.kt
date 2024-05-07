@@ -9,6 +9,7 @@ import io.hamal.repository.api.ExecRepository
 import io.hamal.repository.api.record.exec.ExecEntity
 import io.hamal.repository.record.CreateDomainObject
 import io.hamal.repository.record.exec.ExecRecord
+import io.hamal.repository.record.exec.ExecRecord.*
 import io.hamal.repository.sqlite.record.RecordSqliteRepository
 import java.nio.file.Path
 
@@ -16,7 +17,7 @@ internal object CreateExec : CreateDomainObject<ExecId, ExecRecord, Exec> {
     override fun invoke(recs: List<ExecRecord>): Exec {
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
-        check(firstRecord is ExecRecord.Planned)
+        check(firstRecord is Planned)
 
         var result = ExecEntity(
             cmdId = firstRecord.cmdId,
@@ -57,7 +58,7 @@ class ExecSqliteRepository(
                 versionOf(execId, cmdId) as Exec.Planned
             } else {
                 store(
-                    ExecRecord.Planned(
+                    Planned(
                         cmdId = cmdId,
                         entityId = execId,
                         triggerId = cmd.triggerId,
@@ -84,7 +85,7 @@ class ExecSqliteRepository(
             } else {
                 check(currentVersion(execId) is Exec.Planned) { "$execId not planned" }
 
-                store(ExecRecord.Scheduled(cmdId, execId))
+                store(Scheduled(cmdId, execId))
 
                 (currentVersion(execId) as Exec.Scheduled).also { ProjectionCurrent.upsert(this, it) }
             }
@@ -100,7 +101,7 @@ class ExecSqliteRepository(
             } else {
                 check(currentVersion(execId) is Exec.Scheduled) { "$execId not scheduled" }
 
-                store(ExecRecord.Queued(cmdId, execId))
+                store(Queued(cmdId, execId))
 
                 (currentVersion(execId) as Exec.Queued)
                     .also { ProjectionCurrent.upsert(this, it) }
@@ -121,7 +122,7 @@ class ExecSqliteRepository(
                 } else {
                     check(currentVersion(execId) is Exec.Queued) { "$execId not queued" }
 
-                    store(ExecRecord.Started(cmd.id, execId))
+                    store(Started(cmd.id, execId))
 
                     result.add((currentVersion(execId) as Exec.Started).also { ProjectionCurrent.upsert(this, it) })
                 }
@@ -141,7 +142,7 @@ class ExecSqliteRepository(
             } else {
                 check(currentVersion(execId) is Exec.Started) { "$execId not started" }
 
-                store(ExecRecord.Completed(cmdId, execId, cmd.result, cmd.state))
+                store(Completed(cmdId, execId, cmd.statusCode, cmd.result, cmd.state))
 
                 (currentVersion(execId) as Exec.Completed).also { ProjectionCurrent.upsert(this, it) }
             }
@@ -157,7 +158,7 @@ class ExecSqliteRepository(
             } else {
                 check(currentVersion(execId) is Exec.Started) { "$execId not started" }
 
-                store(ExecRecord.Failed(cmdId, execId, cmd.result))
+                store(Failed(cmdId, execId, cmd.statusCode, cmd.result))
 
                 (currentVersion(execId) as Exec.Failed).also { ProjectionCurrent.upsert(this, it) }
             }

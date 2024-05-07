@@ -98,9 +98,7 @@ export const NodeWidget: FC<NodeWidgetProps> = ({node}) => {
             <span className='text-teal-200'>{node.title} </span>
 
 
-            <ControlListWidget
-                controls={node.controls}
-            />
+            <ControlListWidget node={node}/>
 
             <Ports
                 // nodeId={id}

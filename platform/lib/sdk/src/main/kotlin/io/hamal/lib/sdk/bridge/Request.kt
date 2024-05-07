@@ -1,7 +1,7 @@
 package io.hamal.lib.sdk.bridge
 
-import io.hamal.lib.domain._enum.RequestStatus
 import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.RequestStatus
 
 sealed class BridgeRequested {
     abstract val id: RequestId

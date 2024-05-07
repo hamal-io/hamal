@@ -225,7 +225,7 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput}) => {
         //     //FIXME
         //     // nodesDispatch?.({
         //     //     type: NodesActionType.REMOVE_CONNECTION,
-        //     //     input: { nodeId: inputNodeId, portName: inputPortName },
+        //     //     inputs: { nodeId: inputNodeId, portName: inputPortName },
         //     //     output: { nodeId: outputNodeId, portName: outputPortName }
         //     // });
         //     if (droppedOnPort) {
@@ -244,7 +244,7 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput}) => {
         //             // if (inputWillAcceptConnection) {
         //             //     nodesDispatch?.({
         //             //         type: NodesActionType.ADD_CONNECTION,
-        //             //         input: { nodeId: connectToNodeId, portName: connectToPortName },
+        //             //         inputs: { nodeId: connectToNodeId, portName: connectToPortName },
         //             //         output: { nodeId: outputNodeId, portName: outputPortName }
         //             //     });
         //             // }
@@ -268,7 +268,7 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput}) => {
         //         //     nodesDispatch?.({
         //         //         type: NodesActionType.ADD_CONNECTION,
         //         //         output: { nodeId, portName: name },
-        //         //         input: { nodeId: inputNodeId, portName: inputPortName }
+        //         //         inputs: { nodeId: inputNodeId, portName: inputPortName }
         //         //     });
         //         //     triggerRecalculation();
         //         // }
@@ -305,7 +305,7 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput}) => {
 
         if (isInput) {
             // lineInToPort.current = document.querySelector(
-            //     `[data-input-node-id="${nodeId}"][data-input-port-name="${name}"]`
+            //     `[data-inputs-node-id="${nodeId}"][data-inputs-port-name="${name}"]`
             // );
             // const portIsConnected = !!lineInToPort.current;
             // if (

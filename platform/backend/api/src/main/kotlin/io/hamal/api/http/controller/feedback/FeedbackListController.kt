@@ -4,6 +4,7 @@ import io.hamal.core.adapter.feedback.FeedbackListPort
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.domain.vo.FeedbackId
 import io.hamal.lib.sdk.api.ApiFeedbackList
+import io.hamal.lib.sdk.api.ApiFeedbackList.Feedback
 import io.hamal.repository.api.FeedbackQueryRepository.FeedbackQuery
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -22,15 +23,20 @@ internal class FeedbackListController(
     ): ResponseEntity<ApiFeedbackList> {
         return feedbackList(
             FeedbackQuery(
-                afterId = afterId, limit = limit, feedbackIds = feedbackIds
+                afterId = afterId,
+                limit = limit,
+                feedbackIds = feedbackIds
             )
-        ).let { feedbacks ->
-            ResponseEntity.ok(ApiFeedbackList(feedbacks.map {
-                ApiFeedbackList.Feedback(
-                    id = it.id,
-                    mood = it.mood,
-                )
-            }))
+        ).let {
+            ResponseEntity.ok(
+                ApiFeedbackList(
+                    feedbacks = it.map {
+                        Feedback(
+                            id = it.id,
+                            mood = it.mood
+                        )
+                    })
+            )
         }
     }
 }

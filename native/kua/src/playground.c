@@ -20,7 +20,7 @@ int main(void) {
 
     lua_createtable(L, 0, 2);
     lua_pushstring(L, "ERR");
-    lua_setfield(L, -2, "message");
+    lua_setfield(L, -2, "value");
 
     luaL_setmetatable(L, KUA_BUILTIN_ERROR);
 

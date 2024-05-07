@@ -4,12 +4,23 @@ import io.hamal.bridge.BridgeConfig
 import io.hamal.core.CoreConfig
 import io.hamal.core.component.SetupInternalTopics
 import io.hamal.lib.common.domain.CmdId
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.util.TimeUtils
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.GenerateDomainId
+import io.hamal.lib.domain._enum.ExecStates
+import io.hamal.lib.domain._enum.ExecStates.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
+import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
+import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
+import io.hamal.lib.domain.vo.ExpiresAt.Companion.ExpiresAt
+import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
+import io.hamal.lib.domain.vo.PasswordSalt.Companion.PasswordSalt
+import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
+import io.hamal.lib.domain.vo.WorkspaceName.Companion.WorkspaceName
 import io.hamal.repository.api.*
 import io.hamal.repository.api.AuthCmdRepository.CreateTokenAuthCmd
 import io.hamal.repository.api.ExecCmdRepository.StartCmd
@@ -49,22 +60,16 @@ internal abstract class BaseTest {
     lateinit var authCmdRepository: AuthCmdRepository
 
     @Autowired
-    lateinit var blueprintQueryRepository: BlueprintQueryRepository
+    lateinit var recipeQueryRepository: RecipeQueryRepository
 
     @Autowired
-    lateinit var blueprintCmdRepository: BlueprintCmdRepository
+    lateinit var recipeCmdRepository: RecipeCmdRepository
 
     @Autowired
     lateinit var codeCmdRepository: CodeCmdRepository
 
     @Autowired
     lateinit var codeQueryRepository: CodeQueryRepository
-
-    @Autowired
-    lateinit var endpointQueryRepository: EndpointQueryRepository
-
-    @Autowired
-    lateinit var endpointCmdRepository: EndpointCmdRepository
 
     @Autowired
     lateinit var execCmdRepository: ExecCmdRepository
@@ -92,12 +97,6 @@ internal abstract class BaseTest {
 
     @Autowired
     lateinit var workspaceCmdRepository: WorkspaceCmdRepository
-
-    @Autowired
-    lateinit var hookQueryRepository: HookQueryRepository
-
-    @Autowired
-    lateinit var hookCmdRepository: HookCmdRepository
 
     @Autowired
     lateinit var namespaceQueryRepository: NamespaceQueryRepository
@@ -151,15 +150,13 @@ internal abstract class BaseTest {
 
         accountCmdRepository.clear()
         authCmdRepository.clear()
-        blueprintCmdRepository.clear()
+        recipeCmdRepository.clear()
         codeCmdRepository.clear()
-        endpointCmdRepository.clear()
         execCmdRepository.clear()
         extensionCmdRepository.clear()
         feedbackCmdRepository.clear()
         funcCmdRepository.clear()
         workspaceCmdRepository.clear()
-        hookCmdRepository.clear()
         logBrokerRepository.clear()
         namespaceCmdRepository.clear()
         namespaceTreeCmdRepository.clear()
@@ -221,7 +218,7 @@ internal abstract class BaseTest {
 
     fun createExec(
         execId: ExecId,
-        status: ExecStatus,
+        status: ExecStates,
         correlation: Correlation? = null,
         codeId: CodeId? = null,
         codeVersion: CodeVersion? = null,
@@ -245,7 +242,7 @@ internal abstract class BaseTest {
             )
         )
 
-        if (status == ExecStatus.Planned) {
+        if (status == Planned) {
             return planedExec
         }
 
@@ -256,7 +253,7 @@ internal abstract class BaseTest {
             )
         )
 
-        if (status == ExecStatus.Scheduled) {
+        if (status == Scheduled) {
             return scheduled
         }
 
@@ -266,30 +263,32 @@ internal abstract class BaseTest {
                 execId = scheduled.id
             )
         )
-        if (status == ExecStatus.Queued) {
+        if (status == Queued) {
             return queued
         }
 
         val startedExec = execCmdRepository.start(StartCmd(CmdId(4))).first()
-        if (status == ExecStatus.Started) {
+        if (status == Started) {
             return startedExec
         }
 
         return when (status) {
-            ExecStatus.Completed -> execCmdRepository.complete(
+            Completed -> execCmdRepository.complete(
                 ExecCmdRepository.CompleteCmd(
                     id = CmdId(5),
                     execId = startedExec.id,
-                    result = ExecResult(HotObject.builder().set("hamal", "rocks").build()),
-                    state = ExecState(HotObject.builder().set("state", "ful").build())
+                    statusCode = ExecStatusCode(200),
+                    result = ExecResult(ValueObject.builder().set("hamal", "rocks").build()),
+                    state = ExecState(ValueObject.builder().set("state", "ful").build())
                 )
             )
 
-            ExecStatus.Failed -> execCmdRepository.fail(
+            Failed -> execCmdRepository.fail(
                 ExecCmdRepository.FailCmd(
                     id = CmdId(5),
                     execId = startedExec.id,
-                    result = ExecResult(HotObject.builder().set("message", "BaseTest.kt").build())
+                    statusCode = ExecStatusCode(400),
+                    result = ExecResult(ValueObject.builder().set("message", "BaseTest.kt").build())
                 )
             )
 

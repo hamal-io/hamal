@@ -1,7 +1,10 @@
 package io.hamal.core.http
 
+import io.hamal.lib.common.serialization.Serde
+import io.hamal.lib.common.value.serde.SerdeModuleValueJson
+import io.hamal.lib.domain.vo.SerdeModuleValueVariable
 import io.hamal.lib.sdk.api.ApiError
-import io.hamal.repository.record.json
+import io.hamal.lib.sdk.api.SerdeModuleJsonApi
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.servlet.http.HttpServletResponse.*
@@ -24,6 +27,12 @@ internal class ErrorController {
         val target: String
     )
 
+    internal val json = Serde.json()
+        .register(SerdeModuleJsonApi)
+        .register(SerdeModuleValueJson)
+        .register(SerdeModuleValueVariable)
+
+
     @ExceptionHandler(value = [MethodArgumentTypeMismatchException::class])
     fun argumentTypeMismatch(res: HttpServletResponse, t: MethodArgumentTypeMismatchException) {
         t.printStackTrace()
@@ -33,7 +42,7 @@ internal class ErrorController {
             res.status = 400
             res.addHeader("Content-Type", "application/json;charset=UTF-8")
             res.writer.write(
-                json.serialize(
+                json.write(
                     InvalidArgumentType(
                         message = "ArgumentTypeMismatch",
                         source = cause.sourceType?.toString() ?: "Unknown source type",
@@ -43,7 +52,7 @@ internal class ErrorController {
             )
         } else {
             res.addHeader("Content-Type", "application/json;charset=UTF-8")
-            res.writer.write(json.serialize(ApiError("Bad request")))
+            res.writer.write(json.write(ApiError("Bad request")))
         }
     }
 
@@ -53,7 +62,7 @@ internal class ErrorController {
 
         res.status = 400
         res.addHeader("Content-Type", "application/json;charset=UTF-8")
-        res.writer.write(json.serialize(ApiError(t.cause?.message ?: "Bad request")))
+        res.writer.write(json.write(ApiError(t.cause?.message ?: "Bad request")))
     }
 
     @ExceptionHandler(value = [NoHandlerFoundException::class])
@@ -62,7 +71,7 @@ internal class ErrorController {
 
         res.status = SC_NOT_FOUND
         res.addHeader("Content-Type", "application/json;charset=UTF-8")
-        res.writer.write(json.serialize(ApiError("Request handler not found")))
+        res.writer.write(json.write(ApiError("Request handler not found")))
     }
 
 
@@ -72,7 +81,7 @@ internal class ErrorController {
 
         res.status = SC_FORBIDDEN
         res.addHeader("Content-Type", "application/json;charset=UTF-8")
-        res.writer.write(json.serialize(ApiError("FORBIDDEN")))
+        res.writer.write(json.write(ApiError("FORBIDDEN")))
     }
 
     @ExceptionHandler(value = [Throwable::class])
@@ -94,7 +103,7 @@ internal class ErrorController {
 
         res.status = statusCode
         res.addHeader("Content-Type", "application/json;charset=UTF-8")
-        res.writer.write(json.serialize(ApiError(toHandle?.message ?: "Unknown error")))
+        res.writer.write(json.write(ApiError(toHandle?.message ?: "Unknown error")))
     }
 
 }

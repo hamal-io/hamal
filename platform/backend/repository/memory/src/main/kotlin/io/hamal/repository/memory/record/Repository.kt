@@ -2,14 +2,15 @@ package io.hamal.repository.memory.record
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.DomainObject
-import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.util.CollectionUtils.takeWhileInclusive
+import io.hamal.lib.common.value.ValueVariableSnowflakeId
 import io.hamal.repository.record.*
+import io.hamal.repository.record.RecordSequence.Companion.RecordSequence
 import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 import kotlin.reflect.KClass
 
-abstract class RecordMemoryRepository<ID : ValueObjectId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
+abstract class RecordMemoryRepository<ID : ValueVariableSnowflakeId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
     private val createDomainObject: CreateDomainObject<ID, RECORD, OBJ>,
     private val recordClass: KClass<RECORD>,
     protected val projections: List<ProjectionMemory<ID, out OBJ>>

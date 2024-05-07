@@ -1,12 +1,20 @@
 package io.hamal.core.request.handler.exec
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
-import io.hamal.lib.common.hot.HotObject
-import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.common.value.ValueObject
+import io.hamal.lib.domain._enum.ExecStates
+import io.hamal.lib.domain._enum.ExecStates.Failed
+import io.hamal.lib.domain._enum.ExecStates.Started
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.ExecFailRequested
-import io.hamal.lib.domain.vo.*
-import io.hamal.lib.domain.vo.ExecStatus.Failed
-import io.hamal.lib.domain.vo.ExecStatus.Started
+import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
+import io.hamal.lib.domain.vo.ExecId
+import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
+import io.hamal.lib.domain.vo.ExecResult
+import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
+import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
+import io.hamal.lib.domain.vo.RequestStatus
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import io.hamal.repository.api.Exec
 import io.hamal.repository.api.ExecQueryRepository.ExecQuery
 import org.hamcrest.MatcherAssert.assertThat
@@ -36,7 +44,7 @@ internal class ExecFailHandlerTest : BaseRequestHandlerTest() {
     }
 
     @TestFactory
-    fun `Tries to fail exec, but not in status Started`() = ExecStatus.values()
+    fun `Tries to fail exec, but not in status Started`() = ExecStates.values()
         .filterNot { it == Started }
         .map { execStatus ->
             dynamicTest("Can not complete: $execStatus") {
@@ -59,9 +67,10 @@ internal class ExecFailHandlerTest : BaseRequestHandlerTest() {
         ExecFailRequested(
             requestId = RequestId(10),
             requestedBy = AuthId(20),
-            requestStatus = Submitted,
+            requestStatus = RequestStatus(Submitted),
             id = ExecId(1234),
-            result = ExecResult(HotObject.builder().set("message", "You have not tried hard enough").build())
+            statusCode = ExecStatusCode(450),
+            result = ExecResult(ValueObject.builder().set("message", "You have not tried hard enough").build())
         )
     }
 
@@ -72,10 +81,8 @@ internal class ExecFailHandlerTest : BaseRequestHandlerTest() {
                 require(this is Exec.Failed)
                 assertThat(id, equalTo(ExecId(1234)))
                 assertThat(status, equalTo(Failed))
-                assertThat(
-                    result,
-                    equalTo(ExecResult(HotObject.builder().set("message", "You have not tried hard enough").build()))
-                )
+                assertThat(statusCode, equalTo(ExecStatusCode(450)))
+                assertThat(result, equalTo(ExecResult(ValueObject.builder().set("message", "You have not tried hard enough").build())))
             }
         }
     }

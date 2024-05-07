@@ -1,4 +1,4 @@
---sys = require_plugin('sys')
+--sys = require_plugin('std.sys')
 --
 --_, request = sys.topics.append({ name = "topic-one" })
 --sys.await(request)

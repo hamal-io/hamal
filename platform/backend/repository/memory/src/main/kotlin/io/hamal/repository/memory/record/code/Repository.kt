@@ -49,15 +49,15 @@ class CodeMemoryRepository : RecordMemoryRepository<CodeId, CodeRecord, Code>(
                 versionOf(codeId, cmd.id)
             } else {
                 val currentVersion = versionOf(codeId, cmd.id)
-                val codeValue = cmd.value
-                return if (codeValue == null || codeValue == currentVersion.value) {
+                val ValueCode = cmd.value
+                return if (ValueCode == null || ValueCode == currentVersion.value) {
                     currentVersion
                 } else {
                     store(
                         CodeRecord.Updated(
                             entityId = codeId,
                             cmdId = cmd.id,
-                            value = codeValue
+                            value = ValueCode
                         )
                     )
                     (currentVersion(codeId)).also(currentProjection::upsert)

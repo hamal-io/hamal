@@ -2,8 +2,10 @@ package io.hamal.repository.api
 
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Limit
+import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.domain.request.Requested
 import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
 
 interface RequestRepository : RequestCmdRepository, RequestQueryRepository
 

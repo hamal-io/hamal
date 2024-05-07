@@ -1,7 +1,8 @@
 package io.hamal.lib.sqlite
 
-import io.hamal.lib.common.domain.ValueObjectId
 import io.hamal.lib.common.snowflake.SnowflakeId
+import io.hamal.lib.common.value.ValueSnowflakeId
+import io.hamal.lib.common.value.ValueVariableSnowflakeId
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
@@ -85,13 +86,11 @@ class DefaultNamedResultSetIT {
             testInstance("SELECT snowflake_id_value FROM some_table WHERE snowflake_id_value is not null")
         assertThat(
             testInstance.getSnowflakeId("snowflake_id_value"), equalTo(
-                SnowflakeId(
-                    987654
-                )
+                ValueSnowflakeId(SnowflakeId(987654))
             )
         )
     }
-    
+
     @Test
     fun getDomainId() {
         connection.createStatement().use { it.execute("INSERT INTO some_table (domain_id_value) VALUES (54321)") }
@@ -115,7 +114,7 @@ class DefaultNamedResultSetIT {
     }
 
 
-    private data class TestDomainId(override val value: SnowflakeId) : ValueObjectId() {
-        constructor(value: Int) : this(SnowflakeId(value.toLong()))
+    private data class TestDomainId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
+        constructor(value: Int) : this(ValueSnowflakeId(SnowflakeId(value.toLong())))
     }
 }

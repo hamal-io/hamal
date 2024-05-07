@@ -1,20 +1,30 @@
 package io.hamal.lib.kua
 
-import io.hamal.lib.common.hot.HotNumber
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueNumber
+import io.hamal.lib.common.value.ValueObject
 
-abstract class KuaError(message: String, throwable: Throwable? = null) : Error(message, throwable)
+sealed class KuaError(message: String, throwable: Throwable? = null) : Error(message, throwable)
 
-class ExitError(
-    val status: HotNumber,
-    val result: HotObject
-) : KuaError(status.toString())
+class ExitComplete(
+    val statusCode: ValueNumber,
+    val result: ValueObject
+) : KuaError(statusCode.toString())
 
-class AssertionError(message: String) : KuaError(message)
+class ExitFailure(
+    val statusCode: ValueNumber,
+    val result: ValueObject
+) : KuaError(statusCode.toString())
 
-class ScriptError(message: String) : KuaError(message)
+class ErrorAssertion(message: String) : KuaError(message)
 
-class DecimalError(message: String) : KuaError(message)
+class ErrorDecimal(message: String) : KuaError(message)
 
-class ExtensionError(cause: Throwable) : KuaError(cause.message ?: "Unknown error", cause)
+class ErrorPlugin(cause: Throwable) : KuaError(cause.message ?: "Unknown error", cause)
 
+class ErrorInternal(message: String) : KuaError(message)
+
+class ErrorNotFound(message: String) : KuaError(message)
+
+class ErrorIllegalArgument(message: String) : KuaError(message)
+
+class ErrorIllegalState(message: String) : KuaError(message)

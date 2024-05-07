@@ -1,9 +1,9 @@
 package io.hamal.api.http.controller.topic
 
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.request.TriggerCreateRequested
 import io.hamal.lib.domain.vo.TopicEventPayload
-import io.hamal.lib.domain.vo.TopicName
+import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode.NotFound
 import io.hamal.lib.http.body
@@ -22,7 +22,7 @@ internal class TopicEventAppendControllerTest : TopicBaseControllerTest() {
         awaitCompleted(
             appendToTopic(
                 topicId,
-                TopicEventPayload(HotObject.builder().set("hamal", "rocks").build())
+                TopicEventPayload(ValueObject.builder().set("hamal", "rocks").build())
             )
         )
 
@@ -32,7 +32,7 @@ internal class TopicEventAppendControllerTest : TopicBaseControllerTest() {
             val entry = events.first()
             assertThat(
                 entry.payload, equalTo(
-                    TopicEventPayload(HotObject.builder().set("hamal", "rocks").build())
+                    TopicEventPayload(ValueObject.builder().set("hamal", "rocks").build())
                 )
             )
         }
@@ -46,7 +46,7 @@ internal class TopicEventAppendControllerTest : TopicBaseControllerTest() {
             IntRange(1, 10).map {
                 appendToTopic(
                     topicId,
-                    TopicEventPayload(HotObject.builder().set("hamal", "rocks").build())
+                    TopicEventPayload(ValueObject.builder().set("hamal", "rocks").build())
                 )
             }
         )
@@ -56,7 +56,7 @@ internal class TopicEventAppendControllerTest : TopicBaseControllerTest() {
             events.forEach { entry ->
                 assertThat(
                     entry.payload,
-                    equalTo(TopicEventPayload(HotObject.builder().set("hamal", "rocks").build()))
+                    equalTo(TopicEventPayload(ValueObject.builder().set("hamal", "rocks").build()))
                 )
             }
         }
@@ -65,7 +65,7 @@ internal class TopicEventAppendControllerTest : TopicBaseControllerTest() {
     @Test
     fun `Tries to append event to topic which does not exists`() {
         val topicResponse = httpTemplate.post("/v1/topics/1234/events")
-            .body(TopicEventPayload(HotObject.builder().set("hamal", "rocks").build()))
+            .body(TopicEventPayload(ValueObject.builder().set("hamal", "rocks").build()))
             .execute()
 
         assertThat(topicResponse.statusCode, equalTo(NotFound))

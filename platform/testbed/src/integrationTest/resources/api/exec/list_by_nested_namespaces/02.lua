@@ -1,10 +1,11 @@
-sys = require_plugin('sys')
+sys = require_plugin('std.sys')
+table = require('std.table').create()
 
 namespaces = fail_on_error(sys.namespaces.list())
 
-root_namespace = find_in_list(namespaces, 'name', 'root-namespace')
-namespace_one = find_in_list(namespaces, 'name', 'root-namespace::namespace-1')
-namespace_two = find_in_list(namespaces, 'name', 'root-namespace::namespace-2')
+root_namespace = table.find(namespaces, 'name', 'root-namespace')
+namespace_one = table.find(namespaces, 'name', 'root-namespace::namespace-1')
+namespace_two = table.find(namespaces, 'name', 'root-namespace::namespace-2')
 
 root_namespace_execs = fail_on_error(sys.execs.list({
     namespace_ids = { root_namespace.id }

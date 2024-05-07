@@ -2,12 +2,11 @@ package io.hamal.core.config
 
 import com.google.gson.Gson
 import io.hamal.core.component.*
-import io.hamal.lib.common.hot.HotObjectModule
-import io.hamal.lib.common.serialization.JsonFactoryBuilder
-import io.hamal.lib.domain.vo.ValueObjectJsonModule
-import io.hamal.lib.sdk.api.ApiJsonModule
-import io.hamal.repository.api.DomainJsonModule
-import io.hamal.repository.api.event.PlatformEventJsonModule
+import io.hamal.lib.common.serialization.Serde
+import io.hamal.lib.common.value.serde.SerdeModuleValueJson
+import io.hamal.lib.domain.vo.SerdeModuleValueVariable
+import io.hamal.lib.sdk.api.SerdeModuleJsonApi
+import io.hamal.repository.api.event.SerdeModuleJsonInternalEvent
 import org.apache.coyote.ProtocolHandler
 import org.springframework.boot.web.embedded.tomcat.TomcatProtocolHandlerCustomizer
 import org.springframework.context.annotation.Bean
@@ -28,7 +27,6 @@ import javax.xml.transform.Source
 @Configuration
 open class WebConfig : WebMvcConfigurer {
 
-
     @Bean
     open fun protocolHandlerVirtualThreadExecutorCustomizer(): TomcatProtocolHandlerCustomizer<*> {
         return TomcatProtocolHandlerCustomizer { protocolHandler: ProtocolHandler ->
@@ -36,24 +34,21 @@ open class WebConfig : WebMvcConfigurer {
         }
     }
 
+    @Bean
+    open fun gsonJson(): Gson = Serde.json()
+        .register(SerdeModuleJsonApi)
+        .register(SerdeModuleJsonInternalEvent)
+        .register(SerdeModuleValueJson)
+        .register(SerdeModuleValueVariable)
+        .gson
+
 
     @Bean
-    open fun gson(): Gson = JsonFactoryBuilder()
-        .register(ApiJsonModule)
-        .register(DomainJsonModule)
-        .register(HotObjectModule)
-        .register(PlatformEventJsonModule)
-        .register(ValueObjectJsonModule)
-        .build()
-
-    @Bean
-    open fun gsonHttpMessageConverter(gson: Gson): GsonHttpMessageConverter {
+    open fun httpMessageJsonConverter(gson: Gson): GsonHttpMessageConverter {
         val result = GsonHttpMessageConverter()
         result.gson = gson
         result.defaultCharset = StandardCharsets.UTF_8
-        result.supportedMediaTypes = listOf(
-            MediaType("application", "json", StandardCharsets.UTF_8)
-        )
+        result.supportedMediaTypes = listOf(MediaType("application", "json", StandardCharsets.UTF_8))
         return result
     }
 
@@ -66,8 +61,7 @@ open class WebConfig : WebMvcConfigurer {
 
         converters.add(ByteArrayHttpMessageConverter())
         converters.add(SourceHttpMessageConverter<Source>())
-
-        converters.add(gsonHttpMessageConverter(gson()))
+        converters.add(httpMessageJsonConverter(gsonJson()))
     }
 
 
@@ -79,10 +73,13 @@ open class WebConfig : WebMvcConfigurer {
         registry.addConverter(CorrelationIdConverter)
         registry.addConverter(ExecIdConverter)
         registry.addConverter(ExecLogIdConverter)
+        registry.addConverter(ExtensionIdConverter)
+        registry.addConverter(FeedbackIdConverter)
         registry.addConverter(FuncIdConverter)
         registry.addConverter(LimitConverter)
         registry.addConverter(NamespaceIdConverter)
         registry.addConverter(RequestIdConverter)
+        registry.addConverter(RecipeIdConverter)
         registry.addConverter(TopicEntryIdConverter)
         registry.addConverter(TopicIdConverter)
         registry.addConverter(TopicNameConverter)

@@ -1,12 +1,11 @@
 import React, {FC, useEffect, useState} from "react";
 
-import {Dialog, DialogContent, DialogFooter, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
+import {Dialog, DialogContent, DialogHeader, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import {HookWithTriggers} from "@/pages/app/hook-list/type.tsx";
 import * as z from "zod";
-import {useAuth} from "@/hook/auth.ts";
 import {useNavigate} from "react-router-dom";
-import {useTriggerHookCreate, useTriggerListHook} from "@/hook";
+import {useTriggerHookCreate} from "@/hook";
 import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {Button} from "@/components/ui/button.tsx";
@@ -14,7 +13,6 @@ import {Loader2, Plus} from "lucide-react";
 import {Form} from "@/components/ui/form.tsx";
 import {TriggerListItem} from "@/types";
 import FormFuncSelect from "@/components/form/func-select.tsx";
-import FormHttpMethodSelect from "@/components/form/http-method-select.tsx";
 
 type Prop = {
     item: HookWithTriggers
@@ -54,7 +52,7 @@ const Detail: FC<Prop> = ({item}) => {
                         {triggerList.map(trigger => {
                             return (
                                 <span className="flex justify-between w-full" key={trigger.id}>
-                                    <b>{trigger.hook.method} </b> {trigger.func.name}
+                                    {trigger.func.name}
                                 </span>
                             )
                         })}
@@ -85,14 +83,12 @@ const AddTrigger: FC<AddTriggerProps> = ({namespaceId, hookId, hookName, trigger
 
     const formSchema = z.object({
         funcId: z.string().min(1, "Function required"),
-        httpMethod: z.string().min(1, "Http method required"),
     })
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            funcId: "",
-            httpMethod: ""
+            funcId: ""
         },
     })
 
@@ -104,7 +100,6 @@ const AddTrigger: FC<AddTriggerProps> = ({namespaceId, hookId, hookName, trigger
                 funcId: values.funcId,
                 name: `${hookName}-${trigger.length + 1}`,
                 hookId: hookId,
-                hookMethod: values.httpMethod
             })
 
         } catch (e) {
@@ -138,7 +133,6 @@ const AddTrigger: FC<AddTriggerProps> = ({namespaceId, hookId, hookName, trigger
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                             <FormFuncSelect name='funcId' form={form}/>
-                            <FormHttpMethodSelect name='httpMethod' form={form}/>
                             <Button type="submit">
                                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin"/>}
                                 Add

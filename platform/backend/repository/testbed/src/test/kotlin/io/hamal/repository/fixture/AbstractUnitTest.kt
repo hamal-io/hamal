@@ -1,6 +1,7 @@
 package io.hamal.repository.fixture
 
 import io.hamal.lib.common.domain.CmdId
+import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.repository.api.*
 import io.hamal.repository.api.log.LogBrokerRepository
 import io.hamal.repository.api.log.LogSegmentRepository
@@ -43,10 +44,6 @@ abstract class AbstractUnitTest {
             MemoryFixture,
             SqliteFixture
         ),
-        EndpointRepository::class to listOf(
-            MemoryFixture,
-            SqliteFixture
-        ),
         ExecLogRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
@@ -64,10 +61,6 @@ abstract class AbstractUnitTest {
             SqliteFixture
         ),
         WorkspaceRepository::class to listOf(
-            MemoryFixture,
-            SqliteFixture
-        ),
-        HookRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
         ),
@@ -99,7 +92,7 @@ abstract class AbstractUnitTest {
             MemoryFixture,
             SqliteFixture
         ),
-        BlueprintRepository::class to listOf(
+        RecipeRepository::class to listOf(
             MemoryFixture,
             SqliteFixture
         ),

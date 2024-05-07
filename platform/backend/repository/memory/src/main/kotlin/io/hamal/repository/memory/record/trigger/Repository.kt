@@ -1,8 +1,9 @@
 package io.hamal.repository.memory.record.trigger
 
 import io.hamal.lib.common.domain.Count
-import io.hamal.lib.domain._enum.TriggerStatus
+import io.hamal.lib.domain._enum.TriggerStates
 import io.hamal.lib.domain.vo.TriggerId
+import io.hamal.lib.domain.vo.TriggerStatus.Companion.TriggerStatus
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.api.TriggerCmdRepository.*
 import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
@@ -17,7 +18,7 @@ import kotlin.concurrent.withLock
 class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord, Trigger>(
     createDomainObject = CreateTriggerFromRecords,
     recordClass = TriggerRecord::class,
-    projections = listOf(ProjectionCurrent(), ProjectionUniqueHook())
+    projections = listOf(ProjectionCurrent())
 ), TriggerRepository {
 
     override fun create(cmd: CreateFixedRateCmd): Trigger.FixedRate {
@@ -85,14 +86,11 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                         namespaceId = cmd.namespaceId,
                         name = cmd.name,
                         inputs = cmd.inputs,
-                        hookId = cmd.hookId,
-                        hookMethod = cmd.hookMethod,
                         correlationId = cmd.correlationId,
                         status = cmd.status
                     )
                 )
                 (currentVersion(triggerId) as Trigger.Hook)
-                    .also(uniqueHookProjection::upsert)
                     .also(currentProjection::upsert)
             }
         }
@@ -123,12 +121,37 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
         }
     }
 
+    override fun create(cmd: CreateEndpointCmd): Trigger.Endpoint {
+        return lock.withLock {
+            val triggerId = cmd.triggerId
+            if (commandAlreadyApplied(cmd.id, triggerId)) {
+                versionOf(triggerId, cmd.id) as Trigger.Endpoint
+            } else {
+                store(
+                    TriggerRecord.EndpointCreated(
+                        cmdId = cmd.id,
+                        entityId = triggerId,
+                        workspaceId = cmd.workspaceId,
+                        funcId = cmd.funcId,
+                        namespaceId = cmd.namespaceId,
+                        name = cmd.name,
+                        inputs = cmd.inputs,
+                        correlationId = cmd.correlationId,
+                        status = cmd.status
+                    )
+                )
+                (currentVersion(triggerId) as Trigger.Endpoint)
+                    .also(currentProjection::upsert)
+            }
+        }
+    }
+
     override fun set(triggerId: TriggerId, cmd: SetTriggerStatusCmd): Trigger {
         return lock.withLock {
             if (commandAlreadyApplied(cmd.id, triggerId)) {
                 versionOf(triggerId, cmd.id)
             } else {
-                val rec: TriggerRecord = if (cmd.status == TriggerStatus.Active) {
+                val rec: TriggerRecord = if (cmd.status == TriggerStatus(TriggerStates.Active)) {
                     TriggerRecord.SetActive(
                         cmdId = cmd.id,
                         entityId = triggerId
@@ -155,5 +178,4 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
 
     private val lock = ReentrantLock()
     private val currentProjection = getProjection<ProjectionCurrent>()
-    private val uniqueHookProjection = getProjection<ProjectionUniqueHook>()
 }

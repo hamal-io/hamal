@@ -27,12 +27,12 @@ value class SnowflakeId(val value: Long) : Comparable<SnowflakeId> {
     )
 
     override fun toString(): String {
-        return value.toString()
+        return value.toString(16)
     }
 
     fun toInt(): Int = value.toInt()
 
-    fun toLong(): Long = value.toLong()
+    fun toLong(): Long = value
 }
 
 

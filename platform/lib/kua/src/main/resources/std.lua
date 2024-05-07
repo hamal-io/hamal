@@ -13,11 +13,17 @@ function fail_on_error(err, ...)
     return ...
 end
 
-function find_in_list(list, key, matchValue)
-    for _, value in ipairs(list) do
-        if value[key] == matchValue then
-            return value
+function dump(o)
+    if type(o) == 'table' then
+        local s = '{ '
+        for k, v in pairs(o) do
+            if type(k) ~= 'number' then
+                k = '"' .. k .. '"'
+            end
+            s = s .. '[' .. k .. '] = ' .. dump(v) .. ','
         end
+        return s .. '} '
+    else
+        return tostring(o)
     end
-    return nil
 end

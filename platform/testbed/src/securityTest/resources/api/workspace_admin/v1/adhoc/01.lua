@@ -7,7 +7,7 @@ http = require('net.http').create({
 err, res = http.post({
     url = '/v1/namespaces/1/adhoc',
     headers = { Authorization = 'Bearer ' .. context.env.token },
-    json = {
+    body =  {
         code = 'print("hello hamal")'
     }
 })

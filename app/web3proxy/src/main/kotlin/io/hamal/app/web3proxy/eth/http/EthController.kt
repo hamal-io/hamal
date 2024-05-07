@@ -1,13 +1,13 @@
 package io.hamal.app.web3proxy.eth.http
 
 import io.hamal.app.web3proxy.eth.handler.HandleEthRequest
-import io.hamal.lib.common.hot.HotArray
-import io.hamal.lib.common.hot.HotNode
-import io.hamal.lib.common.hot.HotObject
+import io.hamal.lib.common.serialization.json.JsonArray
+import io.hamal.lib.common.serialization.json.JsonNode
+import io.hamal.lib.common.serialization.json.JsonObject
 import io.hamal.lib.web3.evm.chain.eth.domain.EthRequest
 import io.hamal.lib.web3.evm.chain.eth.domain.EthResponse
 import io.hamal.lib.web3.evm.chain.eth.domain.parseEthRequest
-import io.hamal.lib.web3.json
+import io.hamal.lib.web3.serde
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -19,19 +19,19 @@ internal class EthController(
 ) {
 
     @PostMapping("/eth")
-    fun handle(@RequestBody body: HotNode<*>): ResponseEntity<*> {
+    fun handle(@RequestBody body: JsonNode<*>): ResponseEntity<*> {
         return when (body) {
-            is HotArray -> handleArray(body)
-            is HotObject -> handleObject(body)
+            is JsonArray -> handleArray(body)
+            is JsonObject -> handleObject(body)
             else -> TODO()
         }
     }
 
-    private fun handleArray(requests: HotArray): ResponseEntity<List<EthResponse>> {
+    private fun handleArray(requests: JsonArray): ResponseEntity<List<EthResponse>> {
         val reqs = requests
-            .filterIsInstance<HotObject>()
+            .filterIsInstance<JsonObject>()
             .map { request ->
-                val (err, req) = parseEthRequest(json, request)
+                val (err, req) = parseEthRequest(serde, request)
                 if (err != null) {
                     err
                 } else {
@@ -45,8 +45,8 @@ internal class EthController(
         )
     }
 
-    private fun handleObject(request: HotObject): ResponseEntity<EthResponse> {
-        val (err, req) = parseEthRequest(json, request)
+    private fun handleObject(request: JsonObject): ResponseEntity<EthResponse> {
+        val (err, req) = parseEthRequest(serde, request)
         if (err != null) {
             return ResponseEntity.ok(err)
         }
