@@ -1,23 +1,21 @@
 package io.hamal.plugin.std.log
 
 import io.hamal.lib.domain._enum.ExecLogLevels.*
-import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecLogMessage.Companion.ExecLogMessage
-import io.hamal.lib.sdk.api.ApiExecLogAppendRequest
-import io.hamal.lib.sdk.api.ApiExecLogService
-import io.hamal.runner.test.AbstractRunnerTest
+import io.hamal.runner.test.RunnerFixture.unitOfWork
+
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class PluginLogTest : AbstractRunnerTest() {
+internal class PluginLogTest : AbstractTest() {
 
     @Test
     fun `Log Trace`() {
-        val testService = TestExecLogService()
-        val runner = createTestRunner(pluginFactories = listOf(PluginLogFactory(testService)))
-        runner.run(unitOfWork("local plugin = require_plugin('std.log'); plugin.log('Trace','a trace message')"))
+        runTest(
+            unitOfWork("local plugin = require_plugin('std.log'); plugin.log('Trace','a trace message')")
+        )
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
         with(testService.req) {
@@ -28,9 +26,9 @@ internal class PluginLogTest : AbstractRunnerTest() {
 
     @Test
     fun `Log Debug`() {
-        val testService = TestExecLogService()
-        val runner = createTestRunner(pluginFactories = listOf(PluginLogFactory(testService)))
-        runner.run(unitOfWork("local plugin = require_plugin('std.log'); plugin.log('Debug','a debug message')"))
+        runTest(
+            unitOfWork("local plugin = require_plugin('std.log'); plugin.log('Debug','a debug message')")
+        )
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
         with(testService.req) {
@@ -41,9 +39,9 @@ internal class PluginLogTest : AbstractRunnerTest() {
 
     @Test
     fun `Log Info`() {
-        val testService = TestExecLogService()
-        val runner = createTestRunner(pluginFactories = listOf(PluginLogFactory(testService)))
-        runner.run(unitOfWork("local plugin = require_plugin('std.log'); plugin.log('Info','an info message')"))
+        runTest(
+            unitOfWork("local plugin = require_plugin('std.log'); plugin.log('Info','an info message')")
+        )
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
         with(testService.req) {
@@ -54,22 +52,22 @@ internal class PluginLogTest : AbstractRunnerTest() {
 
     @Test
     fun `Log Warn`() {
-        val testService = TestExecLogService()
-        val runner = createTestRunner(pluginFactories = listOf(PluginLogFactory(testService)))
-        runner.run(unitOfWork("local plugin = require_plugin('std.log'); plugin.log('Warn','a warning message')"))
+        runTest(
+            unitOfWork("local plugin = require_plugin('std.log'); plugin.log('Warn','a warn message')")
+        )
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
         with(testService.req) {
             assertThat(level, equalTo(Warn))
-            assertThat(message, equalTo(ExecLogMessage("a warning message")))
+            assertThat(message, equalTo(ExecLogMessage("a warn message")))
         }
     }
 
     @Test
     fun `Log Error`() {
-        val testService = TestExecLogService()
-        val runner = createTestRunner(pluginFactories = listOf(PluginLogFactory(testService)))
-        runner.run(unitOfWork("local plugin = require_plugin('std.log'); plugin.log('Error','an error message')"))
+        runTest(
+            unitOfWork("local plugin = require_plugin('std.log'); plugin.log('Error','an error message')")
+        )
 
         assertThat(testService.execId, equalTo(ExecId(1234)))
         with(testService.req) {
@@ -78,14 +76,5 @@ internal class PluginLogTest : AbstractRunnerTest() {
         }
     }
 
-    private class TestExecLogService : ApiExecLogService {
-        override fun append(execId: ExecId, req: ApiExecLogAppendRequest) {
-            this.execId = execId
-            this.req = req
-        }
-
-        lateinit var execId: ExecId
-        lateinit var req: ApiExecLogAppendRequest
-    }
 
 }

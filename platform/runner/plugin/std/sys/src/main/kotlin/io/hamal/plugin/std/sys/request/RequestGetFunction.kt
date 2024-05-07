@@ -28,7 +28,7 @@ class RequestGetFunction(
                 .let { exec ->
                     ctx.tableCreate(
                         "request_id" to ValueString(exec.requestId.stringValue),
-                        "request_status" to ValueString(exec.requestStatus.name)
+                        "request_status" to ValueString(exec.requestStatus.stringValue)
                     )
                 }
         } else {

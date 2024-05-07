@@ -1,10 +1,11 @@
 package io.hamal.lib.kua.state
 
-import io.hamal.lib.kua.StackTop
-import io.hamal.lib.kua.booleanGet
 import io.hamal.lib.common.value.ValueFalse
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.common.value.ValueTrue
+import io.hamal.lib.kua.ErrorIllegalState
+import io.hamal.lib.kua.StackTop
+import io.hamal.lib.kua.booleanGet
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
@@ -37,7 +38,7 @@ internal class SerdeBooleanGetTest : StateBaseTest() {
     @TestFactory
     fun `Not a boolean`() = runTest { testInstance ->
         testInstance.stringPush(ValueString("Not  a boolean"))
-        assertThrows<IllegalStateException> {
+        assertThrows<ErrorIllegalState> {
             testInstance.booleanGet(1)
         }.also { exception ->
             assertThat(

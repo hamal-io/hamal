@@ -5,10 +5,12 @@ import io.hamal.lib.common.util.TimeUtils
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.ExecStates.Completed
 import io.hamal.lib.domain._enum.ExecStates.Failed
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatuses
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.ExecStatus.Companion.ExecStatus
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import io.hamal.repository.api.*
 import org.springframework.stereotype.Component
 import java.util.concurrent.CompletableFuture
@@ -40,7 +42,7 @@ class TriggerInvokeEndpointAdapter(
             ExecInvokeRequested(
                 requestId = generateDomainId(::RequestId),
                 requestedBy = AuthId.anonymous, // FIXME
-                requestStatus = RequestStatus.Submitted,
+                requestStatus = RequestStatus(Submitted),
                 id = execId,
                 triggerId = trigger.id,
                 namespaceId = func.namespaceId,

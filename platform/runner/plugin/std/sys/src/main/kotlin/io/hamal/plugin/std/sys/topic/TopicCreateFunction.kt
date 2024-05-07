@@ -37,7 +37,7 @@ class TopicCreateFunction(
 
             null to ctx.tableCreate(
                 "request_id" to ValueString(res.requestId.stringValue),
-                "request_status" to ValueString(res.requestStatus.name),
+                "request_status" to ValueString(res.requestStatus.stringValue),
                 "id" to ValueString(res.id.stringValue),
                 "type" to ValueString(res.type.stringValue),
                 "workspace_id" to ValueString(res.workspaceId.stringValue),

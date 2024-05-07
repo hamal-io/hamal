@@ -1,5 +1,7 @@
 package io.hamal.lib.kua.native
 
+import io.hamal.lib.kua.ErrorIllegalArgument
+import io.hamal.lib.kua.ErrorIllegalState
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -10,28 +12,28 @@ internal class ErrorGetTest : NativeBaseTest() {
     @Test
     fun `Tries to get error with 0 index`() {
         testInstance.errorPush("Error Message")
-        assertThrows<IllegalArgumentException> { testInstance.errorGet(0) }
+        assertThrows<ErrorIllegalArgument> { testInstance.errorGet(0) }
             .also { exception -> assertThat(exception.message, equalTo("Index must not be 0")) }
     }
 
     @Test
     fun `Tries to get error with index bigger than stack size`() {
         testInstance.errorPush("Error Message")
-        assertThrows<IllegalArgumentException> { testInstance.errorGet(2) }
+        assertThrows<ErrorIllegalArgument> { testInstance.errorGet(2) }
             .also { exception -> assertThat(exception.message, equalTo("Index out of bounds")) }
     }
 
     @Test
     fun `Tries to get error with abs(negative index) bigger than stack size`() {
         testInstance.errorPush("Error Message")
-        assertThrows<IllegalArgumentException> { testInstance.errorGet(-2) }
+        assertThrows<ErrorIllegalArgument> { testInstance.errorGet(-2) }
             .also { exception -> assertThat(exception.message, equalTo("Index out of bounds")) }
     }
 
     @Test
     fun `Tries to get not an error as error`() {
         testInstance.numberPush(1.0)
-        assertThrows<IllegalStateException> { testInstance.errorGet(1) }
+        assertThrows<ErrorIllegalState> { testInstance.errorGet(1) }
             .also { exception ->
                 assertThat(exception.message, equalTo("Expected type to be error but was number"))
             }

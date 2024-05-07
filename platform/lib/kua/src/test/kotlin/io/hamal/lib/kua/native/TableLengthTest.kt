@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.native
 
+import io.hamal.lib.kua.ErrorIllegalState
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -59,7 +60,7 @@ internal class TableLengthTest : NativeBaseTest() {
     @Test
     fun `Tries to get table size but not a table`() {
         testInstance.numberPush(2.34)
-        assertThrows<IllegalStateException> { testInstance.tableLength(1) }
+        assertThrows<ErrorIllegalState> { testInstance.tableLength(1) }
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was number")) }
     }
 }

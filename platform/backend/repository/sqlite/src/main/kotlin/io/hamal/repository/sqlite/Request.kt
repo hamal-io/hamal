@@ -4,9 +4,10 @@ import io.hamal.lib.common.KeyedOnce
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.common.domain.Limit
-import io.hamal.lib.domain._enum.RequestStatus
+import io.hamal.lib.domain._enum.RequestStatuses.Companion.of
 import io.hamal.lib.domain.request.Requested
 import io.hamal.lib.domain.vo.RequestId
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.SqliteBaseRepository
 import io.hamal.repository.api.RequestQueryRepository.RequestQuery
@@ -51,7 +52,7 @@ class RequestSqliteRepository(
         connection.tx {
             execute("INSERT INTO requests (id,status,data) VALUES (:id,:status,:data)") {
                 set("id", req.requestId)
-                set("status", req.requestStatus.value)
+                set("status", req.requestStatus.enumValue.value)
                 set("data", hon.write(req))
             }
         }
@@ -81,7 +82,12 @@ class RequestSqliteRepository(
                 }
                 map { rs ->
                     hon.decompressAndRead(Requested::class, rs.getBytes("data")).apply {
-                        statusField(this::class).also { field -> field.set(this, RequestStatus.fromInt(rs.getInt("status"))) }
+                        statusField(this::class).also { field ->
+                            field.set(
+                                this,
+                                RequestStatus(of(rs.getInt("status")))
+                            )
+                        }
                     }
                 }
             }
@@ -133,7 +139,12 @@ class RequestSqliteRepository(
             }
             map { rs ->
                 hon.decompressAndRead(Requested::class, rs.getBytes("data")).apply {
-                    statusField(this::class).also { field -> field.set(this, RequestStatus.fromInt(rs.getInt("status"))) }
+                    statusField(this::class).also { field ->
+                        field.set(
+                            this,
+                            RequestStatus(of(rs.getInt("status")))
+                        )
+                    }
                 }
             }
         }
@@ -159,7 +170,12 @@ class RequestSqliteRepository(
             }
             map { rs ->
                 hon.decompressAndRead(Requested::class, rs.getBytes("data")).apply {
-                    statusField(this::class).also { field -> field.set(this, RequestStatus.fromInt(rs.getInt("status"))) }
+                    statusField(this::class).also { field ->
+                        field.set(
+                            this,
+                            RequestStatus(of(rs.getInt("status")))
+                        )
+                    }
                 }
             }
         }

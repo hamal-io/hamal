@@ -1,6 +1,7 @@
 package io.hamal.lib.kua.state
 
 import io.hamal.lib.common.value.*
+import io.hamal.lib.kua.ErrorIllegalState
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.topPop
@@ -18,7 +19,7 @@ internal class GlobalGetTableTest : StateBaseTest() {
         testInstance.globalSet(ValueString("answer"), ValueFalse)
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
 
-        assertThrows<IllegalStateException> { testInstance.globalGetTable(ValueString("answer")) }
+        assertThrows<ErrorIllegalState> { testInstance.globalGetTable(ValueString("answer")) }
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was boolean")) }
 
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
@@ -29,7 +30,7 @@ internal class GlobalGetTableTest : StateBaseTest() {
         testInstance.globalSet(ValueString("answer"), ValueDecimal(12.23))
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
 
-        assertThrows<IllegalStateException> { testInstance.globalGetTable(ValueString("answer")) }
+        assertThrows<ErrorIllegalState> { testInstance.globalGetTable(ValueString("answer")) }
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was decimal")) }
 
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
@@ -40,7 +41,7 @@ internal class GlobalGetTableTest : StateBaseTest() {
         testInstance.globalSet(ValueString("answer"), ValueError("Some Error Message"))
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
 
-        assertThrows<IllegalStateException> { testInstance.globalGetTable(ValueString("answer")) }
+        assertThrows<ErrorIllegalState> { testInstance.globalGetTable(ValueString("answer")) }
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was error")) }
 
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
@@ -51,7 +52,7 @@ internal class GlobalGetTableTest : StateBaseTest() {
         testInstance.globalSet(ValueString("answer"), ValueNil)
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
 
-        assertThrows<IllegalStateException> { testInstance.globalGetTable(ValueString("answer")) }
+        assertThrows<ErrorIllegalState> { testInstance.globalGetTable(ValueString("answer")) }
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was nil")) }
 
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
@@ -62,7 +63,7 @@ internal class GlobalGetTableTest : StateBaseTest() {
         testInstance.globalSet(ValueString("answer"), ValueNumber(42.0))
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
 
-        assertThrows<IllegalStateException> { testInstance.globalGetTable(ValueString("answer")) }
+        assertThrows<ErrorIllegalState> { testInstance.globalGetTable(ValueString("answer")) }
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was number")) }
 
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
@@ -73,7 +74,7 @@ internal class GlobalGetTableTest : StateBaseTest() {
         testInstance.globalSet(ValueString("answer"), ValueString("hamal rocks"))
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))
 
-        assertThrows<IllegalStateException> { testInstance.globalGetTable(ValueString("answer")) }
+        assertThrows<ErrorIllegalState> { testInstance.globalGetTable(ValueString("answer")) }
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was string")) }
 
         assertThat(testInstance.topGet(), equalTo(StackTop(0)))

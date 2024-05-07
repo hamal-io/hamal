@@ -2,12 +2,13 @@ package io.hamal.core.request.handler.topic
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.lib.common.domain.Limit.Companion.Limit
-import io.hamal.lib.domain._enum.RequestStatus.Submitted
+import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain._enum.TopicTypes.Namespace
 import io.hamal.lib.domain.request.TopicCreateRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.LogTopicId.Companion.LogTopicId
 import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
+import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import io.hamal.lib.domain.vo.TopicId.Companion.TopicId
 import io.hamal.lib.domain.vo.TopicName.Companion.TopicName
 import io.hamal.lib.domain.vo.TopicType.Companion.TopicType
@@ -58,7 +59,7 @@ internal class TopicCreateHandlerTest : BaseRequestHandlerTest() {
         TopicCreateRequested(
             requestId = RequestId(1),
             requestedBy = AuthId(2),
-            requestStatus = Submitted,
+            requestStatus = RequestStatus(Submitted),
             id = TopicId(2345),
             logTopicId = LogTopicId(3456),
             workspaceId = testWorkspace.id,

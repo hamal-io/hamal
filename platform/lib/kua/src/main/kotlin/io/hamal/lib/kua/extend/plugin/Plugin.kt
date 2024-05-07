@@ -5,7 +5,7 @@ import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.kua.Sandbox
 
-interface RunnerPluginFactory {
+fun interface RunnerPluginFactory {
     fun create(sandbox: Sandbox): RunnerPlugin
 }
 

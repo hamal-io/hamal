@@ -1,8 +1,9 @@
 package io.hamal.api.http.controller.feedback
 
-import io.hamal.lib.domain._enum.FeedbackMood
+import io.hamal.lib.domain._enum.FeedbackMoods.Normal
 import io.hamal.lib.domain.request.FeedbackCreateRequest
 import io.hamal.lib.domain.vo.FeedbackMessage.Companion.FeedbackMessage
+import io.hamal.lib.domain.vo.FeedbackMood.Companion.FeedbackMood
 import io.hamal.lib.sdk.api.ApiFeedbackList
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.*
@@ -23,7 +24,7 @@ internal class FeedbackListControllerTest : FeedbackBaseControllerTest() {
     fun `Single Feedback`() {
         createFeedback(
             FeedbackCreateRequest(
-                mood = FeedbackMood.Normal,
+                mood = FeedbackMood(Normal),
                 message = FeedbackMessage("My mood is so normal"),
                 accountId = null
             )
@@ -33,7 +34,7 @@ internal class FeedbackListControllerTest : FeedbackBaseControllerTest() {
             .execute(ApiFeedbackList::class)
 
         with(list.feedbacks[0]) {
-            assertThat(mood, equalTo(FeedbackMood.Normal))
+            assertThat(mood, equalTo(Normal))
         }
     }
 
@@ -42,7 +43,7 @@ internal class FeedbackListControllerTest : FeedbackBaseControllerTest() {
         val requests = IntRange(0, 20).map {
             createFeedback(
                 FeedbackCreateRequest(
-                    mood = FeedbackMood.Normal,
+                    mood = FeedbackMood(Normal),
                     message = FeedbackMessage("This is message number $it"),
                     accountId = null
                 )
@@ -58,7 +59,7 @@ internal class FeedbackListControllerTest : FeedbackBaseControllerTest() {
 
         assertThat(list.feedbacks, hasSize(1))
         with(list.feedbacks.first()) {
-            assertThat(mood, equalTo(FeedbackMood.Normal))
+            assertThat(mood, equalTo(Normal))
         }
     }
 }

@@ -1,10 +1,11 @@
 package io.hamal.lib.kua.state
 
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.kua.ErrorIllegalState
 import io.hamal.lib.kua.StackTop
 import io.hamal.lib.kua.tableCreate
 import io.hamal.lib.kua.tableGet
 import io.hamal.lib.kua.value.getString
-import io.hamal.lib.common.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.TestFactory
@@ -44,7 +45,7 @@ internal class TableGetTest : StateBaseTest() {
     @TestFactory
     fun `Not a table`() = runTest { testInstance ->
         testInstance.stringPush(ValueString("Not  a boolean"))
-        assertThrows<IllegalStateException> { testInstance.tableGet(1) }
+        assertThrows<ErrorIllegalState> { testInstance.tableGet(1) }
             .also { exception ->
                 assertThat(
                     exception.message, equalTo("Expected type to be table but was string")

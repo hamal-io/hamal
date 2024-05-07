@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.native
 
+import io.hamal.lib.kua.ErrorIllegalArgument
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -62,7 +63,7 @@ internal class TopPushTest : NativeBaseTest() {
             assertThat(result, equalTo(idx + 2))
         }
 
-        assertThrows<IllegalArgumentException> {
+        assertThrows<ErrorIllegalArgument> {
             testInstance.topPush(1)
         }.also { exception ->
             assertThat(exception.message, equalTo("Prevented stack overflow"))

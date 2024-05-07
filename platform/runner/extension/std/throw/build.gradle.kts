@@ -3,7 +3,7 @@ plugins {
 }
 
 tasks.jar {
-    archiveFileName.set("ext-std-error.jar")
+    archiveFileName.set("ext-std-throw.jar")
 }
 
 distributions {

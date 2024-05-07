@@ -13,7 +13,7 @@ internal class DecisionAndTest : AbstractIntegrationTest() {
 
     @Test
     fun `Boolean - happy path`() {
-        createTestRunner().run(
+        runTest(
             unitOfWork(
                 initValue = ValueTrue,
                 graph = NodesGraph(
@@ -76,7 +76,7 @@ internal class DecisionAndTest : AbstractIntegrationTest() {
 
     @Test
     fun `Boolean - sad path`() {
-        createTestRunner().run(
+        runTest(
             unitOfWork(
                 initValue = ValueFalse,
                 graph = NodesGraph(

@@ -10,7 +10,8 @@ import io.hamal.plugin.net.smtp.Message
 import io.hamal.plugin.net.smtp.PluginSmtpFactory
 import io.hamal.plugin.net.smtp.Sender
 import io.hamal.plugin.net.smtp.SenderConfig
-import io.hamal.runner.test.AbstractRunnerTest
+import io.hamal.runner.test.RunnerFixture.createTestRunner
+import io.hamal.runner.test.RunnerFixture.unitOfWork
 import io.hamal.runner.test.TestFailConnector
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers
@@ -18,7 +19,7 @@ import org.hamcrest.Matchers.containsString
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal object CreateAndSendTest : AbstractRunnerTest() {
+internal object CreateAndSendTest {
 
     @Test
     fun `Creates instance and send email`() {
@@ -450,7 +451,7 @@ internal object CreateAndSendTest : AbstractRunnerTest() {
 
         createTestRunner(
             pluginFactories = listOf(PluginSmtpFactory(fakeSender)),
-            extensionFactories = listOf( ExtensionNetSmtpFactory),
+            extensionFactories = listOf(ExtensionNetSmtpFactory),
             connector = TestFailConnector { _, statusCode, result ->
                 assertThat(statusCode, equalTo(ExecStatusCode(400)))
                 assertThat(result.value.stringValue("message"), containsString("content not set"))

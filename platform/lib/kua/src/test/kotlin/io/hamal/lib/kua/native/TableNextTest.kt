@@ -1,5 +1,6 @@
 package io.hamal.lib.kua.native
 
+import io.hamal.lib.kua.ErrorIllegalState
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.hamcrest.Matchers.hasSize
@@ -72,7 +73,7 @@ internal class TableNextTest : NativeBaseTest() {
     @Test
     fun `Tries to run next but not a table`() {
         testInstance.numberPush(2.34)
-        assertThrows<IllegalStateException> { testInstance.tableNext(1) }
+        assertThrows<ErrorIllegalState> { testInstance.tableNext(1) }
             .also { exception -> assertThat(exception.message, equalTo("Expected type to be table but was number")) }
     }
 }
