@@ -83,5 +83,9 @@ internal class ProjectionCurrent : ProjectionMemory<TriggerId, Trigger> {
         projection.clear()
     }
 
+    fun delete(obj: Trigger) {
+        projection.remove(obj.id)
+    }
+
     private val projection = mutableMapOf<TriggerId, Trigger>()
 }

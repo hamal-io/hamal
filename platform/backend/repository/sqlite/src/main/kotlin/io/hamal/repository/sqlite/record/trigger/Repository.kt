@@ -213,6 +213,23 @@ class TriggerSqliteRepository(
         }
     }
 
+    override fun delete(cmd: DeleteCmd): Trigger {
+        val triggerId = cmd.triggerId
+        return tx {
+            if (commandAlreadyApplied(cmd.id, triggerId)) {
+                versionOf(triggerId, cmd.id)
+            } else {
+                store(
+                    TriggerRecord.Deleted(
+                        entityId = triggerId,
+                        cmdId = cmd.id
+                    )
+                )
+                currentVersion(triggerId).also { ProjectionCurrent.delete(this, it) }
+            }
+        }
+    }
+
     override fun find(triggerId: TriggerId): Trigger? {
         return ProjectionCurrent.find(connection, triggerId)
     }

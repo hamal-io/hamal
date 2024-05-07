@@ -139,6 +139,19 @@ internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, T
         tx.execute("""DELETE FROM current""")
     }
 
+    fun delete(tx: RecordTransactionSqlite<TriggerId, TriggerRecord, Trigger>, obj: Trigger) {
+        tx.execute(
+            """
+                DELETE FROM 
+                    current
+                WHERE      
+                    id = :id
+            """.trimIndent()
+        ) {
+            set("id", obj.id)
+        }
+    }
+
     private fun TriggerQuery.types(): String {
         return if (types.isEmpty()) {
             ""
