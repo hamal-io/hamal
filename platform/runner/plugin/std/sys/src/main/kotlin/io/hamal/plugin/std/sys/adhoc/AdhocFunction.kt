@@ -1,9 +1,9 @@
 package io.hamal.plugin.std.sys.adhoc
 
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceId.Companion.NamespaceId
@@ -32,7 +32,7 @@ class AdhocFunction(
                     ?: ctx[NamespaceId::class],
                 request = ApiAdhocInvokeRequest(
                     inputs = InvocationInputs(),
-                    code = ValueCode(arg1.getString("code").stringValue)
+                    code = CodeValue(arg1.getString("code").stringValue)
                 )
             )
             return null to ctx.tableCreate(

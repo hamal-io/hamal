@@ -1,6 +1,6 @@
 package io.hamal.api.http.controller.extension
 
-import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.ExtensionName.Companion.ExtensionName
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
@@ -18,14 +18,14 @@ internal class ExtensionGetControllerTest : ExtensionBaseControllerTest() {
             createExtension(
                 ApiExtensionCreateRequest(
                     name = ExtensionName("TestExtension"),
-                    code = ValueCode("40 + 2")
+                    code = CodeValue("40 + 2")
                 )
             )
         ).id
 
         val ext = getExtension(extensionId)
         assertThat(ext.name, equalTo(ExtensionName("TestExtension")))
-        assertThat(codeQueryRepository.get(ext.code.id).value, equalTo(ValueCode("40 + 2")))
+        assertThat(codeQueryRepository.get(ext.code.id).value, equalTo(CodeValue("40 + 2")))
     }
 
     @Test

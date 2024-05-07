@@ -35,7 +35,7 @@ class CodeGetFunction(
                 .let { code ->
                     ctx.tableCreate(
                         "id" to ValueString(code.id.stringValue),
-                        "code" to code.value,
+                        "value" to code.value,
                         "version" to code.version
                         // FIXME-53 deployed_version ????
                     )

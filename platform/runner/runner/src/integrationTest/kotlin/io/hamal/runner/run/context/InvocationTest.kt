@@ -4,6 +4,7 @@ import io.hamal.lib.common.value.*
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.CodeTypes.Lua54
 import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.EventId.Companion.EventId
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
@@ -66,7 +67,7 @@ internal object EventInvocationTest : AbstractTest() {
                         .build()
                 ),
                 state = State(),
-                code = ValueCode(
+                code = CodeValue(
                     """
                     assert( context.exec.hook == nil )
                     assert( context.exec.events ~= nil )
@@ -133,7 +134,7 @@ internal object EventInvocationTest : AbstractTest() {
                         .build()
                 ),
                 state = State(),
-                code = ValueCode("require_plugin('test').fn()"),
+                code = CodeValue("require_plugin('test').fn()"),
                 codeType = CodeType(Lua54)
             ),
             testPlugins = mapOf(ValueString("fn") to testFn)
@@ -178,7 +179,7 @@ internal object HookInvocationTest : AbstractTest() {
                     ).build()
                 ),
                 state = State(),
-                code = ValueCode(
+                code = CodeValue(
                     """
                     assert( context.exec.events == nil )
                     assert( context.exec.hook ~= nil )
@@ -225,7 +226,7 @@ internal object HookInvocationTest : AbstractTest() {
                     ).build()
                 ),
                 state = State(),
-                code = ValueCode("require_plugin('test').fn()"),
+                code = CodeValue("require_plugin('test').fn()"),
                 codeType = CodeType(Lua54)
             ),
             testPlugins = mapOf(ValueString("fn") to testFn)
@@ -275,7 +276,7 @@ internal object EndpointInvocationTest : AbstractTest() {
                     ).build()
                 ),
                 state = State(),
-                code = ValueCode(
+                code = CodeValue(
                     """
                     assert( context.exec.events == nil )
                     assert( context.exec.endpoint ~= nil )
@@ -322,7 +323,7 @@ internal object EndpointInvocationTest : AbstractTest() {
                     ).build()
                 ),
                 state = State(),
-                code = ValueCode("require_plugin('test').fn()"),
+                code = CodeValue("require_plugin('test').fn()"),
                 codeType = CodeType(Lua54)
             ),
             testPlugins = mapOf(ValueString("fn") to testFn)

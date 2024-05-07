@@ -2,13 +2,13 @@ package io.hamal.core.request.handler.func
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
 import io.hamal.core.request.handler.NextCommandId
-import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.FuncUpdateRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
 import io.hamal.lib.domain.vo.FuncInputs
@@ -46,7 +46,7 @@ internal class FuncUpdateHandlerTest : BaseRequestHandlerTest() {
             assertThat(deployment.id, equalTo(CodeId(123)))
             assertThat(deployment.version, equalTo(CodeVersion(1)))
 
-            assertThat(codeQueryRepository.get(CodeId(123)).value, equalTo(ValueCode("some code")))
+            assertThat(codeQueryRepository.get(CodeId(123)).value, equalTo(CodeValue("some code")))
         }
     }
 
@@ -59,7 +59,7 @@ internal class FuncUpdateHandlerTest : BaseRequestHandlerTest() {
             id = FuncId(1),
             name = FuncName("Func-update"),
             inputs = FuncInputs(ValueObject.builder().set("hamal", "rocks").build()),
-            code = ValueCode("some code")
+            code = CodeValue("some code")
         )
     }
 
@@ -69,7 +69,7 @@ internal class FuncUpdateHandlerTest : BaseRequestHandlerTest() {
                 id = NextCommandId(),
                 codeId = codeId,
                 workspaceId = testWorkspace.id,
-                value = ValueCode("1 + 1")
+                value = CodeValue("1 + 1")
             )
         )
 

@@ -30,6 +30,16 @@ class KuaTable(
                 state.tableAppend(index)
             }
 
+            is ValueCode -> {
+                state.stringPush(ValueString(value.stringValue))
+                state.tableAppend(index)
+            }
+
+            is ValueVariableCode -> {
+                state.stringPush(ValueString(value.stringValue))
+                state.tableAppend(index)
+            }
+
             is ValueDecimal -> {
                 state.decimalPush(value)
                 state.tableAppend(index)
@@ -180,6 +190,12 @@ class KuaTable(
             }
 
             is ValueCode -> {
+                state.stringPush(key)
+                state.stringPush(ValueString(value.stringValue))
+                state.tableRawSet(index)
+            }
+
+            is ValueVariableCode -> {
                 state.stringPush(key)
                 state.stringPush(ValueString(value.stringValue))
                 state.tableRawSet(index)

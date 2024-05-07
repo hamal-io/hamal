@@ -1,6 +1,5 @@
 package io.hamal.runner.connector
 
-import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.EventToSubmit
 import io.hamal.lib.domain.State
@@ -13,7 +12,7 @@ data class UnitOfWork(
     val triggerId: TriggerId?,
     val inputs: ExecInputs,
     val state: State,
-    val code: ValueCode,
+    val code: CodeValue,
     val codeType: CodeType,
     val execToken: ExecToken,
     val correlation: Correlation? = null

@@ -1,13 +1,12 @@
 package io.hamal.lib.domain.request
 
-import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.vo.*
 
 
 interface FuncCreateRequest {
     val name: FuncName
     val inputs: FuncInputs
-    val code: ValueCode
+    val code: CodeValue
     val codeType: CodeType
 }
 
@@ -21,14 +20,14 @@ data class FuncCreateRequested(
     val name: FuncName,
     val inputs: FuncInputs,
     val codeId: CodeId,
-    val code: ValueCode,
+    val code: CodeValue,
     val codeType: CodeType
 ) : Requested()
 
 interface FuncUpdateRequest {
     val name: FuncName?
     val inputs: FuncInputs?
-    val code: ValueCode?
+    val code: CodeValue?
 }
 
 data class FuncUpdateRequested(
@@ -39,7 +38,7 @@ data class FuncUpdateRequested(
     val workspaceId: WorkspaceId,
     val name: FuncName?,
     val inputs: FuncInputs?,
-    val code: ValueCode?
+    val code: CodeValue?
 ) : Requested()
 
 

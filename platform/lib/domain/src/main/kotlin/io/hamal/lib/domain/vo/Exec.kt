@@ -25,7 +25,7 @@ class ExecInputs(override val value: ValueObject = ValueObject.empty) : ValueVar
 data class ExecCode(
     val id: CodeId? = null,
     val version: CodeVersion? = null,
-    val value: ValueCode? = null,
+    val value: CodeValue? = null,
     val type: CodeType? = null
 )
 

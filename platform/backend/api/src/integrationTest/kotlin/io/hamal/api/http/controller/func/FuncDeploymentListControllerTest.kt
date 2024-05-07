@@ -1,8 +1,8 @@
 package io.hamal.api.http.controller.func
 
-import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.CodeTypes.Lua54
 import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.domain.vo.DeployMessage.Companion.DeployMessage
 import io.hamal.lib.domain.vo.FuncInputs
@@ -23,7 +23,7 @@ internal class FuncDeploymentListControllerTest : FuncBaseControllerTest() {
                 ApiFuncCreateRequest(
                     name = FuncName("func-1"),
                     inputs = FuncInputs(),
-                    code = ValueCode(""),
+                    code = CodeValue(""),
                     codeType = CodeType(Lua54)
                 )
             )

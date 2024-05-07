@@ -3,7 +3,6 @@ package io.hamal.lib.sdk.api
 import io.hamal.lib.common.domain.Limit
 import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.request.FuncCreateRequest
 import io.hamal.lib.domain.request.FuncDeployRequest
 import io.hamal.lib.domain.request.FuncInvokeRequest
@@ -19,7 +18,7 @@ import io.hamal.lib.sdk.fold
 data class ApiFuncCreateRequest(
     override val name: FuncName,
     override val inputs: FuncInputs,
-    override val code: ValueCode,
+    override val code: CodeValue,
     override val codeType: CodeType
 ) : FuncCreateRequest
 
@@ -45,7 +44,7 @@ data class ApiFuncDeployRequested(
 data class ApiFuncUpdateRequest(
     override val name: FuncName? = null,
     override val inputs: FuncInputs? = null,
-    override val code: ValueCode? = null,
+    override val code: CodeValue? = null,
 ) : FuncUpdateRequest
 
 
@@ -104,13 +103,13 @@ data class ApiFunc(
     data class Code(
         val id: CodeId,
         val version: CodeVersion,
-        val value: ValueCode
+        val value: CodeValue
     )
 
     data class Deployment(
         val id: CodeId,
         val version: CodeVersion,
-        val value: ValueCode,
+        val value: CodeValue,
         val message: DeployMessage
     )
 }

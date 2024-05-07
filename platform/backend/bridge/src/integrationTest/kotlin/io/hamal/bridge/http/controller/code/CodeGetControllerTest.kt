@@ -2,9 +2,8 @@ package io.hamal.bridge.http.controller.code
 
 import io.hamal.lib.common.domain.CmdId
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
-import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
-import io.hamal.lib.domain.vo.CodeVersion
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.http.HttpErrorResponse
 import io.hamal.lib.http.HttpStatusCode
@@ -26,13 +25,13 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
                     id = CmdGen(),
                     codeId = CodeId(iter + 5),
                     workspaceId = testWorkspace.id,
-                    value = ValueCode("1 + $iter")
+                    value = CodeValue("1 + $iter")
                 )
             )
 
             with(getCode(createCode.id)) {
                 assertThat(id, equalTo(CodeId(iter + 5)))
-                assertThat(value, equalTo(ValueCode("1 + $iter")))
+                assertThat(value, equalTo(CodeValue("1 + $iter")))
                 assertThat(version, equalTo(CodeVersion(1)))
             }
         }
@@ -46,24 +45,19 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
                 id = CmdGen(),
                 codeId = CodeId(2),
                 workspaceId = testWorkspace.id,
-                value = ValueCode("1 + 1")
+                value = CodeValue("1 + 1")
             )
         )
 
         repeat(10) { iter ->
-            codeCmdRepository.update(
-                CodeId(2), CodeCmdRepository.UpdateCmd(
-                    CmdGen(),
-                    ValueCode("40 + ${2 + iter}")
-                )
-            )
+            codeCmdRepository.update(CodeId(2), CodeCmdRepository.UpdateCmd(CmdGen(), CodeValue("40 + ${2 + iter}")))
         }
 
         val r = getCode(CodeId(2), CodeVersion(4))
 
         with(r) {
             assertThat(id, equalTo(CodeId(2)))
-            assertThat(value, equalTo(ValueCode("40 + 4")))
+            assertThat(value, equalTo(CodeValue("40 + 4")))
             assertThat(version, equalTo(CodeVersion(4)))
         }
     }
@@ -75,23 +69,18 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
                 id = CmdGen(),
                 codeId = CodeId(3),
                 workspaceId = testWorkspace.id,
-                value = ValueCode("1 + 1")
+                value = CodeValue("1 + 1")
             )
         )
 
         repeat(20) { iter ->
-            codeCmdRepository.update(
-                CodeId(3), CodeCmdRepository.UpdateCmd(
-                    CmdGen(),
-                    ValueCode("40 + $iter")
-                )
-            )
+            codeCmdRepository.update(CodeId(3), CodeCmdRepository.UpdateCmd(CmdGen(), CodeValue("40 + $iter")))
             assertThat(getCode(CodeId(3)).version, equalTo(CodeVersion(iter + 2)))
         }
 
         with(getCode(CodeId(3))) {
             assertThat(id, equalTo(CodeId(3)))
-            assertThat(value, equalTo(ValueCode("40 + 19")))
+            assertThat(value, equalTo(CodeValue("40 + 19")))
         }
     }
 
@@ -103,7 +92,7 @@ internal class CodeGetControllerTest : CodeBaseControllerTest() {
                 id = CmdGen(),
                 codeId = CodeId(4),
                 workspaceId = testWorkspace.id,
-                value = ValueCode("1 + 1")
+                value = CodeValue("1 + 1")
             )
         )
 

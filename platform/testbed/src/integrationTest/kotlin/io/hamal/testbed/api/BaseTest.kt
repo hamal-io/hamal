@@ -9,12 +9,12 @@ import io.hamal.extension.std.table.ExtensionStdTableFactory
 import io.hamal.extension.std.`throw`.ExtensionStdThrowFactory
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain._enum.ExecStates
 import io.hamal.lib.domain._enum.ExecStates.Completed
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.ExecStatus.Companion.ExecStatus
 import io.hamal.lib.domain.vo.ExpiresAt.Companion.ExpiresAt
 import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
@@ -340,7 +340,7 @@ abstract class BaseApiTest {
 
             val execReq = sdk.adhoc.invoke(
                 NamespaceId.root,
-                ApiAdhocInvokeRequest(InvocationInputs(), ValueCode(String(Files.readAllBytes(file))))
+                ApiAdhocInvokeRequest(InvocationInputs(), CodeValue(String(Files.readAllBytes(file))))
             )
 
             sdk.await(execReq)

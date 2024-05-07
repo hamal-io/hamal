@@ -70,7 +70,7 @@ class CodeRunnerImpl(
                     when (unitOfWork.codeType) {
                         CodeType(None) -> TODO()
                         CodeType(Lua54) -> {
-                            sandbox.codeLoad(unitOfWork.code)
+                            sandbox.codeLoad(unitOfWork.code.value)
                         }
 
                         CodeType(Nodes) -> {

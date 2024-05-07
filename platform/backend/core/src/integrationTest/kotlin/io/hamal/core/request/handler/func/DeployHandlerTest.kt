@@ -8,6 +8,7 @@ import io.hamal.lib.domain.request.FuncDeployRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.domain.vo.DeployMessage
 import io.hamal.lib.domain.vo.DeployMessage.Companion.DeployMessage
@@ -101,7 +102,7 @@ internal class FuncDeployHandlerTest : BaseRequestHandlerTest() {
                 id = NextCommandId(),
                 codeId = codeId,
                 workspaceId = testWorkspace.id,
-                value = ValueCode("1 + 1")
+                value = CodeValue("1 + 1")
             )
         )
 

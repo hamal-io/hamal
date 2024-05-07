@@ -1,8 +1,8 @@
 package io.hamal.api.http.controller.func
 
-import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.CodeTypes.Lua54
 import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
 import io.hamal.lib.domain.vo.NamespaceName.Companion.NamespaceName
@@ -26,7 +26,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
                 ApiFuncCreateRequest(
                     name = FuncName("func-one"),
                     inputs = FuncInputs(),
-                    code = ValueCode(""),
+                    code = CodeValue(""),
                     codeType = CodeType(Lua54)
                 )
             )
@@ -49,7 +49,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
                     ApiFuncCreateRequest(
                         name = FuncName("func-$it"),
                         inputs = FuncInputs(),
-                        code = ValueCode(""),
+                        code = CodeValue(""),
                         codeType = CodeType(Lua54)
                     )
                 )
@@ -75,7 +75,7 @@ internal class FuncListControllerTest : FuncBaseControllerTest() {
                 ApiFuncCreateRequest(
                     name = FuncName("func-$it"),
                     inputs = FuncInputs(),
-                    code = ValueCode(""),
+                    code = CodeValue(""),
                     codeType = CodeType(Lua54)
                 )
             )

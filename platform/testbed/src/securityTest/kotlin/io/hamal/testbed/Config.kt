@@ -6,7 +6,6 @@ import io.hamal.core.component.SetupInternalTopics
 import io.hamal.core.config.BackendBasePath
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.CorrelatedState
 import io.hamal.lib.domain.Correlation
@@ -22,6 +21,7 @@ import io.hamal.lib.domain.vo.AccountId.Companion.AccountId
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
 import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
 import io.hamal.lib.domain.vo.CronPattern.Companion.CronPattern
@@ -161,7 +161,7 @@ class TestSetupConfig {
             CodeCmdRepository.CreateCmd(
                 id = CmdId(id),
                 codeId = CodeId(id),
-                value = ValueCode(""),
+                value = CodeValue(""),
                 workspaceId = WorkspaceId(id)
             )
         )

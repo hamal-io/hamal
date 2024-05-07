@@ -12,5 +12,5 @@ local func = fail_on_error(sys.funcs.get(func_req.id))
 local code = fail_on_error(sys.codes.get(func.code.id))
 
 assert(code.id == func.code.id)
-assert(code.code == [[4 + 2]])
+assert(code.value == [[4 + 2]])
 assert(code.version == 1)

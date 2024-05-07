@@ -12,5 +12,5 @@ func_one = fail_on_error(sys.funcs.get(func_req.id))
 code = fail_on_error(sys.codes.get(func_one.code.id, 1))
 
 assert(code.id == func_one.code.id)
-assert(code.code == [[4 + 2]])
+assert(code.value == [[4 + 2]])
 assert(code.version == 1)

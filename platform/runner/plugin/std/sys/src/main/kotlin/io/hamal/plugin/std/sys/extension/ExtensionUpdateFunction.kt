@@ -1,9 +1,9 @@
 package io.hamal.plugin.std.sys.extension
 
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.ExtensionId.Companion.ExtensionId
 import io.hamal.lib.domain.vo.ExtensionName.Companion.ExtensionName
 import io.hamal.lib.kua.function.Function1In2Out
@@ -28,7 +28,7 @@ class ExtensionUpdateFunction(
                 ExtensionId(SnowflakeId(arg1.getString("id").stringValue)),
                 ApiExtensionUpdateRequest(
                     name = arg1.findString("name")?.let { ExtensionName(it.stringValue) },
-                    code = arg1.findString("code")?.let { ValueCode(it.stringValue) }
+                    code = arg1.findString("code")?.let { CodeValue(it.stringValue) }
                 )
             )
 

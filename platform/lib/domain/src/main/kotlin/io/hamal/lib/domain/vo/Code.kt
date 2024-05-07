@@ -27,3 +27,9 @@ class CodeType(override val value: ValueEnum) : ValueVariableEnum<CodeTypes>(Cod
         fun CodeType(value: Enum<CodeTypes>) = CodeType(ValueEnum(value.name))
     }
 }
+
+class CodeValue(override val value: ValueCode) : ValueVariableCode() {
+    companion object {
+        fun CodeValue(value: String) = CodeValue(ValueCode(value))
+    }
+}

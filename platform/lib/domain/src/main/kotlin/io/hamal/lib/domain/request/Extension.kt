@@ -1,11 +1,10 @@
 package io.hamal.lib.domain.request
 
-import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain.vo.*
 
 interface ExtensionCreateRequest {
     val name: ExtensionName
-    val code: ValueCode
+    val code: CodeValue
 }
 
 data class ExtensionCreateRequested(
@@ -16,13 +15,13 @@ data class ExtensionCreateRequested(
     val workspaceId: WorkspaceId,
     val name: ExtensionName,
     val codeId: CodeId,
-    val code: ValueCode
+    val code: CodeValue
 ) : Requested()
 
 
 interface ExtensionUpdateRequest {
     val name: ExtensionName?
-    val code: ValueCode?
+    val code: CodeValue?
 }
 
 
@@ -33,6 +32,6 @@ data class ExtensionUpdateRequested(
     val id: ExtensionId,
     val workspaceId: WorkspaceId,
     val name: ExtensionName?,
-    val code: ValueCode?
+    val code: CodeValue?
 ) : Requested()
 

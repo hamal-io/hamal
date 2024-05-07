@@ -6,6 +6,7 @@ import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain._enum.CodeTypes
 import io.hamal.lib.domain._enum.CodeTypes.Lua54
 import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.domain.vo.FuncInputs
 import io.hamal.lib.domain.vo.FuncName.Companion.FuncName
@@ -32,7 +33,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
             ApiFuncCreateRequest(
                 name = FuncName("test-func"),
                 inputs = FuncInputs(ValueObject.builder().set("hamal", "rocks").build()),
-                code = ValueCode("13 + 37"),
+                code = CodeValue("13 + 37"),
                 codeType = CodeType(Lua54)
             )
         )
@@ -72,7 +73,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
             req = ApiFuncCreateRequest(
                 name = FuncName("test-func"),
                 inputs = FuncInputs(ValueObject.builder().set("hamal", "rocks").build()),
-                code = ValueCode("13 + 37"),
+                code = CodeValue("13 + 37"),
                 codeType = CodeType(Lua54)
             )
         )
@@ -91,7 +92,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
         }
 
         with(codeQueryRepository.get(func.code.id)) {
-            assertThat(value, equalTo(ValueCode("13 + 37")))
+            assertThat(value, equalTo(CodeValue("13 + 37")))
             assertThat(version, equalTo(CodeVersion(1)))
             assertThat(type.enumValue, equalTo(CodeTypes.Lua54))
         }
@@ -105,7 +106,7 @@ internal class FuncCreateControllerTest : FuncBaseControllerTest() {
                 ApiFuncCreateRequest(
                     name = FuncName("test-func"),
                     inputs = FuncInputs(ValueObject.builder().set("hamal", "rocks").build()),
-                    code = ValueCode("13 + 37"),
+                    code = CodeValue("13 + 37"),
                     codeType = CodeType(Lua54)
                 )
             )

@@ -1,8 +1,8 @@
 package io.hamal.plugin.std.sys.extension
 
-import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueError
 import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.ExtensionName
 import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.kua.function.Function1In2Out
@@ -26,7 +26,7 @@ class ExtensionCreateFunction(
                 ctx[WorkspaceId::class],
                 ApiExtensionCreateRequest(
                     name = ExtensionName(arg1.getString("name")),
-                    code = ValueCode(arg1.getString("code").stringValue)
+                    code = CodeValue(arg1.getString("code").stringValue)
                 )
             )
 

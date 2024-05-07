@@ -3,14 +3,10 @@ package io.hamal.repository.api
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.domain.Limit.Companion.Limit
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.CodeTypes.Lua54
-import io.hamal.lib.domain.vo.CodeId
+import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
-import io.hamal.lib.domain.vo.CodeType
 import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
-import io.hamal.lib.domain.vo.CodeVersion
-import io.hamal.lib.domain.vo.WorkspaceId
 
 data class Code(
     override val id: CodeId,
@@ -18,7 +14,7 @@ data class Code(
     override val workspaceId: WorkspaceId,
     val cmdId: CmdId,
     val version: CodeVersion,
-    val value: ValueCode,
+    val value: CodeValue,
     var type: CodeType,
 ) : DomainObject<CodeId>, HasWorkspaceId
 
@@ -32,13 +28,13 @@ interface CodeCmdRepository : CmdRepository {
         val id: CmdId,
         val codeId: CodeId,
         val workspaceId: WorkspaceId,
-        val value: ValueCode,
+        val value: CodeValue,
         val type: CodeType = CodeType(Lua54)
     )
 
     data class UpdateCmd(
         val id: CmdId,
-        val value: ValueCode? = null,
+        val value: CodeValue? = null,
     )
 }
 

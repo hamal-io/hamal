@@ -3,7 +3,6 @@ package io.hamal.bridge
 import io.hamal.core.CoreConfig
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
 import io.hamal.lib.common.util.TimeUtils
-import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain.GenerateDomainId
@@ -12,6 +11,7 @@ import io.hamal.lib.domain._enum.ExecStates.*
 import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AccountType.Root
 import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.ExecStatusCode.Companion.ExecStatusCode
 import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
 import io.hamal.lib.domain.vo.ExpiresAt.Companion.ExpiresAt
@@ -177,7 +177,7 @@ internal abstract class BaseTest {
         correlation: Correlation? = null,
         codeId: CodeId? = null,
         codeVersion: CodeVersion? = null,
-        code: ValueCode? = ValueCode("")
+        code: CodeValue? = CodeValue("")
     ): Exec {
 
         val planedExec = execCmdRepository.plan(

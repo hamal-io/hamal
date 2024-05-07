@@ -1,10 +1,10 @@
 package io.hamal.runner.run
 
-import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.CodeTypes.Lua54
 import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
@@ -31,7 +31,7 @@ internal class TriggerIdTest : AbstractTest() {
                 triggerId = TriggerId(4567),
                 inputs = ExecInputs(),
                 state = State(),
-                code = ValueCode("assert(context.exec.trigger_id == '11d7')"),
+                code = CodeValue("assert(context.exec.trigger_id == '11d7')"),
                 codeType = CodeType(Lua54),
                 correlation = null
             )
@@ -51,7 +51,7 @@ internal class TriggerIdTest : AbstractTest() {
                 triggerId = TriggerId(4567),
                 inputs = ExecInputs(),
                 state = State(),
-                code = ValueCode("require_plugin('test').fn()"),
+                code = CodeValue("require_plugin('test').fn()"),
                 codeType = CodeType(Lua54),
                 correlation = null
             ),

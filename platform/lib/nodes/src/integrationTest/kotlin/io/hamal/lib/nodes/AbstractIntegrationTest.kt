@@ -5,6 +5,7 @@ import io.hamal.lib.common.value.*
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.CodeTypes.Nodes
 import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.ExecToken.Companion.ExecToken
@@ -149,7 +150,7 @@ internal abstract class AbstractIntegrationTest {
                 .build()
         ),
         state = State(),
-        code = ValueCode(serde.write(graph)),
+        code = CodeValue(serde.write(graph)),
         codeType = CodeType(Nodes),
         correlation = null
     )

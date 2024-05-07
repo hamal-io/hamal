@@ -1,18 +1,21 @@
 package io.hamal.core.request.handler.exec
 
 import io.hamal.core.request.handler.BaseRequestHandlerTest
-import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain._enum.RequestStatuses.Submitted
 import io.hamal.lib.domain.request.ExecInvokeRequested
-import io.hamal.lib.domain.vo.*
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
+import io.hamal.lib.domain.vo.ExecCode
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
+import io.hamal.lib.domain.vo.ExecInputs
 import io.hamal.lib.domain.vo.FuncId.Companion.FuncId
+import io.hamal.lib.domain.vo.FuncInputs
+import io.hamal.lib.domain.vo.InvocationInputs
 import io.hamal.lib.domain.vo.RequestId.Companion.RequestId
 import io.hamal.lib.domain.vo.RequestStatus.Companion.RequestStatus
 import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
@@ -38,7 +41,7 @@ internal class ExecInvokeHandlerTest : BaseRequestHandlerTest() {
                 namespaceId = testNamespace.id,
                 workspaceId = testWorkspace.id,
                 inputs = InvocationInputs(ValueObject.builder().set("hamal", "justworks").build()),
-                code = ExecCode(value = ValueCode("code")),
+                code = ExecCode(value = CodeValue("code")),
                 funcId = null,
                 correlationId = null
             )
@@ -51,7 +54,7 @@ internal class ExecInvokeHandlerTest : BaseRequestHandlerTest() {
                 assertThat(id, equalTo(ExecId(3333)))
                 assertThat(correlation, nullValue())
                 assertThat(inputs, equalTo(ExecInputs(ValueObject.builder().set("hamal", "justworks").build())))
-                assertThat(code, equalTo(ExecCode(value = ValueCode("code"))))
+                assertThat(code, equalTo(ExecCode(value = CodeValue("code"))))
             }
         }
     }

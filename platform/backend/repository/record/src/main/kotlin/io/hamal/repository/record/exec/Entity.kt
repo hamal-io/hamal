@@ -12,7 +12,6 @@ import io.hamal.repository.record.RecordEntity
 import io.hamal.repository.record.RecordSequence
 import io.hamal.repository.record.RecordedAt
 import io.hamal.repository.record.exec.ExecRecord
-import java.time.Instant
 
 data class ExecEntity(
     override val cmdId: CmdId,
@@ -27,8 +26,12 @@ data class ExecEntity(
     var correlation: Correlation? = null,
     var inputs: ExecInputs? = null,
     var code: ExecCode? = null,
-    var plannedAt: Instant? = null,
-    var scheduledAt: Instant? = null,
+    var plannedAt: ExecPlannedAt? = null,
+    var scheduledAt: ExecScheduledAt? = null,
+    var queuedAt: ExecQueuedAt? = null,
+    var startedAt: ExecStartedAt? = null,
+    var completedAt: ExecCompletedAt? = null,
+    var failedAt: ExecFailedAt? = null,
     var statusCode: ExecStatusCode? = null,
     var result: ExecResult? = null,
     var state: ExecState? = null
@@ -47,7 +50,7 @@ data class ExecEntity(
                 correlation = rec.correlation,
                 inputs = rec.inputs,
                 code = rec.code,
-                plannedAt = Instant.now(), // FIXME
+                plannedAt = ExecPlannedAt(rec.recordedAt().value),
                 recordedAt = rec.recordedAt()
             )
 
@@ -55,7 +58,7 @@ data class ExecEntity(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 status = ExecStatus(Scheduled),
-                scheduledAt = Instant.now(), // FIXME
+                scheduledAt = ExecScheduledAt(rec.recordedAt().value),
                 recordedAt = rec.recordedAt()
             )
 
@@ -63,28 +66,26 @@ data class ExecEntity(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 status = ExecStatus(Queued),
-                recordedAt = rec.recordedAt()
-//                enqueuedAt = Instant.now() // FIXME
-
+                queuedAt = ExecQueuedAt(rec.recordedAt().value),
+                recordedAt = rec.recordedAt(),
             )
 
             is ExecRecord.Started -> copy(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 status = ExecStatus(Started),
+                startedAt = ExecStartedAt(rec.recordedAt().value),
                 recordedAt = rec.recordedAt()
-//                startedAt = Instant.now() // FIXME
-                //picked by :platform:runner id..
             )
 
             is ExecRecord.Completed -> copy(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 status = ExecStatus(Completed),
-//                enqueuedAt = Instant.now() // FIXME
+                completedAt = ExecCompletedAt(rec.recordedAt().value),
+                recordedAt = rec.recordedAt(),
                 statusCode = rec.statusCode,
                 result = rec.result,
-                recordedAt = rec.recordedAt(),
                 state = rec.state
             )
 
@@ -92,9 +93,10 @@ data class ExecEntity(
                 cmdId = rec.cmdId,
                 sequence = rec.sequence(),
                 status = ExecStatus(Failed),
+                failedAt = ExecFailedAt(rec.recordedAt().value),
+                recordedAt = rec.recordedAt(),
                 statusCode = rec.statusCode,
-                result = rec.result,
-                recordedAt = rec.recordedAt()
+                result = rec.result
             )
         }
     }
@@ -111,7 +113,7 @@ data class ExecEntity(
             correlation = correlation,
             inputs = inputs ?: ExecInputs(ValueObject.empty),
             code = code ?: ExecCode(),
-            plannedAt = ExecPlannedAt(recordedAt.value)
+            plannedAt = plannedAt!!
         )
 
         if (status == ExecStatus(Planned)) return plannedExec
@@ -119,21 +121,21 @@ data class ExecEntity(
         val scheduledExec = Exec.Scheduled(
             cmdId = cmdId,
             exec = plannedExec,
-            scheduledAt = ExecScheduledAt(recordedAt.value)
+            scheduledAt = scheduledAt!!
         )
         if (status == ExecStatus(Scheduled)) return scheduledExec
 
         val queuedExec = Exec.Queued(
             cmdId = cmdId,
             exec = scheduledExec,
-            queuedAt = ExecQueuedAt(recordedAt.value)
+            queuedAt = queuedAt!!
         )
         if (status == ExecStatus(Queued)) return queuedExec
 
         val startedExec = Exec.Started(
             cmdId = cmdId,
             exec = queuedExec,
-            startedAt = ExecStartedAt(recordedAt.value)
+            startedAt = startedAt!!
         )
         if (status == ExecStatus(Started)) return startedExec
 
@@ -141,7 +143,7 @@ data class ExecEntity(
             ExecStatus(Completed) -> Exec.Completed(
                 cmdId = cmdId,
                 exec = startedExec,
-                completedAt = ExecCompletedAt(recordedAt.value),
+                completedAt = completedAt!!,
                 statusCode = statusCode!!,
                 result = result!!,
                 state = state!!
@@ -150,7 +152,7 @@ data class ExecEntity(
             ExecStatus(Failed) -> Exec.Failed(
                 cmdId = cmdId,
                 exec = startedExec,
-                failedAt = ExecFailedAt(recordedAt.value),
+                failedAt = failedAt!!,
                 statusCode = statusCode!!,
                 result = result!!
             )
@@ -166,11 +168,12 @@ fun List<ExecRecord>.createEntity(): ExecEntity {
     check(firstRecord is ExecRecord.Planned)
 
     var result = ExecEntity(
+        cmdId = firstRecord.cmdId,
         id = firstRecord.entityId,
-        triggerId = firstRecord.triggerId,
         namespaceId = firstRecord.namespaceId,
         workspaceId = firstRecord.workspaceId,
-        cmdId = firstRecord.cmdId,
+        triggerId = firstRecord.triggerId,
+        plannedAt = ExecPlannedAt(firstRecord.recordedAt().value),
         sequence = firstRecord.sequence(),
         recordedAt = firstRecord.recordedAt()
     )

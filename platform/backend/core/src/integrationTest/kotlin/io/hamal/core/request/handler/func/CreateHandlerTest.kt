@@ -10,6 +10,7 @@ import io.hamal.lib.domain.request.FuncCreateRequested
 import io.hamal.lib.domain.vo.AuthId.Companion.AuthId
 import io.hamal.lib.domain.vo.CodeId.Companion.CodeId
 import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.domain.vo.DeployMessage.Companion.DeployMessage
 import io.hamal.lib.domain.vo.DeployedAt.Companion.DeployedAt
@@ -83,7 +84,7 @@ internal class FuncCreateHandlerTest : BaseRequestHandlerTest() {
             name = FuncName("awesome-func"),
             inputs = FuncInputs(ValueObject.builder().set("hamal", "rocks").build()),
             codeId = CodeId(34567),
-            code = ValueCode("some code"),
+            code = CodeValue("some code"),
             codeType = CodeType(Lua54)
         )
     }

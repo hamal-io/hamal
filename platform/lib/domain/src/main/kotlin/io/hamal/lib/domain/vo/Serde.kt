@@ -2,6 +2,7 @@ package io.hamal.lib.domain.vo
 
 import io.hamal.lib.common.domain.*
 import io.hamal.lib.common.serialization.SerdeModuleGeneric
+import io.hamal.lib.common.value.serde.ValueVariableAdapters.Code
 import io.hamal.lib.common.value.serde.ValueVariableAdapters.Enum
 import io.hamal.lib.common.value.serde.ValueVariableAdapters.Instant
 import io.hamal.lib.common.value.serde.ValueVariableAdapters.Number
@@ -34,6 +35,7 @@ object SerdeModuleValueVariable : SerdeModuleGeneric() {
 
         this[CodeId::class] = SnowflakeId(::CodeId)
         this[CodeType::class] = Enum(::CodeType)
+        this[CodeValue::class] = Code(::CodeValue)
         this[CodeVersion::class] = Number(::CodeVersion)
 
         this[CorrelationId::class] = String(::CorrelationId)
@@ -43,11 +45,15 @@ object SerdeModuleValueVariable : SerdeModuleGeneric() {
         this[ExecId::class] = SnowflakeId(::ExecId)
         this[ExecType::class] = String(::ExecType)
         this[ExecInputs::class] = Object(::ExecInputs)
+        this[ExecStatusCode::class] = Number(::ExecStatusCode)
         this[ExecResult::class] = Object(::ExecResult)
         this[ExecState::class] = Object(::ExecState)
         this[ExecStatus::class] = Enum(::ExecStatus)
+
+        this[ExecPlannedAt::class] = Instant(::ExecPlannedAt)
         this[ExecScheduledAt::class] = Instant(::ExecScheduledAt)
         this[ExecQueuedAt::class] = Instant(::ExecQueuedAt)
+        this[ExecStartedAt::class] = Instant(::ExecStartedAt)
         this[ExecCompletedAt::class] = Instant(::ExecCompletedAt)
         this[ExecFailedAt::class] = Instant(::ExecFailedAt)
 

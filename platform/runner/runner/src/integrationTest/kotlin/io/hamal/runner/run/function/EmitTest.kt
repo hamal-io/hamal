@@ -1,10 +1,10 @@
 package io.hamal.runner.run.function
 
-import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueObject
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.CodeTypes.Lua54
 import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.EventPayload
 import io.hamal.lib.domain.vo.ExecId.Companion.ExecId
 import io.hamal.lib.domain.vo.ExecInputs
@@ -177,7 +177,7 @@ internal class EmitTest : AbstractTest() {
         triggerId = TriggerId(4567),
         inputs = ExecInputs(),
         state = State(),
-        code = ValueCode(code),
+        code = CodeValue(code),
         codeType = CodeType(Lua54),
         correlation = null
     )

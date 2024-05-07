@@ -114,6 +114,31 @@ internal class ValueAdapterHonTest {
     }
 
     @Nested
+    inner class CodeVariableTest {
+
+        @Test
+        fun write() {
+            val given = TestObject(ValueCode("print('Hamal Rocks')"))
+            val result = serde.write(given)
+            assertThat(result, equalTo("""{"type":"Code","value":"print(\u0027Hamal Rocks\u0027)"}"""))
+        }
+
+        @Test
+        fun read() {
+            val expected = TestObject(ValueCode("print('Hamal Rocks')"))
+            val result = serde.read<TestObject>("""{"type":"Code","value":"print('Hamal Rocks')"}""")
+            assertThat(result, equalTo(expected))
+        }
+
+        private val serde = Serde.hon()
+            .register(SerdeModuleValueHon)
+            .register(TestObject::class, ValueVariableAdapters.Code(::TestObject))
+
+
+        inner class TestObject(override val value: ValueCode) : ValueVariableCode()
+    }
+
+    @Nested
     inner class DecimalTest {
         @Test
         fun write() {

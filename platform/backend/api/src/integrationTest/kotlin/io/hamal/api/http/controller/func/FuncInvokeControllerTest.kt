@@ -5,6 +5,7 @@ import io.hamal.lib.domain.Correlation
 import io.hamal.lib.domain._enum.CodeTypes.Lua54
 import io.hamal.lib.domain.request.ExecInvokeRequested
 import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.domain.vo.CorrelationId
 import io.hamal.lib.domain.vo.CorrelationId.Companion.CorrelationId
@@ -30,7 +31,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                 req = ApiFuncCreateRequest(
                     name = FuncName("test"),
                     inputs = FuncInputs(),
-                    code = ValueCode("x = 10"),
+                    code = CodeValue("x = 10"),
                     codeType = CodeType(Lua54)
                 )
             )
@@ -70,7 +71,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                 ApiFuncCreateRequest(
                     name = FuncName("test"),
                     inputs = FuncInputs(),
-                    code = ValueCode(""),
+                    code = CodeValue(""),
                     codeType = CodeType(Lua54)
                 )
             )
@@ -108,7 +109,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                 ApiFuncCreateRequest(
                     name = FuncName("test"),
                     inputs = FuncInputs(),
-                    code = ValueCode(""),
+                    code = CodeValue(""),
                     codeType = CodeType(Lua54)
                 )
             )
@@ -119,7 +120,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                 updateFunc(
                     createResponse.id, ApiFuncUpdateRequest(
                         name = FuncName("test-update"),
-                        code = ValueCode("code-${it}")
+                        code = CodeValue("code-${it}")
                     )
                 )
             )
@@ -153,7 +154,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                 ApiFuncCreateRequest(
                     name = FuncName("funcName"),
                     inputs = FuncInputs(),
-                    code = ValueCode("createCode"),
+                    code = CodeValue("createCode"),
                     codeType = CodeType(Lua54)
                 )
             )
@@ -163,7 +164,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
             awaitCompleted(
                 updateFunc(
                     createResponse.id, ApiFuncUpdateRequest(
-                        name = FuncName("test-update"), code = ValueCode("code-${it}")
+                        name = FuncName("test-update"), code = CodeValue("code-${it}")
                     )
                 )
             )
@@ -197,7 +198,7 @@ internal class FuncInvokeControllerTest : FuncBaseControllerTest() {
                 ApiFuncCreateRequest(
                     name = FuncName("test"),
                     inputs = FuncInputs(),
-                    code = ValueCode(""),
+                    code = CodeValue(""),
                     codeType = CodeType(Lua54)
                 )
             )

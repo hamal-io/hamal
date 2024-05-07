@@ -20,6 +20,17 @@ object ValueVariableAdapters {
         }
     }
 
+    class Code<TYPE : ValueVariableCode>(val ctor: (ValueCode) -> TYPE) : AdapterGeneric<TYPE> {
+
+        override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {
+            return ctor(context.deserialize(json, ValueCode::class.java))
+        }
+
+        override fun serialize(src: TYPE, typeOfSrc: Type, context: JsonSerializationContext): JsonElement {
+            return context.serialize(src.value, ValueCode::class.java)
+        }
+    }
+
     class Enum<TYPE : ValueVariableEnum<*>>(val ctor: (ValueEnum) -> TYPE) : AdapterGeneric<TYPE> {
 
         override fun deserialize(json: JsonElement, typeOfT: Type, context: JsonDeserializationContext): TYPE {

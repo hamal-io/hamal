@@ -3,6 +3,7 @@ package io.hamal.api.http.controller.func
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.domain._enum.CodeTypes.Lua54
 import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
+import io.hamal.lib.domain.vo.CodeValue.Companion.CodeValue
 import io.hamal.lib.domain.vo.CodeVersion.Companion.CodeVersion
 import io.hamal.lib.domain.vo.DeployMessage
 import io.hamal.lib.domain.vo.DeployMessage.Companion.DeployMessage
@@ -43,7 +44,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
             with(funcQueryRepository.get(func.id)) {
                 assertThat(name, equalTo(FuncName("test-func")))
                 assertThat(code.version, equalTo(CodeVersion(20)))
-                assertThat(codeQueryRepository.get(code.id, deployment.version).value, equalTo(ValueCode("code-19")))
+                assertThat(codeQueryRepository.get(code.id, deployment.version).value, equalTo(CodeValue("code-19")))
             }
 
         }
@@ -68,7 +69,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
             with(funcQueryRepository.get(func.id)) {
                 assertThat(name, equalTo(FuncName("test-func")))
                 assertThat(code.version, equalTo(CodeVersion(20)))
-                assertThat(codeQueryRepository.get(code.id, deployment.version).value, equalTo(ValueCode("code-9")))
+                assertThat(codeQueryRepository.get(code.id, deployment.version).value, equalTo(CodeValue("code-9")))
             }
         }
 
@@ -92,7 +93,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
             with(funcQueryRepository.get(func.id)) {
                 assertThat(name, equalTo(FuncName("test-func")))
                 assertThat(code.version, equalTo(CodeVersion(20)))
-                assertThat(codeQueryRepository.get(code.id, deployment.version).value, equalTo(ValueCode("13 + 37")))
+                assertThat(codeQueryRepository.get(code.id, deployment.version).value, equalTo(CodeValue("13 + 37")))
             }
         }
 
@@ -116,7 +117,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                 ApiFuncCreateRequest(
                     name = FuncName("Func-base"),
                     inputs = FuncInputs(),
-                    code = ValueCode("40 + 2"),
+                    code = CodeValue("40 + 2"),
                     codeType = CodeType(Lua54)
                 )
             )
@@ -153,7 +154,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                 {
                     assertThat(name, equalTo(FuncName("test-func")))
                     assertThat(
-                        codeQueryRepository.get(code.id, deployment.version).value, equalTo(ValueCode("code-19"))
+                        codeQueryRepository.get(code.id, deployment.version).value, equalTo(CodeValue("code-19"))
                     )
                     assertThat(deployment.version, equalTo(code.version))
                     assertThat(deployment.message, equalTo(DeployMessage.empty))
@@ -178,7 +179,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                 with(funcQueryRepository.get(funcId)) {
                     assertThat(name, equalTo(FuncName("test-func")))
                     assertThat(
-                        codeQueryRepository.get(code.id, deployment.version).value, equalTo(ValueCode("code-19"))
+                        codeQueryRepository.get(code.id, deployment.version).value, equalTo(CodeValue("code-19"))
                     )
                     assertThat(deployment.message, equalTo(DeployMessage("SuperFunc")))
                 }
@@ -191,7 +192,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                     ApiFuncCreateRequest(
                         name = FuncName("test-func"),
                         inputs = FuncInputs(),
-                        code = ValueCode("13 + 37"),
+                        code = CodeValue("13 + 37"),
                         codeType = CodeType(Lua54)
                     )
                 )
@@ -203,7 +204,7 @@ internal class FuncDeployControllerTest : FuncBaseControllerTest() {
                         func.id, ApiFuncUpdateRequest(
                             name = null,
                             inputs = null,
-                            code = ValueCode("code-${i}")
+                            code = CodeValue("code-${i}")
                         )
                     )
                 )
