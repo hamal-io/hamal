@@ -11,5 +11,5 @@ err, res = http.delete({
 })
 
 assert(err == nil)
-assert(res.status_code == 200)
+assert(res.status_code == 202)
 assert(res.content_type == 'application/json;charset=UTF-8')
