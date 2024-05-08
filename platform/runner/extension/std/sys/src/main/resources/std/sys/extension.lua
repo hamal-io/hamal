@@ -6,6 +6,7 @@ function extension_create()
 
         exec_namespace_id = context.exec.namespace_id
 
+
         local http = require('net.http').create({ base_url = cfg.base_url or 'http://localhost:8008' })
 
         local instance = {
@@ -33,9 +34,9 @@ function extension_create()
 
         function instance.func.create(req)
             req = req or {}
-
+            namespace_id = req.namespace_id or exec_namespace_id    --FIXME
             local err, resp = http.post({
-                url = '/v1/namespaces/' .. req.namespace_id .. '/funcs',
+                url = '/v1/namespaces/' .. namespace_id .. '/funcs',
                 headers = { ['x-exec-token'] = context.exec.token },
                 body = {
                     name = req.name or nil,
@@ -68,7 +69,7 @@ function extension_create()
         function instance.func.deploy_latest(func_id, message)
             req = req or {}
             local err, resp = http.post({
-                url = '/v1/funcs/' .. req.func_id .. '/deploy',
+                url = '/v1/funcs/' .. func_id .. '/deploy',
                 headers = { ['x-exec-token'] = context.exec.token },
                 body = {
                     id = req.id,
