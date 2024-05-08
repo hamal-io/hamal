@@ -1,6 +1,7 @@
 package io.hamal.core.adapter.trigger
 
 import io.hamal.core.adapter.request.RequestEnqueuePort
+import io.hamal.core.adapter.security.EnsureAccessPort
 import io.hamal.core.security.SecurityContext
 import io.hamal.lib.domain.GenerateDomainId
 import io.hamal.lib.domain._enum.RequestStatuses.Submitted
@@ -18,7 +19,8 @@ fun interface TriggerDeletePort {
 class TriggerDeleteAdapter(
     private val generateDomainId: GenerateDomainId,
     private val requestEnqueue: RequestEnqueuePort,
-    private val triggerGetPort: TriggerGetPort
+    private val triggerGetPort: TriggerGetPort,
+    private val ensureAccess: EnsureAccessPort
 ) : TriggerDeletePort {
     override fun invoke(triggerId: TriggerId): TriggerDeleteRequested {
         triggerGetPort(triggerId)

@@ -324,6 +324,11 @@ function plugin_create(internal)
         return internal.trigger_list(query)
     end
 
+    function export.triggers.delete(req)
+        req = req or {}
+        return internal.trigger_delete(req.id)
+    end
+
     function export.triggers.activate(req)
         req = req or {}
         return internal.trigger_activate({
