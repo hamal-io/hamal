@@ -13,5 +13,5 @@ assert(err == nil)
 assert(res.status_code == 200)
 assert(res.content_type == 'application/json;charset=UTF-8')
 
-trigger_exists = res.content
-assert(trigger_exists.id == '2')
+trigger = res.content
+assert(trigger.id == '2')
