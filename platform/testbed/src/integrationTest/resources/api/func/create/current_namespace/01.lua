@@ -1,20 +1,22 @@
-sys = require_plugin('std.sys')
+sys = require('std.sys').create({
+    base_url = context.env.api_host
+})
 
-err, func_one = sys.funcs.create({
+err, func_one = sys.func.create({
+    namespace_id = '539',
     name = 'test-func',
     inputs = {},
     code = [[4 + 2]]
 })
 assert(err == nil)
-sys.await_completed(func_one)
 
 assert(func_one.id ~= nil)
-assert(func_one.request_status == 'Submitted')
+assert(func_one.requestStatus == 'Submitted')
 assert(func_one.id ~= nil)
-assert(func_one.workspace_id == '539')
-assert(func_one.namespace_id == '539')
+assert(func_one.workspaceId == '539')
+assert(func_one.namespaceId == '539')
 
-err, func_one = sys.funcs.get(func_one.id)
+err, func_one = sys.func.get(func_one.id)
 assert(err == nil)
 
 assert(func_one.namespace.id == '539')

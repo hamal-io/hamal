@@ -107,7 +107,7 @@ function plugin_create(internal)
     function export.funcs.create(req)
         req = req or {}
         return internal.func_create({
-            namespace_id = req.namespace_id,
+            namespace_id = req.namespace_id, --FIXME must not be specified for current namespace
             name = req.name or nil,
             inputs = req.inputs or {},
             code = req.code or ""
