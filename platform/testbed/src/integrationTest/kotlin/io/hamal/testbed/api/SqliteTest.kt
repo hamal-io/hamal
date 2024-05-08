@@ -3,12 +3,12 @@ package io.hamal.testbed.api
 import io.hamal.api.ApiConfig
 import io.hamal.bridge.BridgeConfig
 import io.hamal.core.CoreConfig
-import io.hamal.lib.domain.vo.AuthToken
 import io.hamal.lib.domain.vo.AuthToken.Companion.AuthToken
 import io.hamal.lib.sdk.ApiSdkImpl
 import io.hamal.runner.RunnerConfig
-import org.springframework.boot.Banner
-import org.springframework.boot.WebApplicationType
+import org.springframework.boot.Banner.Mode.OFF
+import org.springframework.boot.WebApplicationType.NONE
+import org.springframework.boot.WebApplicationType.SERVLET
 import org.springframework.boot.builder.SpringApplicationBuilder
 import java.util.*
 
@@ -24,33 +24,33 @@ internal object SqliteApiTest : BaseApiTest() {
             .parent(CoreConfig::class.java, TestConfig::class.java, TestRetryConfig::class.java)
             .profiles("test", "api", "integration-test", "sqlite")
             .properties(properties)
-            .bannerMode(Banner.Mode.OFF)
-            .web(WebApplicationType.NONE)
+            .bannerMode(OFF)
+            .web(NONE)
 
         applicationBuilder.run().let {
             applicationBuilder
                 .parent(it)
                 .child(ApiConfig::class.java)
                 .sources(ClearController::class.java)
-                .web(WebApplicationType.SERVLET)
+                .web(SERVLET)
                 .properties("server.port=8041")
-                .bannerMode(Banner.Mode.OFF)
+                .bannerMode(OFF)
                 .run()
 
             applicationBuilder
                 .parent(it)
                 .child(BridgeConfig::class.java)
-                .web(WebApplicationType.SERVLET)
+                .web(SERVLET)
                 .properties("server.port=7041")
-                .bannerMode(Banner.Mode.OFF)
+                .bannerMode(OFF)
                 .run()
 
             applicationBuilder
                 .parent(it)
                 .child(TestSandboxConfig::class.java, RunnerConfig::class.java)
                 .properties(properties)
-                .web(WebApplicationType.NONE)
-                .bannerMode(Banner.Mode.OFF)
+                .web(NONE)
+                .bannerMode(OFF)
                 .run()
         }
     }

@@ -23,6 +23,10 @@ function extension_create()
                 headers = { ['x-exec-token'] = context.exec.token }
             })
 
+            print(context.exec.token)
+            print(dump(resp.content))
+            -- FIXME handle error
+
             return err, resp.content.execs
         end
 

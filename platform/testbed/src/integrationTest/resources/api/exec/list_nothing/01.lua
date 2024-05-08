@@ -1,7 +1,9 @@
-sys = require_plugin('std.sys')
---
+sys = require('std.sys').create({
+    base_url = context.env.api_host
+})
+
 -- Remember: Each test is an adhoc invoked exec
-err, execs = sys.execs.list()
+err, execs = sys.exec.list({})
 assert(err == nil)
 assert(#execs == 1)
 
