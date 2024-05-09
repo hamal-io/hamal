@@ -106,7 +106,7 @@ function extension_create()
                     codeType = req.code_type or "Lua54" --FIXME-341 register snakecase somewhere
                 }
             }))
-            return err, resp.content
+            return err, resp
         end
 
         function instance.func.get(func_id)
@@ -115,7 +115,7 @@ function extension_create()
                 headers = { ['x-exec-token'] = context.exec.token }
             }))
 
-            return err, resp.content
+            return err, resp
         end
 
         function instance.func.list(query)
