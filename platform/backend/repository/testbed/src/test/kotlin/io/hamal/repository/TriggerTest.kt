@@ -686,7 +686,6 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
             verifyCount(0)
         }
 
-
         @TestFactory
         fun `Tries to delete trigger which does not exist`() = runWith(TriggerRepository::class) {
             delete(DeleteCmd(CmdId(2), TriggerId(1)))

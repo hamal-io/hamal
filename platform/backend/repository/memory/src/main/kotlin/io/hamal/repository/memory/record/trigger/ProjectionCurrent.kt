@@ -78,5 +78,4 @@ internal class ProjectionCurrent : ProjectionMemory.BaseImpl<TriggerId, Trigger>
                 .toLong()
         )
     }
-
 }

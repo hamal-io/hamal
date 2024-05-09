@@ -158,7 +158,6 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                         cmdId = cmd.id,
                     )
                 )
-
                 currentProjection.delete(triggerId)
             }
         }

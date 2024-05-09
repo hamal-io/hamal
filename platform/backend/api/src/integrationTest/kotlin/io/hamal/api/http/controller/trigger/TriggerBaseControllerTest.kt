@@ -119,4 +119,14 @@ internal sealed class TriggerBaseControllerTest : BaseControllerTest() {
         require(res is HttpSuccessResponse) { "request was not successful" }
         return res.result(ApiTriggerStatusRequested::class)
     }
+
+    fun deleteTrigger(triggerId: TriggerId): ApiTriggerDeleteRequested {
+        val deleteResponse = httpTemplate.delete("/v1/triggers/{triggerId}")
+            .path("triggerId", triggerId)
+            .execute()
+
+        assertThat(deleteResponse.statusCode, equalTo(Accepted))
+        require(deleteResponse is HttpSuccessResponse) { "request was not successful" }
+        return deleteResponse.result(ApiTriggerDeleteRequested::class)
+    }
 }
