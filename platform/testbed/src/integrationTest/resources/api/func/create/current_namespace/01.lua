@@ -15,7 +15,7 @@ assert(func_one.workspaceId == '539')
 assert(func_one.namespaceId == '539')
 
 func_one = fail_on_error(sys.func.get(func_one.id))
-print(dump(func_one))
+
 assert(func_one.namespace.id == '539')
 assert(func_one.namespace.name == 'root-namespace')
 assert(func_one.name == 'test-func')
