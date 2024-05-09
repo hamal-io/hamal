@@ -6,7 +6,6 @@ function extension_create()
 
         exec_namespace_id = context.exec.namespace_id
 
-
         local http = require('net.http').create({ base_url = cfg.base_url or 'http://localhost:8008' })
 
         local instance = {
@@ -14,6 +13,26 @@ function extension_create()
             func = { },
             collection = {}
         }
+
+        function handle_error(err, resp, access)
+            if err ~= nil then
+                return err, nil
+            end
+
+            if resp.content['class'] == 'ApiError' then
+                print('ApiError message: ' .. resp.content['message'])
+                if err == nil then
+                    err = {
+                        type = 'ApiError',
+                        message = resp.content['message']
+                    }
+                    print('Error thrown: ', dump(err))
+                end
+                return err, nil
+            end
+
+            return nil, access(resp)
+        end
 
         function instance.exec.list(query)
             query = query or {}
@@ -45,15 +64,16 @@ function extension_create()
                     codeType = req.code_type or "Lua54"
                 }
             })
-            print(dump(resp.content))
-            handle_error(resp, err)
-            return err, resp.content
+
+            return handle_error(err, resp, function(res)
+                return res.content
+            end)
         end
 
         function instance.func.deploy(req)
             req = req or {}
             local err, resp = http.post({
-                url = '/v1/funcs/' .. req.func_id .. '/deploy',
+                url = '/v1/funcs/' .. req.id .. '/deploy',
                 headers = { ['x-exec-token'] = context.exec.token },
                 body = {
                     id = req.id,
@@ -62,8 +82,9 @@ function extension_create()
                 }
             })
 
-            handle_error(resp, err)
-            return err, resp.content
+            return handle_error(err, resp, function(res)
+                return res.content
+            end)
         end
 
         function instance.func.deploy_latest(func_id, message)
@@ -78,8 +99,9 @@ function extension_create()
                 }
             })
 
-            handle_error(resp, err)
-            return err, resp.content
+            return handle_error(err, resp, function(res)
+                return res.content
+            end)
         end
 
         function instance.func.get(func_id)
@@ -88,8 +110,9 @@ function extension_create()
                 headers = { ['x-exec-token'] = context.exec.token }
             })
 
-            handle_error(resp, err)
-            return err, resp.content
+            return handle_error(err, resp, function(res)
+                return res.content
+            end)
         end
 
         function instance.func.list(query)
@@ -103,8 +126,9 @@ function extension_create()
                 }
             })
 
-            handle_error(resp, err)
-            return err, resp.content.funcs
+            return handle_error(err, resp, function(res)
+                return res.content.funcs
+            end)
         end
 
         function instance.list_deployments(query)
@@ -117,8 +141,9 @@ function extension_create()
                 }
             })
 
-            handle_error(resp, err)
-            return err, resp.content.deployments
+            return handle_error(err, resp, function(res)
+                return res.content.deployments
+            end)
         end
 
         function instance.func.invoke(func_id, req)
@@ -133,14 +158,15 @@ function extension_create()
                 }
             })
 
-            handle_error(resp, err)
-            return err, resp.content
+            return handle_error(err, resp, function(res)
+                return res.content
+            end)
         end
 
         function instance.func.update(req)
             req = req or {}
             local err, resp = http.patch({
-                url = '/v1/funcs/' .. func_id,
+                url = '/v1/funcs/' .. req.id,
                 headers = { ['x-exec-token'] = context.exec.token },
                 body = {
                     name = req.name or nil,
@@ -149,8 +175,9 @@ function extension_create()
                 }
             })
 
-            handle_error(resp, err)
-            return err, resp.content
+            return handle_error(err, resp, function(res)
+                return res.content
+            end)
         end
 
         function instance.collection.list(query)
@@ -195,14 +222,3 @@ function extension_create()
 
     return export
 end
-
-function handle_error(response, error)
-    if response.content['class'] == 'ApiError' then
-        print('ApiError message: ' .. response.content['message'])
-        if error == nil then
-            error = 'ApiError'
-        end
-    end
-    return error
-end
-
