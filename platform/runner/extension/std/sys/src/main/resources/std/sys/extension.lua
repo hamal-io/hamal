@@ -12,7 +12,8 @@ function extension_create()
             await_completed = { },
             exec = { },
             func = { },
-            collection = {}
+            collection = { },
+            namespace = { }
         }
 
         function instance.await_completed(req)
@@ -27,6 +28,15 @@ function extension_create()
                 os.sleep(1)
             end]]
             return true
+        end
+
+        function instance.exec.get(exec_id)
+            local err, resp = handle_error(http.get({
+                url = '/v1/execs/' .. exec_id,
+                headers = { ['x-exec-token'] = context.exec.token }
+            }))
+
+            return err, resp.content
         end
 
         function instance.exec.list(query)
@@ -103,6 +113,42 @@ function extension_create()
             local err, resp = handle_error(http.get({
                 url = '/v1/funcs/' .. func_id,
                 headers = { ['x-exec-token'] = context.exec.token }
+            }))
+
+            return err, resp.content
+        end
+
+        function instance.func.list(query)
+            query = query or { }
+            local url = '/v1/funcs'
+            if query.namespace_ids ~= nil then
+                local res = ""
+                for idx, namespace_id in ipairs(query.namespace_ids) do
+                    res = res .. namespace_id
+                    if idx < #query.namespace_ids then
+                        res = res .. ","
+                    end
+                end
+                url = url .. '?namespace_ids=' .. res
+            end
+            local err, resp = handle_error(http.get({
+                url = url,
+                headers = { ['x-exec-token'] = context.exec.token },
+            }))
+
+            return err, resp.content.funcs
+        end
+
+        function instance.namespace.append(req)
+            req = req or {}
+            namespace_id = req.namespace_id or exec_namespace_id
+            local err, resp = handle_error(http.post({
+                url = '/v1/namespaces/' .. namespace_id .. '/namespaces',
+                headers = { ['x-exec-token'] = context.exec.token },
+                body = {
+                    name = req.name,
+                    features = nil
+                }
             }))
 
             return err, resp.content
