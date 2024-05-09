@@ -649,6 +649,7 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
 
     @Nested
     inner class DeleteTest {
+
         @TestFactory
         fun `Deletes a trigger`() = runWith(TriggerRepository::class) {
             createFixedRateTrigger(
@@ -658,23 +659,45 @@ internal class TriggerRepositoryTest : AbstractUnitTest() {
                 name = TriggerName("Trigger-exists")
             )
 
-            delete(
-                DeleteCmd(
-                    CmdId(2),
-                    TriggerId(1)
-                )
+            delete(DeleteCmd(CmdId(2), TriggerId(1)))
+
+            assertThrows<NoSuchElementException> { get(TriggerId(1)) }
+                .also { exception -> assertThat(exception.message, equalTo("Trigger not found")) }
+
+            verifyCount(0)
+        }
+
+        @TestFactory
+        fun `Deletes trigger multiple times`() = runWith(TriggerRepository::class) {
+            createFixedRateTrigger(
+                triggerId = TriggerId(1),
+                namespaceId = NamespaceId(2),
+                workspaceId = WorkspaceId(3),
+                name = TriggerName("Trigger-exists")
             )
 
-            val exception = assertThrows<NoSuchElementException> {
-                get(TriggerId(1))
+            repeat(10) { iteration ->
+                delete(DeleteCmd(CmdId(iteration + 2), TriggerId(1)))
             }
-            assertThat(exception.message, equalTo("Trigger not found"))
+
+            assertThrows<NoSuchElementException> { get(TriggerId(1)) }
+                .also { exception -> assertThat(exception.message, equalTo("Trigger not found")) }
+
             verifyCount(0)
         }
 
 
-    }
+        @TestFactory
+        fun `Tries to delete trigger which does not exist`() = runWith(TriggerRepository::class) {
+            delete(DeleteCmd(CmdId(2), TriggerId(1)))
 
+            assertThrows<NoSuchElementException> { get(TriggerId(1)) }
+                .also { exception -> assertThat(exception.message, equalTo("Trigger not found")) }
+
+            verifyCount(0)
+        }
+
+    }
 
     @Nested
     inner class ClearTest {

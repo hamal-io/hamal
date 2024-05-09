@@ -4,7 +4,6 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.ExtensionId
 import io.hamal.lib.sqlite.Connection
-import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Extension
 import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
 import io.hamal.repository.record.extension.ExtensionRecord
@@ -13,7 +12,7 @@ import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 import org.sqlite.SQLiteException
 
-internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecord, Extension> {
+internal object ProjectionCurrent : ProjectionSqlite.CurrentImpl<ExtensionId, ExtensionRecord, Extension>() {
     override fun upsert(tx: RecordTransactionSqlite<ExtensionId, ExtensionRecord, Extension>, obj: Extension) {
         try {
             tx.execute(
@@ -52,10 +51,6 @@ internal object ProjectionCurrent : ProjectionSqlite<ExtensionId, ExtensionRecor
             );
         """.trimIndent()
         )
-    }
-
-    override fun clear(tx: Transaction) {
-        tx.execute("""DELETE FROM current""")
     }
 
     fun find(connection: Connection, extensionId: ExtensionId): Extension? {

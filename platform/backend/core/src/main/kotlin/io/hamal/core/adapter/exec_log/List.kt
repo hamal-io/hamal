@@ -14,6 +14,5 @@ class ExecLogListAdapter(
     private val execLogQueryRepository: ExecLogQueryRepository,
     private val filterAccess: FilterAccessPort
 ) : ExecLogListPort {
-    override fun invoke(query: ExecLogQueryRepository.ExecLogQuery): List<ExecLog> =
-        filterAccess(execLogQueryRepository.list(query))
+    override fun invoke(query: ExecLogQueryRepository.ExecLogQuery): List<ExecLog> = filterAccess(execLogQueryRepository.list(query))
 }

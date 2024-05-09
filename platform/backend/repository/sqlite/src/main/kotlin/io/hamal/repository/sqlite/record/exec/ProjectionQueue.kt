@@ -2,14 +2,13 @@ package io.hamal.repository.sqlite.record.exec
 
 import io.hamal.lib.domain.vo.ExecId
 import io.hamal.lib.sqlite.Connection
-import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Exec
 import io.hamal.repository.record.exec.ExecRecord
 import io.hamal.repository.sqlite.hon
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
-internal object ProjectionQueue : ProjectionSqlite<ExecId, ExecRecord, Exec> {
+internal object ProjectionQueue : ProjectionSqlite.UniqueImpl<ExecId, ExecRecord, Exec>("queue") {
 
     fun pop(
         tx: RecordTransactionSqlite<ExecId, ExecRecord, Exec>,
@@ -59,9 +58,5 @@ internal object ProjectionQueue : ProjectionSqlite<ExecId, ExecRecord, Exec> {
             );
         """.trimIndent()
         )
-    }
-
-    override fun clear(tx: Transaction) {
-        tx.execute("""DELETE FROM queue""")
     }
 }

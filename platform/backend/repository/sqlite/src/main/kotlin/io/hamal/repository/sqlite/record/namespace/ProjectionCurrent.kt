@@ -4,15 +4,14 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.sqlite.Connection
-import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
-import io.hamal.repository.sqlite.hon
 import io.hamal.repository.record.namespace.NamespaceRecord
+import io.hamal.repository.sqlite.hon
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
-internal object ProjectionCurrent : ProjectionSqlite<NamespaceId, NamespaceRecord, Namespace> {
+internal object ProjectionCurrent : ProjectionSqlite.CurrentImpl<NamespaceId, NamespaceRecord, Namespace>() {
 
     fun find(connection: Connection, namespaceId: NamespaceId): Namespace? {
         return connection.executeQueryOne(
@@ -109,10 +108,6 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceId, NamespaceRecor
             );
         """.trimIndent()
         )
-    }
-
-    override fun clear(tx: Transaction) {
-        tx.execute("""DELETE FROM current""")
     }
 
     private fun NamespaceQuery.workspaceIds(): String {

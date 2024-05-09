@@ -12,7 +12,8 @@ import io.hamal.repository.sqlite.hon
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
-internal object ProjectionCurrent : ProjectionSqlite<TriggerId, TriggerRecord, Trigger> {
+internal object ProjectionCurrent : ProjectionSqlite.CurrentImpl<TriggerId, TriggerRecord, Trigger>() {
+
     fun find(connection: Connection, triggerId: TriggerId): Trigger? {
         return connection.executeQueryOne(
             """
