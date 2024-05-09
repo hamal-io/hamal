@@ -14,6 +14,5 @@ class ExecListAdapter(
     private val execQueryRepository: ExecQueryRepository,
     private val accessFilterAccess: FilterAccessPort
 ) : ExecListPort {
-    override fun invoke(query: ExecQueryRepository.ExecQuery): List<Exec> =
-        accessFilterAccess(execQueryRepository.list(query))
+    override fun invoke(query: ExecQueryRepository.ExecQuery): List<Exec> = accessFilterAccess(execQueryRepository.list(query))
 }
