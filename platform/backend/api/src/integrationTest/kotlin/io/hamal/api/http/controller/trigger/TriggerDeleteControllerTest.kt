@@ -53,4 +53,14 @@ internal class TriggerDeleteControllerTest : TriggerBaseControllerTest() {
         val error = deleteTriggerResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Trigger not found"))
     }
+
+    @Test
+    fun `Tries to delete a trigger which does not exists`() {
+        val deleteTriggerResponse = httpTemplate.delete("/v1/triggers/42").execute()
+        assertThat(deleteTriggerResponse.statusCode, equalTo(NotFound))
+        require(deleteTriggerResponse is HttpErrorResponse) { "request was successful" }
+
+        val error = deleteTriggerResponse.error(ApiError::class)
+        assertThat(error.message, equalTo("Trigger not found"))
+    }
 }
