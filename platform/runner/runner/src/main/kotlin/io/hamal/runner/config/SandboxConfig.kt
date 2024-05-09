@@ -1,5 +1,6 @@
 package io.hamal.runner.config
 
+import io.hamal.extension.debug.ExtensionDebugFactory
 import io.hamal.extension.net.http.ExtensionNetHttpFactory
 import io.hamal.extension.net.smtp.ExtensionNetSmtpFactory
 import io.hamal.extension.social.telegram.ExtensionSocialTelegramFactory
@@ -84,6 +85,7 @@ class SandboxFactoryDefaultImpl(
 
                 ExtensionNetSmtpFactory,
                 ExtensionNetHttpFactory,
+                ExtensionDebugFactory,
 
                 ExtensionSocialTelegramFactory,
 
