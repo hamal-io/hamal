@@ -16,11 +16,16 @@ import java.nio.file.Path
 
 internal object CreateTrigger : CreateDomainObject<TriggerId, TriggerRecord, Trigger> {
     override fun invoke(recs: List<TriggerRecord>): Trigger {
+
         check(recs.isNotEmpty()) { "At least one record is required" }
         val firstRecord = recs.first()
 
         check(
-            firstRecord is TriggerRecord.FixedRateCreated || firstRecord is TriggerRecord.EventCreated || firstRecord is TriggerRecord.HookCreated || firstRecord is TriggerRecord.CronCreated || firstRecord is TriggerRecord.EndpointCreated
+            firstRecord is TriggerRecord.FixedRateCreated ||
+                    firstRecord is TriggerRecord.EventCreated ||
+                    firstRecord is TriggerRecord.HookCreated ||
+                    firstRecord is TriggerRecord.CronCreated ||
+                    firstRecord is TriggerRecord.EndpointCreated
         )
 
         var result = TriggerEntity(
@@ -213,7 +218,7 @@ class TriggerSqliteRepository(
         }
     }
 
-    override fun delete(cmd: DeleteCmd): Trigger {
+    override fun delete(cmd: DeleteCmd) {
         val triggerId = cmd.triggerId
         return tx {
             if (commandAlreadyApplied(cmd.id, triggerId)) {
@@ -225,7 +230,7 @@ class TriggerSqliteRepository(
                         cmdId = cmd.id
                     )
                 )
-                currentVersion(triggerId).also { ProjectionCurrent.delete(this, it) }
+                projections.forEach { projection -> projection.delete(this, triggerId) }
             }
         }
     }

@@ -7,7 +7,7 @@ import io.hamal.repository.api.Extension
 import io.hamal.repository.api.ExtensionQueryRepository.ExtensionQuery
 import io.hamal.repository.memory.record.ProjectionMemory
 
-internal class ProjectionCurrent : ProjectionMemory<ExtensionId, Extension> {
+internal class ProjectionCurrent : ProjectionMemory.BaseImpl<ExtensionId, Extension>() {
 
     override fun upsert(obj: Extension) {
         val currentExt = projection[obj.id]
@@ -49,11 +49,4 @@ internal class ProjectionCurrent : ProjectionMemory<ExtensionId, Extension> {
                 .toLong()
         )
     }
-
-    override fun clear() {
-        projection.clear()
-    }
-
-    private val projection = mutableMapOf<ExtensionId, Extension>()
-
 }

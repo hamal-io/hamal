@@ -2,14 +2,13 @@ package io.hamal.repository.sqlite.record.namespace_tree
 
 import io.hamal.lib.domain.vo.NamespaceTreeId
 import io.hamal.lib.sqlite.Connection
-import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.NamespaceTree
 import io.hamal.repository.record.namespace_tree.NamespaceTreeRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 import org.sqlite.SQLiteException
 
-internal object ProjectionUniqueWorkspace : ProjectionSqlite<NamespaceTreeId, NamespaceTreeRecord, NamespaceTree> {
+internal object ProjectionUniqueWorkspace : ProjectionSqlite.UniqueImpl<NamespaceTreeId, NamespaceTreeRecord, NamespaceTree>("unique_workspace") {
 
     override fun upsert(
         tx: RecordTransactionSqlite<NamespaceTreeId, NamespaceTreeRecord, NamespaceTree>,
@@ -46,9 +45,4 @@ internal object ProjectionUniqueWorkspace : ProjectionSqlite<NamespaceTreeId, Na
         """.trimIndent()
         )
     }
-
-    override fun clear(tx: Transaction) {
-        tx.execute("""DELETE FROM unique_workspace""")
-    }
-
 }

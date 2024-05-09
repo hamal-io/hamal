@@ -4,7 +4,6 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.CodeId
 import io.hamal.lib.sqlite.Connection
-import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Code
 import io.hamal.repository.api.CodeQueryRepository.CodeQuery
 import io.hamal.repository.record.code.CodeRecord
@@ -12,7 +11,7 @@ import io.hamal.repository.sqlite.hon
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
-internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
+internal object ProjectionCurrent : ProjectionSqlite.CurrentImpl<CodeId, CodeRecord, Code>() {
 
     fun find(connection: Connection, codeId: CodeId): Code? {
         return connection.executeQueryOne(
@@ -110,10 +109,6 @@ internal object ProjectionCurrent : ProjectionSqlite<CodeId, CodeRecord, Code> {
             );
         """.trimIndent()
         )
-    }
-
-    override fun clear(tx: Transaction) {
-        tx.execute("""DELETE FROM current""")
     }
 
     private fun CodeQuery.workspaceIds(): String {

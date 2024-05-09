@@ -13,9 +13,9 @@ import kotlin.reflect.KClass
 abstract class RecordSqliteRepository<ID : ValueVariableSnowflakeId, RECORD : Record<ID>, OBJ : DomainObject<ID>>(
     path: Path,
     filename: String,
-    private val createDomainObject: CreateDomainObject<ID, RECORD, OBJ>,
-    private val recordClass: KClass<RECORD>,
-    private val projections: List<ProjectionSqlite<ID, RECORD, OBJ>>
+    protected val createDomainObject: CreateDomainObject<ID, RECORD, OBJ>,
+    protected val recordClass: KClass<RECORD>,
+    protected val projections: List<ProjectionSqlite<ID, RECORD, OBJ>>
 
 ) : SqliteBaseRepository(path, filename) {
 

@@ -7,7 +7,7 @@ import io.hamal.repository.api.Workspace
 import io.hamal.repository.api.WorkspaceQueryRepository.WorkspaceQuery
 import io.hamal.repository.memory.record.ProjectionMemory
 
-internal class ProjectionCurrent : ProjectionMemory<WorkspaceId, Workspace> {
+internal class ProjectionCurrent : ProjectionMemory.BaseImpl<WorkspaceId, Workspace>() {
 
     override fun upsert(obj: Workspace) {
         val currentWorkspace = projection[obj.id]
@@ -49,10 +49,5 @@ internal class ProjectionCurrent : ProjectionMemory<WorkspaceId, Workspace> {
         )
     }
 
-    override fun clear() {
-        projection.clear()
-    }
-
-    private val projection = mutableMapOf<WorkspaceId, Workspace>()
 }
 

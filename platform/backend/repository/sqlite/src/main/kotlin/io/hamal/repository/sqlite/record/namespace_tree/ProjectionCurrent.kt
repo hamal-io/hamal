@@ -8,12 +8,12 @@ import io.hamal.lib.sqlite.Connection
 import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.NamespaceTree
 import io.hamal.repository.api.NamespaceTreeQueryRepository
-import io.hamal.repository.sqlite.hon
 import io.hamal.repository.record.namespace_tree.NamespaceTreeRecord
+import io.hamal.repository.sqlite.hon
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
-internal object ProjectionCurrent : ProjectionSqlite<NamespaceTreeId, NamespaceTreeRecord, NamespaceTree> {
+internal object ProjectionCurrent : ProjectionSqlite.CurrentImpl<NamespaceTreeId, NamespaceTreeRecord, NamespaceTree>() {
 
     fun find(connection: Connection, namespaceId: NamespaceId): NamespaceTree? {
         return connection.executeQueryOne(
@@ -144,8 +144,18 @@ internal object ProjectionCurrent : ProjectionSqlite<NamespaceTreeId, NamespaceT
         )
     }
 
+    override fun delete(tx: RecordTransactionSqlite<NamespaceTreeId, NamespaceTreeRecord, NamespaceTree>, id: NamespaceTreeId) {
+        tx.execute("""DELETE FROM current WHERE id = :id """) {
+            set("id", id)
+        }
+        tx.execute("""DELETE FROM namespaces WHERE namespace_id = :id""") {
+            set("id", id)
+        }
+    }
+
     override fun clear(tx: Transaction) {
         tx.execute("""DELETE FROM current""")
+        tx.execute("""DELETE FROM namespaces""")
     }
 
     private fun NamespaceTreeQueryRepository.NamespaceTreeQuery.workspaceIds(): String {

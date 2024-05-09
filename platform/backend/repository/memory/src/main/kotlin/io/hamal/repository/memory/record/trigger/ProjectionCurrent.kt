@@ -8,7 +8,7 @@ import io.hamal.repository.api.TriggerQueryRepository.TriggerQuery
 import io.hamal.repository.memory.record.ProjectionMemory
 
 
-internal class ProjectionCurrent : ProjectionMemory<TriggerId, Trigger> {
+internal class ProjectionCurrent : ProjectionMemory.BaseImpl<TriggerId, Trigger>() {
 
     override fun upsert(obj: Trigger) {
         val currentTrigger = projection[obj.id]
@@ -79,13 +79,4 @@ internal class ProjectionCurrent : ProjectionMemory<TriggerId, Trigger> {
         )
     }
 
-    override fun clear() {
-        projection.clear()
-    }
-
-    fun delete(obj: Trigger) {
-        projection.remove(obj.id)
-    }
-
-    private val projection = mutableMapOf<TriggerId, Trigger>()
 }

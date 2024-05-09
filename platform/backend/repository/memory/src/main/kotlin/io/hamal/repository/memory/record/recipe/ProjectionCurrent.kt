@@ -7,11 +7,7 @@ import io.hamal.repository.api.Recipe
 import io.hamal.repository.api.RecipeQueryRepository
 import io.hamal.repository.memory.record.ProjectionMemory
 
-internal class ProjectionCurrent : ProjectionMemory<RecipeId, Recipe> {
-
-    override fun upsert(obj: Recipe) {
-        projection[obj.id] = obj
-    }
+internal class ProjectionCurrent : ProjectionMemory.BaseImpl<RecipeId, Recipe>() {
 
     fun find(recipeId: RecipeId): Recipe? = projection[recipeId]
 
@@ -37,9 +33,4 @@ internal class ProjectionCurrent : ProjectionMemory<RecipeId, Recipe> {
         )
     }
 
-    override fun clear() {
-        projection.clear()
-    }
-
-    private val projection = mutableMapOf<RecipeId, Recipe>()
 }
