@@ -3,14 +3,13 @@ package io.hamal.repository.sqlite.record.workspace
 import io.hamal.lib.domain.vo.WorkspaceId
 import io.hamal.lib.domain.vo.WorkspaceName
 import io.hamal.lib.sqlite.Connection
-import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Workspace
 import io.hamal.repository.record.workspace.WorkspaceRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 import org.sqlite.SQLiteException
 
-internal object ProjectionUniqueName : ProjectionSqlite<WorkspaceId, WorkspaceRecord, Workspace> {
+internal object ProjectionUniqueName : ProjectionSqlite.UniqueImpl<WorkspaceId, WorkspaceRecord, Workspace>("unique_name") {
 
     fun find(connection: Connection, workspaceName: WorkspaceName): WorkspaceId? {
         return connection.executeQueryOne(
@@ -62,7 +61,4 @@ internal object ProjectionUniqueName : ProjectionSqlite<WorkspaceId, WorkspaceRe
         )
     }
 
-    override fun clear(tx: Transaction) {
-        tx.execute("""DELETE FROM unique_name""")
-    }
 }

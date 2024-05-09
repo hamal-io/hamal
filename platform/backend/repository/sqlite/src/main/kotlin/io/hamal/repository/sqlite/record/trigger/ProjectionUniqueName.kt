@@ -2,14 +2,13 @@ package io.hamal.repository.sqlite.record.trigger
 
 import io.hamal.lib.domain.vo.TriggerId
 import io.hamal.lib.sqlite.Connection
-import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Trigger
 import io.hamal.repository.record.trigger.TriggerRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 import org.sqlite.SQLiteException
 
-internal object ProjectionUniqueName : ProjectionSqlite<TriggerId, TriggerRecord, Trigger> {
+internal object ProjectionUniqueName : ProjectionSqlite.UniqueImpl<TriggerId, TriggerRecord, Trigger>("unique_name") {
 
     override fun upsert(tx: RecordTransactionSqlite<TriggerId, TriggerRecord, Trigger>, obj: Trigger) {
         try {
@@ -45,9 +44,4 @@ internal object ProjectionUniqueName : ProjectionSqlite<TriggerId, TriggerRecord
         """.trimIndent()
         )
     }
-
-    override fun clear(tx: Transaction) {
-        tx.execute("""DELETE FROM unique_name""")
-    }
-    
 }

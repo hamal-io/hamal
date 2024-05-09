@@ -7,13 +7,10 @@ import io.hamal.repository.api.Namespace
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import io.hamal.repository.memory.record.ProjectionMemory
 
-internal class ProjectionCurrent : ProjectionMemory<NamespaceId, Namespace> {
-
-    override fun upsert(obj: Namespace) {
-        projection[obj.id] = obj
-    }
+internal class ProjectionCurrent : ProjectionMemory.BaseImpl<NamespaceId, Namespace>() {
 
     fun find(namespaceId: NamespaceId): Namespace? = projection[namespaceId]
+
     fun find(namespaceName: NamespaceName): Namespace? = projection.values.find { it.name == namespaceName }
 
     fun list(query: NamespaceQuery): List<Namespace> {
@@ -41,11 +38,5 @@ internal class ProjectionCurrent : ProjectionMemory<NamespaceId, Namespace> {
                 .toLong()
         )
     }
-
-    override fun clear() {
-        projection.clear()
-    }
-
-    private val projection = mutableMapOf<NamespaceId, Namespace>()
 }
 

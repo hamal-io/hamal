@@ -7,7 +7,7 @@ import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.memory.record.ProjectionMemory
 
-internal class ProjectionCurrent : ProjectionMemory<FuncId, Func>{
+internal class ProjectionCurrent : ProjectionMemory.BaseImpl<FuncId, Func>() {
 
     override fun upsert(obj: Func) {
         val currentFunc = projection[obj.id]
@@ -51,10 +51,4 @@ internal class ProjectionCurrent : ProjectionMemory<FuncId, Func>{
                 .toLong()
         )
     }
-
-    override fun clear() {
-        projection.clear()
-    }
-
-    private val projection = mutableMapOf<FuncId, Func>()
 }

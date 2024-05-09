@@ -21,7 +21,8 @@ sealed class TriggerRecord(
             CronCreated::class,
             EndpointCreated::class,
             SetActive::class,
-            SetInactive::class
+            SetInactive::class,
+            Deleted::class
         )
     )
 
@@ -95,6 +96,11 @@ sealed class TriggerRecord(
 
 
     data class SetInactive(
+        override val cmdId: CmdId,
+        override val entityId: TriggerId
+    ) : TriggerRecord()
+
+    data class Deleted(
         override val cmdId: CmdId,
         override val entityId: TriggerId
     ) : TriggerRecord()

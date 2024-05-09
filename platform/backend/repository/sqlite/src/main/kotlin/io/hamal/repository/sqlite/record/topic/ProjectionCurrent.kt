@@ -6,7 +6,6 @@ import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.domain.vo.TopicName
 import io.hamal.lib.sqlite.Connection
-import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Topic
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import io.hamal.repository.record.topic.TopicRecord
@@ -14,7 +13,7 @@ import io.hamal.repository.sqlite.hon
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
-internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic> {
+internal object ProjectionCurrent : ProjectionSqlite.CurrentImpl<TopicId, TopicRecord, Topic>() {
     fun find(connection: Connection, topicId: TopicId): Topic? {
         return connection.executeQueryOne(
             """
@@ -149,10 +148,6 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
         )
     }
 
-    override fun clear(tx: Transaction) {
-        tx.execute("""DELETE FROM current""")
-    }
-
     private fun TopicQuery.types(): String {
         return if (types.isEmpty()) {
             ""
@@ -160,7 +155,6 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
             "AND type IN (${types.joinToString(",") { "${it.enumValue.value}" }})"
         }
     }
-
 
     private fun TopicQuery.ids(): String {
         return if (topicIds.isEmpty()) {
@@ -185,7 +179,6 @@ internal object ProjectionCurrent : ProjectionSqlite<TopicId, TopicRecord, Topic
             "AND namespace_id IN (${namespaceIds.joinToString(",") { "${it.longValue}" }})"
         }
     }
-
 
     private fun TopicQuery.names(): String {
         return if (names.isEmpty()) {
