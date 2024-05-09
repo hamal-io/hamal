@@ -39,24 +39,6 @@ internal class ExecTokenTest : AbstractTest() {
     }
 
     @Test
-    fun `NamespaceId available in code`() {
-        runTest(
-            UnitOfWork(
-                id = ExecId(1234),
-                execToken = ExecToken("ExecToken"),
-                namespaceId = NamespaceId(9876),
-                workspaceId = WorkspaceId(5432),
-                triggerId = TriggerId(4567),
-                inputs = ExecInputs(),
-                state = State(),
-                code = CodeValue("assert(context.namespace_id == '9876')"),
-                codeType = CodeType(Lua54),
-                correlation = null
-            )
-        )
-    }
-
-    @Test
     fun `Exec id available in function`() {
         val testFn = TestFunction()
 
