@@ -131,12 +131,17 @@ function extension_create()
                 end
                 url = url .. '?namespace_ids=' .. res
             end
+
             local err, resp = handle_error(http.get({
                 url = url,
                 headers = { ['x-exec-token'] = context.exec.token },
             }))
 
-            return err, resp.content.funcs
+            if resp ~= nil then
+                resp = resp.funcs
+            end
+
+            return err, resp
         end
 
         function instance.namespace.append(req)
@@ -151,7 +156,7 @@ function extension_create()
                 }
             }))
 
-            return err, resp.content
+            return err, resp
         end
 
         return instance
