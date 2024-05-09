@@ -109,6 +109,35 @@ function extension_create()
             return err, resp
         end
 
+        function instance.func.deploy(req)
+            req = req or {}
+            local err, resp = handle_error(http.post({
+                url = '/v1/funcs/' .. req.id .. '/deploy',
+                headers = { ['x-exec-token'] = context.exec.token },
+                body = {
+                    id = req.id,
+                    version = req.version or nil,
+                    message = req.message or nil
+                }
+            }))
+
+            return err, resp
+        end
+
+        function instance.func.deploy_latest(func_id, message)
+            local err, resp = handle_error(http.post({
+                url = '/v1/funcs/' .. func_id .. '/deploy',
+                headers = { ['x-exec-token'] = context.exec.token },
+                body = {
+                    id = func_id,
+                    version = nil,
+                    message = message or nil
+                }
+            }))
+
+            return err, resp
+        end
+
         function instance.func.get(func_id)
             local err, resp = handle_error(http.get({
                 url = '/v1/funcs/' .. func_id,
@@ -139,6 +168,20 @@ function extension_create()
 
             if resp ~= nil then
                 resp = resp.funcs
+            end
+
+            return err, resp
+        end
+
+        function instance.func.list_deployments(query)
+            query = query or {}
+            local err, resp = handle_error(http.get({
+                url = '/v1/funcs/' .. query.id .. '/deployments',
+                headers = { ['x-exec-token'] = context.exec.token }
+            }))
+
+            if resp ~= nil then
+                resp = resp.deployments
             end
 
             return err, resp
