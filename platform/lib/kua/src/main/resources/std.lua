@@ -42,5 +42,5 @@ function handle_error(err, resp)
         return err, nil
     end
 
-    return nil, resp
+    return nil, resp.content
 end
