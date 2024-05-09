@@ -9,7 +9,9 @@ function plugin_create(internal)
             hook = internal.inputs.hook,
             endpoint = internal.inputs.endpoint,
             events = internal.inputs.events,
-            inputs = internal.inputs
+            inputs = internal.inputs,
+            namespace_id = internal.namespace_id,
+            workspace_id = internal.workspace_id
         },
         state = internal.state
     }

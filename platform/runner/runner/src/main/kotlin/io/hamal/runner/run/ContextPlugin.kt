@@ -29,7 +29,9 @@ class RunnerContextFactory(
                 ValueString("fail") to FailRunFunction,
                 ValueString("complete") to CompleteRunFunction,
                 ValueString("state") to executionCtx.state.value.toKua(sandbox),
-                ValueString("env") to executionCtx[RunnerEnv::class].value.toKua(sandbox)
+                ValueString("env") to executionCtx[RunnerEnv::class].value.toKua(sandbox),
+                ValueString("namespace_id") to ValueString(executionCtx[NamespaceId::class].stringValue),
+                ValueString("workspace_id") to ValueString(executionCtx[WorkspaceId::class].stringValue)
             )
         )
     }
