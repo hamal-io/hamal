@@ -36,7 +36,7 @@ function extension_create()
                 headers = { ['x-exec-token'] = context.exec.token }
             }))
 
-            return err, resp.content
+            return err, resp
         end
 
         function instance.exec.list(query)
@@ -142,6 +142,21 @@ function extension_create()
             local err, resp = handle_error(http.get({
                 url = '/v1/funcs/' .. func_id,
                 headers = { ['x-exec-token'] = context.exec.token }
+            }))
+
+            return err, resp
+        end
+
+        function instance.func.invoke(req)
+            req = req or {}
+            local err, resp = handle_error(http.post({
+                url = '/v1/funcs/' .. req.id .. '/invoke',
+                headers = { ['x-exec-token'] = context.exec.token },
+                body = {
+                    correlation_id = req.correlation_id or "__default__", --FIXME-341 hardcode somewhere else?
+                    inputs = req.inputs or {},
+                    version = req.version or nil
+                }
             }))
 
             return err, resp
