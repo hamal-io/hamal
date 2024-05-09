@@ -16,7 +16,16 @@ function extension_create()
         }
 
         function instance.await_completed(req)
-            --req.requestStatus Completed | Failed else | -> sleep
+            --[[local start_time = os.time()
+            while req.requestStatus ~= 'Completed' do
+                if req.requestStatus == 'Failed' then
+                    error("Request failed!")
+                end
+                if os.time() - start_time >= 5 then
+                    error("Request Timeout")
+                end
+                os.sleep(1)
+            end]]
             return true
         end
 

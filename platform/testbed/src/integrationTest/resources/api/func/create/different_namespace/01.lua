@@ -1,5 +1,7 @@
-sys = require_plugin('std.sys')
---
+sys = require('std.sys').create({
+    base_url = context.env.api_host
+})
+
 namespace = fail_on_error(sys.namespaces.append({ name = "hamal::namespace::rocks" }))
 sys.await_completed(namespace)
 
