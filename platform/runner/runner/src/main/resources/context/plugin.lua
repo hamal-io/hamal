@@ -11,6 +11,8 @@ function plugin_create(internal)
             events = internal.inputs.events,
             inputs = internal.inputs
         },
+        namespace_id = internal.namespace_id,
+        workspace_id = internal.workspace_id,
         state = internal.state
     }
 
