@@ -146,7 +146,7 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
         }
     }
 
-    override fun delete(cmd: DeleteCmd): Trigger {
+    override fun delete(cmd: DeleteCmd) {
         val triggerId = cmd.triggerId;
         return lock.withLock {
             if (commandAlreadyApplied(cmd.id, triggerId)) {
@@ -158,7 +158,7 @@ class TriggerMemoryRepository : RecordMemoryRepository<TriggerId, TriggerRecord,
                         cmdId = cmd.id,
                     )
                 )
-                (currentVersion(triggerId)).also(currentProjection::delete)
+                currentProjection.delete(triggerId)
             }
         }
     }

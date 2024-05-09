@@ -2,14 +2,13 @@ package io.hamal.repository.sqlite.record.topic
 
 import io.hamal.lib.domain.vo.TopicId
 import io.hamal.lib.sqlite.Connection
-import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Topic
 import io.hamal.repository.record.topic.TopicRecord
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 import org.sqlite.SQLiteException
 
-internal object ProjectionUniqueName : ProjectionSqlite<TopicId, TopicRecord, Topic> {
+internal object ProjectionUniqueName : ProjectionSqlite.UniqueImpl<TopicId, TopicRecord, Topic>("unique_name") {
 
     override fun upsert(tx: RecordTransactionSqlite<TopicId, TopicRecord, Topic>, obj: Topic) {
         try {
@@ -44,10 +43,6 @@ internal object ProjectionUniqueName : ProjectionSqlite<TopicId, TopicRecord, To
             );
         """.trimIndent()
         )
-    }
-
-    override fun clear(tx: Transaction) {
-        tx.execute("""DELETE FROM unique_name""")
     }
 
 }

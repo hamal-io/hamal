@@ -5,6 +5,7 @@ function plugin_create(internal)
         exec = {
             id = internal.exec_id,
             trigger_id = internal.trigger_id,
+            token = internal.exec_token,
             hook = internal.inputs.hook,
             endpoint = internal.inputs.endpoint,
             events = internal.inputs.events,

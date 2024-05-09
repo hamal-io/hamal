@@ -4,15 +4,14 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.RecipeId
 import io.hamal.lib.sqlite.Connection
-import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Recipe
 import io.hamal.repository.api.RecipeQueryRepository.RecipeQuery
-import io.hamal.repository.sqlite.hon
 import io.hamal.repository.record.recipe.RecipeRecord
+import io.hamal.repository.sqlite.hon
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
-object ProjectionCurrent : ProjectionSqlite<RecipeId, RecipeRecord, Recipe> {
+object ProjectionCurrent : ProjectionSqlite.CurrentImpl<RecipeId, RecipeRecord, Recipe>() {
 
 
     override fun upsert(tx: RecordTransactionSqlite<RecipeId, RecipeRecord, Recipe>, obj: Recipe) {
@@ -39,10 +38,6 @@ object ProjectionCurrent : ProjectionSqlite<RecipeId, RecipeRecord, Recipe> {
             );
         """.trimIndent()
         )
-    }
-
-    override fun clear(tx: Transaction) {
-        tx.execute("""DELETE FROM current""")
     }
 
     fun find(connection: Connection, recipeId: RecipeId): Recipe? {

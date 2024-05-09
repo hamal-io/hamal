@@ -9,7 +9,7 @@ import io.hamal.repository.api.Topic
 import io.hamal.repository.api.TopicQueryRepository.TopicQuery
 import io.hamal.repository.memory.record.ProjectionMemory
 
-internal class ProjectionCurrent : ProjectionMemory<TopicId, Topic>{
+internal class ProjectionCurrent : ProjectionMemory.BaseImpl<TopicId, Topic>() {
 
     override fun upsert(obj: Topic) {
         val currentTopic = projection[obj.id]
@@ -76,11 +76,5 @@ internal class ProjectionCurrent : ProjectionMemory<TopicId, Topic>{
             }
             .dropWhile { it.id >= query.afterId }.count())
     }
-
-    override fun clear() {
-        projection.clear()
-    }
-
-    private val projection = mutableMapOf<TopicId, Topic>()
 }
 

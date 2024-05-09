@@ -14,6 +14,5 @@ class NamespaceListAdapter(
     private val namespaceQueryRepository: NamespaceQueryRepository,
     private val filterAccess: FilterAccessPort
 ) : NamespaceListPort {
-    override fun invoke(query: NamespaceQueryRepository.NamespaceQuery): List<Namespace> =
-        filterAccess(namespaceQueryRepository.list(query))
+    override fun invoke(query: NamespaceQueryRepository.NamespaceQuery): List<Namespace> = filterAccess(namespaceQueryRepository.list(query))
 }

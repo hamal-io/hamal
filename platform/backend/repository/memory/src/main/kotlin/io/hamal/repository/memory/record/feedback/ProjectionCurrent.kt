@@ -7,11 +7,7 @@ import io.hamal.repository.api.Feedback
 import io.hamal.repository.api.FeedbackQueryRepository.FeedbackQuery
 import io.hamal.repository.memory.record.ProjectionMemory
 
-internal class ProjectionCurrent : ProjectionMemory<FeedbackId, Feedback> {
-
-    override fun upsert(obj: Feedback) {
-        projection[obj.id] = obj
-    }
+internal class ProjectionCurrent : ProjectionMemory.BaseImpl<FeedbackId, Feedback>() {
 
     fun find(feedbackId: FeedbackId): Feedback? = projection[feedbackId]
 
@@ -36,10 +32,4 @@ internal class ProjectionCurrent : ProjectionMemory<FeedbackId, Feedback> {
                 .toLong()
         )
     }
-
-    override fun clear() {
-        projection.clear()
-    }
-
-    private val projection = mutableMapOf<FeedbackId, Feedback>()
 }
