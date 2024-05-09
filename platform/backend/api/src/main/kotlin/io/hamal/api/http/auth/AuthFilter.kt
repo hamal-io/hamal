@@ -58,19 +58,6 @@ class AuthApiFilter(
         // FIXME runner uses runner
         // FIXME x-exec-code as one time password
 
-        val token = request.getHeader("authorization")
-            ?.replace("Bearer ", "")
-            ?.let(::AuthToken)
-            ?: run {
-                log.warn("Unauthorized request on $path")
-
-                response.status = 403
-                response.contentType = "application/json"
-                response.writer.write("""{"message":"That's an error"}""")
-                return
-            }
-
-
         request.getHeader("x-exec-token")?.let(::ExecToken)?.also { execToken ->
             val auth = authRepository.find(execToken) ?: run {
                 log.warn("Unauthorized request on $path")
@@ -85,6 +72,21 @@ class AuthApiFilter(
                 filterChain.doFilter(request, response)
             }
         }
+
+        val token = request.getHeader("authorization")
+            ?.replace("Bearer ", "")
+            ?.let(::AuthToken)
+            ?: run {
+                log.warn("Unauthorized request on $path")
+
+                response.status = 403
+                response.contentType = "application/json"
+                response.writer.write("""{"message":"That's an error"}""")
+                return
+            }
+
+
+
 
         // FIXME token must contain creation timestamp is creation timestamp < 1s ago retry a couple of times - due to its async nature the token might not be in the database yet
         var counter = 0

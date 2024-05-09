@@ -31,6 +31,7 @@ fun Requested.toApiRequested(): ApiRequested = when (this) {
     is TopicAppendEventRequested -> ApiTopicAppendRequested(requestId, requestStatus, id)
     is TopicCreateRequested -> ApiTopicCreateRequested(requestId, requestStatus, id, workspaceId, namespaceId, type)
     is TriggerCreateRequested -> ApiTriggerCreateRequested(requestId, requestStatus, id, workspaceId, namespaceId)
+    is TriggerDeleteRequested -> ApiTriggerDeleteRequested(requestId, requestStatus, id)
     is TriggerStatusRequested -> ApiTriggerStatusRequested(requestId, requestStatus, id, status)
 
     is AuthLogoutRequested,

@@ -8,7 +8,7 @@ import io.hamal.repository.api.NamespaceTree
 import io.hamal.repository.api.NamespaceTreeQueryRepository
 import io.hamal.repository.memory.record.ProjectionMemory
 
-internal class ProjectionCurrent : ProjectionMemory<NamespaceTreeId, NamespaceTree> {
+internal class ProjectionCurrent : ProjectionMemory.BaseImpl<NamespaceTreeId, NamespaceTree>() {
 
     override fun upsert(obj: NamespaceTree) {
         projection.values
@@ -63,6 +63,5 @@ internal class ProjectionCurrent : ProjectionMemory<NamespaceTreeId, NamespaceTr
         namespaceMapping.clear()
     }
 
-    private val projection = mutableMapOf<NamespaceTreeId, NamespaceTree>()
     private val namespaceMapping = mutableMapOf<NamespaceId, NamespaceTreeId>()
 }

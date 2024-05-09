@@ -42,7 +42,8 @@ val internalEventClasses = listOf(
     TopicCreatedEvent::class,
     TriggerCreatedEvent::class,
     TriggerActivatedEvent::class,
-    TriggerDeactivatedEvent::class
+    TriggerDeactivatedEvent::class,
+    TriggerDeletedEvent::class
 )
 
 sealed class InternalEvent {

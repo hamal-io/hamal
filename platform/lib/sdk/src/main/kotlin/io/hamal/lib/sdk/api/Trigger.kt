@@ -38,6 +38,12 @@ data class ApiTriggerCreateRequested(
     val namespaceId: NamespaceId
 ) : ApiRequested()
 
+data class ApiTriggerDeleteRequested(
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: TriggerId
+) : ApiRequested()
+
 
 data class ApiTriggerStatusRequested(
     override val requestId: RequestId,
@@ -286,8 +292,9 @@ sealed class ApiTrigger : ApiObject() {
 
 interface ApiTriggerService {
     fun create(namespaceId: NamespaceId, req: ApiTriggerCreateReq): ApiTriggerCreateRequested
-    fun list(query: TriggerQuery): List<ApiTriggerList.Trigger>
     fun get(triggerId: TriggerId): ApiTrigger
+    fun list(query: TriggerQuery): List<ApiTriggerList.Trigger>
+    fun delete(triggerId: TriggerId): ApiTriggerDeleteRequested
     fun activate(triggerId: TriggerId): ApiTriggerStatusRequested
     fun deactivate(triggerId: TriggerId): ApiTriggerStatusRequested
 
@@ -331,6 +338,13 @@ internal class ApiTriggerServiceImpl(
             .path("triggerId", triggerId)
             .execute()
             .fold(ApiTrigger::class)
+
+    override fun delete(triggerId: TriggerId) =
+        template.delete("/v1/triggers/{triggerId}")
+            .path("triggerId", triggerId)
+            .execute()
+            .fold(ApiTriggerDeleteRequested::class)
+
 
     override fun activate(triggerId: TriggerId): ApiTriggerStatusRequested =
         template.post("/v1/trigger/{triggerId}/activate")

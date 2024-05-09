@@ -68,6 +68,7 @@ sealed class Requested {
             TopicAppendEventRequested::class,
             TopicCreateRequested::class,
             TriggerCreateRequested::class,
+            TriggerDeleteRequested::class,
             TriggerStatusRequested::class,
         ).associateBy { RequestClass(it.simpleName!!) }
     }

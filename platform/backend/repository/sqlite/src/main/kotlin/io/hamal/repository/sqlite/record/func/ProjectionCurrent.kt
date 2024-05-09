@@ -4,7 +4,6 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.FuncId
 import io.hamal.lib.sqlite.Connection
-import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Func
 import io.hamal.repository.api.FuncQueryRepository.FuncQuery
 import io.hamal.repository.record.func.FuncRecord
@@ -12,7 +11,7 @@ import io.hamal.repository.sqlite.hon
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
-internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
+internal object ProjectionCurrent : ProjectionSqlite.CurrentImpl<FuncId, FuncRecord, Func>() {
 
     fun find(connection: Connection, funcId: FuncId): Func? {
         return connection.executeQueryOne(
@@ -113,10 +112,6 @@ internal object ProjectionCurrent : ProjectionSqlite<FuncId, FuncRecord, Func> {
             );
         """.trimIndent()
         )
-    }
-
-    override fun clear(tx: Transaction) {
-        tx.execute("""DELETE FROM current""")
     }
 
     private fun FuncQuery.ids(): String {

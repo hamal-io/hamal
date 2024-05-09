@@ -13,3 +13,7 @@ data class TriggerActivatedEvent(
 data class TriggerDeactivatedEvent(
     val trigger: Trigger
 ) : InternalEvent()
+
+data class TriggerDeletedEvent(
+    val trigger: Trigger
+) : InternalEvent()

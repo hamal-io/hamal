@@ -24,6 +24,7 @@ interface TriggerCmdRepository : CmdRepository {
     fun create(cmd: CreateCronCmd): Trigger.Cron
     fun create(cmd: CreateEndpointCmd): Trigger.Endpoint
     fun set(triggerId: TriggerId, cmd: SetTriggerStatusCmd): Trigger
+    fun delete(cmd: DeleteCmd)
 
     data class CreateFixedRateCmd(
         val id: CmdId,
@@ -91,6 +92,11 @@ interface TriggerCmdRepository : CmdRepository {
     data class SetTriggerStatusCmd(
         val id: CmdId,
         val status: TriggerStatus
+    )
+
+    data class DeleteCmd(
+        val id: CmdId,
+        val triggerId: TriggerId
     )
 }
 

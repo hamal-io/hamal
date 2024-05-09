@@ -333,6 +333,20 @@ class TestSetupConfig {
                 cron = CronPattern("0 0 * * * *")
             )
         )
+
+        triggerRepository.create(
+            TriggerCmdRepository.CreateCronCmd(
+                id = CmdId(id + 4),
+                triggerId = TriggerId(id + 4),
+                name = TriggerName("trigger-to-delete"),
+                funcId = FuncId(id),
+                workspaceId = WorkspaceId(id),
+                namespaceId = NamespaceId(id),
+                inputs = TriggerInputs(),
+                status = TriggerStatus(Active),
+                cron = CronPattern("0 0 * * * *")
+            )
+        )
     }
 
     @Autowired

@@ -4,7 +4,6 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.FeedbackId
 import io.hamal.lib.sqlite.Connection
-import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Feedback
 import io.hamal.repository.api.FeedbackQueryRepository.FeedbackQuery
 import io.hamal.repository.record.feedback.FeedbackRecord
@@ -12,7 +11,8 @@ import io.hamal.repository.sqlite.hon
 import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
-internal object ProjectionCurrent : ProjectionSqlite<FeedbackId, FeedbackRecord, Feedback> {
+internal object ProjectionCurrent : ProjectionSqlite.CurrentImpl<FeedbackId, FeedbackRecord, Feedback>() {
+
     override fun upsert(tx: RecordTransactionSqlite<FeedbackId, FeedbackRecord, Feedback>, obj: Feedback) {
         tx.execute(
             """
@@ -37,10 +37,6 @@ internal object ProjectionCurrent : ProjectionSqlite<FeedbackId, FeedbackRecord,
             );
         """.trimIndent()
         )
-    }
-
-    override fun clear(tx: Transaction) {
-        tx.execute("""DELETE FROM current""")
     }
 
     fun find(connection: Connection, feedbackId: FeedbackId): Feedback? {

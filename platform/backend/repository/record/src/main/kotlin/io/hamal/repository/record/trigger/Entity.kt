@@ -127,6 +127,13 @@ data class TriggerEntity(
                 id = rec.entityId,
                 status = TriggerStatus(Inactive)
             )
+
+            is TriggerRecord.Deleted -> copy(
+                id = rec.entityId,
+                cmdId = rec.cmdId,
+                sequence = rec.sequence(),
+                recordedAt = rec.recordedAt(),
+            )
         }
     }
 

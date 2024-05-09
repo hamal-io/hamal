@@ -12,6 +12,5 @@ fun interface NamespaceTreeListPort {
 class NamespaceTreeListAdapter(
     private val namespaceTreeQueryRepository: NamespaceTreeQueryRepository
 ) : NamespaceTreeListPort {
-    override fun invoke(query: NamespaceTreeQueryRepository.NamespaceTreeQuery): List<NamespaceTree> =
-        namespaceTreeQueryRepository.list(query)
+    override fun invoke(query: NamespaceTreeQueryRepository.NamespaceTreeQuery): List<NamespaceTree> = namespaceTreeQueryRepository.list(query)
 }

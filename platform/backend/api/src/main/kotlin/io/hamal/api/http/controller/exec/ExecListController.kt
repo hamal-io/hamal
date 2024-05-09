@@ -70,21 +70,14 @@ internal class ExecListController(
                 namespaceIds = allNamespaceIds
             )
         ).let { execs ->
-            val namespaces = namespaceList(
-                NamespaceQuery(limit = Limit.all,
-                    namespaceIds = execs.map { it.namespaceId })
-            ).associateBy { it.id }
+            val namespaces = namespaceList(NamespaceQuery(limit = Limit.all, namespaceIds = execs.map { it.namespaceId })).associateBy { it.id }
 
             val funcs = funcList(
-                FuncQuery(limit = Limit.all,
-                    funcIds = execs.mapNotNull { it.correlation?.funcId })
+                FuncQuery(limit = Limit.all, funcIds = execs.mapNotNull { it.correlation?.funcId })
             ).associateBy { it.id }
 
             val triggers = triggerList(
-                TriggerQuery(
-                    limit = Limit.all,
-                    triggerIds = execs.mapNotNull { it.triggerId }
-                )
+                TriggerQuery(limit = Limit.all, triggerIds = execs.mapNotNull { it.triggerId })
             ).associateBy { it.id }
 
             ResponseEntity.ok(ApiExecList(execs = execs.map { exec ->

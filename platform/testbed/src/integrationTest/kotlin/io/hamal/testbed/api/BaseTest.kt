@@ -5,6 +5,7 @@ import io.hamal.core.component.DelayRetryFixedTime
 import io.hamal.core.config.BackendBasePath
 import io.hamal.extension.net.http.ExtensionNetHttpFactory
 import io.hamal.extension.std.memoize.ExtensionStdMemoizeFactory
+import io.hamal.extension.std.sys.ExtensionStdSysFactory
 import io.hamal.extension.std.table.ExtensionStdTableFactory
 import io.hamal.extension.std.`throw`.ExtensionStdThrowFactory
 import io.hamal.lib.common.domain.CmdId.Companion.CmdId
@@ -47,7 +48,7 @@ import org.springframework.web.bind.annotation.RestController
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.time.temporal.ChronoUnit
+import java.time.temporal.ChronoUnit.DAYS
 import java.util.*
 import java.util.stream.Stream
 import kotlin.io.path.name
@@ -96,8 +97,8 @@ class TestRunnerSandboxFactory(
                 PluginHttpFactory()
             )
             .registerExtensions(
-                ExtensionStdTableFactory,
-                ExtensionNetHttpFactory
+                ExtensionNetHttpFactory,
+                ExtensionStdSysFactory,
             )
     }
 }
@@ -146,7 +147,7 @@ class ClearController {
                 authId = AuthId.root,
                 accountId = AccountId.root,
                 token = AuthToken("root-token"),
-                expiresAt = ExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
+                expiresAt = ExpiresAt(TimeUtils.now().plus(1, DAYS))
             )
         ) as Auth.Token).token
 
@@ -256,7 +257,7 @@ class TestConfig {
                     authId = AuthId.root,
                     accountId = AccountId.root,
                     token = AuthToken("root-token"),
-                    expiresAt = ExpiresAt(TimeUtils.now().plus(1, ChronoUnit.DAYS))
+                    expiresAt = ExpiresAt(TimeUtils.now().plus(1, DAYS))
                 )
             ) as Auth.Token).token
 

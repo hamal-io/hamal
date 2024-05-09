@@ -4,7 +4,6 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.common.domain.Count.Companion.Count
 import io.hamal.lib.domain.vo.AccountId
 import io.hamal.lib.sqlite.Connection
-import io.hamal.lib.sqlite.Transaction
 import io.hamal.repository.api.Account
 import io.hamal.repository.api.AccountQueryRepository.AccountQuery
 import io.hamal.repository.record.account.AccountRecord
@@ -13,7 +12,7 @@ import io.hamal.repository.sqlite.record.ProjectionSqlite
 import io.hamal.repository.sqlite.record.RecordTransactionSqlite
 
 
-internal object ProjectionCurrent : ProjectionSqlite<AccountId, AccountRecord, Account> {
+internal object ProjectionCurrent : ProjectionSqlite.CurrentImpl<AccountId, AccountRecord, Account>() {
 
     fun find(connection: Connection, accountId: AccountId): Account? {
         return connection.executeQueryOne(
@@ -96,6 +95,7 @@ internal object ProjectionCurrent : ProjectionSqlite<AccountId, AccountRecord, A
         }
     }
 
+
     override fun setupSchema(connection: Connection) {
         connection.execute(
             """
@@ -108,9 +108,6 @@ internal object ProjectionCurrent : ProjectionSqlite<AccountId, AccountRecord, A
         )
     }
 
-    override fun clear(tx: Transaction) {
-        tx.execute("""DELETE FROM current""")
-    }
 
     private fun AccountQuery.ids(): String {
         return if (accountIds.isEmpty()) {
