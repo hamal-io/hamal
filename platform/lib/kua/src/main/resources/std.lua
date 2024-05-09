@@ -27,3 +27,20 @@ function dump(o)
         return tostring(o)
     end
 end
+
+function handle_error(err, resp)
+    if err ~= nil then
+        return err, nil
+    end
+
+    if resp.content['class'] == 'ApiError' then
+        print('ApiError: ' .. resp.content['message'])
+        err = {
+            type = 'ApiError',
+            message = resp.content['message']
+        }
+        return err, nil
+    end
+
+    return nil, resp
+end

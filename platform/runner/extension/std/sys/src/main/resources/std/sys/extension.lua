@@ -9,9 +9,16 @@ function extension_create()
         local http = require('net.http').create({ base_url = cfg.base_url or 'http://localhost:8008' })
 
         local instance = {
+            await_completed = { },
             exec = { },
+            func = { },
             collection = {}
         }
+
+        function instance.await_completed(req)
+            --req.requestStatus Completed | Failed else | -> sleep
+            return true
+        end
 
         function instance.exec.list(query)
             query = query or {}
@@ -67,9 +74,33 @@ function extension_create()
             return err, resp.content
         end
 
+        function instance.func.create(req)
+            req = req or {}
+            namespace_id = req.namespace_id or exec_namespace_id
+            local err, resp = handle_error(http.post({
+                url = '/v1/namespaces/' .. namespace_id .. '/funcs',
+                headers = { ['x-exec-token'] = context.exec.token },
+                body = {
+                    name = req.name or nil,
+                    inputs = req.inputs or {},
+                    code = req.code or "",
+                    codeType = req.code_type or "Lua54" --FIXME-341 register snakecase somewhere
+                }
+            }))
+            return err, resp.content
+        end
+
+        function instance.func.get(func_id)
+            local err, resp = handle_error(http.get({
+                url = '/v1/funcs/' .. func_id,
+                headers = { ['x-exec-token'] = context.exec.token }
+            }))
+
+            return err, resp.content
+        end
+
         return instance
     end
 
     return export
 end
-
