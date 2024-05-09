@@ -1,10 +1,10 @@
 package io.hamal.plugin.std.sys
 
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 import io.hamal.lib.sdk.ApiSdkImpl
-import io.hamal.lib.common.value.ValueString
 import io.hamal.plugin.std.sys.adhoc.AdhocFunction
 import io.hamal.plugin.std.sys.code.CodeGetFunction
 import io.hamal.plugin.std.sys.exec.ExecGetFunction
@@ -76,6 +76,7 @@ class PluginSysFactory(
                 ValueString("topic_entry_list") to TopicEntryListFunction(sdk),
 
                 ValueString("trigger_create") to TriggerCreateFunction(sdk),
+                ValueString("trigger_delete") to TriggerDeleteFunction(sdk),
                 ValueString("trigger_get") to TriggerGetFunction(sdk),
                 ValueString("trigger_list") to TriggerListFunction(sdk),
                 ValueString("trigger_activate") to TriggerActivateFunction(sdk),

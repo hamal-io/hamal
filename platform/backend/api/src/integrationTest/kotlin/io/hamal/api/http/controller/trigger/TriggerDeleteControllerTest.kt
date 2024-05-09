@@ -63,4 +63,5 @@ internal class TriggerDeleteControllerTest : TriggerBaseControllerTest() {
         val error = deleteTriggerResponse.error(ApiError::class)
         assertThat(error.message, equalTo("Trigger not found"))
     }
+
 }
