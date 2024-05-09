@@ -1,5 +1,8 @@
-sys = require_plugin('std.sys')
+sys = require('std.sys').create({
+    base_url = context.env.api_host
+})
+
 --
-err, func_one = sys.funcs.get('123123123')
+err, func_one = sys.func.get('123123123')
 assert(err.message == 'Func not found')
 assert(func_one == nil)

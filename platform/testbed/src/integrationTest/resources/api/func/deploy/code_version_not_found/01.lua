@@ -21,6 +21,6 @@ err, res = sys.func.deploy({
     id = func_req.id,
     version = 24
 })
-print("res", dump(res))
+
 assert(err.message == 'Code not found')
 assert(res == nil)

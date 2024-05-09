@@ -53,7 +53,7 @@ function extension_create()
 
         function instance.func.create(req)
             req = req or {}
-            namespace_id = req.namespace_id or exec_namespace_id    --FIXME
+            namespace_id = req.namespace_id or exec_namespace_id
             local err, resp = http.post({
                 url = '/v1/namespaces/' .. namespace_id .. '/funcs',
                 headers = { ['x-exec-token'] = context.exec.token },
@@ -61,7 +61,7 @@ function extension_create()
                     name = req.name or nil,
                     inputs = req.inputs or {},
                     code = req.code or "",
-                    codeType = req.code_type or "Lua54"
+                    codeType = req.code_type or "Lua54" --FIXME-341 register snakecase somewhere
                 }
             })
 
@@ -146,13 +146,13 @@ function extension_create()
             end)
         end
 
-        function instance.func.invoke(func_id, req)
+        function instance.func.invoke(req)
             req = req or {}
             local err, resp = http.post({
-                url = '/v1/funcs/' .. func_id .. '/invoke',
+                url = '/v1/funcs/' .. req.id .. '/invoke',
                 headers = { ['x-exec-token'] = context.exec.token },
                 body = {
-                    correlationId = req.correlation_id or nil,
+                    correlation_id = req.correlation_id or "__default__", --FIXME-341 hardcode somewhere else?
                     inputs = req.inputs or {},
                     version = req.version or nil
                 }
