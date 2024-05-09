@@ -1,6 +1,6 @@
 import React, {FC, useContext} from "react";
 import styles from "@/components/nodes/port.module.css";
-import {Position} from "@/components/nodes/types.ts";
+import {PortId, PortInput, PortOutput, Position} from "@/components/nodes/types.ts";
 import {ContextCanvasState} from "@/components/nodes/context.ts";
 
 type PortsProps = {}
@@ -10,17 +10,19 @@ export const Ports: FC<PortsProps> = ({}) => {
             {/*<div className={styles.inputs} data-component="ports-inputs">*/}
             {/*    <PortInput/>*/}
             {/*</div>*/}
-            <div className={styles.outputs} data-component="ports-outputs">
-                <PortOutputWidget/>
-            </div>
+            {/*<div className={styles.outputs} data-component="ports-outputs">*/}
+            {/*    <PortOutputWidget/>*/}
+            {/*</div>*/}
         </div>
     );
 }
 
 
-type PortInputWidgetProps = {}
+type PortInputWidgetProps = {
+    port: PortInput;
+}
 
-export const PortInputWidget: FC<PortInputWidgetProps> = ({}) => {
+export const PortInputWidget: FC<PortInputWidgetProps> = ({port}) => {
     return (
         <div
             data-component="port-input"
@@ -32,6 +34,7 @@ export const PortInputWidget: FC<PortInputWidgetProps> = ({}) => {
             }}
         >
             <PortWidget
+                portId={port.id}
                 isInput={true}
                 // type={type}
                 // color={color}
@@ -68,40 +71,49 @@ export const PortInputWidget: FC<PortInputWidgetProps> = ({}) => {
     )
 }
 
-type PortOutputWidgetProps = {}
+type PortOutputWidgetProps = {
+    port: PortOutput;
+}
 
-export const PortOutputWidget: FC<PortOutputWidgetProps> = ({}) => {
+export const PortOutputWidget: FC<PortOutputWidgetProps> = ({port}) => {
     return (
-        <div
-            data-component="port-output"
-            className={styles.bubble}
-            data-controlless={true}
-            onDragStart={e => {
-                e.preventDefault();
-                e.stopPropagation();
-            }}
-        >
-            <label data-component="port-label" className={styles.portLabel}>
-                {/*{label || defaultLabel}*/}
-            </label>
-            <PortWidget
-                isInput={false}
-                // type={type}
-                // name={name}
-                // color={color}
-                // nodeId={nodeId}
-                // triggerRecalculation={triggerRecalculation}
-            />
+        <div className={styles.wrapper} data-component="ports">
+            <div className={styles.outputs} data-component="ports-outputs">
+                <div
+                    data-component="port-output"
+                    className={styles.bubble}
+                    data-controlless={true}
+                    onDragStart={e => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }}
+                >
+                    <label data-component="port-label" className={styles.portLabel}>
+                        {/*{label || defaultLabel}*/}
+                    </label>
+                    <PortWidget
+                        portId={port.id}
+                        isInput={false}
+                        // type={type}
+                        // name={name}
+                        // color={color}
+                        // nodeId={nodeId}
+                        // triggerRecalculation={triggerRecalculation}
+                    />
+                </div>
+            </div>
         </div>
+
     );
 }
 
 type PortWidgetProps = {
+    portId: PortId;
     isInput: Boolean
 }
 
 
-export const PortWidget: FC<PortWidgetProps> = ({isInput}) => {
+export const PortWidget: FC<PortWidgetProps> = ({isInput, portId}) => {
     // const nodesDispatch = React.useContext(NodeDispatchContext);
     // const stageState = React.useContext(StageContext) || {
     //     scale: 1,
@@ -368,6 +380,7 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput}) => {
                 // data-port-type={type}
                 data-port-type={isInput ? "input" : "output"}
                 // data-node-id={nodeId}
+                data-port-id={portId}
                 data-component="port-handle"
                 onDragStart={e => {
                     e.preventDefault();

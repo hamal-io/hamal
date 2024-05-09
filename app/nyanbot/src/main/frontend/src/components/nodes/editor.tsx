@@ -36,26 +36,26 @@ export const Editor: FC<EditorProps> = ({nodes, connections, controls, onSave}) 
             connections: state.connectionState.connections,
             controls: state.controlState.controls,
             nodeControlIds: state.controlState.nodeControlIds,
-            dispatch
+            dispatch: dispatch
         }}>
             <div style={{background: "whitesmoke"}}>
-                <div className="flex flex-row justify-end p-2">
-                    <ButtonPrimary onClick={() => {
-                        onSave({
-                            connections: Object.entries(state.connectionState.connections).map(([_, value]) => value),
-                            controls: Object.entries(state.controlState.controls).map(([_, value]) => value),
-                            nodes: Object.entries(state.nodeState.nodes).map(([_, value]) => value)
-                        })
-                    }}>
-                        Save
-                    </ButtonPrimary>
+                {/*<div className="flex flex-row justify-end p-2">*/}
+                {/*    <ButtonPrimary onClick={() => {*/}
+                {/*        onSave({*/}
+                {/*            connections: Object.entries(state.connectionState.connections).map(([_, value]) => value),*/}
+                {/*            controls: Object.entries(state.controlState.controls).map(([_, value]) => value),*/}
+                {/*            nodes: Object.entries(state.nodeState.nodes).map(([_, value]) => value)*/}
+                {/*        })*/}
+                {/*    }}>*/}
+                {/*        Save*/}
+                {/*    </ButtonPrimary>*/}
 
-                </div>
+                {/*</div>*/}
                 <div className="h-screen">
                     <Canvas
                         nodes={nodes}
                         connections={connections}
-                        readonly
+                        readonly={false}
                     />
                 </div>
             </div>

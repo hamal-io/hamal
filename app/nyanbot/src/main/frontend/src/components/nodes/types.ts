@@ -126,12 +126,12 @@ export type PortId = string
 
 export type PortInput = {
     id: PortId;
-    inputType: string; // FIXME type
+    // inputType: string; // FIXME type
 }
 
 export type PortOutput = {
     id: PortId;
-    type: string; // FIXME type
+    // type: string; // FIXME type
 }
 
 export type Position = {

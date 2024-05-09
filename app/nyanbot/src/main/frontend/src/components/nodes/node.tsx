@@ -2,7 +2,7 @@ import React, {FC} from "react";
 import {Node, Position} from './types.ts';
 import {Draggable} from './draggable.tsx';
 import styles from "@/components/nodes/node.module.css";
-import {Ports} from "@/components/nodes/port.tsx";
+import {PortOutputWidget} from "@/components/nodes/port.tsx";
 import {ControlListWidget} from "@/components/nodes/control.tsx";
 
 type NodeWidgetProps = {
@@ -100,44 +100,22 @@ export const NodeWidget: FC<NodeWidgetProps> = ({node}) => {
 
             <ControlListWidget node={node}/>
 
-            <Ports
-                // nodeId={id}
-                // inputs={inputs}
-                // outputs={outputs}
-                // connections={connections}
-                // updateNodeConnections={updateNodeConnections}
-                // inputData={inputData}
-            />
+            {node.outputs.length === 1 && (
+                <PortOutputWidget
+                    port={node.outputs[0]}
+                    // nodeId={id}
+                    // inputs={inputs}
+                    // outputs={outputs}
+                    // connections={connections}
+                    // updateNodeConnections={updateNodeConnections}
+                    // inputData={inputData}
+                />)
+            }
 
 
             {/*<Control type={"number"}/>*/}
 
 
-            {/*{type ==='INIT' && initNode()}*/}
-            {/*{type ==='FILTER' && filterNode()}*/}
-            {/*{type ==='TELEGRAM_SEND_MESSAGE' && telegramSendNode()}*/}
-
         </Draggable>
     )
 }
-
-// const initNode = () => {
-//     return (
-//         <span style={{color: "black"}}>On new LP</span>
-//     )
-// }
-//
-// const filterNode = () => {
-//     return (
-//         <span style={{color: "black"}}>Filter</span>
-//     )
-// }
-//
-//
-// const telegramSendNode = () => {
-//     return (
-//         <div>
-//             <span style={{color: "black"}}>Send telegram message</span>
-//         </div>
-//     )
-// }

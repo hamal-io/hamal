@@ -47,10 +47,10 @@ type ControlInvokeWidgetProps = {
     control: ControlInvoke;
 }
 
-export const ControlInvokeWidget: FC<ControlInvokeWidgetProps> = ({}) => {
+export const ControlInvokeWidget: FC<ControlInvokeWidgetProps> = ({control}) => {
     return (
         <div className="flex flex-row">
-            <PortInputWidget/>
+            <PortInputWidget port={control.port}/>
             <span> Invoke</span>
         </div>
     );
@@ -79,7 +79,7 @@ export const ControlTextWidget: FC<ControlTextWidgetProps> = ({control}) => {
 
     return (
         <div className="flex flex-row">
-            {control.port && <PortInputWidget/>}
+            {control.port && <PortInputWidget port={control.port}/>}
             <TextArea value={control.value} placeholder={control.placeholder} onChange={(value) =>
                 dispatch({type: 'CONTROL_TEXT_AREA_UPDATED', id: control.id, value})
             }/>
@@ -130,7 +130,8 @@ type ControlInputWidgetProps = {}
 export const ControlInputWidget: FC<ControlInputWidgetProps> = ({}) => {
     return (
         <div className="flex flex-row">
-            <PortInputWidget/>
+            FIXME
+            {/*<PortInputWidget/>*/}
         </div>
     )
 }

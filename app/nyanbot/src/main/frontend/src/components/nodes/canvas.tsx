@@ -10,10 +10,11 @@ type CanvasProps = {
     nodes: Node[];
     connections: Connection[];
     readonly: boolean;
-    // children: React.ReactNode;
 }
 
-export const Canvas: FC<CanvasProps> = ({nodes, connections, readonly}) => {
+export const Canvas: FC<CanvasProps> = ({
+                                            nodes, connections, readonly
+                                        }) => {
 
     const [canvasState, setCanvasState] = useState<CanvasState>({
         scale: 1,
