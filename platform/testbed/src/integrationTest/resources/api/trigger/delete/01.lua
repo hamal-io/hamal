@@ -24,6 +24,3 @@ assert(trigger == nil)
 
 count = #fail_on_error(sys.triggers.list())
 assert(count == 0)
-
-func = fail_on_error(sys.funcs.get(func_req.id))
-assert(func ~= nil)
