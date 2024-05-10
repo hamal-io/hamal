@@ -1,19 +1,18 @@
 import React, {useContext} from "react";
 import styles from "./connection.module.css";
-import {Connection, Position} from "@/components/nodes/types.ts";
+import {Position} from "@/components/nodes/types.ts";
 import {getPortRect} from "@/components/nodes/calculate.ts";
 import {ContextEditorState} from "@/components/nodes/editor.tsx";
 
-type ConnectionListWidgetProps = {
-    connections: Connection[];
-}
+type ConnectionListWidgetProps = {}
 
-export const ConnectionListWidget = ({connections}: ConnectionListWidgetProps) => {
-    const {canvas} = useContext(ContextEditorState).state
+export const ConnectionListWidget = ({}: ConnectionListWidgetProps) => {
+    const {connections, canvas} = useContext(ContextEditorState).state
 
     const byScale = (value: number) => (1 / (canvas.scale)) * value;
     const {x, y} = canvas.position;
     const {width, height} = canvas.size;
+
     return (
         <svg
             id={"connection-canvas"}
@@ -39,7 +38,8 @@ export const ConnectionListWidget = ({connections}: ConnectionListWidgetProps) =
             />
 
 
-            {connections.map((connection: Connection) => {
+            {Object.keys(connections).map((connectionId) => {
+                    const connection = connections[connectionId];
                     // console.log("Connection", connection);
 
                     const outputPortRect = getPortRect(connection.outputPort.id);

@@ -15,7 +15,6 @@ type CanvasProps = {
 export const Canvas: FC<CanvasProps> = ({
                                             nodes, connections, readonly
                                         }) => {
-
     const {state, dispatch} = useContext(ContextEditorState);
 
     const scale = 1;
@@ -39,36 +38,12 @@ export const Canvas: FC<CanvasProps> = ({
                 }
             })
 
-            // setCanvasState({
-            //     ...canvasState,
-            //     position: {x, y},
-            //     size: {width, height},
-            //     rect: {
-            //         left,
-            //         right,
-            //         top,
-            //         bottom,
-            //     }
-            // })
-
-
         }
     }, []);
 
     useEffect(() => {
         if (wrapper.current) {
             const {x, y, left, right, top, bottom, width, height} = wrapper.current.getBoundingClientRect();
-            // setCanvasState({
-            //     ...canvasState,
-            //     position: {x, y},
-            //     size: {width, height},
-            //     rect: {
-            //         left,
-            //         right,
-            //         top,
-            //         bottom,
-            //     }
-            // })
 
             dispatch({
                 type: "CANVAS_SET",
@@ -130,9 +105,9 @@ export const Canvas: FC<CanvasProps> = ({
                 </div>
             </div>
 
-            <ConnectionListWidget connections={connections}/>
+            <ConnectionListWidget/>
+
         </Draggable>
-        // </ContextCanvasState.Provider>
     )
 
 }

@@ -1,4 +1,4 @@
-import {Connection, ConnectionId, Control, ControlId, isControlTextArea, Node, NodeId, NodeType, Position, Rect, Size, Translate} from "@/components/nodes/types.ts";
+import {Connection, ConnectionId, Control, ControlId, isControlTextArea, Node, NodeId, NodeType, PortId, Position, Rect, Size, Translate} from "@/components/nodes/types.ts";
 
 export type CanvasState = {
     scale: number;
@@ -13,12 +13,19 @@ export type EditorState = {
     connections: {
         [id: ConnectionId]: {
             id: ConnectionId;
+            outputPort: {
+                id: PortId
+            },
+            inputPort: {
+                id: PortId
+            }
         }
     };
     nodes: {
         [id: NodeId]: {
             id: NodeId;
-            type: NodeType
+            type: NodeType,
+            position: Position;
         }
     };
     controls: {
@@ -56,8 +63,9 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
             }
             return {...state}
         case "NODE_POSITION_UPDATED":
-            console.log("reduced")
-            return state;
+            const copy = structuredClone(state)
+            copy.nodes[action.id].position = action.position;
+            return copy;
         default:
             return state;
     }

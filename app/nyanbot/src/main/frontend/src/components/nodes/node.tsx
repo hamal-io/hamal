@@ -28,6 +28,8 @@ export const NodeWidget: FC<NodeWidgetProps> = ({node}) => {
     const handleDrag = ({x, y}: Position) => {
         if (nodeWrapper.current) {
             nodeWrapper.current.style.transform = `translate(${x}px,${y}px)`;
+
+            dispatch({type: "NODE_POSITION_UPDATED", id: node.id, position: {x, y}});
         }
     };
 
