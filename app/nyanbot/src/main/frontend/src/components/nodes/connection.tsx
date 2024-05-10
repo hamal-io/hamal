@@ -31,7 +31,7 @@ export const ConnectionListWidget = ({}: ConnectionListWidgetProps) => {
                 data-component="connection-path"
                 stroke="rgb(185, 186, 189)"
                 // fill="none"
-                strokeWidth={3}
+                strokeWidth={0}
                 strokeLinecap="round"
                 // d={curve}
                 d={`M 0,0 L 0,0`}

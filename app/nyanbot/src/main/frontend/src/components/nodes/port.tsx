@@ -120,7 +120,7 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput, portId}) => {
     //     translate: { x: 0, y: 0 }
     // };
 
-    const {canvas} = useContext(ContextEditorState).state
+    const {state: {canvas}, dispatch} = useContext(ContextEditorState)
 
     // const stageState = {
     //     scale: 1,
@@ -138,8 +138,6 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput, portId}) => {
     // const startPosition = React.useRef(dragStartPosition);
     const port = React.useRef<HTMLDivElement>(null);
 
-    const line = React.useRef<SVGPathElement>(null);
-    const lineInToPort = React.useRef<HTMLDivElement | null>(null);
 
     const byScale = (value: number) => (1 / (canvas.scale)) * value;
 
@@ -225,6 +223,17 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput, portId}) => {
     // };
 
     const handleDragEnd = e => {
+        console.log("drag end", e.target)
+        console.log("drag end", e.target.dataset.portType)
+
+        if (e.target.dataset.portType === 'input') {
+            const outputPortId = portId;
+            const inputPortId = e.target.dataset.portId
+
+            dispatch({type: "CONNECTION_ADDED", outputPortId, inputPortId})
+        }
+
+
         // const droppedOnPort = !!e.target.dataset.portName;
         //
         // if (isInput) {
@@ -288,7 +297,8 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput, portId}) => {
         //     }
         // }
 
-        // document.getElementById("TRANSIENT_CONNECTION").setAttribute("d",`M 0,0 L 0, 0`);
+        document.getElementById("TRANSIENT_CONNECTION").setAttribute("d", `M 0,0 L 0, 0`);
+        document.getElementById("TRANSIENT_CONNECTION").setAttribute("stroke-width", `0`);
 
         setIsDragging(false);
         document.removeEventListener("mouseup", handleDragEnd);
@@ -366,6 +376,8 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput, portId}) => {
             setIsDragging(true);
             document.addEventListener("mouseup", handleDragEnd);
             document.addEventListener("mousemove", handleDrag);
+            document.getElementById("TRANSIENT_CONNECTION").setAttribute("d", `M ${position.x},${position.y} L ${position.x}, ${position.y}`);
+            document.getElementById("TRANSIENT_CONNECTION").setAttribute("stroke-width", `3`);
         }
     };
 

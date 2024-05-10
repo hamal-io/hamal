@@ -39,10 +39,13 @@ export type EditorState = {
 
 export type EditorAction =
     | { type: "CANVAS_SET"; position: Position; size: Size; rect: Rect }
+    | { type: "CONNECTION_ADDED"; outputPortId: PortId, inputPortId: PortId }
     | { type: "CONTROL_TEXT_AREA_UPDATED"; id: ControlId, value: string }
     | { type: "NODE_POSITION_UPDATED"; id: NodeId, position: Position }
 
 export const editorReducer = (state: EditorState, action: EditorAction): EditorState => {
+    const nextConnectionId = () => (Object.keys(state.connections).length + 1).toString()
+
     switch (action.type) {
         case "CANVAS_SET":
             return {
@@ -53,7 +56,21 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
                     rect: action.rect,
                 }
             }
-        case 'CONTROL_TEXT_AREA_UPDATED':
+        case "CONNECTION_ADDED": {
+            const connectionId = nextConnectionId()
+            const copy = structuredClone(state)
+            copy.connections[connectionId] = {
+                id: connectionId,
+                outputPort: {
+                    id: action.outputPortId
+                },
+                inputPort: {
+                    id: action.inputPortId
+                }
+            }
+            return copy;
+        }
+        case 'CONTROL_TEXT_AREA_UPDATED': {
             // FIXME
             const control = state.controls[action.id]
             if (isControlTextArea(control)) {
@@ -62,10 +79,12 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
                 throw Error('Not ControlText')
             }
             return {...state}
-        case "NODE_POSITION_UPDATED":
+        }
+        case "NODE_POSITION_UPDATED": {
             const copy = structuredClone(state)
             copy.nodes[action.id].position = action.position;
             return copy;
+        }
         default:
             return state;
     }
