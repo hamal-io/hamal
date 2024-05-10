@@ -4,7 +4,7 @@ plugins {
 
 
 tasks.jar {
-    archiveFileName.set("extension-debug.jar")
+    archiveFileName.set("extension-std-debug.jar")
 }
 
 distributions {
@@ -37,20 +37,7 @@ testing {
             if (this is JvmTestSuite) {
                 dependencies {
                     implementation(project(":platform:runner:test"))
-                    implementation(project(":platform:runner:extension:std:decimal"))
-                    implementation(project(":platform:runner:extension:net:http"))
-                    implementation(project(":platform:runner:plugin:net:http"))
-
-                    implementation(external.junit)
-                    implementation(external.hamcrest)
-                    implementation(external.spring.web) {
-                        exclude("com.fasterxml.jackson.core", "jackson-core")
-                        exclude("org.springframework.boot", "spring-boot-starter-json")
-                        exclude("com.fasterxml.jackson.core", "jackson-annotations")
-                    }
-                    implementation(external.spring.test) {
-                        exclude("org.assertj", "*")
-                    }
+                    implementation(project(":platform:runner:plugin:std:debug"))
                 }
             }
         }

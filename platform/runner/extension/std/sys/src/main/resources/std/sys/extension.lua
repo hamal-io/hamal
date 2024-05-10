@@ -7,11 +7,28 @@ function extension_create()
         exec_namespace_id = context.exec.namespace_id
 
         local http = require('net.http').create({ base_url = cfg.base_url or 'http://localhost:8008' })
+        local debug = require('std.debug').create()
 
         local instance = {
+            await_completed = {},
             exec = { },
             collection = {}
         }
+
+        function instance.await_completed(req)
+            local count = 0
+            while req.requestStatus ~= 'Completed' do
+                if req.requestStatus == 'Failed' then
+                    error("Request failed!")
+                end
+                if count >= 5 then
+                    error("Request Timeout")
+                end
+                debug.sleep(1000)
+                count = count + 1
+            end
+            return true
+        end
 
         function instance.exec.list(query)
             query = query or {}
