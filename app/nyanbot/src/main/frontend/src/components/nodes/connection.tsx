@@ -2,18 +2,18 @@ import React, {useContext} from "react";
 import styles from "./connection.module.css";
 import {Connection, Position} from "@/components/nodes/types.ts";
 import {getPortRect} from "@/components/nodes/calculate.ts";
-import {ContextCanvasState} from "@/components/nodes/context.ts";
+import {ContextEditorState} from "@/components/nodes/editor.tsx";
 
 type ConnectionListWidgetProps = {
     connections: Connection[];
 }
 
 export const ConnectionListWidget = ({connections}: ConnectionListWidgetProps) => {
-    const canvasState = useContext(ContextCanvasState)
+    const {canvas} = useContext(ContextEditorState).state
 
-    const byScale = (value: number) => (1 / (canvasState.scale)) * value;
-    const {x, y} = canvasState.position;
-    const {width, height} = canvasState.size;
+    const byScale = (value: number) => (1 / (canvas.scale)) * value;
+    const {x, y} = canvas.position;
+    const {width, height} = canvas.size;
     return (
         <svg
             id={"connection-canvas"}
@@ -47,14 +47,14 @@ export const ConnectionListWidget = ({connections}: ConnectionListWidgetProps) =
 
 
                     const from = {
-                        x: byScale((outputPortRect.x + outputPortRect.width / 2) - x - width / 2) + byScale(canvasState.translate.x),
-                        y: byScale((outputPortRect.y + outputPortRect.height / 2) - y - height / 2) + byScale(canvasState.translate.y)
+                        x: byScale((outputPortRect.x + outputPortRect.width / 2) - x - width / 2) + byScale(canvas.translate.x),
+                        y: byScale((outputPortRect.y + outputPortRect.height / 2) - y - height / 2) + byScale(canvas.translate.y)
                     };
 
 
                     const to = {
-                        x: byScale((inputPortRect.x + inputPortRect.width / 2) - x - width / 2) + byScale(canvasState.translate.x),
-                        y: byScale((inputPortRect.y + inputPortRect.height / 2) - y - height / 2) + byScale(canvasState.translate.y)
+                        x: byScale((inputPortRect.x + inputPortRect.width / 2) - x - width / 2) + byScale(canvas.translate.x),
+                        y: byScale((inputPortRect.y + inputPortRect.height / 2) - y - height / 2) + byScale(canvas.translate.y)
                     };
 
                     const calculatePath = (from: Position, to: Position): string => {

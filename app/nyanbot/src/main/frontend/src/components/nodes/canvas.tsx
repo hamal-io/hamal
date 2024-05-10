@@ -1,10 +1,10 @@
-import React, {FC, useCallback, useEffect, useRef, useState} from "react";
+import React, {FC, useCallback, useContext, useEffect, useRef} from "react";
 import {Draggable} from './draggable.tsx';
 import styles from './canvas.module.css'
-import {ContextCanvasState} from "@/components/nodes/context.ts";
-import {CanvasState, Connection, Node} from "./types.ts";
 import {ConnectionListWidget} from "@/components/nodes/connection.tsx";
 import {NodeWidget} from "@/components/nodes/node.tsx";
+import {Connection, Node} from "@/components/nodes/types.ts";
+import {ContextEditorState} from "@/components/nodes/editor.tsx";
 
 type CanvasProps = {
     nodes: Node[];
@@ -16,19 +16,7 @@ export const Canvas: FC<CanvasProps> = ({
                                             nodes, connections, readonly
                                         }) => {
 
-    const [canvasState, setCanvasState] = useState<CanvasState>({
-        scale: 1,
-        translate: {x: 0, y: 0},
-        position: {x: 0, y: 0},
-        size: {width: 0, height: 0},
-        rect: {
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0,
-        },
-        readonly
-    })
+    const {state, dispatch} = useContext(ContextEditorState);
 
     const scale = 1;
 
@@ -39,8 +27,8 @@ export const Canvas: FC<CanvasProps> = ({
         if (wrapper.current) {
             const {x, y, left, right, top, bottom, width, height} = wrapper.current.getBoundingClientRect();
 
-            setCanvasState({
-                ...canvasState,
+            dispatch({
+                type: "CANVAS_SET",
                 position: {x, y},
                 size: {width, height},
                 rect: {
@@ -50,14 +38,40 @@ export const Canvas: FC<CanvasProps> = ({
                     bottom,
                 }
             })
+
+            // setCanvasState({
+            //     ...canvasState,
+            //     position: {x, y},
+            //     size: {width, height},
+            //     rect: {
+            //         left,
+            //         right,
+            //         top,
+            //         bottom,
+            //     }
+            // })
+
+
         }
     }, []);
 
     useEffect(() => {
         if (wrapper.current) {
             const {x, y, left, right, top, bottom, width, height} = wrapper.current.getBoundingClientRect();
-            setCanvasState({
-                ...canvasState,
+            // setCanvasState({
+            //     ...canvasState,
+            //     position: {x, y},
+            //     size: {width, height},
+            //     rect: {
+            //         left,
+            //         right,
+            //         top,
+            //         bottom,
+            //     }
+            // })
+
+            dispatch({
+                type: "CANVAS_SET",
                 position: {x, y},
                 size: {width, height},
                 rect: {
@@ -77,48 +91,48 @@ export const Canvas: FC<CanvasProps> = ({
 
 
     return (
-        <ContextCanvasState.Provider value={canvasState}>
-            <Draggable
-                id="CANVAS_1"
-                data-component="canvas"
-                className={styles.wrapper}
-                innerRef={wrapper}
-                // onContextMenu={handleContextMenu}
-                // onMouseEnter={handleMouseEnter}
-                // onDragDelayStart={handleDragDelayStart}
-                // onDragStart={handleDragStart}
-                // onDrag={handleMouseDrag}
-                // onDragEnd={handleDragEnd}
-                // onKeyDown={handleKeyDown}
-                // tabIndex={-1}
-                // style={{ cursor: "grab" }}
-                // disabled={disablePan || (spaceToPan && !spaceIsPressed)}
+        // <ContextCanvasState.Provider value={canvasState}>
+        <Draggable
+            id="CANVAS_1"
+            data-component="canvas"
+            className={styles.wrapper}
+            innerRef={wrapper}
+            // onContextMenu={handleContextMenu}
+            // onMouseEnter={handleMouseEnter}
+            // onDragDelayStart={handleDragDelayStart}
+            // onDragStart={handleDragStart}
+            // onDrag={handleMouseDrag}
+            // onDragEnd={handleDragEnd}
+            // onKeyDown={handleKeyDown}
+            // tabIndex={-1}
+            // style={{ cursor: "grab" }}
+            // disabled={disablePan || (spaceToPan && !spaceIsPressed)}
+        >
+
+            <div
+                ref={translateWrapper}
+                className={styles.transformWrapper}
+                // style={{transform: `translate(${canvasState.translate.x}px, ${canvasState.translate.y}px)`}}
             >
-
                 <div
-                    ref={translateWrapper}
-                    className={styles.transformWrapper}
-                    // style={{transform: `translate(${canvasState.translate.x}px, ${canvasState.translate.y}px)`}}
+                    className={styles.scaleWrapper}
+                    style={{transform: `scale(${scale})`}}
                 >
-                    <div
-                        className={styles.scaleWrapper}
-                        style={{transform: `scale(${scale})`}}
-                    >
 
-                        {nodes.map(node => (
-                            <NodeWidget
-                                key={node.id}
-                                node={node}
-                                onDragStart={() => console.log("start dragging")}
-                            />
-                        ))}
+                    {nodes.map(node => (
+                        <NodeWidget
+                            key={node.id}
+                            node={node}
+                            onDragStart={() => console.log("start dragging")}
+                        />
+                    ))}
 
-                    </div>
                 </div>
+            </div>
 
-                <ConnectionListWidget connections={connections}/>
-            </Draggable>
-        </ContextCanvasState.Provider>
+            <ConnectionListWidget connections={connections}/>
+        </Draggable>
+        // </ContextCanvasState.Provider>
     )
 
 }

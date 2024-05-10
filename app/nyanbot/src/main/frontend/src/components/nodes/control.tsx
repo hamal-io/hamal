@@ -10,30 +10,30 @@ type ControlsProps = {
 }
 
 export const ControlListWidget: FC<ControlsProps> = ({node}) => {
-    const {controls, nodeControlIds} = useContext(ContextEditorState);
+    const {controls, nodeControlIds} = useContext(ContextEditorState).state;
     return (
-        <div className={styles.wrapper} data-component="ports">
+        <div key={node.id} className={styles.wrapper} data-component="ports">
             {
                 nodeControlIds[node.id].map(controlId => controls[controlId]).map((control) => {
 
                     if (isControlCondition(control)) {
-                        return <ControlConditionWidget/>
+                        return <ControlConditionWidget key={control.id}/>
                     }
 
                     if (isControlInput(control)) {
-                        return <ControlInputWidget/>
+                        return <ControlInputWidget key={control.id}/>
                     }
 
                     if (isControlInit(control)) {
-                        return <ControlInitWidget description={control.description}/>
+                        return <ControlInitWidget key={control.id} description={control.description}/>
                     }
 
                     if (isControlInvoke(control)) {
-                        return <ControlInvokeWidget control={control}/>
+                        return <ControlInvokeWidget key={control.id} control={control}/>
                     }
 
                     if (isControlTextArea(control)) {
-                        return <ControlTextWidget control={control}/>
+                        return <ControlTextWidget key={control.id} control={control}/>
                     }
 
                     throw `Not supported yet`

@@ -1,16 +1,16 @@
-export type CanvasState = {
-    scale: number;
-    translate: Translate;
-    position: Position;
-    size: Size;
-    rect: {
-        left: number;
-        right: number;
-        top: number;
-        bottom: number;
-    };
-    readonly: boolean;
-}
+// export type CanvasState = {
+//     scale: number;
+//     translate: Translate;
+//     position: Position;
+//     size: Size;
+//     rect: {
+//         left: number;
+//         right: number;
+//         top: number;
+//         bottom: number;
+//     };
+//     readonly: boolean;
+// }
 
 export type ConnectionId = string
 
@@ -73,7 +73,7 @@ export type ControlTextArea = ControlBase & {
     placeholder?: string;
     port: {
         id: PortId;
-        type: string;
+        // type: string;
     }
 }
 
@@ -124,12 +124,16 @@ export type Node = {
 
 export type PortId = string
 
-export type PortInput = {
+export interface Port {
+    id: PortId;
+}
+
+export type PortInput = Port & {
     id: PortId;
     // inputType: string; // FIXME type
 }
 
-export type PortOutput = {
+export type PortOutput = Port & {
     id: PortId;
     // type: string; // FIXME type
 }
@@ -138,6 +142,13 @@ export type Position = {
     x: number;
     y: number;
 };
+
+export type Rect = {
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
+}
 
 
 export interface SelectOption {

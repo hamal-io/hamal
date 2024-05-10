@@ -1,7 +1,7 @@
 import React, {FC, useContext} from "react";
 import styles from "@/components/nodes/port.module.css";
 import {PortId, PortInput, PortOutput, Position} from "@/components/nodes/types.ts";
-import {ContextCanvasState} from "@/components/nodes/context.ts";
+import {ContextEditorState} from "@/components/nodes/editor.tsx";
 
 type PortsProps = {}
 export const Ports: FC<PortsProps> = ({}) => {
@@ -120,7 +120,7 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput, portId}) => {
     //     translate: { x: 0, y: 0 }
     // };
 
-    const canvasState = useContext(ContextCanvasState)
+    const {canvas} = useContext(ContextEditorState).state
 
     // const stageState = {
     //     scale: 1,
@@ -141,7 +141,7 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput, portId}) => {
     const line = React.useRef<SVGPathElement>(null);
     const lineInToPort = React.useRef<HTMLDivElement | null>(null);
 
-    const byScale = (value: number) => (1 / (canvasState.scale)) * value;
+    const byScale = (value: number) => (1 / (canvas.scale)) * value;
 
     const calculatePath = (from: Position, to: Position): string => {
         return `M ${from.x} ${from.y} L ${to.x} ${to.y}`
@@ -154,9 +154,9 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput, portId}) => {
         //     ?.getBoundingClientRect() ?? {x: 0, y: 0, width: 0, height: 0};
 
 
-        const {x, y} = canvasState.position;
+        const {x, y} = canvas.position;
         // const x = 0; const y = 0;
-        const {width, height} = canvasState.size;
+        const {width, height} = canvas.size;
 
         // if (isInput) {
         //     const to = {
@@ -169,8 +169,8 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput, portId}) => {
         //     );
         // } else {
         const to = {
-            x: byScale(e.clientX - x - width / 2) + byScale(canvasState.translate.x),
-            y: byScale(e.clientY - y - height / 2) + byScale(canvasState.translate.y)
+            x: byScale(e.clientX - x - width / 2) + byScale(canvas.translate.x),
+            y: byScale(e.clientY - y - height / 2) + byScale(canvas.translate.y)
         };
 
         // line.current?.setAttribute(
@@ -299,7 +299,7 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput, portId}) => {
         e.preventDefault();
         e.stopPropagation();
 
-        if (canvasState.readonly) {
+        if (canvas.readonly) {
             return;
         }
 
@@ -310,10 +310,10 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput, portId}) => {
             height: startPortHeight = 0
         } = port.current?.getBoundingClientRect() || {};
 
-        const canvasX = canvasState.position.x;
-        const canvasY = canvasState.position.y;
-        const canvasWidth = canvasState.size.width;
-        const canvasHeight = canvasState.size.height;
+        const canvasX = canvas.position.x;
+        const canvasY = canvas.position.y;
+        const canvasWidth = canvas.size.width;
+        const canvasHeight = canvas.size.height;
 
         if (isInput) {
             // lineInToPort.current = document.querySelector(
@@ -356,8 +356,8 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput, portId}) => {
             // }
         } else {
             const position = {
-                x: byScale(startPortX - canvasX + startPortWidth / 2 - canvasWidth / 2) + byScale(canvasState.translate.x),
-                y: byScale(startPortY - canvasY + startPortHeight / 2 - canvasHeight / 2) + byScale(canvasState.translate.y)
+                x: byScale(startPortX - canvasX + startPortWidth / 2 - canvasWidth / 2) + byScale(canvas.translate.x),
+                y: byScale(startPortY - canvasY + startPortHeight / 2 - canvasHeight / 2) + byScale(canvas.translate.y)
             };
 
             setStartPosition(position);

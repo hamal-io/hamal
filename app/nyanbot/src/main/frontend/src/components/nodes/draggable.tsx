@@ -1,6 +1,6 @@
 import React, {FC, HTMLProps, MutableRefObject, useContext} from "react";
 import {Position} from "./types";
-import {ContextCanvasState} from "@/components/nodes/context.ts";
+import {ContextEditorState} from "@/components/nodes/editor.tsx";
 
 type DraggableProps = Omit<HTMLProps<HTMLDivElement>, "onDrag" | "onDragEnd"> & {
     id?: string;
@@ -30,21 +30,21 @@ export const Draggable: FC<DraggableProps> = ({
                                                   innerRef,
                                                   ...rest
                                               }) => {
-    const canvasState = useContext(ContextCanvasState)
+    const {canvas} = useContext(ContextEditorState).state
 
     const startPosition = React.useRef<Position | null>(null);
     const offset = React.useRef<Position>();
     const wrapper = React.useRef<HTMLDivElement | null>(null);
 
-    const byScale = (value: number) => (1 / canvasState.scale) * value;
+    const byScale = (value: number) => (1 / canvas.scale) * value;
 
     const getScaledPosition = (e: MouseEvent): Position => {
         const offsetX = offset.current?.x ?? 0;
         const offsetY = offset.current?.y ?? 0;
 
         return {
-            x: byScale(e.clientX - (canvasState.rect.left) - offsetX - (canvasState.size.width) / 2) + byScale(canvasState.translate.x),
-            y: byScale(e.clientY - (canvasState.rect.top) - offsetY - (canvasState.size.height) / 2) + byScale(canvasState.translate.y)
+            x: byScale(e.clientX - (canvas.rect.left) - offsetX - (canvas.size.width) / 2) + byScale(canvas.translate.x),
+            y: byScale(e.clientY - (canvas.rect.top) - offsetY - (canvas.size.height) / 2) + byScale(canvas.translate.y)
         };
     };
 
@@ -65,7 +65,7 @@ export const Draggable: FC<DraggableProps> = ({
     };
 
     const startDrag = e => {
-        if (canvasState.readonly) {
+        if (canvas.readonly) {
             return;
         }
 

@@ -38,7 +38,7 @@ export const TestPage = () => {
                     id: '1',
                     type: 'Init',
                     title: 'Init',
-                    position: {x: -200, y: -400},
+                    position: {x: 0, y: 0},
                     size: {width: 100, height: 100},
                     outputs: [{
                         id: '1',
@@ -49,7 +49,7 @@ export const TestPage = () => {
                     id: '2',
                     type: "Telegram_Send_Message",
                     title: 'Telegram - Send Message',
-                    position: {x: 0, y: -400},
+                    position: {x: 200, y: 0},
                     size: {width: 250, height: 300},
                     outputs: []
                 } satisfies Node

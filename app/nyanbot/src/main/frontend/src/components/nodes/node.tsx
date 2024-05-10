@@ -1,9 +1,10 @@
-import React, {FC} from "react";
+import React, {FC, useContext} from "react";
 import {Node, Position} from './types.ts';
 import {Draggable} from './draggable.tsx';
 import styles from "@/components/nodes/node.module.css";
 import {PortOutputWidget} from "@/components/nodes/port.tsx";
 import {ControlListWidget} from "@/components/nodes/control.tsx";
+import {ContextEditorState} from "@/components/nodes/editor.tsx";
 
 type NodeWidgetProps = {
     // id: NodeId;
@@ -16,12 +17,11 @@ type NodeWidgetProps = {
 }
 
 export const NodeWidget: FC<NodeWidgetProps> = ({node}) => {
-
+    const {dispatch} = useContext(ContextEditorState)
     const nodeWrapper = React.useRef<HTMLDivElement>(null);
 
-
     const startDrag = (e: React.MouseEvent | React.TouchEvent) => {
-        console.log("start drag",)
+        console.debug("Drag started")
         // onDragStart();
     };
 
@@ -32,7 +32,8 @@ export const NodeWidget: FC<NodeWidgetProps> = ({node}) => {
     };
 
     const handleDragEnd = (e: MouseEvent, {x, y}) => {
-        // dispatch({type: CommentActionTypes.SET_COMMENT_COORDINATES, id, x, y});
+        console.debug("Drag ended")
+        dispatch({type: "NODE_POSITION_UPDATED", id: node.id, position: {x, y}});
     };
 
     const isEditing = false
@@ -84,7 +85,7 @@ export const NodeWidget: FC<NodeWidgetProps> = ({node}) => {
             }}
             onDragStart={startDrag}
             onDrag={handleDrag}
-            // onDragEnd={stopDrag}
+            onDragEnd={handleDragEnd}
             innerRef={nodeWrapper}
             // data-node-id={id}
             data-component="node"

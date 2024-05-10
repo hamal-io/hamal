@@ -1,8 +1,7 @@
-import React, {createContext, FC} from 'react'
+import React, {createContext, Dispatch, FC, useReducer} from 'react'
 import {Canvas} from "@/components/nodes/canvas.tsx";
-import ButtonPrimary from "@/components/old-ui/button/ButtonPrimary.tsx";
-import {Connection, ConnectionId, Control, ControlId, Graph, Node, NodeId} from '@/components/nodes/types';
-import {Action, useState} from "@/components/nodes/state";
+import {Connection, Control, Graph, Node} from '@/components/nodes/types';
+import {EditorAction, editorInitialState, editorReducer, EditorState} from "@/components/nodes/state.ts";
 
 type EditorProps = {
     nodes: Node[];
@@ -11,33 +10,23 @@ type EditorProps = {
     onSave: (graph: Graph) => void;
 }
 
-export type EditorState = {
-    nodes: { [id: NodeId]: Node };
-    connections: { [id: ConnectionId]: Connection };
-    controls: { [id: ControlId]: Control };
-    nodeControlIds: { [id: NodeId]: ControlId[] };
-    dispatch: (action: Action) => void;
+type EditorContext = {
+    state: EditorState,
+    dispatch: Dispatch<EditorAction>,
 }
 
-export const ContextEditorState = createContext<EditorState>({
-    nodes: {},
-    connections: {},
-    controls: {},
-    nodeControlIds: {},
-    dispatch: (Action) => {
-    }
-})
+export const ContextEditorState = createContext<EditorContext>({
+    state: undefined,
+    dispatch: undefined
+});
 
 export const Editor: FC<EditorProps> = ({nodes, connections, controls, onSave}) => {
-    const [state, dispatch] = useState(connections, controls, nodes)
+    const [state, dispatch] = useReducer(editorReducer, editorInitialState(
+        nodes, controls, connections
+    ))
+
     return (
-        <ContextEditorState.Provider value={{
-            nodes: state.nodeState.nodes,
-            connections: state.connectionState.connections,
-            controls: state.controlState.controls,
-            nodeControlIds: state.controlState.nodeControlIds,
-            dispatch: dispatch
-        }}>
+        <ContextEditorState.Provider value={{state, dispatch}}>
             <div style={{background: "whitesmoke"}}>
                 {/*<div className="flex flex-row justify-end p-2">*/}
                 {/*    <ButtonPrimary onClick={() => {*/}
