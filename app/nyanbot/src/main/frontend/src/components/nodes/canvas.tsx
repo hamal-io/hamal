@@ -67,47 +67,50 @@ export const Canvas: FC<CanvasProps> = ({
 
     return (
         // <ContextCanvasState.Provider value={canvasState}>
-        <Draggable
-            id="CANVAS_1"
-            data-component="canvas"
-            className={styles.wrapper}
-            innerRef={wrapper}
-            // onContextMenu={handleContextMenu}
-            // onMouseEnter={handleMouseEnter}
-            // onDragDelayStart={handleDragDelayStart}
-            // onDragStart={handleDragStart}
-            // onDrag={handleMouseDrag}
-            // onDragEnd={handleDragEnd}
-            // onKeyDown={handleKeyDown}
-            // tabIndex={-1}
-            // style={{ cursor: "grab" }}
-            // disabled={disablePan || (spaceToPan && !spaceIsPressed)}
-        >
+        <div className={`h-screen`}>
 
-            <div
-                ref={translateWrapper}
-                className={styles.transformWrapper}
-                // style={{transform: `translate(${canvasState.translate.x}px, ${canvasState.translate.y}px)`}}
+            <Draggable
+                id="CANVAS_1"
+                data-component="canvas"
+                className={styles.wrapper}
+                innerRef={wrapper}
+                // onContextMenu={handleContextMenu}
+                // onMouseEnter={handleMouseEnter}
+                // onDragDelayStart={handleDragDelayStart}
+                // onDragStart={handleDragStart}
+                // onDrag={handleMouseDrag}
+                // onDragEnd={handleDragEnd}
+                // onKeyDown={handleKeyDown}
+                // tabIndex={-1}
+                // style={{ cursor: "grab" }}
+                // disabled={disablePan || (spaceToPan && !spaceIsPressed)}
             >
+
                 <div
-                    className={styles.scaleWrapper}
-                    style={{transform: `scale(${scale})`}}
+                    ref={translateWrapper}
+                    className={styles.transformWrapper}
+                    // style={{transform: `translate(${canvasState.translate.x}px, ${canvasState.translate.y}px)`}}
                 >
+                    <div
+                        className={styles.scaleWrapper}
+                        style={{transform: `scale(${scale})`}}
+                    >
 
-                    {nodes.map(node => (
-                        <NodeWidget
-                            key={node.id}
-                            node={node}
-                            onDragStart={() => console.log("start dragging")}
-                        />
-                    ))}
+                        {nodes.map(node => (
+                            <NodeWidget
+                                key={node.id}
+                                node={node}
+                                onDragStart={() => console.log("start dragging")}
+                            />
+                        ))}
 
+                    </div>
                 </div>
-            </div>
 
-            <ConnectionListWidget/>
+                <ConnectionListWidget/>
 
-        </Draggable>
+            </Draggable>
+        </div>
     )
 
 }

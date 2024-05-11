@@ -1,7 +1,9 @@
 import React, {createContext, Dispatch, FC, useReducer} from 'react'
+import styles from "./editor.module.css";
 import {Canvas} from "@/components/nodes/canvas.tsx";
 import {Connection, Control, Graph, Node} from '@/components/nodes/types';
 import {EditorAction, editorInitialState, editorReducer, EditorState} from "@/components/nodes/state.ts";
+import {Menu} from "@/components/nodes/menu.tsx";
 
 type EditorProps = {
     nodes: Node[];
@@ -27,26 +29,26 @@ export const Editor: FC<EditorProps> = ({nodes, connections, controls, onSave}) 
 
     return (
         <ContextEditorState.Provider value={{state, dispatch}}>
-            <div style={{background: "whitesmoke"}}>
-                {/*<div className="flex flex-row justify-end p-2">*/}
-                {/*    <ButtonPrimary onClick={() => {*/}
-                {/*        onSave({*/}
-                {/*            connections: Object.entries(state.connectionState.connections).map(([_, value]) => value),*/}
-                {/*            controls: Object.entries(state.controlState.controls).map(([_, value]) => value),*/}
-                {/*            nodes: Object.entries(state.nodeState.nodes).map(([_, value]) => value)*/}
-                {/*        })*/}
-                {/*    }}>*/}
-                {/*        Save*/}
-                {/*    </ButtonPrimary>*/}
+            {/*<div style={{background: "whitesmoke"}}>*/}
+            {/*<div className="flex flex-row justify-end p-2">*/}
+            {/*    <ButtonPrimary onClick={() => {*/}
+            {/*        onSave({*/}
+            {/*            connections: Object.entries(state.connectionState.connections).map(([_, value]) => value),*/}
+            {/*            controls: Object.entries(state.controlState.controls).map(([_, value]) => value),*/}
+            {/*            nodes: Object.entries(state.nodeState.nodes).map(([_, value]) => value)*/}
+            {/*        })*/}
+            {/*    }}>*/}
+            {/*        Save*/}
+            {/*    </ButtonPrimary>*/}
 
-                {/*</div>*/}
-                <div className="h-screen">
-                    <Canvas
-                        nodes={nodes}
-                        connections={connections}
-                        readonly={false}
-                    />
-                </div>
+            <div className={styles.container}>
+                <Menu/>
+                <Canvas
+                    nodes={nodes}
+                    connections={connections}
+                    readonly={false}
+
+                />
             </div>
         </ContextEditorState.Provider>
     )

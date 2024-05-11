@@ -5,7 +5,8 @@ import styles from "./select.module.css";
 import {SelectOption} from "../types";
 import Select from "@/components/old-ui/select/Select.tsx";
 import {Portal} from "react-portal";
-import ContextMenu from "@/components/nodes/menu.tsx";
+import ContextMenu from "@/components/nodes/context-menu.tsx";
+// import ContextMenu from "@/components/nodes/menu.tsx";
 
 const MAX_LABEL_LENGTH = 50;
 

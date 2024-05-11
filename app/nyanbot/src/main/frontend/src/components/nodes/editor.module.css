@@ -1,3 +1,7 @@
+.container {
+    position: relative;
+}
+
 .menu {
     position: absolute;
     height: 120px;
