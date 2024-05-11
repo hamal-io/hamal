@@ -41,7 +41,7 @@ export const Editor: FC<EditorProps> = ({nodes, connections, controls, onSave}) 
             {/*        Save*/}
             {/*    </ButtonPrimary>*/}
 
-            <div className={styles.container}>
+            <div className={`h-full ${styles.container}`}>
                 <Menu/>
                 <Canvas
                     nodes={nodes}

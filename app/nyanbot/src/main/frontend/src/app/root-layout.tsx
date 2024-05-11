@@ -1,7 +1,7 @@
-import {FC, ReactNode, useEffect} from "react";
-import Header from "@/app/header/index.tsx";
+import React, {FC, ReactNode, useEffect} from "react";
 import {useUiState} from "@/hook/ui.ts";
 import {MetaMaskProvider} from "@metamask/sdk-react";
+import Header from "@/app/header";
 
 type Props = {
     children: ReactNode;
@@ -20,7 +20,7 @@ const RootLayout: FC<Props> = ({children}) => {
     }, [uiState.theme]);
 
     return (
-        <div>
+        <div className="flex-1 h-full">
             <MetaMaskProvider debug={false} sdkOptions={{
                 checkInstallationImmediately: false,
                 dappMetadata: {

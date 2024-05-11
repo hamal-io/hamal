@@ -67,7 +67,7 @@ export const Canvas: FC<CanvasProps> = ({
 
     return (
         // <ContextCanvasState.Provider value={canvasState}>
-        <div className={`h-screen`}>
+        <div className={`h-full`}>
 
             <Draggable
                 id="CANVAS_1"
