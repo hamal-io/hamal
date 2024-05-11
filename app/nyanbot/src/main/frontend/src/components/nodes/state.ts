@@ -41,6 +41,7 @@ export type EditorAction =
     | { type: "CANVAS_SET"; position: Position; size: Size; rect: Rect }
     | { type: "CONNECTION_ADDED"; outputPortId: PortId, inputPortId: PortId }
     | { type: "CONTROL_TEXT_AREA_UPDATED"; id: ControlId, value: string }
+    | { type: "NODE_ADDED"; }
     | { type: "NODE_POSITION_UPDATED"; id: NodeId, position: Position }
 
 export const editorReducer = (state: EditorState, action: EditorAction): EditorState => {
@@ -79,6 +80,10 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
                 throw Error('Not ControlText')
             }
             return {...state}
+        }
+        case "NODE_ADDED": {
+            console.log("node added")
+            return state;
         }
         case "NODE_POSITION_UPDATED": {
             const copy = structuredClone(state)
