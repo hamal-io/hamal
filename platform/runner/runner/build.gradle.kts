@@ -13,6 +13,7 @@ dependencies {
     implementation(project(":platform:lib:nodes"))
     implementation(project(":platform:lib:web3"))
 
+    implementation(project(":platform:runner:extension:std:debug"))
     implementation(project(":platform:runner:extension:net:smtp"))
     implementation(project(":platform:runner:extension:net:http"))
     implementation(project(":platform:runner:extension:social:telegram"))
