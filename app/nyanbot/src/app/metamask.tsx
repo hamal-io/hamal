@@ -1,8 +1,7 @@
 import React, {FC, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {useSDK} from "@metamask/sdk-react";
+import {useSDK} from "@metamask/sdk-react-ui";
 import {useMetaMaskChallenge, useMetaMaskToken} from "@/hook/auth.ts";
-import {Buffer} from "buffer";
 import ButtonPrimary from "@/components/old-ui/button/ButtonPrimary.tsx";
 
 type MetaMaskButtonProps = {
@@ -20,7 +19,6 @@ export const MetaMaskButton: FC<MetaMaskButtonProps> = ({className}) => {
     useEffect(() => {
         if (challenge != null) {
             console.log("init challenge", challenge)
-            const msg = `0x${Buffer.from("test", 'utf8').toString('hex')}`;
             const invoke = async () => {
                 // @ts-ignore
                 const signature = await ethereum.request({
@@ -50,7 +48,6 @@ export const MetaMaskButton: FC<MetaMaskButtonProps> = ({className}) => {
         } catch (err) {
             console.error(`failed to connect..`, err);
             setConnecting(false)
-        } finally {
         }
     };
 

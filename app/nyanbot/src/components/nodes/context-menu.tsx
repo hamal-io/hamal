@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "./menu.module.css";
 import clamp from "lodash/clamp";
-import { nanoid } from "nanoid/non-secure";
 import { SelectOption } from "./types";
 
 interface ContextMenuProps {
@@ -33,7 +32,8 @@ const ContextMenu = ({
     const [filter, setFilter] = React.useState("");
     const [menuWidth, setMenuWidth] = React.useState(0);
     const [selectedIndex, setSelectedIndex] = React.useState<number | null>(0);
-    const menuId = React.useRef(nanoid(10));
+    // const menuId = React.useRef(nanoid(10));
+    const menuId = React.useRef(1);
 
     const handleOptionSelected = (option: SelectOption) => {
         onOptionSelected(option);

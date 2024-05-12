@@ -1,6 +1,6 @@
 import React, {FC, ReactNode, useEffect} from "react";
 import {useUiState} from "@/hook/ui.ts";
-import {MetaMaskProvider} from "@metamask/sdk-react";
+import { MetaMaskUIProvider } from "@metamask/sdk-react-ui";
 import Header from "@/app/header";
 
 type Props = {
@@ -21,7 +21,7 @@ const RootLayout: FC<Props> = ({children}) => {
 
     return (
         <div className="flex-1 h-full">
-            <MetaMaskProvider debug={false} sdkOptions={{
+            <MetaMaskUIProvider debug={false} sdkOptions={{
                 checkInstallationImmediately: false,
                 dappMetadata: {
                     name: "nyanbot.com",
@@ -30,7 +30,7 @@ const RootLayout: FC<Props> = ({children}) => {
             }}>
                 <Header/>
                 {children}
-            </MetaMaskProvider>
+            </MetaMaskUIProvider>
         </div>
     )
 }
