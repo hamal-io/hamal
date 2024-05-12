@@ -62,6 +62,7 @@ include(":platform:runner:runner")
 
 include(":platform:runner:extension:net:smtp")
 include(":platform:runner:extension:net:http")
+include(":platform:runner:extension:std:debug")
 include(":platform:runner:extension:std:decimal")
 include(":platform:runner:extension:std:log")
 include(":platform:runner:extension:std:memoize")

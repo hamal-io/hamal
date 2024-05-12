@@ -1,3 +1,22 @@
+local function handle_response(err, resp)
+    if err ~= nil then
+        return err, nil
+    end
+
+    if resp.status_code >= 400 then
+        if resp.content['class'] == 'ApiError' then
+            print('ApiError: ' .. resp.content['message'])
+            err = {
+                type = 'ApiError',
+                message = resp.content['message']
+            }
+            return err, nil
+        end
+    end
+
+    return nil, resp
+end
+
 function extension_create()
     local export = { }
 
@@ -7,25 +26,32 @@ function extension_create()
         exec_namespace_id = context.exec.namespace_id
 
         local http = require('net.http').create({ base_url = cfg.base_url or 'http://localhost:8008' })
+        local debug = require('std.debug').create()
 
         local instance = {
-            await_completed = { },
             exec = { },
             func = { },
             collection = {}
         }
 
         function instance.await_completed(req)
-            --[[local start_time = os.time()
+            -- FIXME pull requests from backend
+            req = req or {}
+
+            print(dump(req))
+
+            local count = 0
             while req.requestStatus ~= 'Completed' do
                 if req.requestStatus == 'Failed' then
                     error("Request failed!")
                 end
-                if os.time() - start_time >= 5 then
+                if count >= 10 then
                     error("Request Timeout")
                 end
-                os.sleep(1)
-            end]]
+                debug.sleep(1000)
+                count = count + 1
+            end
+
             return true
         end
 
@@ -86,7 +112,7 @@ function extension_create()
         function instance.func.create(req)
             req = req or {}
             namespace_id = req.namespace_id or exec_namespace_id
-            local err, resp = handle_error(http.post({
+            local err, resp = handle_response(http.post({
                 url = '/v1/namespaces/' .. namespace_id .. '/funcs',
                 headers = { ['x-exec-token'] = context.exec.token },
                 body = {
@@ -96,16 +122,16 @@ function extension_create()
                     codeType = req.code_type or "Lua54" --FIXME-341 register snakecase somewhere
                 }
             }))
-            return err, resp
+            return err, resp.content
         end
 
         function instance.func.get(func_id)
-            local err, resp = handle_error(http.get({
+            local err, resp = handle_response(http.get({
                 url = '/v1/funcs/' .. func_id,
                 headers = { ['x-exec-token'] = context.exec.token }
             }))
 
-            return err, resp
+            return err, resp.content
         end
 
         return instance
