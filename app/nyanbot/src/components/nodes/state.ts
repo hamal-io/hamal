@@ -1,4 +1,18 @@
-import {Connection, ConnectionId, Control, ControlId, isControlTextArea, Node, NodeId, NodeType, PortId, Position, Rect, Size, Translate} from "@/components/nodes/types.ts";
+import {
+    Connection,
+    ConnectionId,
+    Control,
+    ControlId,
+    isControlTextArea,
+    Node,
+    NodeId,
+    NodeType,
+    PortId,
+    Position,
+    Rect,
+    Size,
+    Translate
+} from "@/components/nodes/types.ts";
 
 export type CanvasState = {
     scale: number;
@@ -10,6 +24,10 @@ export type CanvasState = {
 }
 
 export type EditorState = {
+    current: {
+        id: string;
+        type: "Node" | "Connection";
+    };
     connections: {
         [id: ConnectionId]: {
             id: ConnectionId;
@@ -42,7 +60,9 @@ export type EditorAction =
     | { type: "CONNECTION_ADDED"; outputPortId: PortId, inputPortId: PortId }
     | { type: "CONTROL_TEXT_AREA_UPDATED"; id: ControlId, value: string }
     | { type: "NODE_ADDED"; }
-    | { type: "NODE_POSITION_UPDATED"; id: NodeId, position: Position }
+    | { type: "NODE_SELECTED"; id: NodeId; }
+    | { type: "NODE_POSITION_UPDATED"; position: Position }
+    | { type: "NODE_UNSELECTED"; }
 
 export const editorReducer = (state: EditorState, action: EditorAction): EditorState => {
     const nextConnectionId = () => (Object.keys(state.connections).length + 1).toString()
@@ -82,12 +102,24 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
             return {...state}
         }
         case "NODE_ADDED": {
-            console.log("node added")
             return state;
+        }
+        case "NODE_SELECTED": {
+            const copy = structuredClone(state)
+            copy.current = {
+                id: action.id,
+                type: "Node"
+            };
+            return copy;
+        }
+        case "NODE_UNSELECTED": {
+            const copy = structuredClone(state)
+            copy.current = null;
+            return copy;
         }
         case "NODE_POSITION_UPDATED": {
             const copy = structuredClone(state)
-            copy.nodes[action.id].position = action.position;
+            copy.nodes[state.current.id].position = action.position;
             return copy;
         }
         default:
@@ -101,6 +133,7 @@ export const editorInitialState = (
     connections: Connection[]
 ): EditorState => {
     return {
+        current: null,
         connections: connections.reduce((acc, cur) => {
             return {...acc, [cur.id]: cur}
         }, {}),

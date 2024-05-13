@@ -97,11 +97,7 @@ export const Canvas: FC<CanvasProps> = ({
                     >
 
                         {nodes.map(node => (
-                            <NodeWidget
-                                key={node.id}
-                                node={node}
-                                onDragStart={() => console.log("start dragging")}
-                            />
+                            <NodeWidget key={node.id} node={node}/>
                         ))}
 
                     </div>

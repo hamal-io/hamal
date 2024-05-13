@@ -12,7 +12,7 @@ type NodeWidgetProps = {
     // size: Size;
     // type: NodeType;
     node: Node;
-    onDragStart: () => void;
+    // onDragStart: () => void;
 
 }
 
@@ -22,6 +22,7 @@ export const NodeWidget: FC<NodeWidgetProps> = ({node}) => {
 
     const startDrag = (e: React.MouseEvent | React.TouchEvent) => {
         console.debug("Drag started")
+        dispatch({type: "NODE_SELECTED", id: node.id})
         // onDragStart();
     };
 
@@ -29,13 +30,14 @@ export const NodeWidget: FC<NodeWidgetProps> = ({node}) => {
         if (nodeWrapper.current) {
             nodeWrapper.current.style.transform = `translate(${x}px,${y}px)`;
 
-            dispatch({type: "NODE_POSITION_UPDATED", id: node.id, position: {x, y}});
+            dispatch({type: "NODE_POSITION_UPDATED", position: {x, y}});
         }
     };
 
     const handleDragEnd = (e: MouseEvent, {x, y}) => {
         console.debug("Drag ended")
-        dispatch({type: "NODE_POSITION_UPDATED", id: node.id, position: {x, y}});
+        dispatch({type: "NODE_POSITION_UPDATED", position: {x, y}});
+        dispatch({type: "NODE_UNSELECTED"})
     };
 
     const isEditing = false
