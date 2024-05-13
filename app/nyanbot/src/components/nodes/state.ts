@@ -59,12 +59,13 @@ export type EditorAction =
     | { type: "CANVAS_SET"; position: Position; size: Size; rect: Rect }
     | { type: "CONNECTION_ADDED"; outputPortId: PortId, inputPortId: PortId }
     | { type: "CONTROL_TEXT_AREA_UPDATED"; id: ControlId, value: string }
-    | { type: "NODE_ADDED"; }
+    | { type: "NODE_ADDED"; position: Position }
     | { type: "NODE_SELECTED"; id: NodeId; }
     | { type: "NODE_POSITION_UPDATED"; position: Position }
     | { type: "NODE_UNSELECTED"; }
 
 export const editorReducer = (state: EditorState, action: EditorAction): EditorState => {
+    const nextNodeId = () => (Object.keys(state.nodes).length + 1).toString()
     const nextConnectionId = () => (Object.keys(state.connections).length + 1).toString()
 
     switch (action.type) {
@@ -102,7 +103,21 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
             return {...state}
         }
         case "NODE_ADDED": {
-            return state;
+            const nodeId = nextNodeId()
+            const copy = structuredClone(state)
+            copy.nodes[nodeId] = {
+                id: nodeId,
+                type: 'Init',
+                title: 'Init',
+                position: action.position,
+                size: {width: 100, height: 100},
+                outputs: [{
+                    id: '1',
+                    type: 'String'
+                }]
+            }
+            copy.nodeControlIds[nodeId] = []
+            return copy;
         }
         case "NODE_SELECTED": {
             const copy = structuredClone(state)

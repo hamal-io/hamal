@@ -7,13 +7,12 @@ import {Connection, Node} from "@/components/nodes/types.ts";
 import {ContextEditorState} from "@/components/nodes/editor.tsx";
 
 type CanvasProps = {
-    nodes: Node[];
     connections: Connection[];
     readonly: boolean;
 }
 
 export const Canvas: FC<CanvasProps> = ({
-                                            nodes, connections, readonly
+                                             connections, readonly
                                         }) => {
     const {state, dispatch} = useContext(ContextEditorState);
 
@@ -96,7 +95,7 @@ export const Canvas: FC<CanvasProps> = ({
                         style={{transform: `scale(${scale})`}}
                     >
 
-                        {nodes.map(node => (
+                        {Object.values(state.nodes).map(node => (
                             <NodeWidget key={node.id} node={node}/>
                         ))}
 
