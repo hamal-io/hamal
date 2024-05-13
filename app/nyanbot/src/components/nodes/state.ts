@@ -2,7 +2,7 @@ import {
     Connection,
     ConnectionId,
     Control,
-    ControlId,
+    ControlId, ControlInvoke,
     isControlTextArea, isControlWithPort,
     Node,
     NodeId,
@@ -43,10 +43,12 @@ export type EditorState = {
         [id: NodeId]: {
             id: NodeId;
             type: NodeType,
+            title: string;
             position: Position;
-            outputs: [{
+            size: Size;
+            outputs: Array<{
                 id: PortId
-            }]
+            }>
         }
     };
     ports: {
@@ -56,9 +58,7 @@ export type EditorState = {
         }
     }
     controls: {
-        [id: ControlId]: {
-            id: NodeId
-        }
+        [id: ControlId]: Control
     }
     nodeControlIds: { [id: NodeId]: ControlId[] };
     canvas: CanvasState
@@ -68,15 +68,16 @@ export type EditorAction =
     | { type: "CANVAS_SET"; position: Position; size: Size; rect: Rect }
     | { type: "CONNECTION_ADDED"; outputPortId: PortId, inputPortId: PortId }
     | { type: "CONTROL_TEXT_AREA_UPDATED"; id: ControlId, value: string }
-    | { type: "NODE_ADDED"; position: Position }
+    | { type: "NODE_ADDED"; nodeType: NodeType; position: Position }
     | { type: "NODE_SELECTED"; id: NodeId; }
     | { type: "NODE_POSITION_UPDATED"; position: Position }
     | { type: "NODE_UNSELECTED"; }
 
 export const editorReducer = (state: EditorState, action: EditorAction): EditorState => {
-    const nextConnectionId = () => (Object.keys(state.connections).length + 1).toString()
-    const nextNodeId = () => (Object.keys(state.nodes).length + 1).toString()
-    const nextPortId = () => (Object.keys(state.ports).length + 1).toString()
+    const nextConnectionId = () => (Object.keys(state.connections).length + 1)
+    const nextControlId = () => (Object.keys(state.controls).length + 1)
+    const nextNodeId = () => (Object.keys(state.nodes).length + 1)
+    const nextPortId = () => (Object.keys(state.ports).length + 1)
 
     switch (action.type) {
         case "CANVAS_SET":
@@ -93,12 +94,18 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
             const copy = structuredClone(state)
 
             copy.connections[connectionId] = {
-                id: connectionId,
+                id: connectionId.toString(),
                 outputPort: {
                     id: action.outputPortId
                 },
+                outputNode: {
+                    id: state.ports[action.outputPortId].nodeId
+                },
                 inputPort: {
                     id: action.inputPortId
+                },
+                inputNode: {
+                    id: state.ports[action.inputPortId].nodeId
                 }
             }
             return copy;
@@ -114,30 +121,124 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
             return {...state}
         }
         case "NODE_ADDED": {
-            const nodeId = nextNodeId()
-            const portId = nextPortId()
 
-            console.log("new port id", portId)
 
             const copy = structuredClone(state)
-            copy.nodes[nodeId] = {
-                id: nodeId,
-                type: 'Init',
-                title: 'Init',
-                position: action.position,
-                size: {width: 100, height: 100},
-                outputs: [{
-                    id: portId,
-                    type: 'String'
-                }]
+
+
+            if (action.nodeType === "Init") {
+
+                const nodeId = nextNodeId().toString()
+                const portId = nextPortId().toString()
+                const controlId = nextControlId().toString()
+
+                copy.nodes[nodeId.toString()] = {
+                    id: nodeId.toString(),
+                    type: 'Init',
+                    title: 'Init',
+                    position: action.position,
+                    size: {width: 100, height: 100},
+                    outputs: [{
+                        id: portId.toString(),
+                        type: 'String'
+                    }]
+                }
+
+                copy.ports[portId.toString()] = {
+                    id: portId.toString(),
+                    nodeId: nodeId.toString()
+                }
+
+
+                copy.controls[controlId.toString()] = {
+                    id: controlId.toString(),
+                    type: 'Init',
+                    nodeId: nodeId.toString(),
+                    config: {
+                        selector: 'No_Value',
+                    },
+                    description: 'Let me trigger TG for ya!',
+                }
+
+                copy.nodeControlIds[nodeId] = [controlId.toString()]
+
+            } else if (action.nodeType == "Telegram_Send_Message") {
+
+                const nodeId = nextNodeId().toString()
+
+                const invokePortId = nextPortId().toString()
+                const invokeControlId = nextControlId().toString()
+
+                copy.nodes[nodeId.toString()] = {
+                    id: nodeId.toString(),
+                    type: "Telegram_Send_Message",
+                    title: 'Telegram - Send Message',
+                    position: action.position,
+                    size: {width: 250, height: 300},
+                    outputs: []
+                }
+
+                copy.ports[invokePortId.toString()] = {
+                    id: invokePortId.toString(),
+                    nodeId: nodeId.toString()
+                }
+
+                copy.controls[invokeControlId.toString()] = {
+                    id: invokeControlId.toString(),
+                    type: 'Invoke',
+                    nodeId: nodeId.toString(),
+                    port: {id: invokePortId.toString()},
+                } satisfies ControlInvoke
+
+
+                const chatIdPortId = (nextPortId() + 2).toString()
+                const chatIdControlId = (nextControlId() + 2).toString()
+
+
+                copy.ports[chatIdPortId.toString()] = {
+                    id: chatIdPortId.toString(),
+                    nodeId: nodeId.toString()
+                }
+
+                copy.controls[chatIdControlId.toString()] = {
+                    id: chatIdControlId.toString(),
+                    type: 'Text_Area',
+                    nodeId: nodeId.toString(),
+                    port: {
+                        id: chatIdPortId.toString(),
+                        type: 'String'
+                    },
+                    value: '',
+                    placeholder: 'chat_id'
+                } satisfies ControlInvoke
+
+
+                const messagePortId = (nextPortId() + 3).toString()
+                const messageControlId = (nextControlId() + 3).toString()
+
+                copy.ports[messagePortId] = {
+                    id: messagePortId.toString(),
+                    nodeId: nodeId.toString()
+                }
+
+                copy.controls[messageControlId.toString()] = {
+                    id: messageControlId.toString(),
+                    type: 'Text_Area',
+                    nodeId: nodeId.toString(),
+                    port: {
+                        id: messagePortId.toString(),
+                        type: 'String'
+                    },
+                    value: '',
+                    placeholder: 'message'
+                } satisfies ControlInvoke
+
+                copy.nodeControlIds[nodeId] = [invokePortId.toString(), chatIdControlId.toString(), messageControlId.toString()]
+
+            } else {
+                throw Error(`${action.nodeType} is not supported yet`)
             }
 
-            copy.ports[portId] = {
-                id: portId,
-                nodeId: nodeId
-            }
-
-            copy.nodeControlIds[nodeId] = []
             return copy;
         }
         case "NODE_SELECTED": {

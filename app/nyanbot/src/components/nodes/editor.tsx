@@ -9,7 +9,7 @@ type EditorProps = {
     nodes: Node[];
     connections: Connection[];
     controls: Control[];
-    onSave: (graph: Graph) => void;
+    onTest: (state: Any) => void;
 }
 
 type EditorContext = {
@@ -22,7 +22,7 @@ export const ContextEditorState = createContext<EditorContext>({
     dispatch: undefined
 });
 
-export const Editor: FC<EditorProps> = ({nodes, connections, controls, onSave}) => {
+export const Editor: FC<EditorProps> = ({nodes, connections, controls, onTest}) => {
     const [state, dispatch] = useReducer(editorReducer, editorInitialState(
         nodes, controls, connections
     ))
@@ -31,7 +31,9 @@ export const Editor: FC<EditorProps> = ({nodes, connections, controls, onSave}) 
     return (
         <ContextEditorState.Provider value={{state, dispatch}}>
             <div className={`h-full ${styles.container}`}>
-                <Menu/>
+                <Menu
+                    onTest={() => onTest(state)}
+                />
                 <Canvas
                     nodes={nodes}
                     connections={connections}

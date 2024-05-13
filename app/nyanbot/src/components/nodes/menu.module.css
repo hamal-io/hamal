@@ -16,6 +16,16 @@
     z-index: 2;
 }
 
+.execute {
+    position: absolute;
+    background: #fff;
+    right: 10px;
+    top: 90px;
+    z-index: 2;
+}
+
+
+
 .wrapper {
     background: rgba(114, 120, 124, 0.9);
     border-radius: 5px;

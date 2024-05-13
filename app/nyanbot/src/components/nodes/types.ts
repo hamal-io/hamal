@@ -95,8 +95,10 @@ export const isControlTextArea = (value: any): value is ControlTextArea => {
 
 export type ControlInit = ControlBase & {
     type: 'Init';
-    selector: string;
     description: string;
+    config: {
+        selector: string;
+    }
 }
 
 export const isControlInit = (value: any): value is ControlInit => {

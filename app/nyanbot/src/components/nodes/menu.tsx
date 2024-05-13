@@ -4,16 +4,24 @@ import {Button} from "@/components/ui/button.tsx";
 import {Card, CardContent, CardTitle} from "@/components/ui/card.tsx";
 import {ContextEditorState} from "@/components/nodes/editor.tsx";
 import {Draggable} from "@/components/nodes/draggable.tsx";
-import {Position} from "@/components/nodes/types.ts";
+import {Graph, Position} from "@/components/nodes/types.ts";
 
-type MenuProps = {}
+type MenuProps = {
+    onTest: () => void;
+}
 
-export const Menu: FC<MenuProps> = ({}) => {
+export const Menu: FC<MenuProps> = ({onTest}) => {
+    const {state} = useContext(ContextEditorState);
     const [showLibrary, setShowLibrary] = useState(true)
     return (
         <div>
             <div className={`flex flex-col ${styles.menu}`}>
                 <Button onClick={_ => setShowLibrary(true)}> Add Node </Button>
+            </div>
+            <div className={styles.execute}>
+                <Button onClick={() => {
+                    onTest()
+                }}> Run </Button>
             </div>
             {showLibrary && <NodeLibrary onClose={() => setShowLibrary(false)}/>}
         </div>
@@ -36,8 +44,12 @@ const NodeLibrary: FC<NodeLibraryProps> = ({onClose}) => {
             <CardContent>
                 <div className={"flex flex-col"}>
 
-                    {[{}, {}, {}, {}].map((prototype, index) =>
-                        <MenuItem index={index}/>
+                    {[
+                        {type: "Init"},
+                        {type: "Telegram_Send_Message"},
+                        {type: "Print"},
+                    ].map((prototype, index) =>
+                        <MenuItem {...prototype} index={index}/>
                     )}
 
                 </div>
@@ -46,7 +58,12 @@ const NodeLibrary: FC<NodeLibraryProps> = ({onClose}) => {
     );
 }
 
-const MenuItem = ({index}) => {
+type MenuItemProps = {
+    index: number;
+    type: string
+}
+
+const MenuItem: FC<MenuItemProps> = ({type, index}) => {
     const {state: {canvas}, dispatch} = useContext(ContextEditorState)
 
     const nodeWrapper = React.useRef<HTMLDivElement>(null);
@@ -81,7 +98,7 @@ const MenuItem = ({index}) => {
     const handleDragEnd = (e: MouseEvent, position: Position) => {
         console.debug("Drag ended")
 
-        dispatch({type: "NODE_ADDED", position})
+        dispatch({type: "NODE_ADDED", nodeType: type, position})
         nodeWrapper.current.style.transform = originalPosition;
     };
 
@@ -97,7 +114,7 @@ const MenuItem = ({index}) => {
             style={{
                 width: 100,
                 height: 100,
-                transform: `translate(0px, ${index * 100}px)`
+                transform: `translate(0px, ${index * 100 + 100}px)`
             }}
             onDragStart={startDrag}
             onDrag={handleDrag}
@@ -105,7 +122,7 @@ const MenuItem = ({index}) => {
             innerRef={nodeWrapper}
         >
 
-            <span className='text-teal-200'> test {index}</span>
+            <span className='text-teal-200'> {type} </span>
 
         </Draggable>
     )
