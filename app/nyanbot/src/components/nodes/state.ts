@@ -3,7 +3,7 @@ import {
     ConnectionId,
     Control,
     ControlId,
-    isControlTextArea,
+    isControlTextArea, isControlWithPort,
     Node,
     NodeId,
     NodeType,
@@ -44,8 +44,17 @@ export type EditorState = {
             id: NodeId;
             type: NodeType,
             position: Position;
+            outputs: [{
+                id: PortId
+            }]
         }
     };
+    ports: {
+        [id: PortId]: {
+            id: PortId
+            nodeId: NodeId
+        }
+    }
     controls: {
         [id: ControlId]: {
             id: NodeId
@@ -65,8 +74,9 @@ export type EditorAction =
     | { type: "NODE_UNSELECTED"; }
 
 export const editorReducer = (state: EditorState, action: EditorAction): EditorState => {
-    const nextNodeId = () => (Object.keys(state.nodes).length + 1).toString()
     const nextConnectionId = () => (Object.keys(state.connections).length + 1).toString()
+    const nextNodeId = () => (Object.keys(state.nodes).length + 1).toString()
+    const nextPortId = () => (Object.keys(state.ports).length + 1).toString()
 
     switch (action.type) {
         case "CANVAS_SET":
@@ -81,6 +91,7 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
         case "CONNECTION_ADDED": {
             const connectionId = nextConnectionId()
             const copy = structuredClone(state)
+
             copy.connections[connectionId] = {
                 id: connectionId,
                 outputPort: {
@@ -104,6 +115,10 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
         }
         case "NODE_ADDED": {
             const nodeId = nextNodeId()
+            const portId = nextPortId()
+
+            console.log("new port id", portId)
+
             const copy = structuredClone(state)
             copy.nodes[nodeId] = {
                 id: nodeId,
@@ -112,10 +127,16 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
                 position: action.position,
                 size: {width: 100, height: 100},
                 outputs: [{
-                    id: '1',
+                    id: portId,
                     type: 'String'
                 }]
             }
+
+            copy.ports[portId] = {
+                id: portId,
+                nodeId: nodeId
+            }
+
             copy.nodeControlIds[nodeId] = []
             return copy;
         }
@@ -147,6 +168,17 @@ export const editorInitialState = (
     controls: Control[],
     connections: Connection[]
 ): EditorState => {
+
+    const ports = nodes.flatMap(node => node.outputs.map((port) => port)).concat(
+        controls.map((control) => {
+            if (isControlWithPort(control)) {
+                return control.port
+            } else {
+                return null;
+            }
+        })
+    )
+
     return {
         current: null,
         connections: connections.reduce((acc, cur) => {
@@ -162,6 +194,10 @@ export const editorInitialState = (
             acc[cur.nodeId] = acc[cur.nodeId] || []
             acc[cur.nodeId].push(cur.id)
             return acc
+        }, {}),
+        ports: ports.reduce((acc, cur) => {
+            if (!cur) return acc;
+            return {...acc, [cur.id]: cur}
         }, {}),
         canvas: {
             scale: 1,

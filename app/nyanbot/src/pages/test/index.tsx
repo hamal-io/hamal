@@ -60,7 +60,7 @@ export const TestPage = () => {
                     outputNode: {id: '1'},
                     outputPort: {id: '1'},
                     inputNode: {id: '2'},
-                    inputPort: {id: '4'}
+                    inputPort: {id: '2'}
                 },
             ]}
             controls={[
@@ -75,14 +75,14 @@ export const TestPage = () => {
                     id: '3',
                     type: 'Invoke',
                     nodeId: '2',
-                    port: {id: '4'},
+                    port: {id: '2'},
                 } satisfies ControlInvoke,
                 {
                     id: '4',
                     type: 'Text_Area',
                     nodeId: '2',
                     port: {
-                        id: '5',
+                        id: '3',
                         type: 'String'
                     },
                     value: '',
@@ -93,7 +93,7 @@ export const TestPage = () => {
                     type: 'Text_Area',
                     nodeId: '2',
                     port: {
-                        id: '6',
+                        id: '4',
                         type: 'String'
                     },
                     value: '',
