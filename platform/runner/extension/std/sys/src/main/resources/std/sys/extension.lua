@@ -167,7 +167,7 @@ function extension_create()
                 url = url .. '?namespace_ids=' .. res
             end
 
-            local err, resp = handle_error(http.get({
+            local err, resp = handle_response(http.get({
                 url = url,
                 headers = { ['x-exec-token'] = context.exec.token },
             }))
@@ -181,8 +181,8 @@ function extension_create()
 
         function instance.namespace.append(req)
             req = req or {}
-            namespace_id = req.namespace_id or exec_namespace_id
-            local err, resp = handle_error(http.post({
+            local namespace_id = req.namespace_id or exec_namespace_id
+            local err, resp = handle_response(http.post({
                 url = '/v1/namespaces/' .. namespace_id .. '/namespaces',
                 headers = { ['x-exec-token'] = context.exec.token },
                 body = {
