@@ -43,11 +43,11 @@ const NodeLibrary: FC<NodeLibraryProps> = ({onClose}) => {
             </CardTitle>
             <CardContent>
                 <div className={"flex flex-col"}>
-
                     {[
                         {type: "Init"},
                         {type: "Telegram_Send_Message"},
                         {type: "Filter"},
+                        {type: "Input"}
                     ].map((prototype, index) =>
                         <MenuItem {...prototype} index={index}/>
                     )}

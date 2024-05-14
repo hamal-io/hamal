@@ -31,9 +31,15 @@ export type Connection = {
 }
 
 export type ControlId = string
-export type ControlType = 'Condition' | 'Input' | 'Init' | 'Invoke' | 'Text_Area'
+export type ControlType = 'Condition' | 'Input' | 'Input_Boolean' | 'Init' | 'Invoke' | 'Text_Area'
 
-export type Control = ControlCondition | ControlInput | ControlInit | ControlInvoke | ControlTextArea
+export type Control =
+    ControlCondition
+    | ControlInput
+    | ControlInputBoolean
+    | ControlInit
+    | ControlInvoke
+    | ControlTextArea
 
 type ControlBase = {
     id: ControlId;
@@ -114,6 +120,15 @@ export type ControlInvoke = ControlBase & {
 
 export const isControlInvoke = (value: any): value is ControlInvoke => {
     return isControl(value) && value.type === 'Invoke';
+}
+
+export type ControlInputBoolean = ControlBase & {
+    type: "Input_Boolean";
+    value: boolean;
+}
+
+export const isControlInputBoolean = (value: unknown): value is ControlInputBoolean => {
+    return isControl(value) && value.type === 'Input_Boolean';
 }
 
 

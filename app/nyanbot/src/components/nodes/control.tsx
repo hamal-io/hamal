@@ -2,8 +2,20 @@ import React, {FC, useContext, useState} from "react";
 import {InputSelect, TextArea} from "./inputs";
 import styles from "@/components/nodes/port.module.css";
 import {PortInputWidget} from "@/components/nodes/port.tsx";
-import {ControlInvoke, ControlTextArea, isControlCondition, isControlInit, isControlInput, isControlInvoke, isControlTextArea, Node} from "@/components/nodes/types.ts";
+import {
+    ControlId,
+    ControlInvoke,
+    ControlTextArea,
+    isControlCondition,
+    isControlInit,
+    isControlInput,
+    isControlInputBoolean,
+    isControlInvoke,
+    isControlTextArea,
+    Node
+} from "@/components/nodes/types.ts";
 import {ContextEditorState} from "@/components/nodes/editor.tsx";
+import {InputBoolean} from "@/components/nodes/inputs/input_boolean.tsx";
 
 type ControlsProps = {
     node: Node;
@@ -15,6 +27,10 @@ export const ControlListWidget: FC<ControlsProps> = ({node}) => {
         <div key={node.id} className={styles.wrapper} data-component="ports">
             {
                 nodeControlIds[node.id].map(controlId => controls[controlId]).map((control) => {
+
+                    if (isControlInputBoolean(control)) {
+                        return <ControlInputBooleanWidget key={control.id} id={control.id}/>
+                    }
 
                     if (isControlCondition(control)) {
                         return <ControlConditionWidget key={control.id}/>
@@ -136,3 +152,19 @@ export const ControlInputWidget: FC<ControlInputWidgetProps> = ({}) => {
     )
 }
 
+
+type ControlInputBooleanWidgetProps = {
+    id: ControlId
+}
+
+export const ControlInputBooleanWidget: FC<ControlInputBooleanWidgetProps> = ({id}) => {
+    const {dispatch} = useContext(ContextEditorState);
+    return (
+        <div className="flex flex-row">
+            <h1> Boolean </h1>
+            <InputBoolean onChange={(value) => {
+                dispatch({type: "CONTROL_INPUT_BOOLEAN_UPDATED", id, value})
+            }}/>
+        </div>
+    )
+}
