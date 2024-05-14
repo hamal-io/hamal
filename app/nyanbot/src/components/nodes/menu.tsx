@@ -47,7 +47,7 @@ const NodeLibrary: FC<NodeLibraryProps> = ({onClose}) => {
                     {[
                         {type: "Init"},
                         {type: "Telegram_Send_Message"},
-                        {type: "Print"},
+                        {type: "Filter"},
                     ].map((prototype, index) =>
                         <MenuItem {...prototype} index={index}/>
                     )}
