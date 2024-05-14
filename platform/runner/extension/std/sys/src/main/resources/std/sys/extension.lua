@@ -4,17 +4,18 @@ local function handle_response(err, resp)
     end
 
     if resp.status_code >= 400 then
-        if resp.content['class'] == 'ApiError' then
-            print('ApiError: ' .. resp.content['message'])
+        if resp.content.class == 'ApiError' then
+            print('ApiError: ', resp.content.message)
             err = {
                 type = 'ApiError',
-                message = resp.content['message']
+                message = resp.content.message
             }
             return err, nil
         end
     end
 
-    return nil, resp
+    --in error case nil.content would throw an error in calling function
+    return nil, resp.content
 end
 
 function extension_create()
@@ -29,29 +30,28 @@ function extension_create()
         local debug = require('std.debug').create()
 
         local instance = {
+            collection = {},
             exec = { },
             func = { },
-            collection = {}
+            request = { }
         }
 
         function instance.await_completed(req)
-            -- FIXME pull requests from backend
             req = req or {}
-
-            print(dump(req))
-
             local count = 0
-            while req.requestStatus ~= 'Completed' do
-                if req.requestStatus == 'Failed' then
+            repeat
+                local status = fail_on_error(instance.request.get(req.requestId))
+                status = status.requestStatus
+                if status == 'Failed' then
                     error("Request failed!")
                 end
                 if count >= 10 then
-                    error("Request Timeout")
+                    error("Request Timeout!")
                 end
-                debug.sleep(1000)
-                count = count + 1
-            end
 
+                debug.sleep(100)
+                count = count + 1
+            until status == 'Completed'
             return true
         end
 
@@ -119,10 +119,10 @@ function extension_create()
                     name = req.name or nil,
                     inputs = req.inputs or {},
                     code = req.code or "",
-                    codeType = req.code_type or "Lua54" --FIXME-341 register snakecase somewhere
+                    codeType = req.code_type or "Lua54"
                 }
             }))
-            return err, resp.content
+            return err, resp
         end
 
         function instance.func.get(func_id)
@@ -131,7 +131,16 @@ function extension_create()
                 headers = { ['x-exec-token'] = context.exec.token }
             }))
 
-            return err, resp.content
+            return err, resp
+        end
+
+        function instance.request.get(request_id)
+            local err, resp = handle_response(http.get({
+                url = '/v1/requests/' .. request_id,
+                headers = { ['x-exec-token'] = context.exec.token }
+            }))
+
+            return err, resp
         end
 
         return instance

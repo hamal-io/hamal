@@ -15,7 +15,6 @@ internal class SleepTest : AbstractTest() {
                 while count <= 5 do
                     debug.sleep(10)
                     count = count + 1
-                    print(count)
                 end
                 
                 assert( count == 6 )
