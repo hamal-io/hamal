@@ -162,6 +162,45 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
 
                 copy.nodeControlIds[nodeId] = [controlId.toString()]
 
+            } else if (action.nodeType == 'Filter') {
+
+                const nodeId = nextNodeId().toString()
+                const portId = nextPortId().toString()
+                const invokePortId = (nextPortId() + 1).toString()
+                const controlId = nextControlId().toString()
+
+                copy.nodes[nodeId.toString()] = {
+                    id: nodeId.toString(),
+                    type: 'Filter',
+                    title: 'Filter',
+                    position: action.position,
+                    size: {width: 100, height: 100},
+                    outputs: [{
+                        id: portId.toString(),
+                        type: 'Boolean'
+                    }]
+                }
+
+                copy.ports[portId.toString()] = {
+                    id: portId.toString(),
+                    nodeId: nodeId.toString()
+                }
+
+                copy.ports[invokePortId.toString()] = {
+                    id: invokePortId.toString(),
+                    nodeId: nodeId.toString()
+                }
+
+                copy.controls[controlId.toString()] = {
+                    id: controlId.toString(),
+                    type: 'Invoke',
+                    nodeId: nodeId.toString(),
+                    port: {id: invokePortId.toString()},
+                } satisfies ControlInvoke
+
+                copy.nodeControlIds[nodeId] = [controlId.toString()]
+
+
             } else if (action.nodeType == "Telegram_Send_Message") {
 
                 const nodeId = nextNodeId().toString()
@@ -191,8 +230,8 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
                 } satisfies ControlInvoke
 
 
-                const chatIdPortId = (nextPortId() + 2).toString()
-                const chatIdControlId = (nextControlId() + 2).toString()
+                const chatIdPortId = (nextPortId() + 1).toString()
+                const chatIdControlId = (nextControlId() + 1).toString()
 
 
                 copy.ports[chatIdPortId.toString()] = {
@@ -213,8 +252,8 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
                 } satisfies ControlInvoke
 
 
-                const messagePortId = (nextPortId() + 3).toString()
-                const messageControlId = (nextControlId() + 3).toString()
+                const messagePortId = (nextPortId() + 2).toString()
+                const messageControlId = (nextControlId() + 2).toString()
 
                 copy.ports[messagePortId] = {
                     id: messagePortId.toString(),
@@ -233,7 +272,7 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
                     placeholder: 'message'
                 } satisfies ControlInvoke
 
-                copy.nodeControlIds[nodeId] = [invokePortId.toString(), chatIdControlId.toString(), messageControlId.toString()]
+                copy.nodeControlIds[nodeId] = [invokeControlId.toString(), chatIdControlId.toString(), messageControlId.toString()]
 
             } else {
                 throw Error(`${action.nodeType} is not supported yet`)
