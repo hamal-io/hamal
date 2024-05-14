@@ -55,6 +55,7 @@ val defaultNodeCompilerRegistry = NodeCompilerRegistry(
         Init.Number,
         Init.Object,
         Init.String,
+        Print.Boolean,
         Print.Number,
         Print.Object,
         Print.String,

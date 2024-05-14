@@ -8,6 +8,22 @@ import io.hamal.lib.nodes.compiler.node.NodeCompiler.Context
 sealed class Print : NodeCompiler() {
     override val type: NodeType get() = NodeType("Print")
 
+    data object Boolean : Print() {
+        override val inputTypes: List<ValueType> get() = listOf(TypeBoolean)
+        override val outputTypes: List<ValueType> get() = listOf()
+
+
+        override fun toCode(ctx: Context): ValueCode {
+            return ValueCode(
+                """
+            print(arg_1)
+            return
+        """.trimIndent()
+            )
+        }
+
+    }
+
     data object Number : Print() {
         override val inputTypes: List<ValueType> get() = listOf(TypeNumber)
         override val outputTypes: List<ValueType> get() = listOf()

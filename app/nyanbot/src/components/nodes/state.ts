@@ -238,6 +238,37 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
 
                 copy.nodeControlIds[nodeId] = [controlId.toString()]
 
+            } else if (action.nodeType === 'Print') {
+
+                const nodeId = nextNodeId().toString()
+                const portId = nextPortId().toString()
+                const controlId = nextControlId().toString()
+
+                copy.nodes[nodeId.toString()] = {
+                    id: nodeId.toString(),
+                    type: 'Print',
+                    title: 'Print',
+                    position: action.position,
+                    size: {width: 100, height: 100},
+                    outputs: []
+                }
+
+                copy.ports[portId.toString()] = {
+                    id: portId.toString(),
+                    nodeId: nodeId.toString()
+                }
+
+                copy.controls[controlId.toString()] = {
+                    id: controlId.toString(),
+                    type: 'Invoke',
+                    nodeId: nodeId.toString(),
+                    port: {
+                        id: portId.toString(),
+                        type: "Boolean"
+                    },
+                } satisfies ControlInvoke
+
+                copy.nodeControlIds[nodeId] = [controlId.toString()]
 
             } else if (action.nodeType == "Telegram_Send_Message") {
 

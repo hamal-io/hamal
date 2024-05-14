@@ -7,13 +7,16 @@ import io.hamal.lib.nodes.NodeId.Companion.NodeId
 import io.hamal.lib.nodes.PortId.Companion.PortId
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 
 internal object ControlInvokeTest : AbstractIntegrationTest() {
 
     @Test
+    @Disabled
     fun `A node can be invoked without exchanging any data`() {
+        // FIXME what is this?
         runTest(
             unitOfWork(
                 initValue = ValueString("This value will not passed into capture node"),

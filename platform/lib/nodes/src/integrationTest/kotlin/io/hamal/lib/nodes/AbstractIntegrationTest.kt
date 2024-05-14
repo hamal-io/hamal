@@ -138,8 +138,8 @@ internal abstract class AbstractIntegrationTest {
     ): PortOutput = PortOutput(PortId(SnowflakeId(id)), type)
 
     fun unitOfWork(
-        initValue: ValueSerializable,
-        graph: NodesGraph
+        graph: NodesGraph,
+        initValue: ValueSerializable = ValueNil,
     ) = UnitOfWork(
         id = ExecId(1234),
         execToken = ExecToken("ExecToken"),

@@ -65,7 +65,7 @@ data class ControlInvoke(
     override val identifier: ControlIdentifier,
     override val nodeId: NodeId,
     override val port: PortInput
-) : ControlFromPortOrInput {
+) : ControlWithPort {
     override val type: ControlType = ControlType("Invoke")
 }
 
@@ -143,9 +143,11 @@ interface Control {
 
 interface ControlInput : Control
 
-interface ControlFromPortOrInput : Control {
+interface ControlWithPort : Control {
     val port: PortInput
 }
+
+interface ControlFromPortOrInput : ControlWithPort
 
 sealed interface TemplateControl {
 

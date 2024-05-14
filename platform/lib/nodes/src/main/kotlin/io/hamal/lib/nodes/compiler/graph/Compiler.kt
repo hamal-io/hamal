@@ -22,8 +22,8 @@ class GraphCompiler(
 
         for (node in nodes) {
             val controls = graph.controls.filter { it.nodeId == node.id }
-            val inputTypes = controls.filter { it !is ControlInvoke }.mapNotNull { control ->
-                if (control is ControlFromPortOrInput) {
+            val inputTypes = controls.mapNotNull { control ->
+                if (control is ControlWithPort) {
                     control.port.type
                 } else {
                     null
