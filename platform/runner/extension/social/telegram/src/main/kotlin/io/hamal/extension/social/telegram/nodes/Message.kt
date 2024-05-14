@@ -24,7 +24,7 @@ val SendMessageNode = TemplateNode(
     outputs = listOf()
 )
 
-internal object SendMessage : NodeCompiler {
+internal object SendMessage : NodeCompiler() {
     override val type: NodeType get() = NodeType("Telegram_Send_Message")
     override val inputTypes: List<ValueType> get() = listOf(TypeString, TypeString)
     override val outputTypes: List<ValueType> get() = listOf()

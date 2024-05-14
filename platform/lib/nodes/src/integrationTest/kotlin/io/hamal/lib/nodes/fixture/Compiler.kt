@@ -14,31 +14,31 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 
 
-interface Capture : NodeCompiler {
+sealed class Capture : NodeCompiler() {
     override val type: NodeType get() = NodeType("Capture")
 
-    object Boolean : Capture {
+    object Boolean : Capture() {
         override val inputTypes: List<ValueType> get() = listOf(TypeBoolean)
         override val outputTypes: List<ValueType> get() = listOf(TypeBoolean)
         override fun toCode(ctx: Context) = captureCode(ctx)
 
     }
 
-    object Decimal : Capture {
+    object Decimal : Capture() {
         override val inputTypes: List<ValueType> get() = listOf(TypeDecimal)
         override val outputTypes: List<ValueType> get() = listOf(TypeDecimal)
         override fun toCode(ctx: Context) = captureCode(ctx)
 
     }
 
-    object Number : Capture {
+    object Number : Capture() {
         override val inputTypes: List<ValueType> get() = listOf(TypeNumber)
         override val outputTypes: List<ValueType> get() = listOf(TypeNumber)
         override fun toCode(ctx: Context) = captureCode(ctx)
 
     }
 
-    object String : Capture {
+    object String : Capture() {
         override val inputTypes: List<ValueType> get() = listOf(TypeString)
         override val outputTypes: List<ValueType> get() = listOf(TypeString)
         override fun toCode(ctx: Context) = captureCode(ctx)
@@ -57,10 +57,10 @@ interface Capture : NodeCompiler {
 }
 
 
-sealed interface Invoked : NodeCompiler {
+sealed class Invoked : NodeCompiler() {
     override val type: NodeType get() = NodeType("Test_Invoked")
 
-    data object Empty : Invoked {
+    data object Empty : Invoked() {
         override val inputTypes: List<ValueType> get() = listOf()
         override val outputTypes: List<ValueType> get() = listOf()
 
@@ -76,7 +76,7 @@ sealed interface Invoked : NodeCompiler {
         }
     }
 
-    data object Boolean : Invoked {
+    data object Boolean : Invoked() {
         override val inputTypes: List<ValueType> get() = listOf(TypeBoolean)
         override val outputTypes: List<ValueType> get() = listOf()
 
@@ -92,7 +92,7 @@ sealed interface Invoked : NodeCompiler {
         }
     }
 
-    data object String : Invoked {
+    data object String : Invoked() {
         override val inputTypes: List<ValueType> get() = listOf(TypeString)
         override val outputTypes: List<ValueType> get() = listOf()
 

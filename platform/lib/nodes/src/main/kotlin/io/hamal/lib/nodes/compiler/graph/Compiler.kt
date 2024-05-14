@@ -4,7 +4,6 @@ import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueType
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.ControlType.Companion.ControlType
-import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.compiler.graph.ComputationGraph.Companion.ComputationGraph
 import io.hamal.lib.nodes.compiler.node.NodeCompiler
 import io.hamal.lib.nodes.compiler.node.NodeCompilerRegistry
@@ -24,7 +23,7 @@ class GraphCompiler(
         for (node in nodes) {
             val controls = graph.controls.filter { it.nodeId == node.id }
             val inputTypes = controls.filter { it !is ControlInvoke }.mapNotNull { control ->
-                if (control is ControlInput) {
+                if (control is ControlFromPortOrInput) {
                     control.port.type
                 } else {
                     null
@@ -61,10 +60,7 @@ class GraphCompiler(
         code.append("\n")
         code.append("\n")
 
-        val initNode = graph.controls.find { it.type == ControlType("Init") }?.nodeId?.let { nodeId -> nodes.find { it.id == nodeId } }
-            ?: nodes.find { it.type == NodeType("Init") }
-            ?: throw IllegalArgumentException("No Init node found")
-
+        val initNode = nodes.minByOrNull { it.id } ?: throw IllegalArgumentException("No Init node found")
 
         val computationGraph = ComputationGraph(graph)
         val orderedNodeIds = breadthFirstSearch(computationGraph, initNode.id)

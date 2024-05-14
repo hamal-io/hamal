@@ -8,11 +8,11 @@ import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.compiler.node.NodeCompiler.Context
 
-interface Code : NodeCompiler {
+abstract class Code : NodeCompiler() {
     override val type: NodeType get() = NodeType("Code")
     override val outputTypes: List<ValueType> get() = listOf()
 
-    data object Object : Code {
+    data object Object : Code() {
         override val inputTypes: List<ValueType> = listOf(TypeObject)
 
         override fun toCode(ctx: Context): ValueCode {

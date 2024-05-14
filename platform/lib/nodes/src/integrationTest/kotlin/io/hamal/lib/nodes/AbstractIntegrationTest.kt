@@ -22,6 +22,7 @@ import io.hamal.lib.nodes.NodeTitle.Companion.NodeTitle
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.PortId.Companion.PortId
 import io.hamal.lib.nodes.compiler.node.Filter
+import io.hamal.lib.nodes.compiler.node.Input
 import io.hamal.lib.nodes.compiler.node.NodeCompilerRegistry
 import io.hamal.lib.nodes.compiler.node.defaultNodeCompilerRegistry
 import io.hamal.lib.nodes.fixture.Capture
@@ -79,7 +80,6 @@ internal abstract class AbstractIntegrationTest {
                         Capture.Decimal,
                         Capture.Number,
                         Capture.String,
-                        Filter.Boolean,
                         Invoked.Boolean,
                         Invoked.Empty,
                         Invoked.String,

@@ -8,10 +8,10 @@ import io.hamal.lib.nodes.ControlCheckbox
 import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
 
-sealed interface Filter : NodeCompiler {
+sealed class Filter : NodeCompiler() {
     override val type: NodeType get() = NodeType("Filter")
 
-    data object Boolean : Filter {
+    data object Boolean : Filter() {
         override val inputTypes: List<ValueType> get() = listOf(TypeBoolean)
         override val outputTypes: List<ValueType> get() = listOf(TypeBoolean)
 

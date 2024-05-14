@@ -5,10 +5,10 @@ import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.compiler.node.NodeCompiler.Context
 
-sealed interface Print : NodeCompiler {
+sealed class Print : NodeCompiler() {
     override val type: NodeType get() = NodeType("Print")
 
-    data object Number : Print {
+    data object Number : Print() {
         override val inputTypes: List<ValueType> get() = listOf(TypeNumber)
         override val outputTypes: List<ValueType> get() = listOf()
 
@@ -24,7 +24,7 @@ sealed interface Print : NodeCompiler {
 
     }
 
-    data object Object : Print {
+    data object Object : Print() {
         override val inputTypes: List<ValueType> get() = listOf(TypeObject)
         override val outputTypes: List<ValueType> get() = listOf()
 
@@ -39,7 +39,7 @@ sealed interface Print : NodeCompiler {
 
     }
 
-    data object String : Print {
+    data object String : Print() {
         override val inputTypes: List<ValueType> get() = listOf(TypeString)
         override val outputTypes: List<ValueType> get() = listOf()
 

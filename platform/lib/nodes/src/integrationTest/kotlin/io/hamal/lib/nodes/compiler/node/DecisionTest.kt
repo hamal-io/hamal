@@ -9,7 +9,7 @@ import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 
-internal class DecisionAndTest : AbstractIntegrationTest() {
+internal class DecisionTest : AbstractIntegrationTest() {
 
     @Test
     fun `Boolean - happy path`() {
@@ -20,7 +20,7 @@ internal class DecisionAndTest : AbstractIntegrationTest() {
                     nodes = listOf(
                         node(1, "Init", listOf(PortOutput(PortId(20), TypeBoolean))),
                         node(
-                            2, "Decision_And", listOf(
+                            2, "Decision", listOf(
                                 portOutput(21, TypeBoolean),
                                 portOutput(22, TypeBoolean)
                             )
@@ -83,7 +83,7 @@ internal class DecisionAndTest : AbstractIntegrationTest() {
                     nodes = listOf(
                         node(1, "Init", listOf(PortOutput(PortId(20), TypeBoolean))),
                         node(
-                            2, "Decision_And", listOf(
+                            2, "Decision", listOf(
                                 portOutput(21, TypeBoolean),
                                 portOutput(22, TypeBoolean)
                             )

@@ -7,11 +7,19 @@ import io.hamal.lib.common.serialization.AdapterJson
 import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.ControlType.Companion.ControlType
 
+data class ControlBooleanInput(
+    override val identifier: ControlIdentifier,
+    override val nodeId: NodeId,
+    val value: ValueBoolean
+) : ControlInput {
+    override val type: ControlType = ControlType("Input_Boolean")
+}
+
 data class ControlCapture(
     override val identifier: ControlIdentifier,
     override val nodeId: NodeId,
     override val port: PortInput,
-) : ControlInput {
+) : ControlFromPortOrInput {
     override val type: ControlType = ControlType("Capture")
 }
 
@@ -20,7 +28,7 @@ data class ControlCheckbox(
     override val nodeId: NodeId,
     override val port: PortInput,
     val value: ValueBoolean
-) : ControlInput {
+) : ControlFromPortOrInput {
     override val type: ControlType = ControlType("Checkbox")
 }
 
@@ -29,7 +37,7 @@ data class ControlCode(
     override val nodeId: NodeId,
     override val port: PortInput,
     val value: ValueCode
-) : ControlInput {
+) : ControlFromPortOrInput {
     override val type: ControlType = ControlType("Code")
 }
 
@@ -37,7 +45,7 @@ data class ControlCondition(
     override val identifier: ControlIdentifier,
     override val nodeId: NodeId,
     override val port: PortInput,
-) : ControlInput {
+) : ControlFromPortOrInput {
     override val type: ControlType = ControlType("Condition")
 }
 
@@ -57,14 +65,13 @@ data class ControlInvoke(
     override val identifier: ControlIdentifier,
     override val nodeId: NodeId,
     override val port: PortInput
-) : ControlInput {
+) : ControlFromPortOrInput {
     override val type: ControlType = ControlType("Invoke")
 }
 
 data class ControlNumberInput(
     override val identifier: ControlIdentifier,
     override val nodeId: NodeId,
-    override val port: PortInput,
     val value: ValueNumber
 ) : ControlInput {
     override val type: ControlType = ControlType("Input_Number")
@@ -75,7 +82,7 @@ data class ControlTextArea(
     override val nodeId: NodeId,
     override val port: PortInput,
     val value: ValueString
-) : ControlInput {
+) : ControlFromPortOrInput {
     override val type: ControlType = ControlType("Text_Area")
 }
 
@@ -119,6 +126,7 @@ interface Control {
             val type = ControlType(json.asJsonObject.get("type").asString)
 
             return when (type) {
+                ControlType("Input_Boolean") -> context.deserialize(json, ControlBooleanInput::class.java)
                 ControlType("Checkbox") -> context.deserialize(json, ControlCheckbox::class.java)
                 ControlType("Capture") -> context.deserialize(json, ControlCapture::class.java)
                 ControlType("Code") -> context.deserialize(json, ControlCode::class.java)
@@ -133,7 +141,9 @@ interface Control {
     }
 }
 
-interface ControlInput : Control {
+interface ControlInput : Control
+
+interface ControlFromPortOrInput : Control {
     val port: PortInput
 }
 
@@ -159,6 +169,7 @@ sealed interface TemplateControl {
             val type = ControlType(json.asJsonObject.get("type").asString)
 
             return when (type) {
+                ControlType("Input_Boolean") -> context.deserialize(json, ControlBooleanInput::class.java)
                 ControlType("Checkbox") -> context.deserialize(json, ControlCheckbox::class.java)
                 ControlType("Capture") -> context.deserialize(json, ControlCapture::class.java)
                 ControlType("Condition") -> context.deserialize(json, ControlCondition::class.java)

@@ -121,10 +121,7 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
             return {...state}
         }
         case "NODE_ADDED": {
-
-
             const copy = structuredClone(state)
-
 
             if (action.nodeType === "Init") {
 

@@ -9,13 +9,14 @@ import io.hamal.lib.nodes.compiler.node.NodeCompiler
 import io.hamal.lib.nodes.compiler.node.NodeCompiler.Context
 
 
-internal data object PairInit : NodeCompiler {
+internal data object PairInit : NodeCompiler() {
     override val type = NodeType("Nyanbot_Pair_Init")
     override val inputTypes = emptyList<ValueType>()
     override val outputTypes: List<ValueType> = listOf(TypeObject)
 
     override fun toCode(ctx: Context): ValueCode {
-        val config = ctx.controls.filterIsInstance<ControlInit>().firstOrNull()?.config ?: throw IllegalArgumentException("Config not found")
+        val config = ctx.controls.filterIsInstance<ControlInit>().firstOrNull()?.config
+            ?: throw IllegalArgumentException("Config not found")
         println(config)
 
         return ValueCode(

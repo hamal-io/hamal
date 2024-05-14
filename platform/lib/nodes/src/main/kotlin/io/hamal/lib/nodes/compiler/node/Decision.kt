@@ -7,12 +7,11 @@ import io.hamal.lib.common.value.ValueType
 import io.hamal.lib.nodes.ControlCheckbox
 import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
-import io.hamal.lib.nodes.compiler.node.NodeCompiler.Context
 
-sealed interface DecisionAnd : NodeCompiler {
-    override val type: NodeType get() = NodeType("Decision_And")
+sealed class Decision : NodeCompiler() {
+    override val type: NodeType get() = NodeType("Decision")
 
-    data object Boolean : DecisionAnd {
+    data object Boolean : Decision() {
         override val inputTypes: List<ValueType> get() = listOf(TypeBoolean)
         override val outputTypes: List<ValueType> get() = listOf(TypeBoolean, TypeBoolean)
 
