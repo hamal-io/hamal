@@ -1,6 +1,6 @@
 import React, {FC, useContext} from "react";
 import styles from "@/components/nodes/port.module.css";
-import {PortId, PortInput, PortOutput, Position} from "@/components/nodes/types.ts";
+import {PortId, Port, Position} from "@/components/nodes/types.ts";
 import {ContextEditorState} from "@/components/nodes/editor.tsx";
 
 type PortsProps = {}
@@ -19,7 +19,7 @@ export const Ports: FC<PortsProps> = ({}) => {
 
 
 type PortInputWidgetProps = {
-    port: PortInput;
+    port: Port;
 }
 
 export const PortInputWidget: FC<PortInputWidgetProps> = ({port}) => {
@@ -72,7 +72,7 @@ export const PortInputWidget: FC<PortInputWidgetProps> = ({port}) => {
 }
 
 type PortOutputWidgetProps = {
-    port: PortOutput;
+    port: Port;
 }
 
 export const PortOutputWidget: FC<PortOutputWidgetProps> = ({port}) => {

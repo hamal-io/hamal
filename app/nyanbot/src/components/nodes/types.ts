@@ -51,6 +51,18 @@ export const isControl = (value: any): value is ControlBase => {
     );
 }
 
+type ControlWithPort = {
+    id: ControlId;
+    port: {
+        id: PortId;
+    }
+}
+
+export const isControlWithPort = (value: any): value is ControlWithPort => {
+    return isControl(value) && "port" in value;
+}
+
+
 export type ControlCondition = ControlBase & {
     type: "Condition";
 }
@@ -83,8 +95,10 @@ export const isControlTextArea = (value: any): value is ControlTextArea => {
 
 export type ControlInit = ControlBase & {
     type: 'Init';
-    selector: string;
     description: string;
+    config: {
+        selector: string;
+    }
 }
 
 export const isControlInit = (value: any): value is ControlInit => {
@@ -119,24 +133,15 @@ export type Node = {
     title?: NodeLabel;
     position: Position;
     size: Size;
-    outputs: PortOutput[];
+    outputs: Port[];
 }
 
 export type PortId = string
 
-export interface Port {
+export type Port = {
     id: PortId;
 }
 
-export type PortInput = Port & {
-    id: PortId;
-    // inputType: string; // FIXME type
-}
-
-export type PortOutput = Port & {
-    id: PortId;
-    // type: string; // FIXME type
-}
 
 export type Position = {
     x: number;

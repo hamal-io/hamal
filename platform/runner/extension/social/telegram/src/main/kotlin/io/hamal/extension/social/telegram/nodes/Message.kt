@@ -32,7 +32,7 @@ internal object SendMessage : NodeCompiler {
     override fun toCode(ctx: Context): ValueCode {
         return ValueCode(
             """
-           -- print('Sending message ' .. arg_2 .. ' to chat ' .. arg_1)
+           print('Sending message ' .. arg_2 .. ' to chat ' .. arg_1)
            
            tg = require('social.telegram').create({
                bot_token = '7084966112:AAElNk5M1t0hTXTQPruNszHVD0SB0OCJjKY'

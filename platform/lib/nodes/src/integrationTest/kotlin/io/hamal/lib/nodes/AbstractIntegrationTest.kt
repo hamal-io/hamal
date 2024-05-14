@@ -21,6 +21,7 @@ import io.hamal.lib.nodes.NodeId.Companion.NodeId
 import io.hamal.lib.nodes.NodeTitle.Companion.NodeTitle
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.PortId.Companion.PortId
+import io.hamal.lib.nodes.compiler.node.Filter
 import io.hamal.lib.nodes.compiler.node.NodeCompilerRegistry
 import io.hamal.lib.nodes.compiler.node.defaultNodeCompilerRegistry
 import io.hamal.lib.nodes.fixture.Capture
@@ -78,6 +79,7 @@ internal abstract class AbstractIntegrationTest {
                         Capture.Decimal,
                         Capture.Number,
                         Capture.String,
+                        Filter.Boolean,
                         Invoked.Boolean,
                         Invoked.Empty,
                         Invoked.String,
@@ -93,7 +95,7 @@ internal abstract class AbstractIntegrationTest {
         outputs: List<PortOutput> = listOf(),
         properties: ValueObject = ValueObject.empty,
         title: NodeTitle = NodeTitle("Title of ${id.toString(16)}"),
-        position: Position = Position(0, 0),
+        position: Position = Position(0.0, 0.0),
         size: Size = Size(200, 200)
     ): Node {
         return Node(

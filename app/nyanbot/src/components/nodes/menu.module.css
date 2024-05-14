@@ -16,6 +16,16 @@
     z-index: 2;
 }
 
+.execute {
+    position: absolute;
+    background: #fff;
+    right: 10px;
+    top: 90px;
+    z-index: 2;
+}
+
+
+
 .wrapper {
     background: rgba(114, 120, 124, 0.9);
     border-radius: 5px;
@@ -63,21 +73,4 @@
         background: rgba(255, 102, 208, 0.65);
         border-color: rgba(242, 131, 228, 0.65);
     }
-}
-
-.transformWrapper {
-    transform-origin: center center;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 0;
-    height: 0;
-}
-
-.scaleWrapper {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 0;
-    height: 0;
 }

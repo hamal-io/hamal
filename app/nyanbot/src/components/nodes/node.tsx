@@ -12,7 +12,7 @@ type NodeWidgetProps = {
     // size: Size;
     // type: NodeType;
     node: Node;
-    onDragStart: () => void;
+    // onDragStart: () => void;
 
 }
 
@@ -22,6 +22,7 @@ export const NodeWidget: FC<NodeWidgetProps> = ({node}) => {
 
     const startDrag = (e: React.MouseEvent | React.TouchEvent) => {
         console.debug("Drag started")
+        dispatch({type: "NODE_SELECTED", id: node.id})
         // onDragStart();
     };
 
@@ -29,18 +30,21 @@ export const NodeWidget: FC<NodeWidgetProps> = ({node}) => {
         if (nodeWrapper.current) {
             nodeWrapper.current.style.transform = `translate(${x}px,${y}px)`;
 
-            dispatch({type: "NODE_POSITION_UPDATED", id: node.id, position: {x, y}});
+            dispatch({type: "NODE_POSITION_UPDATED", position: {x, y}});
         }
     };
 
     const handleDragEnd = (e: MouseEvent, {x, y}) => {
         console.debug("Drag ended")
-        dispatch({type: "NODE_POSITION_UPDATED", id: node.id, position: {x, y}});
+        dispatch({type: "NODE_POSITION_UPDATED", position: {x, y}});
+        dispatch({type: "NODE_UNSELECTED"})
     };
 
     const isEditing = false
     const width = node.size.width;
     const height = node.size.height;
+
+    const stateNode = useContext(ContextEditorState).state.nodes[node.id]
 
     // FIXME
     return (
@@ -89,7 +93,7 @@ export const NodeWidget: FC<NodeWidgetProps> = ({node}) => {
             onDrag={handleDrag}
             onDragEnd={handleDragEnd}
             innerRef={nodeWrapper}
-            // data-node-id={id}
+            data-node-id={node.id}
             data-component="node"
             // data-node-type={currentNodeType.type}
             // data-component-is-root={!!root}
@@ -103,9 +107,9 @@ export const NodeWidget: FC<NodeWidgetProps> = ({node}) => {
 
             <ControlListWidget node={node}/>
 
-            {node.outputs.length === 1 && (
+            {stateNode.outputs.length === 1 && (
                 <PortOutputWidget
-                    port={node.outputs[0]}
+                    port={stateNode.outputs[0]}
                     // nodeId={id}
                     // inputs={inputs}
                     // outputs={outputs}
