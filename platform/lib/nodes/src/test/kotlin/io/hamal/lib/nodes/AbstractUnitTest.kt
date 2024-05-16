@@ -16,7 +16,7 @@ internal abstract class AbstractUnitTest {
         type: String,
         outputs: List<PortOutput> = listOf(),
         title: NodeTitle = NodeTitle("Title of ${id.toString(16)}"),
-        position: Position = Position(0, 0),
+        position: Position = Position(0.0, 0.0),
         size: Size = Size(200, 200)
     ): Node {
         return Node(
