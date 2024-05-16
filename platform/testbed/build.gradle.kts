@@ -40,6 +40,7 @@ testing {
                     implementation(project(":platform:backend:repository:api"))
                     implementation(project(":platform:runner:test"))
                     implementation(project(":platform:runner:extension:net:http"))
+                    implementation(project(":platform:runner:extension:std:debug"))
                     implementation(project(":platform:runner:extension:std:log"))
                     implementation(project(":platform:runner:extension:std:sys"))
                     implementation(project(":platform:runner:extension:std:table"))
