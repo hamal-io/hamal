@@ -57,12 +57,12 @@ function extension_create()
         end
 
         function instance.exec.get(exec_id)
-            local err, resp = handle_error(http.get({
+            local err, resp = handle_response(http.get({
                 url = '/v1/execs/' .. exec_id,
                 headers = { ['x-exec-token'] = context.exec.token }
             }))
 
-            return err, resp
+            return err, resp.content
         end
 
         function instance.exec.list(query)
@@ -174,7 +174,7 @@ function extension_create()
             }))
 
             if resp ~= nil then
-                resp = resp.funcs
+                resp = resp.content.funcs
             end
 
             return err, resp
@@ -192,7 +192,7 @@ function extension_create()
                 }
             }))
 
-            return err, resp
+            return err, resp.content
         end
 
         return instance
