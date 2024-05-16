@@ -10,12 +10,12 @@ local function handle_response(err, resp)
                 type = 'ApiError',
                 message = resp.content.message
             }
-            return err, nil
+            --error case nil.content would error
+            return err, {}
         end
     end
 
-    --in error case nil.content would throw an error in calling function
-    return nil, resp.content
+    return nil, resp
 end
 
 function extension_create()
@@ -122,7 +122,8 @@ function extension_create()
                     codeType = req.code_type or "Lua54"
                 }
             }))
-            return err, resp
+
+            return err, resp.content
         end
 
         function instance.func.get(func_id)
@@ -131,7 +132,7 @@ function extension_create()
                 headers = { ['x-exec-token'] = context.exec.token }
             }))
 
-            return err, resp
+            return err, resp.content
         end
 
         function instance.request.get(request_id)
@@ -140,7 +141,7 @@ function extension_create()
                 headers = { ['x-exec-token'] = context.exec.token }
             }))
 
-            return err, resp
+            return err, resp.content
         end
 
         return instance
