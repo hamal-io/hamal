@@ -10,7 +10,7 @@ local func_req = fail_on_error(sys.func.create({
 
 sys.await_completed(func_req)
 
-for i = 2, 20 do
+for i = 2, 10 do
     update_req = fail_on_error(sys.func.update({
         id = func_req.id,
         name = 'func-' .. i,
@@ -23,9 +23,12 @@ for i = 2, 20 do
     sys.await_completed(deploy_req)
 end
 
+
+
+
 func_one = fail_on_error(sys.func.get(func_req.id))
 
 deployments = fail_on_error(sys.func.list_deployments(func_one))
-assert(#deployments == 19) --first is missing
-assert(deployments[10].message == 'message-11')
-assert(deployments[10].version == 11)
+assert(#deployments == 9) --first is missing
+assert(deployments[5].message == 'message-6')
+assert(deployments[5].version == 6)

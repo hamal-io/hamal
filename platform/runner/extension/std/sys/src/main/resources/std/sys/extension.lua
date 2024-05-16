@@ -43,6 +43,7 @@ function extension_create()
             repeat
                 local status = fail_on_error(instance.request.get(req.requestId))
                 status = status.requestStatus
+                print(status)
                 if status == 'Failed' then
                     error("Request failed!")
                 end
@@ -50,7 +51,7 @@ function extension_create()
                     error("Request Timeout!")
                 end
 
-                debug.sleep(100)
+                debug.sleep(10)
                 count = count + 1
             until status == 'Completed'
             return true
@@ -138,7 +139,7 @@ function extension_create()
 
         function instance.func.deploy(req)
             req = req or {}
-            local err, resp = handle_error(http.post({
+            local err, resp = handle_response(http.post({
                 url = '/v1/funcs/' .. req.id .. '/deploy',
                 headers = { ['x-exec-token'] = context.exec.token },
                 body = {
@@ -148,11 +149,11 @@ function extension_create()
                 }
             }))
 
-            return err, resp
+            return err, resp.content
         end
 
         function instance.func.deploy_latest(func_id, message)
-            local err, resp = handle_error(http.post({
+            local err, resp = handle_response(http.post({
                 url = '/v1/funcs/' .. func_id .. '/deploy',
                 headers = { ['x-exec-token'] = context.exec.token },
                 body = {
@@ -162,7 +163,7 @@ function extension_create()
                 }
             }))
 
-            return err, resp
+            return err, resp.content
         end
 
         function instance.func.get(func_id)
@@ -211,16 +212,12 @@ function extension_create()
 
         function instance.func.list_deployments(query)
             query = query or {}
-            local err, resp = handle_error(http.get({
+            local err, resp = handle_response(http.get({
                 url = '/v1/funcs/' .. query.id .. '/deployments',
                 headers = { ['x-exec-token'] = context.exec.token }
             }))
 
-            if resp ~= nil then
-                resp = resp.deployments
-            end
-
-            return err, resp
+            return err, resp.content.deployments
         end
 
         function instance.func.update(req)
