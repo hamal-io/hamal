@@ -43,7 +43,6 @@ function extension_create()
             repeat
                 local status = fail_on_error(instance.request.get(req.requestId))
                 status = status.requestStatus
-                print(status)
                 if status == 'Failed' then
                     error("Request failed!")
                 end
@@ -186,17 +185,17 @@ function extension_create()
 
         function instance.func.invoke(req)
             req = req or {}
-            local err, resp = handle_error(http.post({
+            local err, resp = handle_response(http.post({
                 url = '/v1/funcs/' .. req.id .. '/invoke',
                 headers = { ['x-exec-token'] = context.exec.token },
                 body = {
-                    correlation_id = req.correlation_id or "__default__", --FIXME-341 hardcode somewhere else?
+                    correlation_id = req.correlation_id or "__default__",
                     inputs = req.inputs or {},
                     version = req.version or nil
                 }
             }))
 
-            return err, resp
+            return err, resp.content
         end
 
         function instance.func.list(query)

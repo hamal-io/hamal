@@ -31,7 +31,7 @@ invocation_req = fail_on_error(sys.func.invoke({
 }))
 
 sys.await_completed(invocation_req)
---FIXME-341 snakecase
+
 assert(invocation_req.requestId ~= nil)
 assert(invocation_req.requestStatus == 'Submitted')
 assert(invocation_req.id ~= nil)
