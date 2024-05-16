@@ -22,13 +22,15 @@ internal class FeedbackListControllerTest : FeedbackBaseControllerTest() {
 
     @Test
     fun `Single Feedback`() {
-        createFeedback(
-            FeedbackCreateRequest(
-                mood = FeedbackMood(Normal),
-                message = FeedbackMessage("My mood is so normal"),
-                accountId = null
+        awaitCompleted(
+            createFeedback(
+                FeedbackCreateRequest(
+                    mood = FeedbackMood(Normal),
+                    message = FeedbackMessage("My mood is so normal"),
+                    accountId = null
+                )
             )
-        ).id
+        )
 
         val list = httpTemplate.get("/v1/feedbacks")
             .execute(ApiFeedbackList::class)

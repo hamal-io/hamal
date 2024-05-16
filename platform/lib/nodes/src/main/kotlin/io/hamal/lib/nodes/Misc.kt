@@ -1,8 +1,8 @@
 package io.hamal.lib.nodes
 
 data class Position(
-    val x: Int,
-    val y: Int
+    val x: Double,
+    val y: Double
 )
 
 data class Size(
