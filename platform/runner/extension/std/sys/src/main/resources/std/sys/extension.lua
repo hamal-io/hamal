@@ -62,7 +62,7 @@ function extension_create()
                 headers = { ['x-exec-token'] = context.exec.token }
             }))
 
-            return err, resp
+            return err, resp.content
         end
 
         function instance.exec.list(query)
