@@ -53,7 +53,6 @@ function extension_create()
                 debug.sleep(10)
                 count = count + 1
             until status == 'Completed'
-            return true
         end
 
         function instance.exec.list(query)
