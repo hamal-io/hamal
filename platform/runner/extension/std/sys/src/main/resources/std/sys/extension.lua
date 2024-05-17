@@ -46,11 +46,11 @@ function extension_create()
                 if status == 'Failed' then
                     throw.internal("Request failed!")
                 end
-                if count >= 5 then
+                if count >= 10 then
                     throw.internal("Request Timeout!")
                 end
 
-                debug.sleep(1)
+                debug.sleep(10)
                 count = count + 1
             until status == 'Completed'
             return true
