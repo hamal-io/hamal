@@ -28,6 +28,7 @@ function extension_create()
 
         local http = require('net.http').create({ base_url = cfg.base_url or 'http://localhost:8008' })
         local debug = require('std.debug').create()
+        local throw = require('std.throw').create()
 
         local instance = {
             collection = {},
@@ -43,13 +44,13 @@ function extension_create()
                 local status = fail_on_error(instance.request.get(req.requestId))
                 status = status.requestStatus
                 if status == 'Failed' then
-                    error("Request failed!")
+                    throw.internal("Request failed!")
                 end
-                if count >= 10 then
-                    error("Request Timeout!")
+                if count >= 5 then
+                    throw.internal("Request Timeout!")
                 end
 
-                debug.sleep(100)
+                debug.sleep(1)
                 count = count + 1
             until status == 'Completed'
             return true

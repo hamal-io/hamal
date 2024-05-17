@@ -39,6 +39,7 @@ testing {
                 dependencies {
                     implementation(project(":platform:runner:test"))
                     implementation(project(":platform:runner:extension:net:http"))
+                    implementation(project(":platform:runner:extension:std:throw"))
                 }
             }
         }
