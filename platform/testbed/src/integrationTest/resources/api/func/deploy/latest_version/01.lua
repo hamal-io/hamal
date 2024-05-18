@@ -26,7 +26,7 @@ assert(func_one.code.value == 'code-20')
 assert(func_one.deployment.version == 1)
 assert(func_one.deployment.value == 'code-1')
 
-deploy_req = fail_on_error(sys.func.deploy_latest(func_one.id))
+deploy_req = fail_on_error(sys.func.deploy_latest({ id = func_one.id }))
 sys.await_completed(deploy_req)
 
 func_one = fail_on_error(sys.func.get(func_one.id))

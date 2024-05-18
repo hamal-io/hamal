@@ -144,7 +144,6 @@ function extension_create()
                 url = '/v1/funcs/' .. req.id .. '/deploy',
                 headers = { ['x-exec-token'] = context.exec.token },
                 body = {
-                    id = req.id,
                     version = req.version or nil,
                     message = req.message or nil
                 }
@@ -153,14 +152,14 @@ function extension_create()
             return err, resp.content
         end
 
-        function instance.func.deploy_latest(func_id, message)
+        function instance.func.deploy_latest(req)
+            req = req or {}
             local err, resp = handle_response(http.post({
-                url = '/v1/funcs/' .. func_id .. '/deploy',
+                url = '/v1/funcs/' .. req.id .. '/deploy',
                 headers = { ['x-exec-token'] = context.exec.token },
                 body = {
-                    id = func_id,
                     version = nil,
-                    message = message or nil
+                    message = req.message or nil
                 }
             }))
 

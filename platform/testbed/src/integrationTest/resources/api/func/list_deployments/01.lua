@@ -19,12 +19,12 @@ for i = 2, 10 do
     }))
     sys.await_completed(update_req)
 
-    deploy_req = fail_on_error(sys.func.deploy_latest(func_req.id, 'message-' .. i))
+    deploy_req = fail_on_error(sys.func.deploy_latest({
+        id = func_req.id,
+        message = 'message-' .. i
+    }))
     sys.await_completed(deploy_req)
 end
-
-
-
 
 func_one = fail_on_error(sys.func.get(func_req.id))
 

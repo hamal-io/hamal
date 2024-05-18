@@ -26,6 +26,6 @@ err, res = sys.func.deploy({
 assert(err.message == 'Func not found')
 assert(res == nil)
 
-err, res = sys.func.deploy_latest('23')
+err, res = sys.func.deploy_latest({ id = '23' })
 assert(err.message == 'Func not found')
 assert(res == nil)
