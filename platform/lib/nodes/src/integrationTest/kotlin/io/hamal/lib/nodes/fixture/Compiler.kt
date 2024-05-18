@@ -2,43 +2,42 @@ package io.hamal.lib.nodes.fixture
 
 import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.AbstractIntegrationTest
-import io.hamal.lib.nodes.ControlTextArea
+import io.hamal.lib.nodes.ControlInputString
 import io.hamal.lib.nodes.NodeId.Companion.NodeId
 import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.NodesGraph
 import io.hamal.lib.nodes.compiler.node.NodeCompiler
-import io.hamal.lib.nodes.compiler.node.NodeCompiler.Context
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
 
 
-interface Capture : NodeCompiler {
+sealed class Capture : NodeCompiler() {
     override val type: NodeType get() = NodeType("Capture")
 
-    object Boolean : Capture {
+    object Boolean : Capture() {
         override val inputTypes: List<ValueType> get() = listOf(TypeBoolean)
         override val outputTypes: List<ValueType> get() = listOf(TypeBoolean)
         override fun toCode(ctx: Context) = captureCode(ctx)
 
     }
 
-    object Decimal : Capture {
+    object Decimal : Capture() {
         override val inputTypes: List<ValueType> get() = listOf(TypeDecimal)
         override val outputTypes: List<ValueType> get() = listOf(TypeDecimal)
         override fun toCode(ctx: Context) = captureCode(ctx)
 
     }
 
-    object Number : Capture {
+    object Number : Capture() {
         override val inputTypes: List<ValueType> get() = listOf(TypeNumber)
         override val outputTypes: List<ValueType> get() = listOf(TypeNumber)
         override fun toCode(ctx: Context) = captureCode(ctx)
 
     }
 
-    object String : Capture {
+    object String : Capture() {
         override val inputTypes: List<ValueType> get() = listOf(TypeString)
         override val outputTypes: List<ValueType> get() = listOf(TypeString)
         override fun toCode(ctx: Context) = captureCode(ctx)
@@ -57,10 +56,10 @@ interface Capture : NodeCompiler {
 }
 
 
-sealed interface Invoked : NodeCompiler {
+sealed class Invoked : NodeCompiler() {
     override val type: NodeType get() = NodeType("Test_Invoked")
 
-    data object Empty : Invoked {
+    data object Empty : Invoked() {
         override val inputTypes: List<ValueType> get() = listOf()
         override val outputTypes: List<ValueType> get() = listOf()
 
@@ -76,7 +75,7 @@ sealed interface Invoked : NodeCompiler {
         }
     }
 
-    data object Boolean : Invoked {
+    data object Boolean : Invoked() {
         override val inputTypes: List<ValueType> get() = listOf(TypeBoolean)
         override val outputTypes: List<ValueType> get() = listOf()
 
@@ -92,7 +91,7 @@ sealed interface Invoked : NodeCompiler {
         }
     }
 
-    data object String : Invoked {
+    data object String : Invoked() {
         override val inputTypes: List<ValueType> get() = listOf(TypeString)
         override val outputTypes: List<ValueType> get() = listOf()
 
@@ -116,22 +115,17 @@ internal class TestInvokedTest : AbstractIntegrationTest() {
 
         runTest(
             unitOfWork(
-                initValue = ValueString("Hamal Rocks"),
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "Init", listOf(portOutput(20, TypeString))),
+                        node(1, "Input", listOf(portOutput(20, TypeString))),
                         node(2, "Test_Invoked")
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
                     ),
                     controls = listOf(
-                        ControlTextArea(
-                            nextControlIdentifier(),
-                            NodeId(2),
-                            portInput(21, TypeString),
-                            ValueString("default")
-                        )
+                        ControlInputString(nextControlId(),NodeId(1),portInput(-1, TypeString),ValueString("Hamal Rocks")),
+                        ControlInputString(nextControlId(),NodeId(2),portInput(21, TypeString),ValueString(""))
                     )
                 )
             )
@@ -144,10 +138,9 @@ internal class TestInvokedTest : AbstractIntegrationTest() {
     fun `Nodes invokes multiple nodes`() {
         runTest(
             unitOfWork(
-                initValue = ValueString("Hamal Rocks"),
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "Init", listOf(portOutput(20, TypeString))),
+                        node(1, "Input", listOf(portOutput(20, TypeString))),
                         node(2, "Test_Invoked"),
                         node(3, "Test_Invoked")
                     ),
@@ -156,18 +149,9 @@ internal class TestInvokedTest : AbstractIntegrationTest() {
                         connection(100, 1, 20, 3, 22),
                     ),
                     controls = listOf(
-                        ControlTextArea(
-                            nextControlIdentifier(),
-                            NodeId(2),
-                            portInput(21, TypeString),
-                            ValueString("default")
-                        ),
-                        ControlTextArea(
-                            nextControlIdentifier(),
-                            NodeId(3),
-                            portInput(22, TypeString),
-                            ValueString("default")
-                        )
+                        ControlInputString(nextControlId(),NodeId(1),portInput(-1, TypeString),ValueString("Hamal Rocks")),
+                        ControlInputString(nextControlId(),NodeId(2),portInput(21, TypeString),ValueString("default")),
+                        ControlInputString(nextControlId(),NodeId(3),portInput(22, TypeString),ValueString("default"))
                     )
 
                 )

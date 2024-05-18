@@ -1,7 +1,10 @@
 package io.hamal.lib.nodes.compiler.node
 
+import io.hamal.lib.common.logger
 import io.hamal.lib.common.value.ValueType
 import io.hamal.lib.nodes.NodeType
+
+private val log = logger(NodeCompilerRegistry::class)
 
 class NodeCompilerRegistry(nodeCompilers: List<NodeCompiler>) {
 
@@ -9,6 +12,8 @@ class NodeCompilerRegistry(nodeCompilers: List<NodeCompiler>) {
         generators.putIfAbsent(nodeCompiler.type, mutableListOf())
         if (find(nodeCompiler) == null) {
             generators[nodeCompiler.type]?.add(nodeCompiler)
+        } else {
+            log.warn("${nodeCompiler::class.simpleName} already registered")
         }
         return this
     }
@@ -43,11 +48,12 @@ class NodeCompilerRegistry(nodeCompilers: List<NodeCompiler>) {
 val defaultNodeCompilerRegistry = NodeCompilerRegistry(
     listOf(
         Code.Object,
-        DecisionAnd.Boolean,
-        Init.Boolean,
-        Init.Number,
-        Init.Object,
-        Init.String,
+        Code.String,
+        Decision.Boolean,
+        Filter.Boolean,
+        Input.Boolean,
+        Input.String,
+        Print.Boolean,
         Print.Number,
         Print.Object,
         Print.String,

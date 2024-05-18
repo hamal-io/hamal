@@ -15,10 +15,9 @@ internal class FilterTest : AbstractIntegrationTest() {
     fun `Boolean - happy path`() {
         runTest(
             unitOfWork(
-                initValue = ValueTrue,
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "Init", listOf(PortOutput(PortId(20), TypeBoolean))),
+                        node(1, "Input", listOf(PortOutput(PortId(20), TypeBoolean))),
                         node(2, "Filter", listOf(portOutput(21, TypeBoolean))),
                         node(
                             3,
@@ -39,9 +38,11 @@ internal class FilterTest : AbstractIntegrationTest() {
                         connection(102, 2, 21, 4, 32),
                     ),
                     controls = listOf(
-                        ControlCheckbox(nextControlIdentifier(), NodeId(2), portInput(30, TypeBoolean), ValueTrue),
-                        ControlCapture(nextControlIdentifier(), NodeId(3), portInput(31, TypeBoolean)),
-                        ControlInvoke(nextControlIdentifier(), NodeId(4), portInput(32, TypeBoolean))
+                        ControlInputBoolean(nextControlId(), NodeId(1), portInput(-1, TypeBoolean), ValueTrue),
+                        ControlInvoke(nextControlId(), NodeId(2), portInput(30, TypeBoolean)),
+                        ControlInputBoolean(nextControlId(), NodeId(2), portInput(33, TypeBoolean), ValueTrue),
+                        ControlCapture(nextControlId(), NodeId(3), portInput(31, TypeBoolean)),
+                        ControlInvoke(nextControlId(), NodeId(4), portInput(32, TypeBoolean))
                     )
                 )
             )
@@ -55,23 +56,12 @@ internal class FilterTest : AbstractIntegrationTest() {
     fun `Boolean - sad path`() {
         runTest(
             unitOfWork(
-                initValue = ValueFalse,
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "Init", listOf(PortOutput(PortId(20), TypeBoolean))),
+                        node(1, "Input", listOf(PortOutput(PortId(20), TypeBoolean))),
                         node(2, "Filter", listOf(portOutput(21, TypeBoolean))),
-                        node(
-                            3,
-                            "Capture",
-                            listOf(portOutput(23, TypeBoolean)),
-                            ValueObject.builder().set("capture_fn", ValueString("capture_one")).build()
-                        ),
-                        node(
-                            4,
-                            "Test_Invoked",
-                            listOf(),
-                            ValueObject.builder().set("invoke_fn", ValueString("invoke_one")).build()
-                        )
+                        node(3,"Capture",listOf(portOutput(23, TypeBoolean)),ValueObject.builder().set("capture_fn", ValueString("capture_one")).build()),
+                        node(4,"Test_Invoked",listOf(),ValueObject.builder().set("invoke_fn", ValueString("invoke_one")).build())
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 30),
@@ -79,9 +69,11 @@ internal class FilterTest : AbstractIntegrationTest() {
                         connection(102, 2, 21, 4, 32),
                     ),
                     controls = listOf(
-                        ControlCheckbox(nextControlIdentifier(), NodeId(2), portInput(30, TypeBoolean), ValueTrue),
-                        ControlCapture(nextControlIdentifier(), NodeId(3), portInput(31, TypeBoolean)),
-                        ControlInvoke(nextControlIdentifier(), NodeId(4), portInput(32, TypeBoolean))
+                        ControlInputBoolean(nextControlId(), NodeId(1), portInput(-1, TypeBoolean), ValueFalse),
+                        ControlInvoke(nextControlId(), NodeId(2), portInput(30, TypeBoolean)),
+                        ControlInputBoolean(nextControlId(), NodeId(2), portInput(33, TypeBoolean), ValueTrue),
+                        ControlCapture(nextControlId(), NodeId(3), portInput(31, TypeBoolean)),
+                        ControlInvoke(nextControlId(), NodeId(4), portInput(32, TypeBoolean))
                     )
                 )
             )
