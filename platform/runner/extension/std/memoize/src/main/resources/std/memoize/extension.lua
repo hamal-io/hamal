@@ -71,26 +71,27 @@ function extension_create()
 
     local export = {}
 
-    function export.create(f)
-        cache = cache or {}
+    function export.create()
 
-        if not is_callable(f) then
-            --error(string.format("Only functions and callable tables are memoizable. Received %s (a %s)", tostring(f), type(f)))
-            print('FIXME')
-        end
-
-        return function(...)
-            local params = { ... }
-
-            local results = cache_get(cache, params)
-            if not results then
-                results = { f(...) }
-                cache_put(cache, params, results)
+        return function(fn)
+            cache = cache or {}
+            
+            if not is_callable(fn) then
+                require('std.throw').create().illegal_argument('Only functions and callable tables are memoizable')
             end
 
-            return unpack(results)
-        end
+            return function(...)
+                local params = { ... }
 
+                local results = cache_get(cache, params)
+                if not results then
+                    results = { fn(...) }
+                    cache_put(cache, params, results)
+                end
+
+                return unpack(results)
+            end
+        end
     end
 
     return export

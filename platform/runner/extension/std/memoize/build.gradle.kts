@@ -26,6 +26,7 @@ distributions {
 
 dependencies {
     implementation(project(":platform:lib:kua"))
+    implementation(project(":platform:runner:extension:std:throw"))
 }
 
 

@@ -11,9 +11,9 @@ object NodesHotModule : SerdeModuleJson() {
     init {
         this[ConnectionId::class] = ValueVariableAdapters.SnowflakeId(::ConnectionId)
 
-        this[ControlIdentifier::class] = ValueVariableAdapters.String(::ControlIdentifier)
+        this[ControlId::class] = ValueVariableAdapters.SnowflakeId(::ControlId)
+        this[ControlKey::class] = ValueVariableAdapters.String(::ControlKey)
         this[ControlType::class] = ValueVariableAdapters.String(::ControlType)
-        this[ControlInit.Config::class] = ValueVariableAdapters.Object(ControlInit::Config)
         this[Control::class] = Control.Adapter
         this[TemplateControl::class] = TemplateControl.Adapter
 

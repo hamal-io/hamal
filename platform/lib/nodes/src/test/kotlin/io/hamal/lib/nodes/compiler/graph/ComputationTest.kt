@@ -30,8 +30,8 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
                     connection(100, 1, 20, 2, 21)
                 ),
                 controls = listOf(
-                    ControlTextArea(
-                        nextControlIdentifier(),
+                    ControlInputString(
+                        nextControlId(),
                         NodeId(2),
                         PortInput(PortId(21), TypeString),
                         ValueString("default string")
@@ -65,14 +65,14 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
                     connection(101, 1, 20, 3, 22),
                 ),
                 controls = listOf(
-                    ControlTextArea(
-                        nextControlIdentifier(),
+                    ControlInputString(
+                        nextControlId(),
                         NodeId(2),
                         PortInput(PortId(21), TypeString),
                         ValueString("default")
                     ),
-                    ControlTextArea(
-                        nextControlIdentifier(),
+                    ControlInputString(
+                        nextControlId(),
                         NodeId(3),
                         PortInput(PortId(22), TypeString),
                         ValueString("default")
@@ -106,14 +106,14 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
                     connection(101, 2, 21, 3, 22),
                 ),
                 controls = listOf(
-                    ControlTextArea(
-                        nextControlIdentifier(),
+                    ControlInputString(
+                        nextControlId(),
                         NodeId(2),
                         PortInput(PortId(21), TypeString),
                         ValueString("default")
                     ),
-                    ControlTextArea(
-                        nextControlIdentifier(),
+                    ControlInputString(
+                        nextControlId(),
                         NodeId(3),
                         PortInput(PortId(22), TypeString),
                         ValueString("default")

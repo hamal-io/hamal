@@ -28,8 +28,10 @@ function extension_create()
 
         local http = require('net.http').create({ base_url = cfg.base_url or 'http://localhost:8008' })
         local debug = require('std.debug').create()
+        local throw = require('std.throw').create()
 
         local instance = {
+            await_completed = {},
             collection = {},
             exec = { },
             func = { },
@@ -44,16 +46,15 @@ function extension_create()
                 local status = fail_on_error(instance.request.get(req.requestId))
                 status = status.requestStatus
                 if status == 'Failed' then
-                    error("Request failed!")
+                    throw.internal("Request failed!")
                 end
                 if count >= 10 then
-                    error("Request Timeout!")
+                    throw.internal("Request Timeout!")
                 end
 
-                debug.sleep(100)
+                debug.sleep(10)
                 count = count + 1
             until status == 'Completed'
-            return true
         end
 
         function instance.exec.get(exec_id)
@@ -139,6 +140,15 @@ function extension_create()
         function instance.func.get(func_id)
             local err, resp = handle_response(http.get({
                 url = '/v1/funcs/' .. func_id,
+                headers = { ['x-exec-token'] = context.exec.token }
+            }))
+
+            return err, resp.content
+        end
+
+        function instance.request.get(request_id)
+            local err, resp = handle_response(http.get({
+                url = '/v1/requests/' .. request_id,
                 headers = { ['x-exec-token'] = context.exec.token }
             }))
 

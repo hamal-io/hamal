@@ -71,7 +71,7 @@ internal class NodeCompilerRegistryTest {
         }
     }
 
-    private val someNodeCompilerOne = object : NodeCompiler {
+    private val someNodeCompilerOne = object : NodeCompiler() {
         override val type: NodeType get() = NodeType("SOME_TYPE")
         override val inputTypes: List<ValueType> = listOf(TypeString)
         override val outputTypes: List<ValueType> get() = listOf()
@@ -79,7 +79,7 @@ internal class NodeCompilerRegistryTest {
             TODO("Not yet implemented")
         }
     }
-    private val someNodeCompilerTwo = object : NodeCompiler {
+    private val someNodeCompilerTwo = object : NodeCompiler() {
         override val type: NodeType get() = NodeType("SOME_TYPE")
         override val inputTypes: List<ValueType> = listOf(TypeNumber)
         override val outputTypes: List<ValueType> get() = listOf()
@@ -88,7 +88,7 @@ internal class NodeCompilerRegistryTest {
         }
     }
 
-    private val anotherNodeCompilerOne = object : NodeCompiler {
+    private val anotherNodeCompilerOne = object : NodeCompiler() {
         override val type: NodeType get() = NodeType("ANOTHER_TYPE")
         override val inputTypes: List<ValueType> = listOf()
         override val outputTypes: List<ValueType> get() = listOf(TypeString)
@@ -97,7 +97,7 @@ internal class NodeCompilerRegistryTest {
         }
     }
 
-    private val anotherNodeCompilerTwo = object : NodeCompiler {
+    private val anotherNodeCompilerTwo = object : NodeCompiler() {
         override val type: NodeType get() = NodeType("ANOTHER_TYPE")
         override val inputTypes: List<ValueType> = listOf()
         override val outputTypes: List<ValueType> = listOf(TypeDecimal)
@@ -106,7 +106,7 @@ internal class NodeCompilerRegistryTest {
         }
     }
 
-    private val noTypeNodeCompiler = object : NodeCompiler {
+    private val noTypeNodeCompiler = object : NodeCompiler() {
         override val type: NodeType get() = NodeType("NO_TYPE")
         override val inputTypes: List<ValueType> = listOf()
         override val outputTypes: List<ValueType> = listOf()
@@ -115,7 +115,7 @@ internal class NodeCompilerRegistryTest {
         }
     }
 
-    private val stringPassThroughNodeCompiler = object : NodeCompiler {
+    private val stringPassThroughNodeCompiler = object : NodeCompiler() {
         override val type: NodeType get() = NodeType("STRING_PASS_THROUGH")
         override val inputTypes: List<ValueType> = listOf(TypeString)
         override val outputTypes: List<ValueType> = listOf(TypeString)
