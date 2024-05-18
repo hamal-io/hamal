@@ -39,8 +39,13 @@ internal object SendMessage : NodeCompiler() {
 
         return ValueCode(
             """
-           chat_id = '${chatId.stringValue}'
-           message = '${message.stringValue}'
+           -- chat_id =  controls['chat_id'].value or default_value or error
+           -- args['xyz'].value()
+           
+           
+            
+           chat_id =  controls['chat_id'].value() 
+           message =  controls['message'].value() -- retrieves value - either from input or from connected node
                 
            print(chat_id)
            print(message)

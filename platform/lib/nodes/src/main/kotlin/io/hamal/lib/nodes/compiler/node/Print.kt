@@ -62,6 +62,7 @@ sealed class Print : NodeCompiler() {
         override fun toCode(ctx: Context): ValueCode {
             return ValueCode(
                 """
+            -- print(args[0].value())
             print(arg_1)
             return
         """.trimIndent()

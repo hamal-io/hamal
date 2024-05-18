@@ -10,12 +10,12 @@ import {Form, FormControl, FormField, FormItem, FormMessage} from "@/components/
 import {useForm} from "react-hook-form";
 import {useAccountLogin} from "@/hook";
 import {Buffer} from "buffer";
-import {MetaMaskProvider, useSDK} from '@metamask/sdk-react';
+import {MetaMaskUIProvider, useSDK} from "@metamask/sdk-react-ui";
 import {useMetaMaskChallenge, useMetaMaskToken} from "@/hook/auth.ts";
 
 export const LoginPage = () => {
     return (
-        <MetaMaskProvider debug={false} sdkOptions={{
+        <MetaMaskUIProvider debug={false} sdkOptions={{
             checkInstallationImmediately: false,
             dappMetadata: {
                 name: "fn(guru)",
@@ -74,7 +74,7 @@ export const LoginPage = () => {
                     </div>
                 </div>
             </div>
-        </MetaMaskProvider>
+        </MetaMaskUIProvider>
     )
 }
 
@@ -96,7 +96,6 @@ const MetaMaskButton: FC<MetaMaskButtonProps> = ({loading, setLoading}) => {
     useEffect(() => {
         if (challenge != null) {
             console.log("init challenge", challenge)
-            const msg = `0x${Buffer.from("test", 'utf8').toString('hex')}`;
             const invoke = async () => {
                 // @ts-ignore
                 const signature = await ethereum.request({
@@ -168,7 +167,6 @@ const LoginForm = () => {
             login(values.email, values.password)
         } catch (e) {
             console.error(e)
-        } finally {
         }
     }
 
