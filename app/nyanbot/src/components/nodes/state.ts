@@ -13,6 +13,7 @@ import {
     Size,
     Translate
 } from "@/components/nodes/types.ts";
+import {filter} from "lodash";
 
 export type CanvasState = {
     scale: number;
@@ -172,6 +173,7 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
                 const nodeId = nextNodeId().toString()
                 const portId = nextPortId().toString()
                 const controlId = nextControlId().toString()
+                const controlPortId = (nextPortId() + 1).toString()
 
                 copy.nodes[nodeId.toString()] = {
                     id: nodeId.toString(),
@@ -190,11 +192,20 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
                     nodeId: nodeId.toString()
                 }
 
+                copy.ports[controlPortId.toString()] = {
+                    id: controlPortId.toString(),
+                    nodeId: nodeId.toString()
+                }
+
                 copy.controls[controlId.toString()] = {
                     id: controlId.toString(),
                     type: 'Input_Boolean',
                     nodeId: nodeId.toString(),
-                    value: false
+                    value: false,
+                    port: {
+                        id: controlPortId,
+                        type: "Boolean"
+                    }
                 } satisfies ControlInputBoolean
 
                 copy.nodeControlIds[nodeId] = [controlId.toString()]
@@ -206,6 +217,8 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
                 const portId = nextPortId().toString()
                 const invokePortId = (nextPortId() + 1).toString()
                 const controlId = nextControlId().toString()
+                const filterControlId = (nextControlId() + 1).toString()
+                const filterPortId = (nextPortId() + 1).toString()
 
                 copy.nodes[nodeId.toString()] = {
                     id: nodeId.toString(),
@@ -229,14 +242,33 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
                     nodeId: nodeId.toString()
                 }
 
+                copy.ports[filterPortId.toString()] = {
+                    id: filterPortId.toString(),
+                    nodeId: nodeId.toString()
+                }
+
                 copy.controls[controlId.toString()] = {
                     id: controlId.toString(),
                     type: 'Invoke',
                     nodeId: nodeId.toString(),
-                    port: {id: invokePortId.toString()},
+                    port: {
+                        id: invokePortId.toString(),
+                        type: "Boolean"
+                    },
+                    value: false
                 } satisfies ControlInvoke
 
-                copy.nodeControlIds[nodeId] = [controlId.toString()]
+                copy.controls[filterControlId.toString()] = {
+                    id: filterControlId.toString(),
+                    type: "Input_Boolean",
+                    nodeId: nodeId.toString(),
+                    port: {
+                        id: filterPortId,
+                        type: "Boolean"
+                    }
+                } satisfies ControlInputBoolean
+
+                copy.nodeControlIds[nodeId] = [controlId.toString(), filterControlId.toString()]
 
             } else if (action.nodeType === 'Print') {
 
@@ -267,6 +299,7 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
                         type: "Boolean"
                     },
                 } satisfies ControlInvoke
+
 
                 copy.nodeControlIds[nodeId] = [controlId.toString()]
 

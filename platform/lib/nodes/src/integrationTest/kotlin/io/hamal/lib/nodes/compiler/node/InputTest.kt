@@ -18,18 +18,13 @@ internal object InputTest : AbstractIntegrationTest() {
                 graph = NodesGraph(
                     nodes = listOf(
                         node(1, "Input", listOf(PortOutput(PortId(20), TypeBoolean))),
-                        node(
-                            2,
-                            "Capture",
-                            listOf(portOutput(22, TypeBoolean)),
-                            ValueObject.builder().set("capture_fn", ValueString("capture_one")).build()
-                        ),
+                        node(2,"Capture",listOf(portOutput(22, TypeBoolean)), ValueObject.builder().set("capture_fn", ValueString("capture_one")).build()),
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 30),
                     ),
                     controls = listOf(
-                        ControlBooleanInput(nextControlIdentifier(), NodeId(1), ValueTrue),
+                        ControlInputBoolean(nextControlIdentifier(), NodeId(1), portInput(23, TypeBoolean), ValueTrue),
                         ControlCapture(nextControlIdentifier(), NodeId(2), portInput(31, TypeBoolean)),
                     )
                 )
@@ -56,7 +51,7 @@ internal object InputTest : AbstractIntegrationTest() {
                         connection(100, 1, 20, 2, 30),
                     ),
                     controls = listOf(
-                        ControlBooleanInput(nextControlIdentifier(), NodeId(1), ValueFalse),
+                        ControlInputBoolean(nextControlIdentifier(), NodeId(1), portInput(23, TypeBoolean), ValueFalse),
                         ControlCapture(nextControlIdentifier(), NodeId(2), portInput(31, TypeBoolean)),
                     )
                 )

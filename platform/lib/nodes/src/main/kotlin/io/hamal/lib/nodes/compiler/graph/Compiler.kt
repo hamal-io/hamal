@@ -20,11 +20,13 @@ class GraphCompiler(
 
         val nodes = graph.nodes
 
+        code.append("throw = require('std.throw').create()\n")
+
         for (node in nodes) {
             val controls = graph.controls.filter { it.nodeId == node.id }
-            val inputTypes = controls.mapNotNull { control ->
+            val inputTypes = controls.filterIsInstance<ControlCausesInvocation>().mapNotNull { control ->
                 if (control is ControlWithPort) {
-                    control.port.type
+                    control.port?.type
                 } else {
                     null
                 }
@@ -37,7 +39,6 @@ class GraphCompiler(
             val builder = StringBuilder()
             val args = List(generator.inputTypes.size) { "arg_${it + 1}" }.joinToString { it }
 
-            builder.append("throw = require('std.throw').create()")
 
             builder.append("""function n_${node.id.stringValue}(${args})""")
             builder.append("\n")
@@ -59,6 +60,7 @@ class GraphCompiler(
 
         code.append("\n")
         code.append("\n")
+
 
         val initNode = nodes.minByOrNull { it.id } ?: throw IllegalArgumentException("No Init node found")
 
@@ -105,13 +107,17 @@ class GraphCompiler(
                         }
 
                         code.append("local p_1 = $p1 \n")
-                        code.append("n_${inputNode.id.stringValue}(p_1)")
+
+                        code.append("n_${inputNode.id}_1, n_${inputNode.id}_2 = n_${inputNode.id.stringValue}(p_1)")
 
                     } else if (controls.size == 2) {
                         var control = controls.first()
                         val p1 = if (control is ControlTextArea) {
                             val defaultValue = control.value.stringValue
                             "'${defaultValue}'"
+                        } else if (control is ControlInputBoolean) {
+                            val defaultValue = control.value.booleanValue
+                            "${defaultValue}"
                         } else {
                             outputPortMapping[connection.outputPort.id]!!.first
                         }
@@ -138,6 +144,9 @@ class GraphCompiler(
                         val p1 = if (control is ControlTextArea) {
                             val defaultValue = control.value.stringValue
                             "'${defaultValue}'"
+                        } else if (control is ControlInputBoolean) {
+                            val defaultValue = control.value.booleanValue
+                            "${defaultValue}"
                         } else {
                             outputPortMapping[connection.outputPort.id]!!.first
                         }
@@ -175,6 +184,9 @@ class GraphCompiler(
                         val p1 = if (control is ControlTextArea) {
                             val defaultValue = control.value.stringValue
                             "${outputPortMapping[connection.outputPort.id]!!.first} or '${defaultValue}'"
+                        } else if (control is ControlInputBoolean) {
+                            val defaultValue = control.value.booleanValue
+                            "${outputPortMapping[connection.outputPort.id]!!.first} or '${defaultValue}'"
                         } else {
                             outputPortMapping[connection.outputPort.id]!!.first
                         }
@@ -201,8 +213,6 @@ class GraphCompiler(
                 code.append("\n")
             }
         }
-
-//        println(code)
 
         return ValueCode(code.toString())
     }

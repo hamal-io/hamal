@@ -4,7 +4,7 @@ import io.hamal.lib.common.value.TypeBoolean
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueTrue
 import io.hamal.lib.common.value.ValueType
-import io.hamal.lib.nodes.ControlCheckbox
+import io.hamal.lib.nodes.ControlInputBoolean
 import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
 
@@ -16,7 +16,7 @@ sealed class Decision : NodeCompiler() {
         override val outputTypes: List<ValueType> get() = listOf(TypeBoolean, TypeBoolean)
 
         override fun toCode(ctx: Context): ValueCode {
-            val checkbox = ctx.controls.filterIsInstance<ControlCheckbox>().first()
+            val checkbox = ctx.controls.filterIsInstance<ControlInputBoolean>().first()
             val expectedValue = checkbox.value
             return ValueCode(
                 """

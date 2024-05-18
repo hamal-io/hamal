@@ -7,29 +7,17 @@ import io.hamal.lib.common.serialization.AdapterJson
 import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.ControlType.Companion.ControlType
 
-data class ControlBooleanInput(
-    override val identifier: ControlIdentifier,
-    override val nodeId: NodeId,
-    val value: ValueBoolean
-) : ControlInput {
-    override val type: ControlType = ControlType("Input_Boolean")
+interface ControlCausesInvocation : ControlWithPort {
+
 }
+
 
 data class ControlCapture(
     override val identifier: ControlIdentifier,
     override val nodeId: NodeId,
     override val port: PortInput,
-) : ControlFromPortOrInput {
+) : ControlCausesInvocation {
     override val type: ControlType = ControlType("Capture")
-}
-
-data class ControlCheckbox(
-    override val identifier: ControlIdentifier,
-    override val nodeId: NodeId,
-    override val port: PortInput,
-    val value: ValueBoolean
-) : ControlFromPortOrInput {
-    override val type: ControlType = ControlType("Checkbox")
 }
 
 data class ControlCode(
@@ -37,7 +25,7 @@ data class ControlCode(
     override val nodeId: NodeId,
     override val port: PortInput,
     val value: ValueCode
-) : ControlFromPortOrInput {
+) : ControlCausesInvocation {
     override val type: ControlType = ControlType("Code")
 }
 
@@ -65,11 +53,21 @@ data class ControlInvoke(
     override val identifier: ControlIdentifier,
     override val nodeId: NodeId,
     override val port: PortInput
-) : ControlWithPort {
+) : ControlCausesInvocation {
     override val type: ControlType = ControlType("Invoke")
 }
 
-data class ControlNumberInput(
+data class ControlInputBoolean(
+    override val identifier: ControlIdentifier,
+    override val nodeId: NodeId,
+    override val port: PortInput,
+    val value: ValueBoolean
+) : ControlFromPortOrInput {
+    override val type: ControlType = ControlType("Input_Boolean")
+}
+
+
+data class ControlInputNumber(
     override val identifier: ControlIdentifier,
     override val nodeId: NodeId,
     val value: ValueNumber
@@ -126,14 +124,13 @@ interface Control {
             val type = ControlType(json.asJsonObject.get("type").asString)
 
             return when (type) {
-                ControlType("Input_Boolean") -> context.deserialize(json, ControlBooleanInput::class.java)
-                ControlType("Checkbox") -> context.deserialize(json, ControlCheckbox::class.java)
+                ControlType("Input_Boolean") -> context.deserialize(json, ControlInputBoolean::class.java)
                 ControlType("Capture") -> context.deserialize(json, ControlCapture::class.java)
                 ControlType("Code") -> context.deserialize(json, ControlCode::class.java)
                 ControlType("Condition") -> context.deserialize(json, ControlCondition::class.java)
                 ControlType("Init") -> context.deserialize(json, ControlInit::class.java)
                 ControlType("Invoke") -> context.deserialize(json, ControlInvoke::class.java)
-                ControlType("Input_Number") -> context.deserialize(json, ControlNumberInput::class.java)
+                ControlType("Input_Number") -> context.deserialize(json, ControlInputNumber::class.java)
                 ControlType("Text_Area") -> context.deserialize(json, ControlTextArea::class.java)
                 else -> TODO()
             }
@@ -144,7 +141,7 @@ interface Control {
 interface ControlInput : Control
 
 interface ControlWithPort : Control {
-    val port: PortInput
+    val port: PortInput?
 }
 
 interface ControlFromPortOrInput : ControlWithPort
@@ -171,13 +168,12 @@ sealed interface TemplateControl {
             val type = ControlType(json.asJsonObject.get("type").asString)
 
             return when (type) {
-                ControlType("Input_Boolean") -> context.deserialize(json, ControlBooleanInput::class.java)
-                ControlType("Checkbox") -> context.deserialize(json, ControlCheckbox::class.java)
+                ControlType("Input_Boolean") -> context.deserialize(json, ControlInputBoolean::class.java)
                 ControlType("Capture") -> context.deserialize(json, ControlCapture::class.java)
                 ControlType("Condition") -> context.deserialize(json, ControlCondition::class.java)
                 ControlType("Init") -> context.deserialize(json, ControlInit::class.java)
                 ControlType("Invoke") -> context.deserialize(json, ControlInvoke::class.java)
-                ControlType("Input_Number") -> context.deserialize(json, ControlNumberInput::class.java)
+                ControlType("Input_Number") -> context.deserialize(json, ControlInputNumber::class.java)
                 ControlType("Text_Area") -> context.deserialize(json, ControlTextArea::class.java)
                 else -> TODO()
             }

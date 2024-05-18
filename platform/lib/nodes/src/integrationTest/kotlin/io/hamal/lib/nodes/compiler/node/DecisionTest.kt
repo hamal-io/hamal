@@ -19,12 +19,7 @@ internal class DecisionTest : AbstractIntegrationTest() {
                 graph = NodesGraph(
                     nodes = listOf(
                         node(1, "Init", listOf(PortOutput(PortId(20), TypeBoolean))),
-                        node(
-                            2, "Decision", listOf(
-                                portOutput(21, TypeBoolean),
-                                portOutput(22, TypeBoolean)
-                            )
-                        ),
+                        node(2, "Decision", listOf(portOutput(21, TypeBoolean), portOutput(22, TypeBoolean))),
                         node(
                             3,
                             "Capture",
@@ -58,7 +53,8 @@ internal class DecisionTest : AbstractIntegrationTest() {
                         connection(104, 2, 22, 6, 34, "no"),
                     ),
                     controls = listOf(
-                        ControlCheckbox(nextControlIdentifier(), NodeId(2), portInput(30, TypeBoolean), ValueTrue),
+                        ControlInvoke(nextControlIdentifier(), NodeId(2), portInput(30, TypeBoolean)),
+                        ControlInputBoolean(nextControlIdentifier(), NodeId(2), portInput(35, TypeBoolean), ValueTrue),
                         ControlCapture(nextControlIdentifier(), NodeId(3), portInput(31, TypeBoolean)),
                         ControlInvoke(nextControlIdentifier(), NodeId(4), portInput(32, TypeBoolean)),
                         ControlCapture(nextControlIdentifier(), NodeId(5), portInput(33, TypeBoolean)),
@@ -82,12 +78,7 @@ internal class DecisionTest : AbstractIntegrationTest() {
                 graph = NodesGraph(
                     nodes = listOf(
                         node(1, "Init", listOf(PortOutput(PortId(20), TypeBoolean))),
-                        node(
-                            2, "Decision", listOf(
-                                portOutput(21, TypeBoolean),
-                                portOutput(22, TypeBoolean)
-                            )
-                        ),
+                        node(2, "Decision", listOf(portOutput(21, TypeBoolean), portOutput(22, TypeBoolean))),
                         node(
                             3,
                             "Capture",
@@ -121,7 +112,8 @@ internal class DecisionTest : AbstractIntegrationTest() {
                         connection(104, 2, 22, 6, 34, "no"),
                     ),
                     controls = listOf(
-                        ControlCheckbox(nextControlIdentifier(), NodeId(2), portInput(30, TypeBoolean), ValueTrue),
+                        ControlInvoke(nextControlIdentifier(), NodeId(2), portInput(30, TypeBoolean)),
+                        ControlInputBoolean(nextControlIdentifier(), NodeId(2), portInput(35, TypeBoolean), ValueTrue),
                         ControlCapture(nextControlIdentifier(), NodeId(3), portInput(31, TypeBoolean)),
                         ControlInvoke(nextControlIdentifier(), NodeId(4), portInput(32, TypeBoolean)),
                         ControlCapture(nextControlIdentifier(), NodeId(5), portInput(33, TypeBoolean)),
