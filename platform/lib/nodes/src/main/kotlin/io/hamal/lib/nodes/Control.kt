@@ -4,8 +4,10 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.AdapterJson
+import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.ControlType.Companion.ControlType
+import java.util.UUID
 
 interface ControlCausesInvocation : ControlWithPort {
 
@@ -13,85 +15,92 @@ interface ControlCausesInvocation : ControlWithPort {
 
 
 data class ControlCapture(
-    override val identifier: ControlIdentifier,
+    override val id: ControlId,
     override val nodeId: NodeId,
     override val port: PortInput,
+    override val key: ControlKey = ControlKey.random(),
 ) : ControlCausesInvocation {
     override val type: ControlType = ControlType("Capture")
 }
 
 data class ControlCode(
-    override val identifier: ControlIdentifier,
+    override val id: ControlId,
     override val nodeId: NodeId,
     override val port: PortInput,
-    val value: ValueCode
+    val value: ValueCode,
+    override val key: ControlKey = ControlKey.random()
 ) : ControlCausesInvocation {
     override val type: ControlType = ControlType("Code")
 }
 
 data class ControlCondition(
-    override val identifier: ControlIdentifier,
+    override val id: ControlId,
     override val nodeId: NodeId,
     override val port: PortInput,
+    override val key: ControlKey = ControlKey.random(),
 ) : ControlFromPortOrInput {
     override val type: ControlType = ControlType("Condition")
 }
 
-data class ControlInit(
-    override val identifier: ControlIdentifier,
-    override val nodeId: NodeId,
-    val config: Config = Config(),
-    val description: String = "",
-) : Control {
-    override val type: ControlType = ControlType("Init")
-
-    class Config(override val value: ValueObject = ValueObject.empty) : ValueVariableObject()
-
-}
-
 data class ControlInvoke(
-    override val identifier: ControlIdentifier,
+    override val id: ControlId,
     override val nodeId: NodeId,
-    override val port: PortInput
+    override val port: PortInput,
+    override val key: ControlKey = ControlKey.random(),
 ) : ControlCausesInvocation {
     override val type: ControlType = ControlType("Invoke")
 }
 
 data class ControlInputBoolean(
-    override val identifier: ControlIdentifier,
+    override val id: ControlId,
     override val nodeId: NodeId,
     override val port: PortInput,
-    val value: ValueBoolean
+    val value: ValueBoolean,
+    override val key: ControlKey = ControlKey.random(),
 ) : ControlFromPortOrInput {
     override val type: ControlType = ControlType("Input_Boolean")
 }
 
 
 data class ControlInputNumber(
-    override val identifier: ControlIdentifier,
+    override val id: ControlId,
     override val nodeId: NodeId,
-    val value: ValueNumber
+    val value: ValueNumber,
+    override val key: ControlKey = ControlKey.random(),
 ) : ControlInput {
     override val type: ControlType = ControlType("Input_Number")
 }
 
-data class ControlTextArea(
-    override val identifier: ControlIdentifier,
+data class ControlInputString(
+    override val id: ControlId,
     override val nodeId: NodeId,
     override val port: PortInput,
-    val value: ValueString
+    val value: ValueString,
+    override val key: ControlKey = ControlKey.random(),
 ) : ControlFromPortOrInput {
-    override val type: ControlType = ControlType("Text_Area")
+    override val type: ControlType = ControlType("Input_String")
 }
 
 
 // FIXME drop distinguishing between constant and input -- same thing and having a port connector is optional
 // FIXME boolean as checkbox
-class ControlIdentifier(override val value: ValueString) : ValueVariableString() {
+
+class ControlId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
     companion object {
-        fun ControlIdentifier(value: String) = ControlIdentifier(ValueString(value))
+        fun ControlId(value: SnowflakeId) = ControlId(ValueSnowflakeId(value))
+        fun ControlId(value: Int) = ControlId(ValueSnowflakeId(SnowflakeId(value.toLong())))
+        fun ControlId(value: String) = ControlId(ValueSnowflakeId(SnowflakeId(value.toLong(16))))
     }
 }
+
+
+class ControlKey(override val value: ValueString) : ValueVariableString() {
+    companion object {
+        fun ControlKey(value: String) = ControlKey(ValueString(value))
+        fun random() = ControlKey(UUID.randomUUID().toString())
+    }
+}
+
 
 class ControlType(override val value: ValueString) : ValueVariableString() {
     companion object {
@@ -102,9 +111,10 @@ class ControlType(override val value: ValueString) : ValueVariableString() {
 
 // FIXME becomes sealed after migration
 interface Control {
-    val identifier: ControlIdentifier
+    val id: ControlId
     val type: ControlType
     val nodeId: NodeId
+    val key: ControlKey
 
     object Adapter : AdapterJson<Control> {
 
@@ -124,14 +134,13 @@ interface Control {
             val type = ControlType(json.asJsonObject.get("type").asString)
 
             return when (type) {
-                ControlType("Input_Boolean") -> context.deserialize(json, ControlInputBoolean::class.java)
                 ControlType("Capture") -> context.deserialize(json, ControlCapture::class.java)
                 ControlType("Code") -> context.deserialize(json, ControlCode::class.java)
                 ControlType("Condition") -> context.deserialize(json, ControlCondition::class.java)
-                ControlType("Init") -> context.deserialize(json, ControlInit::class.java)
                 ControlType("Invoke") -> context.deserialize(json, ControlInvoke::class.java)
+                ControlType("Input_Boolean") -> context.deserialize(json, ControlInputBoolean::class.java)
                 ControlType("Input_Number") -> context.deserialize(json, ControlInputNumber::class.java)
-                ControlType("Text_Area") -> context.deserialize(json, ControlTextArea::class.java)
+                ControlType("Input_String") -> context.deserialize(json, ControlInputString::class.java)
                 else -> TODO()
             }
         }
@@ -168,13 +177,12 @@ sealed interface TemplateControl {
             val type = ControlType(json.asJsonObject.get("type").asString)
 
             return when (type) {
-                ControlType("Input_Boolean") -> context.deserialize(json, ControlInputBoolean::class.java)
                 ControlType("Capture") -> context.deserialize(json, ControlCapture::class.java)
                 ControlType("Condition") -> context.deserialize(json, ControlCondition::class.java)
-                ControlType("Init") -> context.deserialize(json, ControlInit::class.java)
                 ControlType("Invoke") -> context.deserialize(json, ControlInvoke::class.java)
+                ControlType("Input_Boolean") -> context.deserialize(json, ControlInputBoolean::class.java)
                 ControlType("Input_Number") -> context.deserialize(json, ControlInputNumber::class.java)
-                ControlType("Text_Area") -> context.deserialize(json, ControlTextArea::class.java)
+                ControlType("Input_String") -> context.deserialize(json, ControlInputString::class.java)
                 else -> TODO()
             }
         }

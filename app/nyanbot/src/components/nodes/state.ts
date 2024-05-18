@@ -3,7 +3,7 @@ import {
     ConnectionId,
     Control,
     ControlId, ControlInputBoolean, ControlInvoke,
-    isControlTextArea, isControlWithPort,
+    isControlInputString, isControlWithPort,
     Node,
     NodeId,
     NodeType,
@@ -68,7 +68,7 @@ export type EditorState = {
 export type EditorAction =
     | { type: "CANVAS_SET"; position: Position; size: Size; rect: Rect }
     | { type: "CONNECTION_ADDED"; outputPortId: PortId, inputPortId: PortId }
-    | { type: "CONTROL_TEXT_AREA_UPDATED"; id: ControlId, value: string }
+    | { type: "CONTROL_INPUT_STRING_UPDATED"; id: ControlId, value: string }
     | { type: "CONTROL_INPUT_BOOLEAN_UPDATED"; id: ControlId, value: boolean }
     | { type: "NODE_ADDED"; nodeType: NodeType; position: Position }
     | { type: "NODE_SELECTED"; id: NodeId; }
@@ -112,10 +112,10 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
             }
             return copy;
         }
-        case 'CONTROL_TEXT_AREA_UPDATED': {
+        case 'CONTROL_INPUT_STRING_UPDATED': {
             // FIXME
             const control = state.controls[action.id]
-            if (isControlTextArea(control)) {
+            if (isControlInputString(control)) {
                 control.value = action.value;
             } else {
                 throw Error('Not ControlText')
@@ -133,42 +133,7 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
         case "NODE_ADDED": {
             const copy = structuredClone(state)
 
-            if (action.nodeType === "Init") {
-
-                const nodeId = nextNodeId().toString()
-                const portId = nextPortId().toString()
-                const controlId = nextControlId().toString()
-
-                copy.nodes[nodeId.toString()] = {
-                    id: nodeId.toString(),
-                    type: 'Init',
-                    title: 'Init',
-                    position: action.position,
-                    size: {width: 100, height: 100},
-                    outputs: [{
-                        id: portId.toString(),
-                        type: 'String'
-                    }]
-                }
-
-                copy.ports[portId.toString()] = {
-                    id: portId.toString(),
-                    nodeId: nodeId.toString()
-                }
-
-
-                copy.controls[controlId.toString()] = {
-                    id: controlId.toString(),
-                    type: 'Init',
-                    nodeId: nodeId.toString(),
-                    config: {
-                        selector: 'No_Value',
-                    },
-                    description: 'Let me trigger TG for ya!',
-                }
-
-                copy.nodeControlIds[nodeId] = [controlId.toString()]
-            } else if (action.nodeType == 'Input') {
+            if (action.nodeType == 'Input') {
 
                 const nodeId = nextNodeId().toString()
                 const portId = nextPortId().toString()
@@ -205,6 +170,49 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
                     port: {
                         id: controlPortId,
                         type: "Boolean"
+                    }
+                } satisfies ControlInputBoolean
+
+                copy.nodeControlIds[nodeId] = [controlId.toString()]
+
+
+            } else if (action.nodeType == 'Input_String') {
+
+                const nodeId = nextNodeId().toString()
+                const portId = nextPortId().toString()
+                const controlId = nextControlId().toString()
+                const controlPortId = (nextPortId() + 1).toString()
+
+                copy.nodes[nodeId.toString()] = {
+                    id: nodeId.toString(),
+                    type: 'Input',
+                    title: 'Input - String',
+                    position: action.position,
+                    size: {width: 100, height: 100},
+                    outputs: [{
+                        id: portId.toString(),
+                        type: 'String'
+                    }]
+                }
+
+                copy.ports[portId.toString()] = {
+                    id: portId.toString(),
+                    nodeId: nodeId.toString()
+                }
+
+                copy.ports[controlPortId.toString()] = {
+                    id: controlPortId.toString(),
+                    nodeId: nodeId.toString()
+                }
+
+                copy.controls[controlId.toString()] = {
+                    id: controlId.toString(),
+                    type: 'Input_String',
+                    nodeId: nodeId.toString(),
+                    value: 'Meeooowww',
+                    port: {
+                        id: controlPortId,
+                        type: "String"
                     }
                 } satisfies ControlInputBoolean
 
@@ -328,7 +336,10 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
                     id: invokeControlId.toString(),
                     type: 'Invoke',
                     nodeId: nodeId.toString(),
-                    port: {id: invokePortId.toString()},
+                    port: {
+                        id: invokePortId.toString(),
+                        type: "Unit"
+                    },
                 } satisfies ControlInvoke
 
 
@@ -343,7 +354,8 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
 
                 copy.controls[chatIdControlId.toString()] = {
                     id: chatIdControlId.toString(),
-                    type: 'Text_Area',
+                    key: 'chat_id',
+                    type: 'Input_String',
                     nodeId: nodeId.toString(),
                     port: {
                         id: chatIdPortId.toString(),
@@ -364,7 +376,8 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
 
                 copy.controls[messageControlId.toString()] = {
                     id: messageControlId.toString(),
-                    type: 'Text_Area',
+                    key: 'message',
+                    type: 'Input_String',
                     nodeId: nodeId.toString(),
                     port: {
                         id: messagePortId.toString(),

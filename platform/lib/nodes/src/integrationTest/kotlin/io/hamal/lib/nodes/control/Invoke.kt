@@ -19,7 +19,7 @@ internal object ControlInvokeTest : AbstractIntegrationTest() {
         // FIXME what is this?
         runTest(
             unitOfWork(
-                initValue = ValueString("This value will not passed into capture node"),
+//                initValue = ValueString("This value will not passed into capture node"),
                 graph = NodesGraph(
                     nodes = listOf(
                         node(1, "Init", listOf(PortOutput(PortId(20), TypeString))),
@@ -29,10 +29,9 @@ internal object ControlInvokeTest : AbstractIntegrationTest() {
                         connection(100, 1, 20, 2, 21)
                     ),
                     controls = listOf(
-                        ControlInit(nextControlIdentifier(), NodeId(1), ControlInit.Config()),
-                        ControlInvoke(nextControlIdentifier(), NodeId(2), portInput(21, TypeString)),
-                        ControlTextArea(
-                            nextControlIdentifier(),
+                        ControlInvoke(nextControlId(), NodeId(2), portInput(21, TypeString)),
+                        ControlInputString(
+                            nextControlId(),
                             NodeId(2),
                             portInput(22, TypeString),
                             ValueString("default capture string")

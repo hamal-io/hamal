@@ -48,13 +48,11 @@ class NodeCompilerRegistry(nodeCompilers: List<NodeCompiler>) {
 val defaultNodeCompilerRegistry = NodeCompilerRegistry(
     listOf(
         Code.Object,
+        Code.String,
         Decision.Boolean,
         Filter.Boolean,
         Input.Boolean,
-        Init.Boolean,
-        Init.Number,
-        Init.Object,
-        Init.String,
+        Input.String,
         Print.Boolean,
         Print.Number,
         Print.Object,

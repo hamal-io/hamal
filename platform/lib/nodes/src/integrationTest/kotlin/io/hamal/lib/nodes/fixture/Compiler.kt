@@ -2,13 +2,12 @@ package io.hamal.lib.nodes.fixture
 
 import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.AbstractIntegrationTest
-import io.hamal.lib.nodes.ControlTextArea
+import io.hamal.lib.nodes.ControlInputString
 import io.hamal.lib.nodes.NodeId.Companion.NodeId
 import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.NodesGraph
 import io.hamal.lib.nodes.compiler.node.NodeCompiler
-import io.hamal.lib.nodes.compiler.node.NodeCompiler.Context
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
@@ -116,22 +115,17 @@ internal class TestInvokedTest : AbstractIntegrationTest() {
 
         runTest(
             unitOfWork(
-                initValue = ValueString("Hamal Rocks"),
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "Init", listOf(portOutput(20, TypeString))),
+                        node(1, "Input", listOf(portOutput(20, TypeString))),
                         node(2, "Test_Invoked")
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
                     ),
                     controls = listOf(
-                        ControlTextArea(
-                            nextControlIdentifier(),
-                            NodeId(2),
-                            portInput(21, TypeString),
-                            ValueString("default")
-                        )
+                        ControlInputString(nextControlId(),NodeId(1),portInput(-1, TypeString),ValueString("Hamal Rocks")),
+                        ControlInputString(nextControlId(),NodeId(2),portInput(21, TypeString),ValueString(""))
                     )
                 )
             )
@@ -144,10 +138,9 @@ internal class TestInvokedTest : AbstractIntegrationTest() {
     fun `Nodes invokes multiple nodes`() {
         runTest(
             unitOfWork(
-                initValue = ValueString("Hamal Rocks"),
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "Init", listOf(portOutput(20, TypeString))),
+                        node(1, "Input", listOf(portOutput(20, TypeString))),
                         node(2, "Test_Invoked"),
                         node(3, "Test_Invoked")
                     ),
@@ -156,18 +149,9 @@ internal class TestInvokedTest : AbstractIntegrationTest() {
                         connection(100, 1, 20, 3, 22),
                     ),
                     controls = listOf(
-                        ControlTextArea(
-                            nextControlIdentifier(),
-                            NodeId(2),
-                            portInput(21, TypeString),
-                            ValueString("default")
-                        ),
-                        ControlTextArea(
-                            nextControlIdentifier(),
-                            NodeId(3),
-                            portInput(22, TypeString),
-                            ValueString("default")
-                        )
+                        ControlInputString(nextControlId(),NodeId(1),portInput(-1, TypeString),ValueString("Hamal Rocks")),
+                        ControlInputString(nextControlId(),NodeId(2),portInput(21, TypeString),ValueString("default")),
+                        ControlInputString(nextControlId(),NodeId(3),portInput(22, TypeString),ValueString("default"))
                     )
 
                 )

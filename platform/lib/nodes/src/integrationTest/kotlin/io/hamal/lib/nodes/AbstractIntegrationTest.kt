@@ -16,13 +16,11 @@ import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
 import io.hamal.lib.nodes.ConnectionId.Companion.ConnectionId
 import io.hamal.lib.nodes.ConnectionLabel.Companion.ConnectionLabel
-import io.hamal.lib.nodes.ControlIdentifier.Companion.ControlIdentifier
+import io.hamal.lib.nodes.ControlId.Companion.ControlId
 import io.hamal.lib.nodes.NodeId.Companion.NodeId
 import io.hamal.lib.nodes.NodeTitle.Companion.NodeTitle
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.PortId.Companion.PortId
-import io.hamal.lib.nodes.compiler.node.Filter
-import io.hamal.lib.nodes.compiler.node.Input
 import io.hamal.lib.nodes.compiler.node.NodeCompilerRegistry
 import io.hamal.lib.nodes.compiler.node.defaultNodeCompilerRegistry
 import io.hamal.lib.nodes.fixture.Capture
@@ -139,18 +137,13 @@ internal abstract class AbstractIntegrationTest {
 
     fun unitOfWork(
         graph: NodesGraph,
-        initValue: ValueSerializable = ValueNil,
     ) = UnitOfWork(
         id = ExecId(1234),
         execToken = ExecToken("ExecToken"),
         namespaceId = NamespaceId(9876),
         workspaceId = WorkspaceId(5432),
         triggerId = TriggerId(4567),
-        inputs = ExecInputs(
-            ValueObject.builder()
-                .set("__nodes__init__", initValue)
-                .build()
-        ),
+        inputs = ExecInputs(),
         state = State(),
         code = CodeValue(serde.write(graph)),
         codeType = CodeType(Nodes),
@@ -158,13 +151,13 @@ internal abstract class AbstractIntegrationTest {
     )
 
 
-    protected val nextControlIdentifier = NextControlIdentifier
+    protected val nextControlId = NextControlId
     protected val testContext = TestContext()
 
-    object NextControlIdentifier {
+    object NextControlId {
 
-        operator fun invoke(): ControlIdentifier {
-            return ControlIdentifier((counter++).toString(16))
+        operator fun invoke(): ControlId {
+            return ControlId(counter++)
         }
 
         private var counter: Int = 0

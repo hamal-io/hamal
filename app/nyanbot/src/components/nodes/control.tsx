@@ -5,13 +5,12 @@ import {PortInputWidget} from "@/components/nodes/port.tsx";
 import {
     ControlId,
     ControlInvoke,
-    ControlTextArea,
+    ControlInputString,
     isControlCondition,
-    isControlInit,
     isControlInput,
     isControlInputBoolean,
     isControlInvoke,
-    isControlTextArea,
+    isControlInputString,
     Node
 } from "@/components/nodes/types.ts";
 import {ContextEditorState} from "@/components/nodes/editor.tsx";
@@ -40,16 +39,12 @@ export const ControlListWidget: FC<ControlsProps> = ({node}) => {
                         return <ControlInputWidget key={control.id}/>
                     }
 
-                    if (isControlInit(control)) {
-                        return <ControlInitWidget key={control.id} description={control.description}/>
-                    }
-
                     if (isControlInvoke(control)) {
                         return <ControlInvokeWidget key={control.id} control={control}/>
                     }
 
-                    if (isControlTextArea(control)) {
-                        return <ControlTextWidget key={control.id} control={control}/>
+                    if (isControlInputString(control)) {
+                        return <ControlInputStringWidget key={control.id} control={control}/>
                     }
 
                     throw `Not supported yet`
@@ -73,31 +68,18 @@ export const ControlInvokeWidget: FC<ControlInvokeWidgetProps> = ({control}) => 
 }
 
 
-type ControlInitWidgetProps = {
-    description?: string;
+type ControlInputStringWidgetProps = {
+    control: ControlInputString;
 }
 
-export const ControlInitWidget: FC<ControlInitWidgetProps> = ({description}) => {
-    return (
-        <div className="flex flex-row">
-            <span className="text-fuchsia-400">{description}</span>
-        </div>
-    )
-}
-
-
-type ControlTextWidgetProps = {
-    control: ControlTextArea;
-}
-
-export const ControlTextWidget: FC<ControlTextWidgetProps> = ({control}) => {
+export const ControlInputStringWidget: FC<ControlInputStringWidgetProps> = ({control}) => {
     const {dispatch} = useContext(ContextEditorState)
 
     return (
         <div className="flex flex-row">
             {control.port && <PortInputWidget port={control.port}/>}
             <TextArea value={control.value} placeholder={control.placeholder} onChange={(value) =>
-                dispatch({type: 'CONTROL_TEXT_AREA_UPDATED', id: control.id, value})
+                dispatch({type: 'CONTROL_INPUT_STRING_UPDATED', id: control.id, value})
             }/>
         </div>
     )

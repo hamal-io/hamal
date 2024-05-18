@@ -31,15 +31,14 @@ export type Connection = {
 }
 
 export type ControlId = string
-export type ControlType = 'Condition' | 'Input' | 'Input_Boolean' | 'Init' | 'Invoke' | 'Text_Area'
+export type ControlType = 'Condition' | 'Input' | 'Input_Boolean' | 'Invoke' | 'Input_String'
 
 export type Control =
     ControlCondition
     | ControlInput
     | ControlInputBoolean
-    | ControlInit
     | ControlInvoke
-    | ControlTextArea
+    | ControlInputString
 
 type ControlBase = {
     id: ControlId;
@@ -85,8 +84,8 @@ export const isControlInput = (value: any): value is ControlCondition => {
     return isControl(value) && value.type === 'Input';
 }
 
-export type ControlTextArea = ControlBase & {
-    type: 'Text_Area';
+export type ControlInputString = ControlBase & {
+    type: 'Input_String';
     value?: string;
     placeholder?: string;
     port: {
@@ -95,20 +94,8 @@ export type ControlTextArea = ControlBase & {
     }
 }
 
-export const isControlTextArea = (value: any): value is ControlTextArea => {
-    return isControl(value) && value.type === 'Text_Area';
-}
-
-export type ControlInit = ControlBase & {
-    type: 'Init';
-    description: string;
-    config: {
-        selector: string;
-    }
-}
-
-export const isControlInit = (value: any): value is ControlInit => {
-    return isControl(value) && value.type === 'Init';
+export const isControlInputString = (value: any): value is ControlInputString => {
+    return isControl(value) && value.type === 'Input_String';
 }
 
 export type ControlInvoke = ControlBase & {

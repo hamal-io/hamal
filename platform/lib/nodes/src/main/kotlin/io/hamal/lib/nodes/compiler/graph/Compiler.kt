@@ -99,7 +99,7 @@ class GraphCompiler(
 
 
                         var control = controls.first()
-                        val p1 = if (control is ControlTextArea) {
+                        val p1 = if (control is ControlInputString) {
                             val defaultValue = control.value.stringValue
                             "'${defaultValue}'"
                         } else {
@@ -112,7 +112,7 @@ class GraphCompiler(
 
                     } else if (controls.size == 2) {
                         var control = controls.first()
-                        val p1 = if (control is ControlTextArea) {
+                        val p1 = if (control is ControlInputString) {
                             val defaultValue = control.value.stringValue
                             "'${defaultValue}'"
                         } else if (control is ControlInputBoolean) {
@@ -126,7 +126,7 @@ class GraphCompiler(
 
                         // FIXME is there a connection to the port? otherwise default to default value
                         control = controls.last()
-                        require(control is ControlTextArea)
+                        require(control is ControlInputString)
                         val p2 = "'${control.value.stringValue}'"
 
                         code.append("local p_2 = $p2 \n")
@@ -141,7 +141,7 @@ class GraphCompiler(
                     if (controls.size == 1) {
                         val control = controls.first()
 
-                        val p1 = if (control is ControlTextArea) {
+                        val p1 = if (control is ControlInputString) {
                             val defaultValue = control.value.stringValue
                             "'${defaultValue}'"
                         } else if (control is ControlInputBoolean) {
@@ -162,7 +162,7 @@ class GraphCompiler(
                             code.append(" = ")
                         }
 
-                        if (control is ControlTextArea) {
+                        if (control is ControlInputString) {
                             val defaultValue = control.value.stringValue
                             code.append("n_${inputNode.id.stringValue}(${outputPortMapping[connection.outputPort.id]!!.first} or '${defaultValue}')")
                         } else {
@@ -181,7 +181,7 @@ class GraphCompiler(
                     } else if (controls.size == 2) {
 
                         var control = controls.first()
-                        val p1 = if (control is ControlTextArea) {
+                        val p1 = if (control is ControlInputString) {
                             val defaultValue = control.value.stringValue
                             "${outputPortMapping[connection.outputPort.id]!!.first} or '${defaultValue}'"
                         } else if (control is ControlInputBoolean) {
@@ -195,7 +195,7 @@ class GraphCompiler(
 
                         // FIXME is there a connection to the port? otherwise default to default value
                         control = controls.last()
-                        require(control is ControlTextArea)
+                        require(control is ControlInputString)
                         val p2 = connections.find { it.inputPort.id == control.port.id }?.let { connection ->
                             // FIXME resolve variable name
                             null
@@ -213,6 +213,8 @@ class GraphCompiler(
                 code.append("\n")
             }
         }
+
+        println(code.toString())
 
         return ValueCode(code.toString())
     }

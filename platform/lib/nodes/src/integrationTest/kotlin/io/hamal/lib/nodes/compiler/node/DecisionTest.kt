@@ -15,10 +15,9 @@ internal class DecisionTest : AbstractIntegrationTest() {
     fun `Boolean - happy path`() {
         runTest(
             unitOfWork(
-                initValue = ValueTrue,
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "Init", listOf(PortOutput(PortId(20), TypeBoolean))),
+                        node(1, "Input", listOf(PortOutput(PortId(20), TypeBoolean))),
                         node(2, "Decision", listOf(portOutput(21, TypeBoolean), portOutput(22, TypeBoolean))),
                         node(
                             3,
@@ -53,12 +52,13 @@ internal class DecisionTest : AbstractIntegrationTest() {
                         connection(104, 2, 22, 6, 34, "no"),
                     ),
                     controls = listOf(
-                        ControlInvoke(nextControlIdentifier(), NodeId(2), portInput(30, TypeBoolean)),
-                        ControlInputBoolean(nextControlIdentifier(), NodeId(2), portInput(35, TypeBoolean), ValueTrue),
-                        ControlCapture(nextControlIdentifier(), NodeId(3), portInput(31, TypeBoolean)),
-                        ControlInvoke(nextControlIdentifier(), NodeId(4), portInput(32, TypeBoolean)),
-                        ControlCapture(nextControlIdentifier(), NodeId(5), portInput(33, TypeBoolean)),
-                        ControlInvoke(nextControlIdentifier(), NodeId(6), portInput(34, TypeBoolean))
+                        ControlInputBoolean(nextControlId(), NodeId(1), portInput(-1, TypeBoolean), ValueTrue),
+                        ControlInvoke(nextControlId(), NodeId(2), portInput(30, TypeBoolean)),
+                        ControlInputBoolean(nextControlId(), NodeId(2), portInput(35, TypeBoolean), ValueTrue),
+                        ControlCapture(nextControlId(), NodeId(3), portInput(31, TypeBoolean)),
+                        ControlInvoke(nextControlId(), NodeId(4), portInput(32, TypeBoolean)),
+                        ControlCapture(nextControlId(), NodeId(5), portInput(33, TypeBoolean)),
+                        ControlInvoke(nextControlId(), NodeId(6), portInput(34, TypeBoolean))
                     )
                 )
             )
@@ -74,10 +74,9 @@ internal class DecisionTest : AbstractIntegrationTest() {
     fun `Boolean - sad path`() {
         runTest(
             unitOfWork(
-                initValue = ValueFalse,
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "Init", listOf(PortOutput(PortId(20), TypeBoolean))),
+                        node(1, "Input", listOf(PortOutput(PortId(20), TypeBoolean))),
                         node(2, "Decision", listOf(portOutput(21, TypeBoolean), portOutput(22, TypeBoolean))),
                         node(
                             3,
@@ -112,12 +111,13 @@ internal class DecisionTest : AbstractIntegrationTest() {
                         connection(104, 2, 22, 6, 34, "no"),
                     ),
                     controls = listOf(
-                        ControlInvoke(nextControlIdentifier(), NodeId(2), portInput(30, TypeBoolean)),
-                        ControlInputBoolean(nextControlIdentifier(), NodeId(2), portInput(35, TypeBoolean), ValueTrue),
-                        ControlCapture(nextControlIdentifier(), NodeId(3), portInput(31, TypeBoolean)),
-                        ControlInvoke(nextControlIdentifier(), NodeId(4), portInput(32, TypeBoolean)),
-                        ControlCapture(nextControlIdentifier(), NodeId(5), portInput(33, TypeBoolean)),
-                        ControlInvoke(nextControlIdentifier(), NodeId(6), portInput(34, TypeBoolean))
+                        ControlInputBoolean(nextControlId(), NodeId(1), portInput(-1, TypeBoolean), ValueFalse),
+                        ControlInvoke(nextControlId(), NodeId(2), portInput(30, TypeBoolean)),
+                        ControlInputBoolean(nextControlId(), NodeId(2), portInput(35, TypeBoolean), ValueTrue),
+                        ControlCapture(nextControlId(), NodeId(3), portInput(31, TypeBoolean)),
+                        ControlInvoke(nextControlId(), NodeId(4), portInput(32, TypeBoolean)),
+                        ControlCapture(nextControlId(), NodeId(5), portInput(33, TypeBoolean)),
+                        ControlInvoke(nextControlId(), NodeId(6), portInput(34, TypeBoolean))
                     )
                 )
             )
