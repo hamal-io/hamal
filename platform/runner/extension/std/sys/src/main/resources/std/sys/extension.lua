@@ -45,7 +45,6 @@ function extension_create()
             repeat
                 local status = fail_on_error(instance.request.get(req.requestId))
                 status = status.requestStatus
-                print(status)
                 if status == 'Failed' then
                     throw.internal("Request failed!")
                 end
