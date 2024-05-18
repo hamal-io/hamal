@@ -155,15 +155,6 @@ function extension_create()
             return err, resp.content
         end
 
-        function instance.request.get(request_id)
-            local err, resp = handle_response(http.get({
-                url = '/v1/requests/' .. request_id,
-                headers = { ['x-exec-token'] = context.exec.token }
-            }))
-
-            return err, resp.content
-        end
-
         function instance.func.list(query)
             query = query or { }
             local url = '/v1/funcs'
