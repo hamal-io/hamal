@@ -75,4 +75,22 @@ internal class MemoizeTest : AbstractTest() {
         assertThat(InvokeFunction.invocations, equalTo(3))
     }
 
+    @Test
+    fun `Memoize multiple functions `() {
+        runTest(
+            unitOfWork(
+                """
+                    memoize = require('std.memoize').create()
+                    f1 = memoize(function() return 222 end)
+                    f2 = memoize(function() return 444 end)
+                    f3 = memoize(function() return 666 end)
+
+                    assert(f1()[1] == 222)
+                    assert(f2()[1] == 444)
+                    assert(f3()[1] == 666)
+            """
+            )
+        )
+    }
+
 }
