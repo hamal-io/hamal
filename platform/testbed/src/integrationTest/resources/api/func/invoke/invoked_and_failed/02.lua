@@ -1,17 +1,17 @@
-sys = require_plugin('std.sys')
+sys = require('std.sys').create({
+    base_url = context.env.api_host
+})
 
-err, execs = sys.execs.list()
-assert(err == nil)
+execs = fail_on_error(sys.exec.list())
 assert(#execs == 3) -- 01.lua / invoked_func / 02.lua
 
 invoked_exec = execs[2]
 assert(invoked_exec.status == 'Failed')
-assert(invoked_exec.correlation_id == '__default__')
+assert(invoked_exec.correlation == '__default__')
 
-err, exec = sys.execs.get(invoked_exec.id)
-assert(err == nil)
+exec = fail_on_error(sys.exec.get(invoked_exec.id))
 assert(exec ~= nil)
-
+print(dump(exec))
 assert(exec.id == invoked_exec.id)
 assert(exec.status == 'Failed')
-assert(exec.correlation.id == '__default__')
+assert(exec.correlation == '__default__')

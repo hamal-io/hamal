@@ -183,6 +183,21 @@ function extension_create()
             return err, resp.content
         end
 
+        function instance.func.invoke(req)
+            req = req or {}
+            local err, resp = handle_response(http.post({
+                url = '/v1/funcs/' .. req.id .. '/invoke',
+                headers = { ['x-exec-token'] = context.exec.token },
+                body = {
+                    correlation_id = req.correlation_id or "__default__",
+                    inputs = req.inputs or {},
+                    version = req.version or nil
+                }
+            }))
+
+            return err, resp.content
+        end
+
         function instance.func.list(query)
             query = query or { }
             local url = '/v1/funcs'
