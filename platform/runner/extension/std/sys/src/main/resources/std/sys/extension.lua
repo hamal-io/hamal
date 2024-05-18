@@ -181,6 +181,21 @@ function extension_create()
             return err, resp
         end
 
+        function instance.func.update(req)
+            req = req or {}
+            local err, resp = handle_response(http.patch({
+                url = '/v1/funcs/' .. req.id,
+                headers = { ['x-exec-token'] = context.exec.token },
+                body = {
+                    name = req.name or nil,
+                    inputs = req.inputs or {},
+                    code = req.code or nil
+                }
+            }))
+
+            return err, resp.content
+        end
+
         function instance.namespace.append(req)
             req = req or {}
             local namespace_id = req.namespace_id or exec_namespace_id
