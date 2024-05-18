@@ -31,9 +31,11 @@ function extension_create()
         local throw = require('std.throw').create()
 
         local instance = {
+            await_completed = {},
             collection = {},
             exec = { },
             func = { },
+            namespace = { },
             request = { }
         }
 
@@ -53,6 +55,15 @@ function extension_create()
                 debug.sleep(10)
                 count = count + 1
             until status == 'Completed'
+        end
+
+        function instance.exec.get(exec_id)
+            local err, resp = handle_response(http.get({
+                url = '/v1/execs/' .. exec_id,
+                headers = { ['x-exec-token'] = context.exec.token }
+            }))
+
+            return err, resp.content
         end
 
         function instance.exec.list(query)
@@ -139,6 +150,47 @@ function extension_create()
             local err, resp = handle_response(http.get({
                 url = '/v1/requests/' .. request_id,
                 headers = { ['x-exec-token'] = context.exec.token }
+            }))
+
+            return err, resp.content
+        end
+
+        function instance.func.list(query)
+            query = query or { }
+            local url = '/v1/funcs'
+            if query.namespace_ids ~= nil then
+                local res = ""
+                for idx, namespace_id in ipairs(query.namespace_ids) do
+                    res = res .. namespace_id
+                    if idx < #query.namespace_ids then
+                        res = res .. ","
+                    end
+                end
+                url = url .. '?namespace_ids=' .. res
+            end
+
+            local err, resp = handle_response(http.get({
+                url = url,
+                headers = { ['x-exec-token'] = context.exec.token },
+            }))
+
+            if resp ~= nil then
+                resp = resp.content.funcs
+            end
+
+            return err, resp
+        end
+
+        function instance.namespace.append(req)
+            req = req or {}
+            local namespace_id = req.namespace_id or exec_namespace_id
+            local err, resp = handle_response(http.post({
+                url = '/v1/namespaces/' .. namespace_id .. '/namespaces',
+                headers = { ['x-exec-token'] = context.exec.token },
+                body = {
+                    name = req.name,
+                    features = nil
+                }
             }))
 
             return err, resp.content
