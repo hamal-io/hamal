@@ -8,11 +8,13 @@ import io.hamal.lib.nodes.compiler.graph.ComputationGraph.Companion.ComputationG
 import io.hamal.lib.nodes.compiler.node.NodeCompiler
 import io.hamal.lib.nodes.compiler.node.NodeCompilerRegistry
 
-class GraphCompiler(
-    private val registry: NodeCompilerRegistry
-) {
+interface GraphCompiler {
+    fun compile(graph: NodesGraph): ValueCode
+}
 
-    fun compile(graph: NodesGraph): ValueCode {
+class GraphCompilerImpl(private val registry: NodeCompilerRegistry) : GraphCompiler {
+
+    override fun compile(graph: NodesGraph): ValueCode {
         val code = StringBuilder()
 
         val nodeCodeGenerators = mutableMapOf<NodeId, NodeCompiler>()
