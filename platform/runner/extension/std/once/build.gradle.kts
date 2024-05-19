@@ -28,21 +28,5 @@ dependencies {
     implementation(project(":platform:lib:kua"))
     implementation(project(":platform:runner:extension:std:throw"))
     implementation(project(":platform:runner:extension:std:table"))
-}
-
-
-@Suppress("UnstableApiUsage")
-testing {
-    suites {
-        configureEach {
-            if (this is JvmTestSuite) {
-                dependencies {
-                    implementation(project(":platform:runner:test"))
-                    implementation(project(":platform:runner:extension:std:once"))
-                    implementation(project(":platform:runner:extension:std:table"))
-                    implementation(project(":platform:runner:extension:std:throw"))
-                }
-            }
-        }
-    }
+    testImplementation(project(":platform:runner:test"))
 }

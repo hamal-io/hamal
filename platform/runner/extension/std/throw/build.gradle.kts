@@ -26,19 +26,5 @@ distributions {
 
 dependencies {
     implementation(project(":platform:lib:kua"))
-}
-
-
-@Suppress("UnstableApiUsage")
-testing {
-    suites {
-        configureEach {
-            if (this is JvmTestSuite) {
-                dependencies {
-                    implementation(project(":platform:runner:test"))
-                    implementation(project(":platform:runner:extension:std:throw"))
-                }
-            }
-        }
-    }
+    testImplementation(project(":platform:runner:test"))
 }
