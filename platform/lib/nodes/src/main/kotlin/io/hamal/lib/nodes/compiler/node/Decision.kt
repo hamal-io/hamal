@@ -26,12 +26,14 @@ sealed class Decision : AbstractNode() {
                 |if value == ${if (expectedValue == ValueTrue) "true" else "false"} then
                 |_F[4] = nil
                 |print('happy')
+                |print('prune node 4')
                 |return{
                 |   ['${ctx.node.outputs.first().key}'] = true
                 |}
                 |else
                 |_F[3] = nil
                 |print('sad')
+                |print('prune node 3')
                 |return{
                 |   ['${ctx.node.outputs.last().key}'] = true
                 |}

@@ -12,7 +12,7 @@ object ExtensionStdOnceFactory : RunnerExtensionFactory {
     override fun create(sandbox: Sandbox): RunnerExtension {
         return RunnerExtension(
             name = ValueString("std.once"),
-            dependencies = listOf(ExtensionStdThrowFactory, ExtensionStdTableFactory)
+            dependencies = listOf(ExtensionStdTableFactory, ExtensionStdThrowFactory)
         )
     }
 }

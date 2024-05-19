@@ -46,6 +46,7 @@ testing {
                     implementation(project(":platform:runner:extension:std:table"))
                     implementation(project(":platform:runner:extension:std:throw"))
                     implementation(project(":platform:runner:extension:std:memoize"))
+                    implementation(project(":platform:runner:extension:std:once"))
 
                     implementation(project(":platform:runner:plugin:net:http"))
                     implementation(project(":platform:runner:plugin:std:debug"))

@@ -5,7 +5,8 @@ import io.hamal.core.component.DelayRetryFixedTime
 import io.hamal.core.config.BackendBasePath
 import io.hamal.extension.net.http.ExtensionNetHttpFactory
 import io.hamal.extension.std.debug.ExtensionStdDebugFactory
-import io.hamal.extension.std.once.ExtensionStdMemoizeFactory
+import io.hamal.extension.std.memoize.ExtensionStdMemoizeFactory
+import io.hamal.extension.std.once.ExtensionStdOnceFactory
 import io.hamal.extension.std.sys.ExtensionStdSysFactory
 import io.hamal.extension.std.table.ExtensionStdTableFactory
 import io.hamal.extension.std.`throw`.ExtensionStdThrowFactory
@@ -89,7 +90,8 @@ class TestRunnerSandboxFactory(
             .registerExtensions(
                 ExtensionStdTableFactory,
                 ExtensionStdThrowFactory,
-                io.hamal.extension.std.once.ExtensionStdMemoizeFactory,
+                ExtensionStdMemoizeFactory,
+                ExtensionStdOnceFactory
             )
             .registerPlugins(
                 PluginLogFactory(sdk.execLog),
