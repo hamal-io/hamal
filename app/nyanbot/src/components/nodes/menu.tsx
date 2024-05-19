@@ -45,6 +45,7 @@ const NodeLibrary: FC<NodeLibraryProps> = ({onClose}) => {
                 <div className={"flex flex-col"}>
                     {[
                         {type: "Init"},
+                        {type: "Decision"},
                         {type: "Input"},
                         {type: "Input_String"},
                         {type: "Filter"},

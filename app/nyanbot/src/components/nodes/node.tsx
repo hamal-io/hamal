@@ -110,9 +110,9 @@ export const NodeWidget: FC<NodeWidgetProps> = ({node}) => {
 
             <ControlListWidget node={node}/>
 
-            {stateNode.outputs.length === 1 && (
-                <PortOutputWidget
-                    port={stateNode.outputs[0]}
+            {stateNode.outputs.map(port =>
+                (<PortOutputWidget
+                    port={port}
                     // NodeIndex={id}
                     // inputs={inputs}
                     // outputs={outputs}
@@ -120,6 +120,7 @@ export const NodeWidget: FC<NodeWidgetProps> = ({node}) => {
                     // updateNodeConnections={updateNodeConnections}
                     // inputData={inputData}
                 />)
+            )
             }
 
 

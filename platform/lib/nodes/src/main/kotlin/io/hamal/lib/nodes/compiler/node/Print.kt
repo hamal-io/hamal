@@ -23,7 +23,7 @@ sealed class Print : AbstractNode() {
                 """
                 |fn = _F[${connection.outputNode.index}]
                 |value = fn()
-                |print(value[1]['value'])
+                |print(value['value'])
                 |return { }
                 """.trimMargin()
             )

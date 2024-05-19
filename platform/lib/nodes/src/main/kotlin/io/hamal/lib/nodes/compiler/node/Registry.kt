@@ -44,6 +44,7 @@ val defaultNodeCompilerRegistry = NodeCompilerRegistry(
 //        Code.String,
 //        Decision.Boolean,
 //        Filter.Boolean,
+        Decision.V_0_0_1,
         Init.V_0_0_1,
         Print.V_0_0_1
 //        Input.Boolean,

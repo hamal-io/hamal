@@ -19,6 +19,7 @@ dependencies {
     implementation(project(":platform:runner:extension:social:telegram"))
     implementation(project(":platform:runner:extension:std:decimal"))
     implementation(project(":platform:runner:extension:std:memoize"))
+    implementation(project(":platform:runner:extension:std:once"))
     implementation(project(":platform:runner:extension:std:log"))
     implementation(project(":platform:runner:extension:std:sys"))
     implementation(project(":platform:runner:extension:std:table"))

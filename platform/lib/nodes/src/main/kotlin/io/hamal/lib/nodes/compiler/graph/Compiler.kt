@@ -27,8 +27,9 @@ class GraphCompilerImpl(registry: NodeCompilerRegistry) : GraphCompiler {
         val initNode = graph.nodes.find { it.type == NodeType("Init") }
             ?: throw IllegalArgumentException("No Init node found")
 
-        builder.append("throw = require('std.throw').create()\n\n")
-        builder.append("memoize = require('std.memoize').create()\n\n")
+        builder.append("throw = require('std.throw').create()\n")
+//        builder.append("memoize = require('std.memoize').create()\n\n")
+        builder.append("once = require('std.once').create()\n\n")
 
         builder.append("_F = {}\n")
 
@@ -37,7 +38,7 @@ class GraphCompilerImpl(registry: NodeCompilerRegistry) : GraphCompiler {
         orderedNodes.forEach { inputNodeIndex ->
             val inputNode = graph.nodes.find { it.index == inputNodeIndex }!!
 //            builder.append("_F[${inputNode.index}] = { result =  n_${inputNode.index}() } \n")
-            builder.append("_F[${inputNode.index}] = memoize(n_${inputNode.index}) \n")
+            builder.append("_F[${inputNode.index}] = once(n_${inputNode.index}) \n")
         }
 
 
@@ -50,7 +51,16 @@ class GraphCompilerImpl(registry: NodeCompilerRegistry) : GraphCompiler {
         orderedNodes.forEach { inputNodeIndex ->
 //            builder.append("_F[${inputNode.index}] = { result =  n_${inputNode.index}() } \n")
 //            builder.append("_F[${inputNode.index}] = memoize(n_${inputNode.index}) \n")
-            builder.append("_F[${inputNodeIndex}]()\n")
+//            builder.append("_F[${inputNodeIndex}]()\n")
+
+            builder.append(
+                """
+                if _F[${inputNodeIndex}] then
+                    _F[${inputNodeIndex}]()
+                end
+            """.trimIndent()
+            )
+            builder.append("\n")
         }
 
 
@@ -58,6 +68,7 @@ class GraphCompilerImpl(registry: NodeCompilerRegistry) : GraphCompiler {
 //        builder.append("_F[3]()\n")
 
         println(builder)
+        builder.append("print(dump(_F))")
 
         return ValueCode(builder.toString())
     }

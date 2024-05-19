@@ -7,6 +7,7 @@ import io.hamal.extension.std.debug.ExtensionStdDebugFactory
 import io.hamal.extension.std.decimal.ExtensionStdDecimalFactory
 import io.hamal.extension.std.log.ExtensionStdLogFactory
 import io.hamal.extension.std.memoize.ExtensionStdMemoizeFactory
+import io.hamal.extension.std.once.ExtensionStdOnceFactory
 import io.hamal.extension.std.sys.ExtensionStdSysFactory
 import io.hamal.extension.std.table.ExtensionStdTableFactory
 import io.hamal.extension.std.`throw`.ExtensionStdThrowFactory
@@ -69,6 +70,7 @@ class SandboxFactoryDefaultImpl(
                 ExtensionStdTableFactory,
                 ExtensionStdThrowFactory,
                 ExtensionStdMemoizeFactory,
+                ExtensionStdOnceFactory,
                 ExtensionStdDecimalFactory
             )
             .registerPlugins(

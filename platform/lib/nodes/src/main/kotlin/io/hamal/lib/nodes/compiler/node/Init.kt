@@ -1,6 +1,7 @@
 package io.hamal.lib.nodes.compiler.node
 
 import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.nodes.ControlInputBoolean
 import io.hamal.lib.nodes.ControlInputString
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.NodeVersion
@@ -16,6 +17,14 @@ sealed class Init : AbstractNode() {
             val control = ctx.controlsOfNode(ctx.node.index).first()
 
             return when (control) {
+                is ControlInputBoolean -> ValueCode(
+                    """
+                    |return{
+                    |['${ctx.node.outputs.first().key}'] = ${control.value.booleanValue}
+                    |}
+                    """.trimMargin()
+                )
+
                 is ControlInputString ->
                     ValueCode(
                         """

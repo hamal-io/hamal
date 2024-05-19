@@ -3,7 +3,7 @@ import {InputSelect, TextArea} from "./inputs";
 import styles from "@/components/nodes/port.module.css";
 import {PortInputWidget} from "@/components/nodes/port.tsx";
 import {
-    ControlIndex,
+    ControlIndex, ControlInputBoolean,
     ControlInputString,
     isControlInputBoolean,
     isControlInputString,
@@ -24,7 +24,7 @@ export const ControlListWidget: FC<ControlsProps> = ({node}) => {
                 nodeControlIds[node.index].map(controlId => controls[controlId]).map((control) => {
 
                     if (isControlInputBoolean(control)) {
-                        return <ControlInputBooleanWidget key={control.index} index={control.index}/>
+                        return <ControlInputBooleanWidget key={control.index} control={control}/>
                     }
 
                     if (isControlInputString(control)) {
@@ -37,7 +37,6 @@ export const ControlListWidget: FC<ControlsProps> = ({node}) => {
         </div>
     )
 }
-
 
 
 type ControlInputStringWidgetProps = {
@@ -108,16 +107,17 @@ export const ControlInputWidget: FC<ControlInputWidgetProps> = ({}) => {
 
 
 type ControlInputBooleanWidgetProps = {
-    index: ControlIndex
+    control: ControlInputBoolean
 }
 
-export const ControlInputBooleanWidget: FC<ControlInputBooleanWidgetProps> = ({index}) => {
+export const ControlInputBooleanWidget: FC<ControlInputBooleanWidgetProps> = ({control}) => {
     const {dispatch} = useContext(ContextEditorState);
     return (
         <div className="flex flex-row">
+            <PortInputWidget port={control.port}/>
             <h1> Boolean </h1>
             <InputBoolean onChange={(value) => {
-                dispatch({type: "CONTROL_INPUT_BOOLEAN_UPDATED", index, value})
+                dispatch({type: "CONTROL_INPUT_BOOLEAN_UPDATED", index: control.index, value})
             }}/>
         </div>
     )

@@ -156,7 +156,7 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
                     size: {width: 100, height: 100},
                     outputs: [{
                         index: portIndex,
-                        form: 'String',
+                        form: 'Boolean',
                         key: 'value'
                     }]
                 }
@@ -173,14 +173,15 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
 
                 copy.controls[controlId] = {
                     index: controlId,
-                    type: 'Input_String',
+                    type: 'Input_Boolean',
                     nodeIndex: nodeIndex,
-                    value: 'Meeooowww',
+                    // value: 'Meeooowww',
+                    value: false,
                     port: {
                         index: controlPortIndex,
                         form: "String"
                     }
-                } satisfies ControlInputString
+                } satisfies ControlInputBoolean
 
                 copy.nodeControlIds[nodeIndex] = [controlId]
 
@@ -272,6 +273,61 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
 
                 copy.nodeControlIds[nodeIndex] = [controlId]
 
+
+            } else if (action.nodeType === 'Decision') {
+                const nodeIndex = nextNodeIndex()
+                const outputPortIndex = nextPortIndex()
+                const outputPortTwoIndex = nextPortIndex() + 1
+                // const inputPortIndex = (nextPortIndex() + 1)
+                // const controlId = nextControlIndex()
+                const filterControlIndex = (nextControlIndex())
+                const filterPortIndex = (nextPortIndex() + 2)
+
+                copy.nodes[nodeIndex] = {
+                    index: nodeIndex,
+                    type: 'Decision',
+                    version: '0.0.1',
+                    title: 'Decision',
+                    position: action.position,
+                    size: {width: 100, height: 100},
+                    outputs: [
+                        {
+                            index: outputPortIndex,
+                            form: 'Boolean'
+                        },
+                        {
+                            index: outputPortTwoIndex,
+                            form: 'Boolean'
+                        }
+                    ]
+                }
+
+                copy.ports[outputPortIndex] = {
+                    index: outputPortIndex,
+                    nodeIndex: nodeIndex
+                }
+
+                copy.ports[outputPortTwoIndex] = {
+                    index: outputPortTwoIndex,
+                    nodeIndex: nodeIndex
+                }
+
+                copy.ports[filterPortIndex] = {
+                    index: filterPortIndex,
+                    nodeIndex: nodeIndex
+                }
+
+                copy.controls[filterControlIndex] = {
+                    index: filterControlIndex,
+                    type: "Input_Boolean",
+                    nodeIndex: nodeIndex,
+                    port: {
+                        index: filterPortIndex,
+                        form: "Boolean"
+                    }
+                } satisfies ControlInputBoolean
+
+                copy.nodeControlIds[nodeIndex] = [filterControlIndex]
 
             } else if (action.nodeType == 'Filter') {
 
