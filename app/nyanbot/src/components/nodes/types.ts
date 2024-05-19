@@ -64,6 +64,7 @@ export const isControlWithPort = (value: any): value is ControlWithPort => {
     return isControl(value) && "port" in value;
 }
 
+
 export type ControlInputBoolean = ControlWithPort & {
     type: "Input_Boolean";
     value?: boolean;
@@ -93,11 +94,13 @@ export type Graph = {
 
 export type NodeIndex = number
 export type NodeType = string
+export type NodeVersion = string
 export type NodeLabel = string
 
 export type Node = {
     index: NodeIndex;
     type: NodeType;
+    version: NodeVersion;
     title?: NodeLabel;
     position: Position;
     size: Size;

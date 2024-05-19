@@ -12,6 +12,8 @@ class PortIndex(override val value: ValueNumber) : ValueVariableNumber() {
         fun PortIndex(value: Int) = PortIndex(ValueNumber(value))
         fun PortIndex(value: Long) = PortIndex(ValueNumber(value))
     }
+
+    override fun toString(): String = value.longValue.toString()
 }
 
 class PortKey(override val value: ValueString) : ValueVariableString() {

@@ -1,11 +1,15 @@
 package io.hamal.lib.nodes.compiler.graph
 
-import io.hamal.lib.nodes.NodeIndex
-import io.hamal.lib.nodes.NodesGraph
+import io.hamal.lib.nodes.*
 
-internal data class ComputationGraph(val data: Map<NodeIndex, List<NodeIndex>>) {
+data class ComputationGraph(
+    val dependencies: Map<NodeIndex, List<NodeIndex>>,
+    val nodes: MutableMap<NodeIndex, Node>,
+    val controls: MutableMap<ControlIndex, Control>,
+    val connections: MutableMap<ConnectionIndex, Connection>
+) {
 
-    operator fun get(NodeIndex: NodeIndex): List<NodeIndex>? = data[NodeIndex]
+    operator fun get(index: NodeIndex): List<NodeIndex>? = dependencies[index]
 
     companion object {
         fun ComputationGraph(graph: NodesGraph): ComputationGraph {
@@ -17,7 +21,12 @@ internal data class ComputationGraph(val data: Map<NodeIndex, List<NodeIndex>>) 
                 computationGraph.putIfAbsent(outputId, mutableListOf())
                 computationGraph[outputId]!!.add(inputId)
             }
-            return ComputationGraph(computationGraph)
+            return ComputationGraph(
+                dependencies = computationGraph,
+                nodes = graph.nodes.associateBy { it.index }.toMutableMap(),
+                controls = graph.controls.associateBy { it.index }.toMutableMap(),
+                connections = graph.connections.associateBy { it.index }.toMutableMap()
+            )
         }
 
     }

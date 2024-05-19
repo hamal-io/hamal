@@ -11,6 +11,8 @@ class ConnectionIndex(override val value: ValueNumber) : ValueVariableNumber() {
         fun ConnectionIndex(value: Int) = ConnectionIndex(ValueNumber(value))
         fun ConnectionIndex(value: Long) = ConnectionIndex(ValueNumber(value))
     }
+
+    override fun toString(): String = value.longValue.toString()
 }
 
 

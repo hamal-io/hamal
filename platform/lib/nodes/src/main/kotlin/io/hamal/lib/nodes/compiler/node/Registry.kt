@@ -1,19 +1,19 @@
 package io.hamal.lib.nodes.compiler.node
 
 import io.hamal.lib.common.logger
-import io.hamal.lib.nodes.Form
 import io.hamal.lib.nodes.NodeType
+import io.hamal.lib.nodes.NodeVersion
 
 private val log = logger(NodeCompilerRegistry::class)
 
 class NodeCompilerRegistry(nodeCompilers: List<AbstractNode>) {
 
-    fun register(nodeCompiler: AbstractNode): NodeCompilerRegistry {
-        generators.putIfAbsent(nodeCompiler.type, mutableListOf())
-        if (find(nodeCompiler) == null) {
-            generators[nodeCompiler.type]?.add(nodeCompiler)
+    fun register(node: AbstractNode): NodeCompilerRegistry {
+        generators.putIfAbsent(node.type, mutableListOf())
+        if (find(node) == null) {
+            generators[node.type]?.add(node)
         } else {
-            log.warn("${nodeCompiler::class.simpleName} already registered")
+            log.warn("${node::class.simpleName} already registered")
         }
         return this
     }
@@ -22,20 +22,13 @@ class NodeCompilerRegistry(nodeCompilers: List<AbstractNode>) {
         registry.generators.values.flatten().forEach { generator -> register(generator) }
     }
 
-    operator fun get(type: NodeType, inputs: List<Form>, outputs: List<Form>) =
-        find(type, inputs, outputs)
-            ?: throw NoSuchElementException(
-                "No generator found for $type with [${inputs.joinToString(", ")}] and [${outputs.joinToString(", ")}]"
-            )
+    operator fun get(type: NodeType, version: NodeVersion) =
+        find(type, version) ?: throw NoSuchElementException("No generator found for $type with $version")
 
-    fun find(type: NodeType, inputs: List<Form>, outputs: List<Form>): AbstractNode? {
-        return generators[type]?.find {
-            it.inputs == inputs && it.outputs == outputs
-        }
-    }
+    fun find(node: AbstractNode): AbstractNode? = find(node.type, node.version)
 
-    private fun find(nodeCompiler: AbstractNode): AbstractNode? {
-        return find(nodeCompiler.type, nodeCompiler.inputs, nodeCompiler.outputs)
+    fun find(type: NodeType, version: NodeVersion): AbstractNode? {
+        return generators[type]?.find { it.version == version }
     }
 
     private val generators = mutableMapOf<NodeType, MutableList<AbstractNode>>()
@@ -51,6 +44,8 @@ val defaultNodeCompilerRegistry = NodeCompilerRegistry(
 //        Code.String,
 //        Decision.Boolean,
 //        Filter.Boolean,
+        Init.V_0_0_1,
+        Print.V_0_0_1
 //        Input.Boolean,
 //        Input.String,
 //        Print.Boolean,

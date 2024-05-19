@@ -1,9 +1,36 @@
-//package io.hamal.lib.nodes.compiler.node
-//
-//import io.hamal.lib.common.value.*
-//import io.hamal.lib.nodes.NodeType
-//import io.hamal.lib.nodes.NodeType.Companion.NodeType
-//
+package io.hamal.lib.nodes.compiler.node
+
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.nodes.ControlWithPort
+import io.hamal.lib.nodes.NodeType.Companion.NodeType
+import io.hamal.lib.nodes.NodeVersion
+
+sealed class Print : AbstractNode() {
+    override val type = NodeType("Print")
+
+    data object V_0_0_1 : Print() {
+        override val version = NodeVersion.v_0_0_1
+
+        override fun toCode(ctx: Context): ValueCode {
+            // FIXME make sure only one control present
+            val control = ctx.controlsOfNode(ctx.node.index).first() as ControlWithPort
+
+            val outputNode = ctx.nodeOfPort(control.port!!.index)
+
+            val connection = ctx.getConnection(control.port!!.index)
+
+            return ValueCode(
+                """
+                |fn = _F[${connection.outputNode.index}]
+                |value = fn()
+                |print(value[1]['value'])
+                |return { }
+                """.trimMargin()
+            )
+        }
+    }
+}
+
 //sealed class Print : AbstractNode() {
 //    override val type: NodeType get() = NodeType("Print")
 //

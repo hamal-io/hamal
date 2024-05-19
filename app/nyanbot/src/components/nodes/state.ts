@@ -6,7 +6,7 @@ import {
     isControlInputString, isControlWithPort,
     Node,
     NodeIndex,
-    NodeType,
+    NodeType, NodeVersion,
     PortIndex,
     Position,
     Rect,
@@ -49,13 +49,10 @@ export type EditorState = {
         [index: NodeIndex]: {
             index: NodeIndex;
             type: NodeType,
+            version: NodeVersion;
             title: string;
             position: Position;
             size: Size;
-            inputs: Array<{
-                index: PortIndex;
-                form: string;
-            }>;
             outputs: Array<{
                 index: PortIndex;
                 form: string;
@@ -143,7 +140,52 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
         case "NODE_ADDED": {
             const copy = structuredClone(state)
 
-            if (action.nodeType == 'Input') {
+            if (action.nodeType == 'Init') {
+
+                const nodeIndex = nextNodeIndex()
+                const portIndex = nextPortIndex()
+                const controlId = nextControlIndex()
+                const controlPortIndex = (nextPortIndex() + 1)
+
+                copy.nodes[nodeIndex] = {
+                    index: nodeIndex,
+                    type: 'Init',
+                    version: '0.0.1',
+                    title: 'Init - String',
+                    position: action.position,
+                    size: {width: 100, height: 100},
+                    outputs: [{
+                        index: portIndex,
+                        form: 'String',
+                        key: 'value'
+                    }]
+                }
+
+                copy.ports[portIndex] = {
+                    index: portIndex,
+                    nodeIndex: nodeIndex
+                }
+
+                copy.ports[controlPortIndex] = {
+                    index: controlPortIndex,
+                    nodeIndex: nodeIndex
+                }
+
+                copy.controls[controlId] = {
+                    index: controlId,
+                    type: 'Input_String',
+                    nodeIndex: nodeIndex,
+                    value: 'Meeooowww',
+                    port: {
+                        index: controlPortIndex,
+                        form: "String"
+                    }
+                } satisfies ControlInputString
+
+                copy.nodeControlIds[nodeIndex] = [controlId]
+
+
+            } else if (action.nodeType == 'Input') {
 
                 const nodeIndex = nextNodeIndex()
                 const portIndex = nextPortIndex()
@@ -153,10 +195,10 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
                 copy.nodes[nodeIndex] = {
                     index: nodeIndex,
                     type: 'Input',
+                    version: '0.0.1',
                     title: 'Input',
                     position: action.position,
                     size: {width: 100, height: 100},
-                    inputs: [],
                     outputs: [{
                         index: portIndex,
                         form: 'Boolean'
@@ -197,10 +239,10 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
                 copy.nodes[nodeIndex] = {
                     index: nodeIndex,
                     type: 'Input',
+                    version: '0.0.1',
                     title: 'Input - String',
                     position: action.position,
                     size: {width: 100, height: 100},
-                    inputs: [],
                     outputs: [{
                         index: portIndex,
                         form: 'String'
@@ -237,19 +279,16 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
                 const outputPortIndex = nextPortIndex()
                 const inputPortIndex = (nextPortIndex() + 1)
                 // const controlId = nextControlIndex()
-                const filterControlId = (nextControlIndex() )
+                const filterControlId = (nextControlIndex())
                 const filterPortIndex = (nextPortIndex() + 2)
 
                 copy.nodes[nodeIndex] = {
                     index: nodeIndex,
                     type: 'Filter',
+                    version: '0.0.1',
                     title: 'Filter',
                     position: action.position,
                     size: {width: 100, height: 100},
-                    inputs: [{
-                        index: inputPortIndex,
-                        form: 'Boolean'
-                    }],
                     outputs: [{
                         index: outputPortIndex,
                         form: 'Boolean'
@@ -292,26 +331,21 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
                     }
                 } satisfies ControlInputBoolean
 
-                copy.nodeControlIds[nodeIndex] = [ filterControlId]
+                copy.nodeControlIds[nodeIndex] = [filterControlId]
 
             } else if (action.nodeType === 'Print') {
 
                 const nodeIndex = nextNodeIndex()
                 const portIndex = nextPortIndex()
-                // const controlId = nextControlIndex()
+                const controlId = nextControlIndex()
 
                 copy.nodes[nodeIndex] = {
                     index: nodeIndex,
                     type: 'Print',
+                    version: '0.0.1',
                     title: 'Print',
                     position: action.position,
                     size: {width: 100, height: 100},
-                    inputs: [
-                        {
-                            index: portIndex,
-                            form: "Boolean"
-                        },
-                    ],
                     outputs: []
                 }
 
@@ -320,18 +354,18 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
                     nodeIndex: nodeIndex
                 }
 
-                // copy.controls[controlId] = {
-                //     index: controlId,
-                //     type: 'Invoke',
-                //     nodeIndex: nodeIndex,
-                //     port: {
-                //         index: portIndex,
-                //         type: "Boolean"
-                //     },
-                // } satisfies ControlInvoke
+                copy.controls[controlId] = {
+                    index: controlId,
+                    type: 'Input_String',
+                    nodeIndex: nodeIndex,
+                    port: {
+                        index: portIndex,
+                        form: "String"
+                    },
+                } satisfies ControlInputString
 
 
-                copy.nodeControlIds[nodeIndex] = []
+                copy.nodeControlIds[nodeIndex] = [controlId]
 
             } else if (action.nodeType == "Telegram_Send_Message") {
 
@@ -342,15 +376,10 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
                 copy.nodes[nodeIndex] = {
                     index: nodeIndex,
                     type: "Telegram_Send_Message",
+                    version: '0.0.1',
                     title: 'Telegram - Send Message',
                     position: action.position,
                     size: {width: 250, height: 300},
-                    inputs: [
-                        {
-                            index: invokePortIndex,
-                            form: "Any"
-                        },
-                    ],
                     outputs: []
                 }
 

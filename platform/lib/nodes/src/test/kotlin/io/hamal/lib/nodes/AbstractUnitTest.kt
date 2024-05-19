@@ -5,7 +5,9 @@ import io.hamal.lib.nodes.ControlIndex.Companion.ControlIndex
 import io.hamal.lib.nodes.NodeIndex.Companion.NodeIndex
 import io.hamal.lib.nodes.NodeTitle.Companion.NodeTitle
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
+import io.hamal.lib.nodes.NodeVersion.Companion.NodeVersion
 import io.hamal.lib.nodes.PortIndex.Companion.PortIndex
+import io.hamal.lib.nodes.compiler.graph.ComputationGraph
 
 
 internal abstract class AbstractUnitTest {
@@ -21,6 +23,7 @@ internal abstract class AbstractUnitTest {
         return Node(
             index = NodeIndex(id),
             type = NodeType(type),
+            version = NodeVersion("0.0.1"),
             title = title,
             position = position,
             size = size,

@@ -1,6 +1,7 @@
 package io.hamal.lib.nodes.compiler.graph
 
 import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.NodesGraph
 import io.hamal.lib.nodes.compiler.graph.ComputationGraph.Companion.ComputationGraph
 import io.hamal.lib.nodes.compiler.node.NodeCompilerRegistry
@@ -14,9 +15,51 @@ class GraphCompilerImpl(registry: NodeCompilerRegistry) : GraphCompiler {
 
     override fun compile(graph: NodesGraph): ValueCode {
         val computationGraph = ComputationGraph(graph)
-        val compiledNodes = nodeCompiler.compile(graph)
+        val compiledNodes = nodeCompiler.compile(computationGraph).associateBy { it.index }
 
-        return ValueCode("""""")
+        val builder = StringBuilder()
+
+        compiledNodes.values.forEach { compiledNode ->
+            builder.append(compiledNode.code.stringValue)
+            builder.append("\n")
+        }
+
+        val initNode = graph.nodes.find { it.type == NodeType("Init") }
+            ?: throw IllegalArgumentException("No Init node found")
+
+        builder.append("throw = require('std.throw').create()\n\n")
+        builder.append("memoize = require('std.memoize').create()\n\n")
+
+        builder.append("_F = {}\n")
+
+        val orderedNodes = breadthFirstSearch(computationGraph, initNode.index)
+
+        orderedNodes.forEach { inputNodeIndex ->
+            val inputNode = graph.nodes.find { it.index == inputNodeIndex }!!
+//            builder.append("_F[${inputNode.index}] = { result =  n_${inputNode.index}() } \n")
+            builder.append("_F[${inputNode.index}] = memoize(n_${inputNode.index}) \n")
+        }
+
+
+//        builder.append("print(dump(_F))")
+
+
+        // invoke all nodes except those which are not on the happy path... ?!
+
+
+        orderedNodes.forEach { inputNodeIndex ->
+//            builder.append("_F[${inputNode.index}] = { result =  n_${inputNode.index}() } \n")
+//            builder.append("_F[${inputNode.index}] = memoize(n_${inputNode.index}) \n")
+            builder.append("_F[${inputNodeIndex}]()\n")
+        }
+
+
+//        builder.append("_F[2]()\n")
+//        builder.append("_F[3]()\n")
+
+        println(builder)
+
+        return ValueCode(builder.toString())
     }
 
     private val nodeCompiler = NodeCompilerImpl(registry)

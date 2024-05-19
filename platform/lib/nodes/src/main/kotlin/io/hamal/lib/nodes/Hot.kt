@@ -17,9 +17,13 @@ object NodesHotModule : SerdeModuleJson() {
         this[Control::class] = Control.Adapter
         this[TemplateControl::class] = TemplateControl.Adapter
 
+        this[Form::class] = Form.Adapter
+
         this[NodeIndex::class] = ValueVariableAdapters.Number(::NodeIndex)
         this[NodeType::class] = ValueVariableAdapters.String(::NodeType)
+        this[NodeVersion::class] = ValueVariableAdapters.String(::NodeVersion)
         this[NodeTitle::class] = ValueVariableAdapters.String(::NodeTitle)
+
 
         this[PortIndex::class] = ValueVariableAdapters.Number(::PortIndex)
         this[PortKey::class] = ValueVariableAdapters.String(::PortKey)

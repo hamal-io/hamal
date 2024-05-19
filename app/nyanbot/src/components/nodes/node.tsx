@@ -103,9 +103,9 @@ export const NodeWidget: FC<NodeWidgetProps> = ({node}) => {
         >
 
             <span className='text-teal-200'>{node.title} </span>
-            {stateNode.inputs.length === 1 && (
-                <PortInputWidget port={stateNode.inputs[0]}/>
-            )}
+            {/*{stateNode.inputs.length === 1 && (*/}
+            {/*    <PortInputWidget port={stateNode.inputs[0]}/>*/}
+            {/*)}*/}
 
 
             <ControlListWidget node={node}/>

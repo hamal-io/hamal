@@ -17,6 +17,15 @@ data class ControlCode(
     override val type: ControlType = ControlType("Code")
 }
 
+data class ControlInput(
+    override val index: ControlIndex,
+    override val nodeIndex: NodeIndex,
+    override val port: PortInput,
+    override val key: ControlKey = ControlKey.random(),
+) : ControlWithPort {
+    override val type: ControlType = ControlType("Input")
+}
+
 data class ControlInputBoolean(
     override val index: ControlIndex,
     override val nodeIndex: NodeIndex,
@@ -52,6 +61,8 @@ class ControlIndex(override val value: ValueNumber) : ValueVariableNumber() {
     companion object {
         fun ControlIndex(value: Int) = ControlIndex(ValueNumber(value))
     }
+
+    override fun toString(): String = value.longValue.toString()
 }
 
 class ControlKey(override val value: ValueString) : ValueVariableString() {
@@ -95,6 +106,7 @@ interface Control {
 
             return when (type) {
                 ControlType("Code") -> context.deserialize(json, ControlCode::class.java)
+                ControlType("Input") -> context.deserialize(json, ControlInput::class.java)
                 ControlType("Input_Boolean") -> context.deserialize(json, ControlInputBoolean::class.java)
                 ControlType("Input_Number") -> context.deserialize(json, ControlInputNumber::class.java)
                 ControlType("Input_String") -> context.deserialize(json, ControlInputString::class.java)
@@ -103,8 +115,6 @@ interface Control {
         }
     }
 }
-
-interface ControlInput : Control
 
 interface ControlWithPort : Control {
     val port: PortInput?
@@ -133,6 +143,7 @@ sealed interface TemplateControl {
             val type = ControlType(json.asJsonObject.get("type").asString)
 
             return when (type) {
+                ControlType("Input") -> context.deserialize(json, ControlInput::class.java)
                 ControlType("Input_Boolean") -> context.deserialize(json, ControlInputBoolean::class.java)
                 ControlType("Input_Number") -> context.deserialize(json, ControlInputNumber::class.java)
                 ControlType("Input_String") -> context.deserialize(json, ControlInputString::class.java)
