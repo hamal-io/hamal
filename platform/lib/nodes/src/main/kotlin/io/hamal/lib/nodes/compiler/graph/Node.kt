@@ -22,9 +22,9 @@ internal class NodeCompilerImpl(
 
             val controls = graph.controls.filter { it.nodeIndex == node.index }
 
-            val inputs = node.inputs.map { port -> port.type }
+            val inputs = node.inputs.map { port -> port.form }
 
-            val outputs = node.outputs.map { it.type }
+            val outputs = node.outputs.map { it.form }
 
             val generator = registry[node.type, inputs, outputs]
 

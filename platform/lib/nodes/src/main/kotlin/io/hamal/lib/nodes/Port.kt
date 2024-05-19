@@ -1,6 +1,9 @@
 package io.hamal.lib.nodes
 
-import io.hamal.lib.common.value.*
+import io.hamal.lib.common.value.ValueNumber
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueVariableNumber
+import io.hamal.lib.common.value.ValueVariableString
 import io.hamal.lib.nodes.PortKey.Companion.PortKey
 import java.util.*
 
@@ -21,23 +24,13 @@ class PortKey(override val value: ValueString) : ValueVariableString() {
 
 data class PortInput(
     val index: PortIndex,
-    val type: Form,
+    val form: Form,
     val key: PortKey = PortKey(index.value.longValue.toString(16)),
 )
 
 data class PortOutput(
     val index: PortIndex,
-    val type: Form,
+    val form: Form,
     val key: PortKey = PortKey(index.value.longValue.toString(16)),
 )
-
-data class TemplatePortInput(
-    val inputType: ValueType
-)
-
-data class TemplatePortOutput(
-    val outputType: ValueType
-)
-
-
 

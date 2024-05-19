@@ -10,7 +10,6 @@ object ExtensionWeb3NyanbotFactory : RunnerExtensionFactory {
     override fun create(sandbox: Sandbox): RunnerExtension {
         return RunnerExtension(
             name = ValueString("web3.nyanbot"),
-            nodes = listOf(),
             nodeCompilers = listOf()
         )
     }

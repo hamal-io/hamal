@@ -38,12 +38,11 @@ export const ConnectionListWidget = ({}: ConnectionListWidgetProps) => {
             />
 
 
-            {Object.keys(connections).map((ConnectionIndex) => {
-                    const connection = connections[ConnectionIndex];
-                    // console.log("Connection", connection);
+            {Object.keys(connections).map((connectionIndex) => {
+                    const connection = connections[connectionIndex];
 
-                    const outputPortRect = getPortRect(connection.outputPort.id);
-                    const inputPortRect = getPortRect(connection.inputPort.id);
+                    const outputPortRect = getPortRect(connection.outputPort.index);
+                    const inputPortRect = getPortRect(connection.inputPort.index);
 
 
                     const from = {
@@ -65,7 +64,7 @@ export const ConnectionListWidget = ({}: ConnectionListWidgetProps) => {
                     return (
                         <path
                             key={connection.id}
-                            data-connection-id={connection.id}
+                            data-connection-index={connection.index}
                             // data-output-node-id={outputNodeIndex}
                             // data-output-port-name={outputPortName}
                             // data-inputs-node-id={inputNodeIndex}

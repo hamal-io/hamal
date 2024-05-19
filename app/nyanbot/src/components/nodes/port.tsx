@@ -34,7 +34,7 @@ export const PortInputWidget: FC<PortInputWidgetProps> = ({port}) => {
             }}
         >
             <PortWidget
-                PortIndex={port.id}
+                index={port.index}
                 isInput={true}
                 // type={type}
                 // color={color}
@@ -92,7 +92,7 @@ export const PortOutputWidget: FC<PortOutputWidgetProps> = ({port}) => {
                         {/*{label || defaultLabel}*/}
                     </label>
                     <PortWidget
-                        PortIndex={port.id}
+                        index={port.index}
                         isInput={false}
                         // type={type}
                         // name={name}
@@ -108,12 +108,12 @@ export const PortOutputWidget: FC<PortOutputWidgetProps> = ({port}) => {
 }
 
 type PortWidgetProps = {
-    PortIndex: PortIndex;
+    index: PortIndex;
     isInput: Boolean
 }
 
 
-export const PortWidget: FC<PortWidgetProps> = ({isInput, PortIndex}) => {
+export const PortWidget: FC<PortWidgetProps> = ({isInput, index}) => {
     // const nodesDispatch = React.useContext(NodeDispatchContext);
     // const stageState = React.useContext(StageContext) || {
     //     scale: 1,
@@ -227,8 +227,8 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput, PortIndex}) => {
         console.log("drag end", e.target.dataset.portType)
 
         if (e.target.dataset.portType === 'input') {
-            const outputPortIndex = PortIndex;
-            const inputPortIndex = e.target.dataset.PortIndex
+            const outputPortIndex = index;
+            const inputPortIndex = Number(e.target.dataset.portIndex)
 
             dispatch({type: "CONNECTION_ADDED", outputPortIndex, inputPortIndex})
         }
@@ -392,7 +392,7 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput, PortIndex}) => {
                 // data-port-type={type}
                 data-port-type={isInput ? "input" : "output"}
                 // data-node-id={NodeIndex}
-                data-port-id={PortIndex}
+                data-port-index={index}
                 data-component="port-handle"
                 onDragStart={e => {
                     e.preventDefault();

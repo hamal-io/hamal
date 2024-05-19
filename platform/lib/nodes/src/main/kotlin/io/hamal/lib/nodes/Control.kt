@@ -8,73 +8,42 @@ import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.ControlType.Companion.ControlType
 import java.util.*
 
-interface ControlCausesInvocation : ControlWithPort {
-}
-
-data class ControlCapture(
-    override val index: ControlIndex,
-    override val nodeIndex: NodeIndex,
-    override val port: PortInput,
-    override val key: ControlKey = ControlKey.random(),
-) : ControlCausesInvocation {
-    override val type: ControlType = ControlType("Capture")
-}
-
 data class ControlCode(
     override val index: ControlIndex,
     override val nodeIndex: NodeIndex,
-    override val port: PortInput,
     val value: ValueCode,
     override val key: ControlKey = ControlKey.random()
-) : ControlCausesInvocation {
+) : Control {
     override val type: ControlType = ControlType("Code")
-}
-
-data class ControlCondition(
-    override val index: ControlIndex,
-    override val nodeIndex: NodeIndex,
-    override val port: PortInput,
-    override val key: ControlKey = ControlKey.random(),
-) : ControlFromPortOrInput {
-    override val type: ControlType = ControlType("Condition")
-}
-
-data class ControlInvoke(
-    override val index: ControlIndex,
-    override val nodeIndex: NodeIndex,
-    override val port: PortInput,
-    override val key: ControlKey = ControlKey.random(),
-) : ControlCausesInvocation {
-    override val type: ControlType = ControlType("Invoke")
 }
 
 data class ControlInputBoolean(
     override val index: ControlIndex,
     override val nodeIndex: NodeIndex,
-    override val port: PortInput,
+    override val port: PortInput?,
     val value: ValueBoolean,
     override val key: ControlKey = ControlKey.random(),
-) : ControlFromPortOrInput {
+) : ControlWithPort {
     override val type: ControlType = ControlType("Input_Boolean")
 }
-
 
 data class ControlInputNumber(
     override val index: ControlIndex,
     override val nodeIndex: NodeIndex,
+    override val port: PortInput?,
     val value: ValueNumber,
     override val key: ControlKey = ControlKey.random(),
-) : ControlInput {
+) : ControlWithPort {
     override val type: ControlType = ControlType("Input_Number")
 }
 
 data class ControlInputString(
     override val index: ControlIndex,
     override val nodeIndex: NodeIndex,
-    override val port: PortInput,
+    override val port: PortInput?,
     val value: ValueString,
     override val key: ControlKey = ControlKey.random(),
-) : ControlFromPortOrInput {
+) : ControlWithPort {
     override val type: ControlType = ControlType("Input_String")
 }
 
@@ -125,10 +94,7 @@ interface Control {
             val type = ControlType(json.asJsonObject.get("type").asString)
 
             return when (type) {
-                ControlType("Capture") -> context.deserialize(json, ControlCapture::class.java)
                 ControlType("Code") -> context.deserialize(json, ControlCode::class.java)
-                ControlType("Condition") -> context.deserialize(json, ControlCondition::class.java)
-                ControlType("Invoke") -> context.deserialize(json, ControlInvoke::class.java)
                 ControlType("Input_Boolean") -> context.deserialize(json, ControlInputBoolean::class.java)
                 ControlType("Input_Number") -> context.deserialize(json, ControlInputNumber::class.java)
                 ControlType("Input_String") -> context.deserialize(json, ControlInputString::class.java)
@@ -144,7 +110,6 @@ interface ControlWithPort : Control {
     val port: PortInput?
 }
 
-interface ControlFromPortOrInput : ControlWithPort
 
 sealed interface TemplateControl {
 
@@ -168,9 +133,6 @@ sealed interface TemplateControl {
             val type = ControlType(json.asJsonObject.get("type").asString)
 
             return when (type) {
-                ControlType("Capture") -> context.deserialize(json, ControlCapture::class.java)
-                ControlType("Condition") -> context.deserialize(json, ControlCondition::class.java)
-                ControlType("Invoke") -> context.deserialize(json, ControlInvoke::class.java)
                 ControlType("Input_Boolean") -> context.deserialize(json, ControlInputBoolean::class.java)
                 ControlType("Input_Number") -> context.deserialize(json, ControlInputNumber::class.java)
                 ControlType("Input_String") -> context.deserialize(json, ControlInputString::class.java)

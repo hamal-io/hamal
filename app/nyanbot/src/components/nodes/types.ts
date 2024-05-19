@@ -12,38 +12,35 @@
 //     readonly: boolean;
 // }
 
-export type ConnectionIndex = string
+export type ConnectionIndex = number
 
 export type Connection = {
-    id: ConnectionIndex;
+    index: ConnectionIndex;
     outputNode: {
-        id: NodeIndex
+        index: NodeIndex
     };
     outputPort: {
-        id: PortIndex
+        index: PortIndex
     };
     inputNode: {
-        id: NodeIndex
+        index: NodeIndex
     };
     inputPort: {
-        id: PortIndex
+        index: PortIndex
     };
 }
 
-export type ControlId = string
-export type ControlType = 'Condition' | 'Input' | 'Input_Boolean' | 'Invoke' | 'Input_String'
+export type ControlIndex = number
+export type ControlType = 'Input_Boolean' | 'Input_String'
 
 export type Control =
-    ControlCondition
-    | ControlInput
     | ControlInputBoolean
-    | ControlInvoke
     | ControlInputString
 
 type ControlBase = {
-    id: ControlId;
+    index: ControlIndex;
     type: ControlType;
-    NodeIndex: NodeIndex;
+    nodeIndex: NodeIndex;
     label?: string;
 }
 
@@ -51,15 +48,15 @@ export const isControl = (value: any): value is ControlBase => {
     return (
         typeof value === "object" &&
         value !== null &&
-        "id" in value &&
+        "index" in value &&
         "type" in value
     );
 }
 
-type ControlWithPort = {
-    id: ControlId;
+type ControlWithPort = ControlBase & {
     port: {
-        id: PortIndex;
+        index: PortIndex;
+        form: string;
     }
 }
 
@@ -67,55 +64,24 @@ export const isControlWithPort = (value: any): value is ControlWithPort => {
     return isControl(value) && "port" in value;
 }
 
-
-export type ControlCondition = ControlBase & {
-    type: "Condition";
-}
-
-export const isControlCondition = (value: any): value is ControlCondition => {
-    return isControl(value) && value.type === 'Condition';
-}
-
-export type ControlInput = ControlBase & {
-    type: 'Input';
-}
-
-export const isControlInput = (value: any): value is ControlCondition => {
-    return isControl(value) && value.type === 'Input';
-}
-
-export type ControlInputString = ControlBase & {
-    type: 'Input_String';
-    value?: string;
-    placeholder?: string;
-    port: {
-        id: PortIndex;
-        // type: string;
-    }
-}
-
-export const isControlInputString = (value: any): value is ControlInputString => {
-    return isControl(value) && value.type === 'Input_String';
-}
-
-export type ControlInvoke = ControlBase & {
-    type: "Invoke";
-    port: {
-        id: PortIndex;
-    }
-}
-
-export const isControlInvoke = (value: any): value is ControlInvoke => {
-    return isControl(value) && value.type === 'Invoke';
-}
-
-export type ControlInputBoolean = ControlBase & {
+export type ControlInputBoolean = ControlWithPort & {
     type: "Input_Boolean";
-    value: boolean;
+    value?: boolean;
 }
 
 export const isControlInputBoolean = (value: unknown): value is ControlInputBoolean => {
     return isControl(value) && value.type === 'Input_Boolean';
+}
+
+
+export type ControlInputString = ControlWithPort & {
+    type: 'Input_String';
+    value?: string;
+    placeholder?: string;
+}
+
+export const isControlInputString = (value: any): value is ControlInputString => {
+    return isControl(value) && value.type === 'Input_String';
 }
 
 
@@ -125,12 +91,12 @@ export type Graph = {
     controls: Control[];
 }
 
-export type NodeIndex = string
+export type NodeIndex = number
 export type NodeType = string
 export type NodeLabel = string
 
 export type Node = {
-    id: NodeIndex;
+    index: NodeIndex;
     type: NodeType;
     title?: NodeLabel;
     position: Position;
@@ -138,10 +104,11 @@ export type Node = {
     outputs: Port[];
 }
 
-export type PortIndex = string
+export type PortIndex = number
 
 export type Port = {
-    id: PortIndex;
+    index: PortIndex;
+    form: string;
 }
 
 

@@ -35,10 +35,3 @@ data class Node(
     val outputs: List<PortOutput> = listOf()
 )
 
-data class TemplateNode(
-    val type: NodeType,
-    val title: NodeTitle,
-    val size: Size,
-    val controls: List<TemplateControl>,
-    val outputs: List<TemplatePortOutput>
-)

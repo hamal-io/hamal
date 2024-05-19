@@ -1,11 +1,8 @@
 package io.hamal.lib.nodes.compiler.graph
 
 import io.hamal.lib.common.value.ValueCode
-import io.hamal.lib.common.value.ValueType
-import io.hamal.lib.nodes.*
-import io.hamal.lib.nodes.ControlType.Companion.ControlType
+import io.hamal.lib.nodes.NodesGraph
 import io.hamal.lib.nodes.compiler.graph.ComputationGraph.Companion.ComputationGraph
-import io.hamal.lib.nodes.compiler.node.AbstractNode
 import io.hamal.lib.nodes.compiler.node.NodeCompilerRegistry
 
 interface GraphCompiler {
@@ -19,7 +16,7 @@ class GraphCompilerImpl(registry: NodeCompilerRegistry) : GraphCompiler {
         val computationGraph = ComputationGraph(graph)
         val compiledNodes = nodeCompiler.compile(graph)
 
-        TODO("Not yet implemented")
+        return ValueCode("""""")
     }
 
     private val nodeCompiler = NodeCompilerImpl(registry)
