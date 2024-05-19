@@ -1,7 +1,9 @@
 package io.hamal.lib.nodes
 
-import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.common.value.*
+import io.hamal.lib.common.value.ValueNumber
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueVariableNumber
+import io.hamal.lib.common.value.ValueVariableString
 
 
 class ConnectionIndex(override val value: ValueNumber) : ValueVariableNumber() {

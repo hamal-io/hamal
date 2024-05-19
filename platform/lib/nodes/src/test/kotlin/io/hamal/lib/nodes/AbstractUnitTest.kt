@@ -28,6 +28,12 @@ internal abstract class AbstractUnitTest {
         )
     }
 
+    fun graph(
+        nodes: List<Node> = listOf(),
+        connections: List<Connection> = listOf(),
+        controls: List<Control> = listOf(),
+    ) = NodesGraph(nodes, connections, controls)
+
     fun connection(
         id: Long,
         outputNode: Long,

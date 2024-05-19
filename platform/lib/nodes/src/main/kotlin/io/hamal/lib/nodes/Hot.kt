@@ -22,6 +22,7 @@ object NodesHotModule : SerdeModuleJson() {
         this[NodeTitle::class] = ValueVariableAdapters.String(::NodeTitle)
 
         this[PortIndex::class] = ValueVariableAdapters.Number(::PortIndex)
+        this[PortKey::class] = ValueVariableAdapters.String(::PortKey)
     }
 }
 

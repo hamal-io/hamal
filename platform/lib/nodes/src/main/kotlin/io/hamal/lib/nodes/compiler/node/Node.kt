@@ -1,17 +1,17 @@
 package io.hamal.lib.nodes.compiler.node
 
 import io.hamal.lib.common.value.ValueCode
-import io.hamal.lib.common.value.ValueType
 import io.hamal.lib.nodes.Control
+import io.hamal.lib.nodes.Form
 import io.hamal.lib.nodes.Node
 import io.hamal.lib.nodes.NodeType
 
 
-abstract class NodeCompiler {
-
+abstract class AbstractNode {
     abstract val type: NodeType
-    abstract val inputTypes: List<ValueType> // FIXME that should be Parameter (name:type) - so that it can be addressed in lua directly by name
-    abstract val outputTypes: List<ValueType>
+
+    abstract val inputs: List<Form>
+    abstract val outputs: List<Form>
 
     abstract fun toCode(ctx: Context): ValueCode
 
@@ -24,19 +24,19 @@ abstract class NodeCompiler {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as NodeCompiler
+        other as AbstractNode
 
         if (type != other.type) return false
-        if (inputTypes != other.inputTypes) return false
-        if (outputTypes != other.outputTypes) return false
+        if (inputs != other.inputs) return false
+        if (outputs != other.outputs) return false
 
         return true
     }
 
     override fun hashCode(): Int {
         var result = type.hashCode()
-        result = 31 * result + inputTypes.hashCode()
-        result = 31 * result + outputTypes.hashCode()
+        result = 31 * result + inputs.hashCode()
+        result = 31 * result + outputs.hashCode()
         return result
     }
 

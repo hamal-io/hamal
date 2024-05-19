@@ -4,15 +4,12 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonElement
 import com.google.gson.JsonSerializationContext
 import io.hamal.lib.common.serialization.AdapterJson
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.ControlType.Companion.ControlType
-import java.util.UUID
+import java.util.*
 
 interface ControlCausesInvocation : ControlWithPort {
-
 }
-
 
 data class ControlCapture(
     override val index: ControlIndex,

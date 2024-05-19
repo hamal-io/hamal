@@ -1,6 +1,5 @@
 package io.hamal.lib.nodes.compiler.graph
 
-import io.hamal.lib.common.value.TypeString
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.nodes.*
 import io.hamal.lib.nodes.NodeIndex.Companion.NodeIndex
@@ -23,7 +22,7 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
         val result = ComputationGraph(
             NodesGraph(
                 nodes = listOf(
-                    node(1, "Init", listOf(PortOutput(PortIndex(20), TypeString))),
+                    node(1, "Init", listOf(PortOutput(PortIndex(20), Form.Primitive.String))),
                     node(2, "Test_Invoked")
                 ),
                 connections = listOf(
@@ -33,7 +32,7 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
                     ControlInputString(
                         nextControlIndex(),
                         NodeIndex(2),
-                        PortInput(PortIndex(21), TypeString),
+                        PortInput(PortIndex(21), Form.Primitive.String),
                         ValueString("default string")
                     )
                 )
@@ -56,7 +55,7 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
         val result = ComputationGraph(
             graph = NodesGraph(
                 nodes = listOf(
-                    node(1, "A", listOf(PortOutput(PortIndex(20), TypeString))),
+                    node(1, "A", listOf(PortOutput(PortIndex(20), Form.Primitive.String))),
                     node(2, "B"),
                     node(3, "C")
                 ),
@@ -68,13 +67,13 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
                     ControlInputString(
                         nextControlIndex(),
                         NodeIndex(2),
-                        PortInput(PortIndex(21), TypeString),
+                        PortInput(PortIndex(21), Form.Primitive.String),
                         ValueString("default")
                     ),
                     ControlInputString(
                         nextControlIndex(),
                         NodeIndex(3),
-                        PortInput(PortIndex(22), TypeString),
+                        PortInput(PortIndex(22), Form.Primitive.String),
                         ValueString("default")
                     )
                 )
@@ -97,7 +96,7 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
         val result = ComputationGraph(
             graph = NodesGraph(
                 nodes = listOf(
-                    node(1, "Init", listOf(PortOutput(PortIndex(20), TypeString))),
+                    node(1, "Init", listOf(PortOutput(PortIndex(20), Form.Primitive.String))),
                     node(2, "Test_Invoked"),
                     node(3, "Test_Invoked")
                 ),
@@ -109,13 +108,13 @@ internal object ComputationNodesGraphTest : AbstractUnitTest() {
                     ControlInputString(
                         nextControlIndex(),
                         NodeIndex(2),
-                        PortInput(PortIndex(21), TypeString),
+                        PortInput(PortIndex(21), Form.Primitive.String),
                         ValueString("default")
                     ),
                     ControlInputString(
                         nextControlIndex(),
                         NodeIndex(3),
-                        PortInput(PortIndex(22), TypeString),
+                        PortInput(PortIndex(22), Form.Primitive.String),
                         ValueString("default")
                     )
                 )

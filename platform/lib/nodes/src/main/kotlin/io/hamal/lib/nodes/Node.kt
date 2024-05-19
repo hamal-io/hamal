@@ -1,6 +1,5 @@
 package io.hamal.lib.nodes
 
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.*
 
 
@@ -32,6 +31,7 @@ data class Node(
     val position: Position,
     val size: Size,
     val properties: NodeProperties = NodeProperties(),
+    val inputs: List<PortInput> = listOf(),
     val outputs: List<PortOutput> = listOf()
 )
 
