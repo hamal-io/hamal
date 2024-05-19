@@ -3,7 +3,7 @@ package io.hamal.lib.nodes.fixture
 import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.AbstractIntegrationTest
 import io.hamal.lib.nodes.ControlInputString
-import io.hamal.lib.nodes.NodeId.Companion.NodeId
+import io.hamal.lib.nodes.NodeIndex.Companion.NodeIndex
 import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.NodesGraph
@@ -124,8 +124,8 @@ internal class TestInvokedTest : AbstractIntegrationTest() {
                         connection(100, 1, 20, 2, 21)
                     ),
                     controls = listOf(
-                        ControlInputString(nextControlId(),NodeId(1),portInput(-1, TypeString),ValueString("Hamal Rocks")),
-                        ControlInputString(nextControlId(),NodeId(2),portInput(21, TypeString),ValueString(""))
+                        ControlInputString(nextControlId(),NodeIndex(1),portInput(-1, TypeString),ValueString("Hamal Rocks")),
+                        ControlInputString(nextControlId(),NodeIndex(2),portInput(21, TypeString),ValueString(""))
                     )
                 )
             )
@@ -149,9 +149,9 @@ internal class TestInvokedTest : AbstractIntegrationTest() {
                         connection(100, 1, 20, 3, 22),
                     ),
                     controls = listOf(
-                        ControlInputString(nextControlId(),NodeId(1),portInput(-1, TypeString),ValueString("Hamal Rocks")),
-                        ControlInputString(nextControlId(),NodeId(2),portInput(21, TypeString),ValueString("default")),
-                        ControlInputString(nextControlId(),NodeId(3),portInput(22, TypeString),ValueString("default"))
+                        ControlInputString(nextControlId(),NodeIndex(1),portInput(-1, TypeString),ValueString("Hamal Rocks")),
+                        ControlInputString(nextControlId(),NodeIndex(2),portInput(21, TypeString),ValueString("default")),
+                        ControlInputString(nextControlId(),NodeIndex(3),portInput(22, TypeString),ValueString("default"))
                     )
 
                 )

@@ -3,8 +3,8 @@ package io.hamal.lib.nodes.control
 import io.hamal.lib.common.value.TypeString
 import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.nodes.*
-import io.hamal.lib.nodes.NodeId.Companion.NodeId
-import io.hamal.lib.nodes.PortId.Companion.PortId
+import io.hamal.lib.nodes.NodeIndex.Companion.NodeIndex
+import io.hamal.lib.nodes.PortIndex.Companion.PortIndex
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Disabled
@@ -22,17 +22,17 @@ internal object ControlInvokeTest : AbstractIntegrationTest() {
 //                initValue = ValueString("This value will not passed into capture node"),
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "Init", listOf(PortOutput(PortId(20), TypeString))),
-                        node(2, "Capture", listOf(PortOutput(PortId(22), TypeString)))
+                        node(1, "Init", listOf(PortOutput(PortIndex(20), TypeString))),
+                        node(2, "Capture", listOf(PortOutput(PortIndex(22), TypeString)))
                     ),
                     connections = listOf(
                         connection(100, 1, 20, 2, 21)
                     ),
                     controls = listOf(
-                        ControlInvoke(nextControlId(), NodeId(2), portInput(21, TypeString)),
+                        ControlInvoke(nextControlId(), NodeIndex(2), portInput(21, TypeString)),
                         ControlInputString(
                             nextControlId(),
-                            NodeId(2),
+                            NodeIndex(2),
                             portInput(22, TypeString),
                             ValueString("default capture string")
                         ),

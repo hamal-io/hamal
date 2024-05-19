@@ -4,11 +4,10 @@ import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.*
 
 
-class NodeId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
+class NodeIndex(override val value: ValueNumber) : ValueVariableNumber() {
     companion object {
-        fun NodeId(value: SnowflakeId) = NodeId(ValueSnowflakeId(value))
-        fun NodeId(value: Int) = NodeId(ValueSnowflakeId(SnowflakeId(value.toLong())))
-        fun NodeId(value: String) = NodeId(ValueSnowflakeId(SnowflakeId(value.toLong(16))))
+        fun NodeIndex(value: Int) = NodeIndex(ValueNumber(value))
+        fun NodeIndex(value: Long) = NodeIndex(ValueNumber(value))
     }
 }
 
@@ -27,7 +26,7 @@ class NodeType(override val value: ValueString) : ValueVariableString() {
 class NodeProperties(override val value: ValueObject = ValueObject.empty) : ValueVariableObject()
 
 data class Node(
-    val id: NodeId,
+    val index: NodeIndex,
     val type: NodeType,
     val title: NodeTitle,
     val position: Position,

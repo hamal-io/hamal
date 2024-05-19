@@ -1,12 +1,11 @@
 package io.hamal.lib.nodes
 
-import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.nodes.ConnectionId.Companion.ConnectionId
-import io.hamal.lib.nodes.ControlId.Companion.ControlId
-import io.hamal.lib.nodes.NodeId.Companion.NodeId
+import io.hamal.lib.nodes.ConnectionIndex.Companion.ConnectionIndex
+import io.hamal.lib.nodes.ControlIndex.Companion.ControlIndex
+import io.hamal.lib.nodes.NodeIndex.Companion.NodeIndex
 import io.hamal.lib.nodes.NodeTitle.Companion.NodeTitle
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
-import io.hamal.lib.nodes.PortId.Companion.PortId
+import io.hamal.lib.nodes.PortIndex.Companion.PortIndex
 
 
 internal abstract class AbstractUnitTest {
@@ -20,7 +19,7 @@ internal abstract class AbstractUnitTest {
         size: Size = Size(200, 200)
     ): Node {
         return Node(
-            id = NodeId(SnowflakeId(id)),
+            index = NodeIndex(id),
             type = NodeType(type),
             title = title,
             position = position,
@@ -37,20 +36,20 @@ internal abstract class AbstractUnitTest {
         inputPort: Long
     ): Connection {
         return Connection(
-            id = ConnectionId(SnowflakeId(id)),
-            outputNode = Connection.Node(NodeId(SnowflakeId(outputNode))),
-            outputPort = Connection.Port(id = PortId(SnowflakeId(outputPort))),
-            inputNode = Connection.Node(NodeId(SnowflakeId(inputNode))),
-            inputPort = Connection.Port(id = PortId(SnowflakeId(inputPort)))
+            index = ConnectionIndex(id),
+            outputNode = Connection.Node(NodeIndex(outputNode)),
+            outputPort = Connection.Port(PortIndex(outputPort)),
+            inputNode = Connection.Node(NodeIndex(inputNode)),
+            inputPort = Connection.Port(PortIndex(inputPort))
         )
     }
 
-    protected val nextControlId = NextControlId
+    protected val nextControlIndex = NextControlIndex
 
-    object NextControlId {
+    object NextControlIndex {
 
-        operator fun invoke(): ControlId {
-            return ControlId(counter++)
+        operator fun invoke(): ControlIndex {
+            return ControlIndex(counter++)
         }
 
         private var counter: Int = 0

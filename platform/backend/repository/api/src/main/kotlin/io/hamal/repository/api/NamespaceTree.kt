@@ -38,7 +38,7 @@ interface NamespaceTreeCmdRepository : CmdRepository {
         val id: CmdId,
         val treeId: NamespaceTreeId,
         val workspaceId: WorkspaceId,
-        val rootNodeId: NamespaceId
+        val rootNodeIndex: NamespaceId
     )
 
     data class AppendCmd(

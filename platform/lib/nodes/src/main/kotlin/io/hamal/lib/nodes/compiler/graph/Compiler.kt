@@ -12,20 +12,78 @@ interface GraphCompiler {
     fun compile(graph: NodesGraph): ValueCode
 }
 
-class GraphCompilerImpl(private val registry: NodeCompilerRegistry) : GraphCompiler {
+internal data class CompiledNode(
+    val code: String,
+    val outputs: List<ValueType>
+)
+
+internal class NodeCompilerImpl(
+    private val registry: NodeCompilerRegistry
+) {
+
+    fun compile(graph: NodesGraph): List<CompiledNode> {
+        return graph.nodes.map { node ->
+            val builder = StringBuilder()
+
+            val controls = graph.controls.filter { it.nodeIndex == node.index }
+            val inputTypes = controls.filterIsInstance<ControlCausesInvocation>().mapNotNull { control ->
+                if (control is ControlWithPort) {
+                    control.port?.type
+                } else {
+                    null
+                }
+            }
+
+            val outputTypes = node.outputs.map { it.type }
+
+            val generator = registry[node.type, inputTypes, outputTypes]
+
+            val args = List(generator.inputTypes.size) { "arg_${it + 1}" }.joinToString { it }
+
+            builder.append("""function n_${node.index}(${args})""")
+            builder.append("\n")
+            builder.append(generator.toCode(NodeCompiler.Context(node, controls.filter { it.nodeIndex == node.index })))
+            builder.append("\n")
+            builder.append("""end""")
+            builder.append("\n")
+            builder.append("\n")
+
+            CompiledNode(
+                code = builder.toString(),
+                outputs = List(node.outputs.size) { index -> generator.outputTypes[index] }
+            )
+        }
+    }
+}
+
+class GraphCompilerImpl(registry: NodeCompilerRegistry) : GraphCompiler {
+
+    override fun compile(graph: NodesGraph): ValueCode {
+        val computationGraph = ComputationGraph(graph)
+        val compiledNodes = nodeCompiler.compile(graph)
+
+        TODO("Not yet implemented")
+    }
+
+    private val nodeCompiler = NodeCompilerImpl(registry)
+
+}
+
+
+class DeprecatedGraphCompilerImpl(private val registry: NodeCompilerRegistry) : GraphCompiler {
 
     override fun compile(graph: NodesGraph): ValueCode {
         val code = StringBuilder()
 
-        val nodeCodeGenerators = mutableMapOf<NodeId, NodeCompiler>()
-        val outputPortMapping = mutableMapOf<PortId, Pair<String, ValueType>>()
+        val nodeCodeGenerators = mutableMapOf<NodeIndex, NodeCompiler>()
+        val outputPortMapping = mutableMapOf<PortIndex, Pair<String, ValueType>>()
 
         val nodes = graph.nodes
 
         code.append("throw = require('std.throw').create()\n")
 
         for (node in nodes) {
-            val controls = graph.controls.filter { it.nodeId == node.id }
+            val controls = graph.controls.filter { it.nodeIndex == node.index }
             val inputTypes = controls.filterIsInstance<ControlCausesInvocation>().mapNotNull { control ->
                 if (control is ControlWithPort) {
                     control.port?.type
@@ -42,21 +100,21 @@ class GraphCompilerImpl(private val registry: NodeCompilerRegistry) : GraphCompi
             val args = List(generator.inputTypes.size) { "arg_${it + 1}" }.joinToString { it }
 
 
-            builder.append("""function n_${node.id.stringValue}(${args})""")
+            builder.append("""function n_${node.index}(${args})""")
             builder.append("\n")
-            builder.append(generator.toCode(NodeCompiler.Context(node, controls.filter { it.nodeId == node.id })))
+            builder.append(generator.toCode(NodeCompiler.Context(node, controls.filter { it.nodeIndex == node.index })))
             builder.append("\n")
             builder.append("""end""")
             builder.append("\n")
             builder.append("\n")
 
-            nodeCodeGenerators[node.id] = generator
+            nodeCodeGenerators[node.index] = generator
 
             code.append(builder.toString())
 
             node.outputs.mapIndexed { index, portOutput ->
-                outputPortMapping[portOutput.id] =
-                    "n_${node.id.stringValue}_${index + 1}" to generator.outputTypes[index]
+                outputPortMapping[portOutput.index] =
+                    "n_${node.index}_${index + 1}" to generator.outputTypes[index]
             }
         }
 
@@ -64,35 +122,35 @@ class GraphCompilerImpl(private val registry: NodeCompilerRegistry) : GraphCompi
         code.append("\n")
 
 
-        val initNode = nodes.minByOrNull { it.id } ?: throw IllegalArgumentException("No Init node found")
+        val initNode = nodes.minByOrNull { it.index } ?: throw IllegalArgumentException("No Init node found")
 
         val computationGraph = ComputationGraph(graph)
-        val orderedNodeIds = breadthFirstSearch(computationGraph, initNode.id)
+        val orderedNodeIndexs = breadthFirstSearch(computationGraph, initNode.index)
 
-        orderedNodeIds.forEach { inputNodeId ->
-            val inputNode = nodes.find { it.id == inputNodeId }!!
+        orderedNodeIndexs.forEach { inputNodeIndex ->
+            val inputNode = nodes.find { it.index == inputNodeIndex }!!
 
-            val connections = graph.connections.filter { it.inputNode.id == inputNodeId }
+            val connections = graph.connections.filter { it.inputNode.index == inputNodeIndex }
             if (connections.isEmpty()) {
-                code.append("n_${inputNode.id.stringValue}_1 = n_1()\n")
+                code.append("n_${inputNode.index}_1 = n_1()\n")
             } else {
 
                 val connection = connections.first()
-                val controls = graph.controls.filter { it.nodeId == inputNodeId }
+                val controls = graph.controls.filter { it.nodeIndex == inputNodeIndex }
                 if (controls.any { it.type == ControlType("Invoke") }) {
                     val controls = controls.filterNot { it.type == ControlType("Invoke") }
 
                     if (controls.isEmpty()) {
 
 
-                        val p1 = outputPortMapping[connection.outputPort.id]!!.first
+                        val p1 = outputPortMapping[connection.outputPort.index]!!.first
 
 
                         code.append("local p_1 = $p1 \n")
 
                         code.append("if p_1 ~= nil then \n")
 
-                        code.append("n_${inputNode.id.stringValue}(p_1)\n")
+                        code.append("n_${inputNode.index}(p_1)\n")
 
                         code.append("end\n")
 
@@ -105,12 +163,12 @@ class GraphCompilerImpl(private val registry: NodeCompilerRegistry) : GraphCompi
                             val defaultValue = control.value.stringValue
                             "'${defaultValue}'"
                         } else {
-                            outputPortMapping[connection.outputPort.id]!!.first
+                            outputPortMapping[connection.outputPort.index]!!.first
                         }
 
                         code.append("local p_1 = $p1 \n")
 
-                        code.append("n_${inputNode.id}_1, n_${inputNode.id}_2 = n_${inputNode.id.stringValue}(p_1)")
+                        code.append("n_${inputNode.index}_1, n_${inputNode.index}_2 = n_${inputNode.index}(p_1)")
 
                     } else if (controls.size == 2) {
                         var control = controls.first()
@@ -121,7 +179,7 @@ class GraphCompilerImpl(private val registry: NodeCompilerRegistry) : GraphCompi
                             val defaultValue = control.value.booleanValue
                             "${defaultValue}"
                         } else {
-                            outputPortMapping[connection.outputPort.id]!!.first
+                            outputPortMapping[connection.outputPort.index]!!.first
                         }
 
                         code.append("local p_1 = $p1 \n")
@@ -133,7 +191,7 @@ class GraphCompilerImpl(private val registry: NodeCompilerRegistry) : GraphCompi
 
                         code.append("local p_2 = $p2 \n")
 
-                        code.append("n_${inputNode.id.stringValue}(p_1, p_2)")
+                        code.append("n_${inputNode.index}(p_1, p_2)")
                     } else {
                         TODO()
                     }
@@ -150,15 +208,16 @@ class GraphCompilerImpl(private val registry: NodeCompilerRegistry) : GraphCompi
                             val defaultValue = control.value.booleanValue
                             "${defaultValue}"
                         } else {
-                            outputPortMapping[connection.outputPort.id]!!.first
+                            outputPortMapping[connection.outputPort.index]!!.first
                         }
 
                         code.append("local p_1 = $p1 \n")
 
                         code.append("if p_1 ~= nil then \n")
 
-                        val fnResult = inputNode.outputs.map { portOutput -> outputPortMapping[portOutput.id]!!.first }
-                            .joinToString(", ")
+                        val fnResult =
+                            inputNode.outputs.map { portOutput -> outputPortMapping[portOutput.index]!!.first }
+                                .joinToString(", ")
                         if (inputNode.outputs.size > 0) {
                             code.append(fnResult)
                             code.append(" = ")
@@ -166,15 +225,15 @@ class GraphCompilerImpl(private val registry: NodeCompilerRegistry) : GraphCompi
 
                         if (control is ControlInputString) {
                             val defaultValue = control.value.stringValue
-                            code.append("n_${inputNode.id.stringValue}(${outputPortMapping[connection.outputPort.id]!!.first} or '${defaultValue}')")
+                            code.append("n_${inputNode.index}(${outputPortMapping[connection.outputPort.index]!!.first} or '${defaultValue}')")
                         } else {
-                            code.append("n_${inputNode.id.stringValue}(${outputPortMapping[connection.outputPort.id]!!.first})")
+                            code.append("n_${inputNode.index}(${outputPortMapping[connection.outputPort.index]!!.first})")
                         }
 
                         code.append("\nelse\n")
 
                         inputNode.outputs.forEach { portOutput ->
-                            code.append(outputPortMapping[portOutput.id]!!.first)
+                            code.append(outputPortMapping[portOutput.index]!!.first)
                             code.append(" = nil\n")
                         }
 
@@ -185,12 +244,12 @@ class GraphCompilerImpl(private val registry: NodeCompilerRegistry) : GraphCompi
                         var control = controls.first()
                         val p1 = if (control is ControlInputString) {
                             val defaultValue = control.value.stringValue
-                            "${outputPortMapping[connection.outputPort.id]!!.first} or '${defaultValue}'"
+                            "${outputPortMapping[connection.outputPort.index]!!.first} or '${defaultValue}'"
                         } else if (control is ControlInputBoolean) {
                             val defaultValue = control.value.booleanValue
-                            "${outputPortMapping[connection.outputPort.id]!!.first} or '${defaultValue}'"
+                            "${outputPortMapping[connection.outputPort.index]!!.first} or '${defaultValue}'"
                         } else {
-                            outputPortMapping[connection.outputPort.id]!!.first
+                            outputPortMapping[connection.outputPort.index]!!.first
                         }
 
                         code.append("local p_1 = $p1 \n")
@@ -198,18 +257,18 @@ class GraphCompilerImpl(private val registry: NodeCompilerRegistry) : GraphCompi
                         // FIXME is there a connection to the port? otherwise default to default value
                         control = controls.last()
                         require(control is ControlInputString)
-                        val p2 = connections.find { it.inputPort.id == control.port.id }?.let { connection ->
+                        val p2 = connections.find { it.inputPort.index == control.port.index }?.let { connection ->
                             // FIXME resolve variable name
                             null
                         } ?: "'${control.value.stringValue}'"
 
                         code.append("local p_2 = $p2 \n")
 
-                        code.append("n_${inputNode.id.stringValue}(p_1, p_2)")
+                        code.append("n_${inputNode.index}(p_1, p_2)")
                     } else {
 
 
-                        code.append("n_${inputNode.id.stringValue}(${outputPortMapping[connection.outputPort.id]!!.first})")
+                        code.append("n_${inputNode.index}(${outputPortMapping[connection.outputPort.index]!!.first})")
                     }
                 }
                 code.append("\n")

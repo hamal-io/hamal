@@ -29,7 +29,7 @@ class NamespaceTreeMemoryRepository : RecordMemoryRepository<NamespaceTreeId, Na
                     NamespaceTreeRecord.Created(
                         cmdId = cmd.id,
                         entityId = treeId,
-                        rootId = cmd.rootNodeId,
+                        rootId = cmd.rootNodeIndex,
                         workspaceId = cmd.workspaceId,
                     )
                 )

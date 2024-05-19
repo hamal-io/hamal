@@ -2,8 +2,8 @@ package io.hamal.lib.nodes.compiler.node
 
 import io.hamal.lib.common.value.*
 import io.hamal.lib.nodes.*
-import io.hamal.lib.nodes.NodeId.Companion.NodeId
-import io.hamal.lib.nodes.PortId.Companion.PortId
+import io.hamal.lib.nodes.NodeIndex.Companion.NodeIndex
+import io.hamal.lib.nodes.PortIndex.Companion.PortIndex
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.nullValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -17,7 +17,7 @@ internal class DecisionTest : AbstractIntegrationTest() {
             unitOfWork(
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "Input", listOf(PortOutput(PortId(20), TypeBoolean))),
+                        node(1, "Input", listOf(PortOutput(PortIndex(20), TypeBoolean))),
                         node(2, "Decision", listOf(portOutput(21, TypeBoolean), portOutput(22, TypeBoolean))),
                         node(
                             3,
@@ -52,13 +52,13 @@ internal class DecisionTest : AbstractIntegrationTest() {
                         connection(104, 2, 22, 6, 34, "no"),
                     ),
                     controls = listOf(
-                        ControlInputBoolean(nextControlId(), NodeId(1), portInput(-1, TypeBoolean), ValueTrue),
-                        ControlInvoke(nextControlId(), NodeId(2), portInput(30, TypeBoolean)),
-                        ControlInputBoolean(nextControlId(), NodeId(2), portInput(35, TypeBoolean), ValueTrue),
-                        ControlCapture(nextControlId(), NodeId(3), portInput(31, TypeBoolean)),
-                        ControlInvoke(nextControlId(), NodeId(4), portInput(32, TypeBoolean)),
-                        ControlCapture(nextControlId(), NodeId(5), portInput(33, TypeBoolean)),
-                        ControlInvoke(nextControlId(), NodeId(6), portInput(34, TypeBoolean))
+                        ControlInputBoolean(nextControlId(), NodeIndex(1), portInput(-1, TypeBoolean), ValueTrue),
+                        ControlInvoke(nextControlId(), NodeIndex(2), portInput(30, TypeBoolean)),
+                        ControlInputBoolean(nextControlId(), NodeIndex(2), portInput(35, TypeBoolean), ValueTrue),
+                        ControlCapture(nextControlId(), NodeIndex(3), portInput(31, TypeBoolean)),
+                        ControlInvoke(nextControlId(), NodeIndex(4), portInput(32, TypeBoolean)),
+                        ControlCapture(nextControlId(), NodeIndex(5), portInput(33, TypeBoolean)),
+                        ControlInvoke(nextControlId(), NodeIndex(6), portInput(34, TypeBoolean))
                     )
                 )
             )
@@ -76,7 +76,7 @@ internal class DecisionTest : AbstractIntegrationTest() {
             unitOfWork(
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "Input", listOf(PortOutput(PortId(20), TypeBoolean))),
+                        node(1, "Input", listOf(PortOutput(PortIndex(20), TypeBoolean))),
                         node(2, "Decision", listOf(portOutput(21, TypeBoolean), portOutput(22, TypeBoolean))),
                         node(
                             3,
@@ -111,13 +111,13 @@ internal class DecisionTest : AbstractIntegrationTest() {
                         connection(104, 2, 22, 6, 34, "no"),
                     ),
                     controls = listOf(
-                        ControlInputBoolean(nextControlId(), NodeId(1), portInput(-1, TypeBoolean), ValueFalse),
-                        ControlInvoke(nextControlId(), NodeId(2), portInput(30, TypeBoolean)),
-                        ControlInputBoolean(nextControlId(), NodeId(2), portInput(35, TypeBoolean), ValueTrue),
-                        ControlCapture(nextControlId(), NodeId(3), portInput(31, TypeBoolean)),
-                        ControlInvoke(nextControlId(), NodeId(4), portInput(32, TypeBoolean)),
-                        ControlCapture(nextControlId(), NodeId(5), portInput(33, TypeBoolean)),
-                        ControlInvoke(nextControlId(), NodeId(6), portInput(34, TypeBoolean))
+                        ControlInputBoolean(nextControlId(), NodeIndex(1), portInput(-1, TypeBoolean), ValueFalse),
+                        ControlInvoke(nextControlId(), NodeIndex(2), portInput(30, TypeBoolean)),
+                        ControlInputBoolean(nextControlId(), NodeIndex(2), portInput(35, TypeBoolean), ValueTrue),
+                        ControlCapture(nextControlId(), NodeIndex(3), portInput(31, TypeBoolean)),
+                        ControlInvoke(nextControlId(), NodeIndex(4), portInput(32, TypeBoolean)),
+                        ControlCapture(nextControlId(), NodeIndex(5), portInput(33, TypeBoolean)),
+                        ControlInvoke(nextControlId(), NodeIndex(6), portInput(34, TypeBoolean))
                     )
                 )
             )

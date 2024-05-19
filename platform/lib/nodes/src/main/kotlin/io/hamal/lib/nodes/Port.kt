@@ -1,26 +1,22 @@
 package io.hamal.lib.nodes
 
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.common.value.ValueType
-import io.hamal.lib.common.value.ValueSnowflakeId
-import io.hamal.lib.common.value.ValueVariableSnowflakeId
+import io.hamal.lib.common.value.*
 
-class PortId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
+class PortIndex(override val value: ValueNumber) : ValueVariableNumber() {
     companion object {
-        fun PortId(value: SnowflakeId) = PortId(ValueSnowflakeId(value))
-        fun PortId(value: Int) = PortId(ValueSnowflakeId(SnowflakeId(value.toLong())))
-        fun PortId(value: String) = PortId(ValueSnowflakeId(SnowflakeId(value.toLong(16))))
+        fun PortIndex(value: Int) = PortIndex(ValueNumber(value))
+        fun PortIndex(value: Long) = PortIndex(ValueNumber(value))
     }
 }
 
-
 data class PortInput(
-    val id: PortId,
+    val index: PortIndex,
     val type: ValueType
 )
 
 data class PortOutput(
-    val id: PortId,
+    val index: PortIndex,
     val type: ValueType
 )
 
@@ -31,4 +27,6 @@ data class TemplatePortInput(
 data class TemplatePortOutput(
     val outputType: ValueType
 )
+
+
 

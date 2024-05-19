@@ -44,7 +44,7 @@ internal class NamespaceAppendHandlerTest : BaseRequestHandlerTest() {
             NamespaceTreeCmdRepository.CreateCmd(
                 id = CmdId(2),
                 treeId = NamespaceTreeId.root,
-                rootNodeId = NamespaceId.root,
+                rootNodeIndex = NamespaceId.root,
                 workspaceId = testWorkspace.id
             )
         )

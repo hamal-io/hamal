@@ -12,21 +12,21 @@
 //     readonly: boolean;
 // }
 
-export type ConnectionId = string
+export type ConnectionIndex = string
 
 export type Connection = {
-    id: ConnectionId;
+    id: ConnectionIndex;
     outputNode: {
-        id: NodeId
+        id: NodeIndex
     };
     outputPort: {
-        id: PortId
+        id: PortIndex
     };
     inputNode: {
-        id: NodeId
+        id: NodeIndex
     };
     inputPort: {
-        id: PortId
+        id: PortIndex
     };
 }
 
@@ -43,7 +43,7 @@ export type Control =
 type ControlBase = {
     id: ControlId;
     type: ControlType;
-    nodeId: NodeId;
+    NodeIndex: NodeIndex;
     label?: string;
 }
 
@@ -59,7 +59,7 @@ export const isControl = (value: any): value is ControlBase => {
 type ControlWithPort = {
     id: ControlId;
     port: {
-        id: PortId;
+        id: PortIndex;
     }
 }
 
@@ -89,7 +89,7 @@ export type ControlInputString = ControlBase & {
     value?: string;
     placeholder?: string;
     port: {
-        id: PortId;
+        id: PortIndex;
         // type: string;
     }
 }
@@ -101,7 +101,7 @@ export const isControlInputString = (value: any): value is ControlInputString =>
 export type ControlInvoke = ControlBase & {
     type: "Invoke";
     port: {
-        id: PortId;
+        id: PortIndex;
     }
 }
 
@@ -125,12 +125,12 @@ export type Graph = {
     controls: Control[];
 }
 
-export type NodeId = string
+export type NodeIndex = string
 export type NodeType = string
 export type NodeLabel = string
 
 export type Node = {
-    id: NodeId;
+    id: NodeIndex;
     type: NodeType;
     title?: NodeLabel;
     position: Position;
@@ -138,10 +138,10 @@ export type Node = {
     outputs: Port[];
 }
 
-export type PortId = string
+export type PortIndex = string
 
 export type Port = {
-    id: PortId;
+    id: PortIndex;
 }
 
 

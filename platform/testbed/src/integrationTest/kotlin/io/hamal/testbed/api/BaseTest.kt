@@ -177,7 +177,7 @@ class ClearController {
                 id = CmdId(6),
                 treeId = NamespaceTreeId.root,
                 workspaceId = WorkspaceId.root,
-                rootNodeId = NamespaceId.root
+                rootNodeIndex = NamespaceId.root
             )
         )
     }

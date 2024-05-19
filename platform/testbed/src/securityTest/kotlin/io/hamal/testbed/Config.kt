@@ -153,7 +153,7 @@ class TestSetupConfig {
                 id = CmdId(id),
                 treeId = NamespaceTreeId(id),
                 workspaceId = WorkspaceId(id),
-                rootNodeId = NamespaceId(id)
+                rootNodeIndex = NamespaceId(id)
             )
         )
 

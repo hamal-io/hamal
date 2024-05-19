@@ -9,19 +9,19 @@ import io.hamal.lib.domain.vo.SerdeModuleValueVariable
 
 object NodesHotModule : SerdeModuleJson() {
     init {
-        this[ConnectionId::class] = ValueVariableAdapters.SnowflakeId(::ConnectionId)
+        this[ConnectionIndex::class] = ValueVariableAdapters.Number(::ConnectionIndex)
 
-        this[ControlId::class] = ValueVariableAdapters.SnowflakeId(::ControlId)
+        this[ControlIndex::class] = ValueVariableAdapters.Number(::ControlIndex)
         this[ControlKey::class] = ValueVariableAdapters.String(::ControlKey)
         this[ControlType::class] = ValueVariableAdapters.String(::ControlType)
         this[Control::class] = Control.Adapter
         this[TemplateControl::class] = TemplateControl.Adapter
 
-        this[NodeId::class] = ValueVariableAdapters.SnowflakeId(::NodeId)
+        this[NodeIndex::class] = ValueVariableAdapters.Number(::NodeIndex)
         this[NodeType::class] = ValueVariableAdapters.String(::NodeType)
         this[NodeTitle::class] = ValueVariableAdapters.String(::NodeTitle)
 
-        this[PortId::class] = ValueVariableAdapters.SnowflakeId(::PortId)
+        this[PortIndex::class] = ValueVariableAdapters.Number(::PortIndex)
     }
 }
 

@@ -37,7 +37,7 @@ internal class NamespaceTreeRepositoryTest : AbstractUnitTest() {
                     id = CmdId(1),
                     treeId = NamespaceTreeId(2),
                     workspaceId = WorkspaceId(3),
-                    rootNodeId = NamespaceId(4)
+                    rootNodeIndex = NamespaceId(4)
                 )
             )
 
@@ -58,7 +58,7 @@ internal class NamespaceTreeRepositoryTest : AbstractUnitTest() {
                         id = CmdId(1),
                         treeId = NamespaceTreeId(2),
                         workspaceId = WorkspaceId(3),
-                        rootNodeId = NamespaceId(4)
+                        rootNodeIndex = NamespaceId(4)
                     )
                 )
 
@@ -68,7 +68,7 @@ internal class NamespaceTreeRepositoryTest : AbstractUnitTest() {
                             id = CmdId(2),
                             treeId = NamespaceTreeId(222),
                             workspaceId = WorkspaceId(3),
-                            rootNodeId = NamespaceId(444)
+                            rootNodeIndex = NamespaceId(444)
                         )
                     )
                 }.also { exception ->
@@ -86,7 +86,7 @@ internal class NamespaceTreeRepositoryTest : AbstractUnitTest() {
                     cmdId = CmdId(1),
                     treeId = NamespaceTreeId(2),
                     workspaceId = WorkspaceId(3),
-                    rootNodeId = NamespaceId(4)
+                    rootNodeIndex = NamespaceId(4)
                 )
 
                 val result = create(
@@ -94,7 +94,7 @@ internal class NamespaceTreeRepositoryTest : AbstractUnitTest() {
                         id = CmdId(1),
                         treeId = NamespaceTreeId(2),
                         workspaceId = WorkspaceId(3333),
-                        rootNodeId = NamespaceId(44444)
+                        rootNodeIndex = NamespaceId(44444)
                     )
                 )
 
@@ -116,7 +116,7 @@ internal class NamespaceTreeRepositoryTest : AbstractUnitTest() {
                 cmdId = CmdId(1),
                 treeId = NamespaceTreeId(2),
                 workspaceId = WorkspaceId(3),
-                rootNodeId = NamespaceId(4)
+                rootNodeIndex = NamespaceId(4)
             )
 
             append(
@@ -143,7 +143,7 @@ internal class NamespaceTreeRepositoryTest : AbstractUnitTest() {
                 cmdId = CmdId(1),
                 treeId = NamespaceTreeId(2),
                 workspaceId = WorkspaceId(3),
-                rootNodeId = NamespaceId(4)
+                rootNodeIndex = NamespaceId(4)
             )
 
             append(
@@ -195,14 +195,14 @@ internal class NamespaceTreeRepositoryTest : AbstractUnitTest() {
                 cmdId = CmdId(1),
                 treeId = NamespaceTreeId(2),
                 workspaceId = WorkspaceId(3),
-                rootNodeId = NamespaceId(4)
+                rootNodeIndex = NamespaceId(4)
             )
 
             createNamespaceTree(
                 cmdId = CmdId(1),
                 treeId = NamespaceTreeId(22),
                 workspaceId = WorkspaceId(33),
-                rootNodeId = NamespaceId(44)
+                rootNodeIndex = NamespaceId(44)
             )
 
             clear()
@@ -221,7 +221,7 @@ internal class NamespaceTreeRepositoryTest : AbstractUnitTest() {
                 cmdId = CmdId(1),
                 treeId = NamespaceTreeId(2),
                 workspaceId = WorkspaceId(3),
-                rootNodeId = NamespaceId(4)
+                rootNodeIndex = NamespaceId(4)
             )
 
             append(
@@ -247,7 +247,7 @@ internal class NamespaceTreeRepositoryTest : AbstractUnitTest() {
                 cmdId = CmdId(1),
                 treeId = NamespaceTreeId(2),
                 workspaceId = WorkspaceId(3),
-                rootNodeId = NamespaceId(4)
+                rootNodeIndex = NamespaceId(4)
             )
 
             append(
@@ -273,7 +273,7 @@ internal class NamespaceTreeRepositoryTest : AbstractUnitTest() {
                 cmdId = CmdId(1),
                 treeId = NamespaceTreeId(2),
                 workspaceId = WorkspaceId(3),
-                rootNodeId = NamespaceId(4)
+                rootNodeIndex = NamespaceId(4)
             )
             assertThrows<NoSuchElementException> {
                 get(NamespaceId(111111))
@@ -290,7 +290,7 @@ internal class NamespaceTreeRepositoryTest : AbstractUnitTest() {
                 cmdId = CmdId(1),
                 treeId = NamespaceTreeId(2),
                 workspaceId = WorkspaceId(3),
-                rootNodeId = NamespaceId(4)
+                rootNodeIndex = NamespaceId(4)
             )
 
             append(
@@ -316,7 +316,7 @@ internal class NamespaceTreeRepositoryTest : AbstractUnitTest() {
                 cmdId = CmdId(1),
                 treeId = NamespaceTreeId(2),
                 workspaceId = WorkspaceId(3),
-                rootNodeId = NamespaceId(4)
+                rootNodeIndex = NamespaceId(4)
             )
 
             append(
@@ -342,7 +342,7 @@ internal class NamespaceTreeRepositoryTest : AbstractUnitTest() {
                 cmdId = CmdId(1),
                 treeId = NamespaceTreeId(2),
                 workspaceId = WorkspaceId(3),
-                rootNodeId = NamespaceId(4)
+                rootNodeIndex = NamespaceId(4)
             )
             val result = find(NamespaceId(111111))
             assertThat(result, nullValue())
@@ -430,28 +430,28 @@ internal class NamespaceTreeRepositoryTest : AbstractUnitTest() {
                 cmdId = CmdId(1),
                 treeId = NamespaceTreeId(2),
                 workspaceId = WorkspaceId(3),
-                rootNodeId = NamespaceId(4)
+                rootNodeIndex = NamespaceId(4)
             )
 
             createNamespaceTree(
                 cmdId = CmdId(2),
                 treeId = NamespaceTreeId(12),
                 workspaceId = WorkspaceId(13),
-                rootNodeId = NamespaceId(14)
+                rootNodeIndex = NamespaceId(14)
             )
 
             createNamespaceTree(
                 cmdId = CmdId(3),
                 treeId = NamespaceTreeId(20),
                 workspaceId = WorkspaceId(23),
-                rootNodeId = NamespaceId(24)
+                rootNodeIndex = NamespaceId(24)
             )
 
             createNamespaceTree(
                 cmdId = CmdId(4),
                 treeId = NamespaceTreeId(30),
                 workspaceId = WorkspaceId(33),
-                rootNodeId = NamespaceId(34)
+                rootNodeIndex = NamespaceId(34)
             )
         }
     }
@@ -460,7 +460,7 @@ internal class NamespaceTreeRepositoryTest : AbstractUnitTest() {
 private fun NamespaceTreeRepository.createNamespaceTree(
     treeId: NamespaceTreeId,
     workspaceId: WorkspaceId,
-    rootNodeId: NamespaceId,
+    rootNodeIndex: NamespaceId,
     cmdId: CmdId = CmdId(abs(Random(10).nextInt()) + 10)
 ) {
 
@@ -469,7 +469,7 @@ private fun NamespaceTreeRepository.createNamespaceTree(
             id = cmdId,
             treeId = treeId,
             workspaceId = workspaceId,
-            rootNodeId = rootNodeId
+            rootNodeIndex = rootNodeIndex
         )
     )
 }

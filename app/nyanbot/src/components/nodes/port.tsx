@@ -1,6 +1,6 @@
 import React, {FC, useContext} from "react";
 import styles from "@/components/nodes/port.module.css";
-import {PortId, Port, Position} from "@/components/nodes/types.ts";
+import {PortIndex, Port, Position} from "@/components/nodes/types.ts";
 import {ContextEditorState} from "@/components/nodes/editor.tsx";
 
 type PortsProps = {}
@@ -34,12 +34,12 @@ export const PortInputWidget: FC<PortInputWidgetProps> = ({port}) => {
             }}
         >
             <PortWidget
-                portId={port.id}
+                PortIndex={port.id}
                 isInput={true}
                 // type={type}
                 // color={color}
                 // name={name}
-                // nodeId={nodeId}
+                // NodeIndex={NodeIndex}
                 // isInput
                 // triggerRecalculation={triggerRecalculation}
             />
@@ -53,7 +53,7 @@ export const PortInputWidget: FC<PortInputWidgetProps> = ({port}) => {
             {/*        {controls.map(control => (*/}
             {/*            <Control*/}
             {/*                {...control}*/}
-            {/*                nodeId={nodeId}*/}
+            {/*                NodeIndex={NodeIndex}*/}
             {/*                portName={name}*/}
             {/*                triggerRecalculation={triggerRecalculation}*/}
             {/*                updateNodeConnections={updateNodeConnections}*/}
@@ -92,12 +92,12 @@ export const PortOutputWidget: FC<PortOutputWidgetProps> = ({port}) => {
                         {/*{label || defaultLabel}*/}
                     </label>
                     <PortWidget
-                        portId={port.id}
+                        PortIndex={port.id}
                         isInput={false}
                         // type={type}
                         // name={name}
                         // color={color}
-                        // nodeId={nodeId}
+                        // NodeIndex={NodeIndex}
                         // triggerRecalculation={triggerRecalculation}
                     />
                 </div>
@@ -108,12 +108,12 @@ export const PortOutputWidget: FC<PortOutputWidgetProps> = ({port}) => {
 }
 
 type PortWidgetProps = {
-    portId: PortId;
+    PortIndex: PortIndex;
     isInput: Boolean
 }
 
 
-export const PortWidget: FC<PortWidgetProps> = ({isInput, portId}) => {
+export const PortWidget: FC<PortWidgetProps> = ({isInput, PortIndex}) => {
     // const nodesDispatch = React.useContext(NodeDispatchContext);
     // const stageState = React.useContext(StageContext) || {
     //     scale: 1,
@@ -227,10 +227,10 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput, portId}) => {
         console.log("drag end", e.target.dataset.portType)
 
         if (e.target.dataset.portType === 'input') {
-            const outputPortId = portId;
-            const inputPortId = e.target.dataset.portId
+            const outputPortIndex = PortIndex;
+            const inputPortIndex = e.target.dataset.PortIndex
 
-            dispatch({type: "CONNECTION_ADDED", outputPortId, inputPortId})
+            dispatch({type: "CONNECTION_ADDED", outputPortIndex, inputPortIndex})
         }
 
 
@@ -238,25 +238,25 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput, portId}) => {
         //
         // if (isInput) {
         //     const {
-        //         inputNodeId = "",
+        //         inputNodeIndex = "",
         //         inputPortName = "",
-        //         outputNodeId = "",
+        //         outputNodeIndex = "",
         //         outputPortName = ""
         //     } = lineInToPort.current?.dataset ?? {};
         //     //FIXME
         //     // nodesDispatch?.({
         //     //     type: NodesActionType.REMOVE_CONNECTION,
-        //     //     inputs: { nodeId: inputNodeId, portName: inputPortName },
-        //     //     output: { nodeId: outputNodeId, portName: outputPortName }
+        //     //     inputs: { NodeIndex: inputNodeIndex, portName: inputPortName },
+        //     //     output: { NodeIndex: outputNodeIndex, portName: outputPortName }
         //     // });
         //     if (droppedOnPort) {
         //         const {
         //             portName: connectToPortName,
-        //             nodeId: connectToNodeId,
+        //             NodeIndex: connectToNodeIndex,
         //             portType: connectToPortType,
         //             portTransputType: connectToTransputType
         //         } = e.target.dataset;
-        //         const isNotSameNode = outputNodeId !== connectToNodeId;
+        //         const isNotSameNode = outputNodeIndex !== connectToNodeIndex;
         //         if (isNotSameNode && connectToTransputType !== "output") {
         //             //FIXME
         //             // const inputWillAcceptConnection = inputTypes[
@@ -265,8 +265,8 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput, portId}) => {
         //             // if (inputWillAcceptConnection) {
         //             //     nodesDispatch?.({
         //             //         type: NodesActionType.ADD_CONNECTION,
-        //             //         inputs: { nodeId: connectToNodeId, portName: connectToPortName },
-        //             //         output: { nodeId: outputNodeId, portName: outputPortName }
+        //             //         inputs: { NodeIndex: connectToNodeIndex, portName: connectToPortName },
+        //             //         output: { NodeIndex: outputNodeIndex, portName: outputPortName }
         //             //     });
         //             // }
         //         }
@@ -275,12 +275,12 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput, portId}) => {
         //     if (droppedOnPort) {
         //         const {
         //             portName: inputPortName,
-        //             nodeId: inputNodeId,
+        //             NodeIndex: inputNodeIndex,
         //             portType: inputNodeType,
         //             portTransputType: inputTransputType
         //         } = e.target.dataset;
         //         //FIXME
-        //         // const isNotSameNode = inputNodeId !== nodeId;
+        //         // const isNotSameNode = inputNodeIndex !== NodeIndex;
         //         // if (isNotSameNode && inputTransputType !== "output") {
         //         // const inputWillAcceptConnection = inputTypes[
         //         //     inputNodeType
@@ -288,8 +288,8 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput, portId}) => {
         //         // if (inputWillAcceptConnection) {
         //         //     nodesDispatch?.({
         //         //         type: NodesActionType.ADD_CONNECTION,
-        //         //         output: { nodeId, portName: name },
-        //         //         inputs: { nodeId: inputNodeId, portName: inputPortName }
+        //         //         output: { NodeIndex, portName: name },
+        //         //         inputs: { NodeIndex: inputNodeIndex, portName: inputPortName }
         //         //     });
         //         //     triggerRecalculation();
         //         // }
@@ -327,7 +327,7 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput, portId}) => {
 
         if (isInput) {
             // lineInToPort.current = document.querySelector(
-            //     `[data-inputs-node-id="${nodeId}"][data-inputs-port-name="${name}"]`
+            //     `[data-inputs-node-id="${NodeIndex}"][data-inputs-port-name="${name}"]`
             // );
             // const portIsConnected = !!lineInToPort.current;
             // if (
@@ -343,7 +343,7 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput, portId}) => {
             //         height: outputPortHeight = 0
             //     } =
             //     getPortRect(
-            //         lineInToPort.current.dataset.outputNodeId || "",
+            //         lineInToPort.current.dataset.outputNodeIndex || "",
             //         lineInToPort.current.dataset.outputPortName || "",
             //         "output"
             //     ) || {};
@@ -391,8 +391,8 @@ export const PortWidget: FC<PortWidgetProps> = ({isInput, portId}) => {
                 // data-port-name={name}
                 // data-port-type={type}
                 data-port-type={isInput ? "input" : "output"}
-                // data-node-id={nodeId}
-                data-port-id={portId}
+                // data-node-id={NodeIndex}
+                data-port-id={PortIndex}
                 data-component="port-handle"
                 onDragStart={e => {
                     e.preventDefault();

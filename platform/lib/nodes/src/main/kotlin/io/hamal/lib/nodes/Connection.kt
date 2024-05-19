@@ -1,18 +1,16 @@
 package io.hamal.lib.nodes
 
 import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.common.value.ValueSnowflakeId
-import io.hamal.lib.common.value.ValueString
-import io.hamal.lib.common.value.ValueVariableSnowflakeId
-import io.hamal.lib.common.value.ValueVariableString
+import io.hamal.lib.common.value.*
 
-class ConnectionId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
+
+class ConnectionIndex(override val value: ValueNumber) : ValueVariableNumber() {
     companion object {
-        fun ConnectionId(value: SnowflakeId) = ConnectionId(ValueSnowflakeId(value))
-        fun ConnectionId(value: Int) = ConnectionId(ValueSnowflakeId(SnowflakeId(value.toLong())))
-        fun ConnectionId(value: String) = ConnectionId(ValueSnowflakeId(SnowflakeId(value.toLong(16))))
+        fun ConnectionIndex(value: Int) = ConnectionIndex(ValueNumber(value))
+        fun ConnectionIndex(value: Long) = ConnectionIndex(ValueNumber(value))
     }
 }
+
 
 class ConnectionLabel(override val value: ValueString) : ValueVariableString() {
     companion object {
@@ -21,7 +19,7 @@ class ConnectionLabel(override val value: ValueString) : ValueVariableString() {
 }
 
 data class Connection(
-    val id: ConnectionId,
+    val index: ConnectionIndex,
     val outputNode: Node,
     val outputPort: Port,
     val inputNode: Node,
@@ -33,6 +31,6 @@ data class Connection(
     }
 
 
-    data class Node(val id: NodeId)
-    data class Port(val id: PortId)
+    data class Node(val index: NodeIndex)
+    data class Port(val index: PortIndex)
 }

@@ -15,8 +15,8 @@ interface ControlCausesInvocation : ControlWithPort {
 
 
 data class ControlCapture(
-    override val id: ControlId,
-    override val nodeId: NodeId,
+    override val index: ControlIndex,
+    override val nodeIndex: NodeIndex,
     override val port: PortInput,
     override val key: ControlKey = ControlKey.random(),
 ) : ControlCausesInvocation {
@@ -24,8 +24,8 @@ data class ControlCapture(
 }
 
 data class ControlCode(
-    override val id: ControlId,
-    override val nodeId: NodeId,
+    override val index: ControlIndex,
+    override val nodeIndex: NodeIndex,
     override val port: PortInput,
     val value: ValueCode,
     override val key: ControlKey = ControlKey.random()
@@ -34,8 +34,8 @@ data class ControlCode(
 }
 
 data class ControlCondition(
-    override val id: ControlId,
-    override val nodeId: NodeId,
+    override val index: ControlIndex,
+    override val nodeIndex: NodeIndex,
     override val port: PortInput,
     override val key: ControlKey = ControlKey.random(),
 ) : ControlFromPortOrInput {
@@ -43,8 +43,8 @@ data class ControlCondition(
 }
 
 data class ControlInvoke(
-    override val id: ControlId,
-    override val nodeId: NodeId,
+    override val index: ControlIndex,
+    override val nodeIndex: NodeIndex,
     override val port: PortInput,
     override val key: ControlKey = ControlKey.random(),
 ) : ControlCausesInvocation {
@@ -52,8 +52,8 @@ data class ControlInvoke(
 }
 
 data class ControlInputBoolean(
-    override val id: ControlId,
-    override val nodeId: NodeId,
+    override val index: ControlIndex,
+    override val nodeIndex: NodeIndex,
     override val port: PortInput,
     val value: ValueBoolean,
     override val key: ControlKey = ControlKey.random(),
@@ -63,8 +63,8 @@ data class ControlInputBoolean(
 
 
 data class ControlInputNumber(
-    override val id: ControlId,
-    override val nodeId: NodeId,
+    override val index: ControlIndex,
+    override val nodeIndex: NodeIndex,
     val value: ValueNumber,
     override val key: ControlKey = ControlKey.random(),
 ) : ControlInput {
@@ -72,8 +72,8 @@ data class ControlInputNumber(
 }
 
 data class ControlInputString(
-    override val id: ControlId,
-    override val nodeId: NodeId,
+    override val index: ControlIndex,
+    override val nodeIndex: NodeIndex,
     override val port: PortInput,
     val value: ValueString,
     override val key: ControlKey = ControlKey.random(),
@@ -82,17 +82,11 @@ data class ControlInputString(
 }
 
 
-// FIXME drop distinguishing between constant and input -- same thing and having a port connector is optional
-// FIXME boolean as checkbox
-
-class ControlId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
+class ControlIndex(override val value: ValueNumber) : ValueVariableNumber() {
     companion object {
-        fun ControlId(value: SnowflakeId) = ControlId(ValueSnowflakeId(value))
-        fun ControlId(value: Int) = ControlId(ValueSnowflakeId(SnowflakeId(value.toLong())))
-        fun ControlId(value: String) = ControlId(ValueSnowflakeId(SnowflakeId(value.toLong(16))))
+        fun ControlIndex(value: Int) = ControlIndex(ValueNumber(value))
     }
 }
-
 
 class ControlKey(override val value: ValueString) : ValueVariableString() {
     companion object {
@@ -111,9 +105,9 @@ class ControlType(override val value: ValueString) : ValueVariableString() {
 
 // FIXME becomes sealed after migration
 interface Control {
-    val id: ControlId
+    val index: ControlIndex
     val type: ControlType
-    val nodeId: NodeId
+    val nodeIndex: NodeIndex
     val key: ControlKey
 
     object Adapter : AdapterJson<Control> {

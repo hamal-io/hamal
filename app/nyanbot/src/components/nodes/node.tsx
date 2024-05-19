@@ -7,7 +7,7 @@ import {ControlListWidget} from "@/components/nodes/control.tsx";
 import {ContextEditorState} from "@/components/nodes/editor.tsx";
 
 type NodeWidgetProps = {
-    // id: NodeId;
+    // id: NodeIndex;
     // position: Position;
     // size: Size;
     // type: NodeType;
@@ -110,7 +110,7 @@ export const NodeWidget: FC<NodeWidgetProps> = ({node}) => {
             {stateNode.outputs.length === 1 && (
                 <PortOutputWidget
                     port={stateNode.outputs[0]}
-                    // nodeId={id}
+                    // NodeIndex={id}
                     // inputs={inputs}
                     // outputs={outputs}
                     // connections={connections}
