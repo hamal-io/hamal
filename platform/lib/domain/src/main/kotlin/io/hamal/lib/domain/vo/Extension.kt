@@ -24,6 +24,6 @@ class ExtensionName(override val value: ValueString) : ValueVariableString() {
 
 class ExtensionFile(override val value: ValueString) : ValueVariableString() {
     companion object {
-        fun ExtensionFileName(value: String) = ExtensionFile(ValueString(value))
+        fun ExtensionFile(value: String) = ExtensionFile(ValueString(value))
     }
 }

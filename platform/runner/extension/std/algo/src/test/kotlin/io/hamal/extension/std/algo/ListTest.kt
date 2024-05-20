@@ -13,28 +13,13 @@ internal object ListTest : AbstractTest() {
     }
 
     @Test
-    @Disabled
     fun `Nested functions which should be used only once`() {
         runTest(
             unitOfWork(
                 """
                print('hello world')
-                algo = require('std.algo').create()
-                list = algo.list
-                
-                local l = list.create({capacity = 3})
-                list.add(l, 1)
-                list.add(l, 2)
-                list.add(l, 3)
-                
-                list.length(l)
-                
-                list.replace(l, 1, 4)
-                
-                list.get(l, 12)
-                list.at(l, 1)
-                
-                list.index_of(l, value)
+               algo = require('std.algo').create()
+         
                 
             """
             )
@@ -43,3 +28,19 @@ internal object ListTest : AbstractTest() {
     }
 
 }
+
+//list = algo.list
+//
+//local l = list.create({capacity = 3})
+//list.add(l, 1)
+//list.add(l, 2)
+//list.add(l, 3)
+//
+//list.length(l)
+//
+//list.replace(l, 1, 4)
+//
+//list.get(l, 12)
+//list.at(l, 1)
+//
+//list.index_of(l, value)

@@ -3,6 +3,7 @@ package io.hamal.runner.config
 import io.hamal.extension.net.http.ExtensionNetHttpFactory
 import io.hamal.extension.net.smtp.ExtensionNetSmtpFactory
 import io.hamal.extension.social.telegram.ExtensionSocialTelegramFactory
+import io.hamal.extension.std.algo.ExtensionStdAlgoFactory
 import io.hamal.extension.std.debug.ExtensionStdDebugFactory
 import io.hamal.extension.std.decimal.ExtensionStdDecimalFactory
 import io.hamal.extension.std.log.ExtensionStdLogFactory
@@ -82,6 +83,7 @@ class SandboxFactoryDefaultImpl(
                 PluginWeb3EvmFactory()
             )
             .registerExtensions(
+                ExtensionStdAlgoFactory,
                 ExtensionStdLogFactory,
                 ExtensionStdSysFactory,
 
