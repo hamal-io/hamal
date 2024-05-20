@@ -12,6 +12,7 @@ object ExtensionStdAlgoFactory : RunnerExtensionFactory {
             name = ExtensionName("std.algo"),
             files = listOf(
                 ExtensionFile("list.lua"),
+                ExtensionFile("graph.lua"),
                 ExtensionFile("extension.lua"),
             )
         )
