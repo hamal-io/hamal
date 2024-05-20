@@ -25,15 +25,13 @@ sealed class Init : AbstractNode() {
                     """.trimMargin()
                 )
 
-                is ControlInputString ->
-                    ValueCode(
-                        """
-                        |return { 
-                        |['${ctx.node.outputs.first().key}'] = '${control.value.stringValue}'
-                        |}
-                        """.trimMargin()
-                    )
-
+                is ControlInputString -> ValueCode(
+                    """
+                    |return { 
+                    |['${ctx.node.outputs.first().key}'] = '${control.value.stringValue}'
+                    |}
+                    """.trimMargin()
+                )
                 else -> TODO()
             }
         }

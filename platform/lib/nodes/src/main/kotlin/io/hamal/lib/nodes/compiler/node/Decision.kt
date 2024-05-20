@@ -20,18 +20,18 @@ sealed class Decision : AbstractNode() {
 
             return ValueCode(
                 """
-                |fn = _F[${connection.outputNode.index}]
+                |fn = __F__[${connection.outputNode.index}]
                 |value = fn()['value']
                 |print(value)
                 |if value == ${if (expectedValue == ValueTrue) "true" else "false"} then
-                |_F[4] = nil
+                |__F__[4] = nil
                 |print('happy')
                 |print('prune node 4')
                 |return{
                 |   ['${ctx.node.outputs.first().key}'] = true
                 |}
                 |else
-                |_F[3] = nil
+                |__F__[3] = nil
                 |print('sad')
                 |print('prune node 3')
                 |return{

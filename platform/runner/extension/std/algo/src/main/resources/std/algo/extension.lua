@@ -4,7 +4,7 @@ function extension_create()
         return {
             graph = {
                 create = function()
-                    return __graph__.create()
+                    return __graph__.create(0, directed)
                 end,
                 add_edge = function(gph, v, w, weight)
                     return gph:addEdge(v, w, weight)

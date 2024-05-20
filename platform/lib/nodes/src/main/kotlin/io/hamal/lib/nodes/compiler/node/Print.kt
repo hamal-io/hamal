@@ -21,7 +21,7 @@ sealed class Print : AbstractNode() {
 
             return ValueCode(
                 """
-                |fn = _F[${connection.outputNode.index}]
+                |fn = __F__[${connection.outputNode.index}]
                 |value = fn()
                 |print(value['value'])
                 |return { }

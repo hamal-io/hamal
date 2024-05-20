@@ -60,7 +60,7 @@ function __graph__.create(V, directed)
     g.adjList = {}
 
     if V > 0 then
-        for v = 0,V-1 do
+        for v = 0, V - 1 do
             g.vertexList:add(v)
             g.adjList[v] = __list__.create()
         end
@@ -88,7 +88,7 @@ function __graph__.createFromVertexList(vertices, directed)
 
     g.vertexList = vertices
     g.adjList = {}
-    for i = 0,g.vertexList:size()-1 do
+    for i = 0, g.vertexList:size() - 1 do
         local v = g.vertexList:get(i)
         g.adjList[v] = __list__.create()
     end
@@ -111,10 +111,10 @@ function __graph__:removeVertex(v)
     if self.vertexList:contains(v) then
         self.vertexList:remove(v)
         self.adjList[v] = nil
-        for i=0,self.vertexList:size()-1 do
+        for i = 0, self.vertexList:size() - 1 do
             local w = self.vertexList:get(i)
             local adj_w = self.adjList[w]
-            for k = 0,adj_w:size()-1 do
+            for k = 0, adj_w:size() - 1 do
                 local e = adj_w:get(k)
                 if e:other(w) == v then
                     adj_w:removeAt(k)
@@ -151,10 +151,10 @@ end
 
 function __graph__:reverse()
     local g = __graph__.createFromVertexList(self.vertexList, self.directed)
-    for k=0,self:vertexCount()-1 do
+    for k = 0, self:vertexCount() - 1 do
         local v = self:vertexAt(k)
         local adj_v = self:adj(v)
-        for i=0,adj_v:size()-1 do
+        for i = 0, adj_v:size() - 1 do
             local e = adj_v:get(i)
             g:addEdge(e:to(), e:from(), e.weight)
         end
@@ -171,11 +171,11 @@ end
 function __graph__:edges()
     local list = __list__.create()
 
-    for i=0,self.vertexList:size()-1 do
+    for i = 0, self.vertexList:size() - 1 do
         local v = self.vertexList:get(i)
         local adj_v = self:adj(v)
-        for i=0,adj_v:size()-1 do
-            local e = adj_v:get(i)
+        for j = 0, adj_v:size() - 1 do
+            local e = adj_v:get(j)
             local w = e:other(v)
             if self.directed == true or w > v then
                 list:add(e)
@@ -190,7 +190,7 @@ end
 
 function __graph__:hasEdge(v, w)
     local adj_v = self:adj(v)
-    for i=0,adj_v:size()-1 do
+    for i = 0, adj_v:size() - 1 do
         local e = adj_v:get(i)
         if e:to() == w then
             return true

@@ -27,18 +27,18 @@ class GraphCompilerImpl(registry: NodeCompilerRegistry) : GraphCompiler {
         val initNode = graph.nodes.find { it.type == NodeType("Init") }
             ?: throw IllegalArgumentException("No Init node found")
 
+        builder.append("algo = require('std.algo').create()\n")
         builder.append("throw = require('std.throw').create()\n")
-//        builder.append("memoize = require('std.memoize').create()\n\n")
         builder.append("once = require('std.once').create()\n\n")
 
-        builder.append("_F = {}\n")
+        builder.append("__F__ = {}\n")
 
         val orderedNodes = breadthFirstSearch(computationGraph, initNode.index)
 
         orderedNodes.forEach { inputNodeIndex ->
             val inputNode = graph.nodes.find { it.index == inputNodeIndex }!!
 //            builder.append("_F[${inputNode.index}] = { result =  n_${inputNode.index}() } \n")
-            builder.append("_F[${inputNode.index}] = once(n_${inputNode.index}) \n")
+            builder.append("__F__[${inputNode.index}] = once(n_${inputNode.index}) \n")
         }
 
 
@@ -48,27 +48,36 @@ class GraphCompilerImpl(registry: NodeCompilerRegistry) : GraphCompiler {
         // invoke all nodes except those which are not on the happy path... ?!
 
 
-        orderedNodes.forEach { inputNodeIndex ->
-//            builder.append("_F[${inputNode.index}] = { result =  n_${inputNode.index}() } \n")
-//            builder.append("_F[${inputNode.index}] = memoize(n_${inputNode.index}) \n")
-//            builder.append("_F[${inputNodeIndex}]()\n")
+//        orderedNodes.forEach { inputNodeIndex ->
+////            builder.append("_F[${inputNode.index}] = { result =  n_${inputNode.index}() } \n")
+////            builder.append("_F[${inputNode.index}] = memoize(n_${inputNode.index}) \n")
+////            builder.append("_F[${inputNodeIndex}]()\n")
+//
+//            builder.append(
+//                """
+//                if __F__[${inputNodeIndex}] then
+//                    __F__[${inputNodeIndex}]()
+//                end
+//            """.trimIndent()
+//            )
+//            builder.append("\n")
+//        }
+        builder.append("\n")
+        builder.append("""__G__ = algo.graph.create()""")
+        builder.append("\n")
 
-            builder.append(
-                """
-                if _F[${inputNodeIndex}] then
-                    _F[${inputNodeIndex}]()
-                end
-            """.trimIndent()
-            )
-            builder.append("\n")
+        computationGraph.dependencies.forEach { (index, list) ->
+            list.forEach { otherIndex ->
+                builder.append("""algo.graph.add_edge(__G__, ${index.longValue}, ${otherIndex.longValue})""")
+                builder.append("\n")
+            }
         }
-
 
 //        builder.append("_F[2]()\n")
 //        builder.append("_F[3]()\n")
 
         println(builder)
-        builder.append("print(dump(_F))")
+//        builder.append("print(dump(__F__))")
 
         return ValueCode(builder.toString())
     }
