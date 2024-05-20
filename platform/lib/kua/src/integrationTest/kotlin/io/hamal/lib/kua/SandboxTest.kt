@@ -1,12 +1,13 @@
 package io.hamal.lib.kua
 
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.domain.vo.ExtensionName.Companion.ExtensionName
 import io.hamal.lib.kua.NativeLoader.Preference.Resources
 import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.function.Function0In0Out
 import io.hamal.lib.kua.function.FunctionContext
-import io.hamal.lib.common.value.ValueCode
-import io.hamal.lib.common.value.ValueString
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
@@ -17,7 +18,7 @@ internal class RegisterExtensionTest : BaseSandboxTest() {
     fun `Registers an extension and call function`() {
         testInstance.register(
             RunnerExtension(
-                name = ValueString("some_plugin"),
+                name = ExtensionName("some_plugin"),
                 factoryCode = ValueCode(
                     """
                     function extension_create()

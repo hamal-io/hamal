@@ -2,6 +2,7 @@ package io.hamal.lib.kua
 
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.domain.vo.ExtensionName
 import io.hamal.lib.kua.extend.extension.RunnerExtension
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 
@@ -10,7 +11,7 @@ interface SandboxRegistry {
     fun register(extension: RunnerExtension)
 
     fun pluginPush(name: ValueString)
-    fun extensionPush(name: ValueString)
+    fun push(name: ExtensionName)
 }
 
 internal class SandboxRegistryImpl(
@@ -24,7 +25,7 @@ internal class SandboxRegistryImpl(
 
     override fun register(extension: RunnerExtension) {
         extensions[extension.name] = extension
-        extensionPush(extension.name)
+        push(extension.name)
     }
 
     override fun pluginPush(name: ValueString) {
@@ -41,7 +42,7 @@ internal class SandboxRegistryImpl(
         }
     }
 
-    override fun extensionPush(name: ValueString) {
+    override fun push(name: ExtensionName) {
         val extension = extensions[name] ?: throw NoSuchElementException("$name not found in registry")
 
         state.codeLoad(extension.factoryCode)
@@ -53,5 +54,5 @@ internal class SandboxRegistryImpl(
     }
 
     private val plugins = mutableMapOf<ValueString, RunnerPlugin>()
-    private val extensions = mutableMapOf<ValueString, RunnerExtension>()
+    private val extensions = mutableMapOf<ExtensionName, RunnerExtension>()
 }
