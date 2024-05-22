@@ -10,6 +10,7 @@ import FlowListPage from "@/pages/app/flow-list";
 import FlowDetailPage from "@/pages/app/flow-detail";
 import RecipeListPage from "@/pages/app/recipe-list";
 import RecipeDetailPage from "@/pages/app/recipe-detail";
+import NodesEditor from "@/pages/app/nodes-editor";
 
 export const router = createBrowserRouter([
     {
@@ -29,6 +30,12 @@ export const router = createBrowserRouter([
             <RootLayout>
                 <FlowDetailPage/>
             </RootLayout>
+    },
+    {
+        path: "/editor", element:
+        //<RootLayout>
+            <NodesEditor/>
+        //</RootLayout>
     },
     {
         path: "/recipes", element:
