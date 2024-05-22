@@ -70,6 +70,7 @@
     "react-router-hash-link": "^2.4.3",
     "react-swipeable": "^7.0.1",
     "react-use": "^17.4.0",
+    "reactflow": "^11.11.3",
     "sass": "^1.69.5",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
