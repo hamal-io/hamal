@@ -68,7 +68,7 @@ class GraphCompilerImpl(registry: NodeCompilerRegistry) : GraphCompiler {
 
         computationGraph.dependencies.forEach { (index, list) ->
             list.forEach { otherIndex ->
-                builder.append("""algo.graph.add_edge(__G__, ${index.longValue}, ${otherIndex.longValue})""")
+                builder.append("""algo.graph.add(__G__, ${index.longValue}, ${otherIndex.longValue})""")
                 builder.append("\n")
             }
         }

@@ -38,17 +38,17 @@ end
 
 function __list__.array_list:makeCopy()
     local temp = {}
-    for key,val in pairs(self.a) do
+    for key, val in pairs(self.a) do
         temp[key] = val
     end
     return __list__.array_list.createWith(temp, self.aLen, self.N)
 end
 
 function __list__.array_list:add(value)
-    self.a[self.N] = value
+    self.a[self.N + 1] = value
     self.N = self.N + 1
-    if self.N == self.aLen then
-        self:resize(self.aLen * 2)
+    if self.N == self.aLen + 1 then
+        self:resize((self.aLen + 1) * 2)
     end
 end
 
@@ -62,12 +62,12 @@ function __list__.array_list:get(index)
 end
 
 function __list__.array_list:removeAt(index)
-    if index == self.N-1 then
+    if index == self.N - 1 then
         self.N = self.N - 1
         return
     end
-    for i = index+1,self.N-1 do
-        self.a[i-1]=self.a[i]
+    for i = index + 1, self.N - 1 do
+        self.a[i - 1] = self.a[i]
     end
     self.N = self.N - 1
     if self.N == math.floor(self.aLen / 4) then
@@ -80,7 +80,7 @@ function __list__.array_list:indexOf(value)
     if self.N == 0 then
         return -1
     end
-    for i=0,self.N-1 do
+    for i = 1, self.N do
         if self.a[i] == value then
             return i
         end
@@ -99,7 +99,7 @@ end
 
 function __list__.array_list:resize(newSize)
     local temp = {}
-    for i = 0,(newSize-1) do
+    for i = 1, newSize do
         temp[i] = self.a[i]
     end
 
@@ -117,15 +117,15 @@ end
 
 function __list__.array_list:enumerate()
     local temp = {}
-    for i = 0,(self.N-1) do
+    for i = 1, self.N do
         temp[i] = self.a[i]
     end
     return temp
 end
 
 function __list__.array_list:isSortedAscendingly(comparator)
-    for i=0,(self:size()-2) do
-        if comparator(a:get(i), a:get(i+1)) > 0 then
+    for i = 0, (self:size() - 2) do
+        if comparator(a:get(i), a:get(i + 1)) > 0 then
             return false
         end
 
@@ -134,8 +134,8 @@ function __list__.array_list:isSortedAscendingly(comparator)
 end
 
 function __list__.array_list:isSortedDescendingly(comparator)
-    for i=0,(self:size()-2) do
-        if comparator(a:get(i), a:get(i+1)) < 0 then
+    for i = 0, (self:size() - 2) do
+        if comparator(a:get(i), a:get(i + 1)) < 0 then
             return false
         end
 
