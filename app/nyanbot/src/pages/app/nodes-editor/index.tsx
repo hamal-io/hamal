@@ -1,6 +1,6 @@
 import {History, Menu, Play, Plus, Save, Workflow} from 'lucide-react';
 import React, {useState} from "react";
-import ReactFlow, {Background, Controls} from 'reactflow';
+import ReactFlow, {Background, Controls, useNodesState} from 'reactflow';
 import 'reactflow/dist/style.css';
 import MenuItem from "@/pages/app/nodes-editor/components/menu-item.tsx";
 import NodesLib from "@/pages/app/nodes-editor/components/nodes-lib.tsx";
@@ -8,19 +8,23 @@ import NodesLib from "@/pages/app/nodes-editor/components/nodes-lib.tsx";
 
 const NodesEditorPage = () => {
     const [libOpen, setLibOpen] = useState(false)
+    const [nodes, setNodes, onNodesChange] = useNodesState([]);
 
-
+    function addNode(node): void {
+        setNodes(prevState => [...prevState, node]);
+        console.log(nodes)
+    }
 
     return (
         <>
-            <main className={"p-2 h-full"}>
-                <ReactFlow>
+            <main className={"p-4 h-full"}>
+                <ReactFlow nodes={nodes}>
                     <Background/>
                     <div className={"absolute bottom-12 right-16 z-50"}>
                         <Controls/>
                     </div>
                 </ReactFlow>
-                <div className={"absolute inset-x-2 top-4"}>
+                <div className={"absolute inset-x-2 inset-y-4"}>
                     <div
                         className={"flex flex-row p-2 h-18 border rounded-md justify-between bg-white items-center max-w-7xl z-40"}>
                         <div>
@@ -54,7 +58,7 @@ const NodesEditorPage = () => {
                 </div>
             </main>
 
-            {libOpen === true ? <NodesLib onClose={() => setLibOpen(false)}/> : null}
+            {libOpen === true ? <NodesLib onClose={() => setLibOpen(false)} addNode={addNode}/> : null}
 
         </>
 
