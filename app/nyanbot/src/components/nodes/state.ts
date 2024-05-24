@@ -140,7 +140,7 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
         case "NODE_ADDED": {
             const copy = structuredClone(state)
 
-            if (action.nodeType == 'Init') {
+            if (action.nodeType == 'Start') {
 
                 const nodeIndex = nextNodeIndex()
                 const portIndex = nextPortIndex()
@@ -149,9 +149,9 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
 
                 copy.nodes[nodeIndex] = {
                     index: nodeIndex,
-                    type: 'Init',
+                    type: 'Start',
                     version: '0.0.1',
-                    title: 'Init - String',
+                    title: 'Start',
                     position: action.position,
                     size: {width: 100, height: 100},
                     outputs: [{

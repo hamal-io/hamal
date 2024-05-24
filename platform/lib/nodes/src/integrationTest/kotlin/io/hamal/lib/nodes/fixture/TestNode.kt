@@ -59,7 +59,7 @@ internal class TestInvokedTest : AbstractIntegrationTest() {
             unitOfWork(
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "Init", listOf(portOutput(20, Form.String))),
+                        node(1, "Start", listOf(portOutput(20, Form.String))),
                         node(2, "Test_Invoked")
                     ),
                     connections = listOf(
@@ -87,7 +87,7 @@ internal class TestInvokedTest : AbstractIntegrationTest() {
             unitOfWork(
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "Init", listOf(portOutput(20, Form.String))),
+                        node(1, "Start", listOf(portOutput(20, Form.String))),
                         node(2, "Test_Invoked"),
                         node(3, "Test_Invoked")
                     ),

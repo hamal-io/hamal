@@ -24,7 +24,7 @@ class GraphCompilerImpl(registry: NodeCompilerRegistry) : GraphCompiler {
             builder.append("\n")
         }
 
-        val initNode = graph.nodes.find { it.type == NodeType("Init") }
+        val startNode = graph.nodes.find { it.type == NodeType("Start") }
             ?: throw IllegalArgumentException("No Init node found")
 
         builder.append("algo = require('std.algo').create()\n")
@@ -33,7 +33,7 @@ class GraphCompilerImpl(registry: NodeCompilerRegistry) : GraphCompiler {
 
         builder.append("__F__ = {}\n")
 
-        val orderedNodes = breadthFirstSearch(computationGraph, initNode.index)
+        val orderedNodes = breadthFirstSearch(computationGraph, startNode.index)
 
         orderedNodes.forEach { inputNodeIndex ->
             val inputNode = graph.nodes.find { it.index == inputNodeIndex }!!

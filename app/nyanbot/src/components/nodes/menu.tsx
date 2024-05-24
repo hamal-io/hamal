@@ -44,7 +44,7 @@ const NodeLibrary: FC<NodeLibraryProps> = ({onClose}) => {
             <CardContent>
                 <div className={"flex flex-col"}>
                     {[
-                        {type: "Init"},
+                        {type: "Start"},
                         {type: "Decision"},
                         {type: "Input"},
                         {type: "Input_String"},

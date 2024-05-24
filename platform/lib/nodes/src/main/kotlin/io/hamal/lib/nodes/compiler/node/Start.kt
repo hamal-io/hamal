@@ -6,10 +6,10 @@ import io.hamal.lib.nodes.ControlInputString
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.NodeVersion
 
-sealed class Init : AbstractNode() {
-    override val type = NodeType("Init")
+sealed class Start : AbstractNode() {
+    override val type = NodeType("Start")
 
-    data object V_0_0_1 : Init() {
+    data object V_0_0_1 : Start() {
         override val version = NodeVersion.v_0_0_1
 
         override fun toCode(ctx: Context): ValueCode {
@@ -32,6 +32,7 @@ sealed class Init : AbstractNode() {
                     |}
                     """.trimMargin()
                 )
+
                 else -> TODO()
             }
         }
