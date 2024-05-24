@@ -15,7 +15,7 @@ class Point {
         return new Point(this.x - point.x, this.y - point.y);
     }
 
-    direction(point) {
+    length(point) {
         const dx = this.x - point.x;
         const dy = this.y - point.y;
         return Math.sqrt(dx * dx + dy * dy);

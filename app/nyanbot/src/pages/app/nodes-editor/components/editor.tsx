@@ -7,8 +7,8 @@ import ReactFlow, {
     Node,
     useNodesState
 } from "reactflow";
-import React, {forwardRef, useCallback, useImperativeHandle, useMemo, useState} from "react";
-import TextUpdaterNode from "@/pages/app/nodes-editor/nodes/text-updater.tsx";
+import React, {forwardRef, useCallback, useImperativeHandle, useState} from "react";
+import {nodeTypes} from "@/pages/app/nodes-editor/nodes/registry.ts";
 
 interface Handles {
     add: (node: Node) => void
@@ -18,7 +18,12 @@ type Props = {}
 const NodeEditor = forwardRef<Handles, Props>(({}, ref) => {
     const [nodes, setNodes] = useNodesState([]);
     const [edges, setEdges] = useState([]);
-    const nodeTypes = useMemo(() => ({textUpdater: TextUpdaterNode}), []);
+
+    /* const nodeTypes = useMemo(() => ({
+             textUpdater: TextUpdaterNode,
+             counter: CounterNode
+         }
+     ), []);*/
 
     const onNodesChange = useCallback(
         (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),

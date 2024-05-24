@@ -18,7 +18,14 @@ const NodesLibrary: Array<NodeLibraryEntry> = [
     },
     {
         nodeId: "3",
-        name: "Custom Node",
+        name: "Text Input",
+        tags: "null",
+        description: "Does something custom",
+        icon: Waves
+    },
+    {
+        nodeId: "4",
+        name: "Telegram",
         tags: "null",
         description: "Does something custom",
         icon: Waves

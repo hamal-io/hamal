@@ -1,22 +1,35 @@
 import {Node} from 'reactflow';
+import TelegramSenderNode from "@/pages/app/nodes-editor/nodes/telegram-sender.tsx";
+import TextInputNode from "@/pages/app/nodes-editor/nodes/text-input.tsx";
 
-const NodesRegistry: Node[] = [
+export const NodesRegistry: Node[] = [
     {
-        id: '1', // required
-        position: {x: 300, y: 300}, // required
+        id: '1',
+        position: {x: 0, y: 0},
         data: {label: 'Hello'},
     },
     {
-        id: '2', // required
-        position: {x: 350, y: 350}, // required
+        id: '2',
+        position: {x: 0, y: 0},
         data: {label: 'World'},
     },
     {
         id: '3',
-        type: 'textUpdater',
-        position: {x: 400, y: 400},
-        data: {value: 123},
+        type: 'textInput',
+        position: {x: 0, y: 0},
+        data: {value: 123}
     },
+    {
+        id: '4',
+        type: 'telegramSender',
+        position: {x: 0, y: 0},
+        data: {value: 123}
+    }
+
 ];
 
-export default NodesRegistry
+export const nodeTypes = {
+    textInput: TextInputNode,
+    telegramSender: TelegramSenderNode,
+};
+
