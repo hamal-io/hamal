@@ -1,4 +1,6 @@
-const flowNodes = [
+import {Node} from 'reactflow';
+
+const NodesRegistry: Node[] = [
     {
         id: '1', // required
         position: {x: 300, y: 300}, // required
@@ -9,6 +11,12 @@ const flowNodes = [
         position: {x: 350, y: 350}, // required
         data: {label: 'World'},
     },
+    {
+        id: '3',
+        type: 'textUpdater',
+        position: {x: 400, y: 400},
+        data: {value: 123},
+    },
 ];
 
-export default flowNodes
+export default NodesRegistry

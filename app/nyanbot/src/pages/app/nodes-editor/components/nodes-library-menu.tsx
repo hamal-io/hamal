@@ -1,47 +1,17 @@
 import {FC} from "react";
-import {LucideIcon, Waves, X} from 'lucide-react';
+import {X} from 'lucide-react';
 import {Input} from "@/components/ui/input.tsx";
 import Point from "@/pages/app/nodes-editor/point.ts";
-import flowNodes from "@/pages/app/nodes-editor/components/react-flow-nodes.ts";
-
-
-type DummyNode = {
-    nodeId: string
-    name: string
-    tags: string
-    description: string
-    icon: LucideIcon
-}
-
-const nodeLibrary: Array<DummyNode> = [
-    {
-        nodeId: "1",
-        name: "Node One",
-        tags: "null",
-        description: "First awesome Node",
-        icon: Waves
-    },
-    {
-        nodeId: "2",
-        name: "Node Two",
-        tags: "null",
-        description: "Second awesome Node",
-        icon: Waves
-    }
-]
+import NodesLibrary from "@/pages/app/nodes-editor/nodes/library.ts";
+import {NodeLibraryEntry} from "@/pages/app/nodes-editor/types.ts";
 
 
 type Props = {
     onClose: () => void
-    addNode: (node) => void
+    onSelect: (id: string) => void
 }
-const NodesLib: FC<Props> = ({onClose, addNode}) => {
 
-    function handleNodeClicked(libId: string) {
-        const node = flowNodes.find(flow => flow.id == libId)
-        addNode(node)
-    }
-
+const NodesLibraryMenu: FC<Props> = ({onClose, onSelect}) => {
     return (
         <div
             className={"absolute inset-x-2 inset-y-28 w-64 h-96  bg-white border-2 rounded-lg z-50"}>
@@ -56,8 +26,8 @@ const NodesLib: FC<Props> = ({onClose, addNode}) => {
                 </div>
                 <div><Input placeholder={"Search Nodes"}/></div>
                 <div>TagFilter</div>
-                {nodeLibrary.map(n =>
-                    <NodeCard key={n.nodeId} node={n} onClick={handleNodeClicked}/>
+                {NodesLibrary.map(n =>
+                    <NodeCard key={n.nodeId} node={n} onClick={() => onSelect(n.nodeId)}/>
                 )}
             </div>
 
@@ -65,10 +35,10 @@ const NodesLib: FC<Props> = ({onClose, addNode}) => {
     )
 }
 
-export default NodesLib
+export default NodesLibraryMenu
 
 type NodeCardProps = {
-    node: DummyNode
+    node: NodeLibraryEntry
     onClick: (nodeId: string) => void
     onDrag?: (p: Point, nodeId: string) => void
 }

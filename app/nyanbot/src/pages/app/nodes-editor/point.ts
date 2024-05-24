@@ -7,15 +7,15 @@ class Point {
         this.y = y;
     }
 
-    add(point) {
+    plus(point) {
         return new Point(this.x + point.x, this.y + point.y);
     }
 
-    subtract(point) {
+    minus(point) {
         return new Point(this.x - point.x, this.y - point.y);
     }
 
-    distance(point) {
+    direction(point) {
         const dx = this.x - point.x;
         const dy = this.y - point.y;
         return Math.sqrt(dx * dx + dy * dy);

@@ -1,30 +1,27 @@
 import {History, Menu, Play, Plus, Save, Workflow} from 'lucide-react';
-import React, {useState} from "react";
-import ReactFlow, {Background, Controls, useNodesState} from 'reactflow';
+import React, {useRef, useState} from "react";
+
 import 'reactflow/dist/style.css';
 import MenuItem from "@/pages/app/nodes-editor/components/menu-item.tsx";
-import NodesLib from "@/pages/app/nodes-editor/components/nodes-lib.tsx";
+import NodesLibraryMenu from "@/pages/app/nodes-editor/components/nodes-library-menu.tsx";
+import {buildNode} from "@/pages/app/nodes-editor/nodes/builder.tsx";
+import NodeEditor from "@/pages/app/nodes-editor/components/editor.tsx";
 
 
 const NodesEditorPage = () => {
     const [libOpen, setLibOpen] = useState(false)
-    const [nodes, setNodes, onNodesChange] = useNodesState([]);
+    const editorRef = useRef(null)
 
-    function addNode(node): void {
-        setNodes(prevState => [...prevState, node]);
-        console.log(nodes)
+    function onLibraryNodeSelected(id: string) {
+        editorRef.current.add(buildNode(id))
     }
+
 
     return (
         <>
             <main className={"p-4 h-full"}>
-                <ReactFlow nodes={nodes}>
-                    <Background/>
-                    <div className={"absolute bottom-12 right-16 z-50"}>
-                        <Controls/>
-                    </div>
-                </ReactFlow>
-                <div className={"absolute inset-x-2 inset-y-4"}>
+                <NodeEditor ref={editorRef}/>
+                <div className={"absolute inset-x-2 top-4"}>
                     <div
                         className={"flex flex-row p-2 h-18 border rounded-md justify-between bg-white items-center max-w-7xl z-40"}>
                         <div>
@@ -36,7 +33,6 @@ const NodesEditorPage = () => {
                         </div>
                     </div>
                 </div>
-
 
                 <div className={"absolute inset-x-2 inset-y-14 w-16 h-16"}>
                     <div className={"flex flex-col mt-12 p-2 w-16  items-center justify-evenly gap-4 z-50"}>
@@ -58,7 +54,8 @@ const NodesEditorPage = () => {
                 </div>
             </main>
 
-            {libOpen === true ? <NodesLib onClose={() => setLibOpen(false)} addNode={addNode}/> : null}
+            {libOpen === true ?
+                <NodesLibraryMenu onClose={() => setLibOpen(false)} onSelect={onLibraryNodeSelected}/> : null}
 
         </>
 
