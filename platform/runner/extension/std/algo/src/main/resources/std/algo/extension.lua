@@ -7,8 +7,8 @@ function extension_create()
                     return __graph__.create(0, directed)
                 end,
 
-                add = function(gph, v, w, weight)
-                    return gph:addEdge(v, w, weight)
+                add = function(gph, from, to, weight)
+                    return gph:addEdge(from, to, weight)
                 end,
 
                 vertex_count = function(gph)
@@ -19,8 +19,8 @@ function extension_create()
                     return gph:vertices()
                 end,
 
-                remove_vertex = function(gph, v)
-                    return gph:removeVertex(v)
+                remove_vertex = function(gph, from)
+                    return gph:removeVertex(from)
                 end,
 
                 edges = function(gph, v)
@@ -35,6 +35,10 @@ function extension_create()
 
                 add = function(lst, value)
                     return lst:add(value)
+                end,
+
+                contains = function(lst, value)
+                    return lst:contains(value)
                 end,
 
                 length = function(lst)

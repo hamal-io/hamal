@@ -10,7 +10,7 @@ __graph__.__index = __graph__
 __graph__.edge = {}
 __graph__.edge.__index = __graph__.edge
 
-function __graph__.edge.create(v, w, weight)
+function __graph__.edge.create(from, to, weight)
     local s = {}
     setmetatable(s, __graph__.edge)
 
@@ -18,39 +18,27 @@ function __graph__.edge.create(v, w, weight)
         weight = 1.0
     end
 
-    s.v = v
-    s.w = w
+    s.from = from
+    s.to = to
     s.weight = weight
 
     return s
 end
 
-function __graph__.edge:from()
-    return self.v
-end
-
-function __graph__.edge:to()
-    return self.w;
-end
-
-function __graph__.edge:either()
-    return self.v
-end
-
 function __graph__.edge:other(x)
-    if x == self.v then
-        return self.w
+    if x == self.from then
+        return self.to
     else
-        return self.v
+        return self.from
     end
 
 end
 
-function __graph__.create(V, directed)
+function __graph__.create(from, directed)
     local g = {}
     setmetatable(g, __graph__)
 
-    V = V or 0
+    from = from or 0
 
     if directed == nil then
         directed = false
@@ -59,10 +47,10 @@ function __graph__.create(V, directed)
     g.vertexList = __list__.create()
     g.adjList = {}
 
-    if V > 0 then
-        for v = 0, V - 1 do
-            g.vertexList:add(v)
-            g.adjList[v] = __list__.create()
+    if from > 0 then
+        for from = 0, from - 1 do
+            g.vertexList:add(from)
+            g.adjList[from] = __list__.create()
         end
     end
     g.directed = directed
@@ -89,34 +77,34 @@ function __graph__.createFromVertexList(vertices, directed)
     g.vertexList = vertices
     g.adjList = {}
     for i = 0, g.vertexList:size() - 1 do
-        local v = g.vertexList:get(i)
-        g.adjList[v] = __list__.create()
+        local from = g.vertexList:get(i)
+        g.adjList[from] = __list__.create()
     end
     g.directed = directed
 
     return g
 end
 
-function __graph__:addVertexIfNotExists(v)
-    if self.vertexList:contains(v) then
+function __graph__:addVertexIfNotExists(from)
+    if self.vertexList:contains(from) then
         return false
     else
-        self.vertexList:add(v)
-        self.adjList[v] = __list__.create()
+        self.vertexList:add(from)
+        self.adjList[from] = __list__.create()
         return true
     end
 end
 
-function __graph__:removeVertex(v)
-    if self.vertexList:contains(v) then
-        self.vertexList:remove(v)
-        self.adjList[v] = nil
+function __graph__:removeVertex(from)
+    if self.vertexList:contains(from) then
+        self.vertexList:remove(from)
+        self.adjList[from] = nil
         for i = 0, self.vertexList:size() - 1 do
-            local w = self.vertexList:get(i)
-            local adj_w = self.adjList[w]
+            local to = self.vertexList:get(i)
+            local adj_w = self.adjList[to]
             for k = 0, adj_w:size() - 1 do
                 local e = adj_w:get(k)
-                if e:other(w) == v then
+                if e:other(to) == from then
                     adj_w:removeAt(k)
                     break
                 end
@@ -128,23 +116,23 @@ function __graph__:removeVertex(v)
     end
 end
 
-function __graph__:containsVertex(v)
-    return self.vertexList:contains(v)
+function __graph__:containsVertex(from)
+    return self.vertexList:contains(from)
 end
 
-function __graph__:adj(v)
-    return self.adjList[v]
+function __graph__:adj(from)
+    return self.adjList[from]
 end
 
-function __graph__:addEdge(v, w, weight)
-    local e = __graph__.edge.create(v, w, weight)
-    self:addVertexIfNotExists(v)
-    self:addVertexIfNotExists(w)
+function __graph__:addEdge(from, to, weight)
+    local e = __graph__.edge.create(from, to, weight)
+    self:addVertexIfNotExists(from)
+    self:addVertexIfNotExists(to)
     if self.directed then
-        self.adjList[e:from()]:add(e)
+        self.adjList[e.from]:add(e)
     else
-        self.adjList[e:from()]:add(e)
-        self.adjList[e:to()]:add(e)
+        self.adjList[e.from]:add(e)
+        self.adjList[e.to]:add(e)
     end
 
 end
@@ -152,11 +140,11 @@ end
 function __graph__:reverse()
     local g = __graph__.createFromVertexList(self.vertexList, self.directed)
     for k = 0, self:vertexCount() - 1 do
-        local v = self:vertexAt(k)
-        local adj_v = self:adj(v)
+        local from = self:vertexAt(k)
+        local adj_v = self:adj(from)
         for i = 0, adj_v:size() - 1 do
             local e = adj_v:get(i)
-            g:addEdge(e:to(), e:from(), e.weight)
+            g:addEdge(e.to, e.from, e.weight)
         end
 
     end
@@ -172,12 +160,12 @@ function __graph__:edges()
     local list = __list__.create()
 
     for i = 0, self.vertexList:size() - 1 do
-        local v = self.vertexList:get(i)
-        local adj_v = self:adj(v)
+        local from = self.vertexList:get(i)
+        local adj_v = self:adj(from)
         for j = 0, adj_v:size() - 1 do
             local e = adj_v:get(j)
-            local w = e:other(v)
-            if self.directed == true or w > v then
+            local to = e:other(from)
+            if self.directed == true or to > from then
                 list:add(e)
             end
 
@@ -188,11 +176,11 @@ function __graph__:edges()
     return list
 end
 
-function __graph__:hasEdge(v, w)
-    local adj_v = self:adj(v)
+function __graph__:hasEdge(from, to)
+    local adj_v = self:adj(from)
     for i = 0, adj_v:size() - 1 do
         local e = adj_v:get(i)
-        if e:to() == w then
+        if e.to == to then
             return true
         end
     end
