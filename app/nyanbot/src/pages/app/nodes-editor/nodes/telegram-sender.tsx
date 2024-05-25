@@ -1,8 +1,9 @@
-import {Handle, NodeProps, Position} from 'reactflow';
+import {Connection, Handle, NodeProps, Position} from 'reactflow';
 import styles from "@/pages/app/nodes-editor/nodes/handle.module.css";
 
 
 export default function TelegramSenderNode(props: NodeProps) {
+
     return (
         <>
             <div className={"flex flex-col border-2 rounded-lg"}>
@@ -10,8 +11,8 @@ export default function TelegramSenderNode(props: NodeProps) {
                 <div>
                     <Handle type="target" position={Position.Left} id="false" className={`
                     ${styles.text} 
-                    ${styles.left}`
-                    }/>
+                    ${styles.left}`}
+                    />
                     <input placeholder={"Message"} id="text" name="text" className="nodrag border"/>
                 </div>
                 <div>

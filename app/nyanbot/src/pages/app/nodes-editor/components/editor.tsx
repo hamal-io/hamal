@@ -35,7 +35,11 @@ const NodeEditor = forwardRef<Handles, Props>(({}, ref) => {
     );
 
     const onConnect = useCallback(
-        (params) => setEdges((eds) => addEdge(params, eds)),
+        (params) => {
+            const { sourceHandle, target } = params;
+            console.log('Source type:', sourceHandle);
+            setEdges((eds) => addEdge(params, eds))
+        },
         [],
     );
 
