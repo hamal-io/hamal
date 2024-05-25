@@ -17,13 +17,13 @@ data class ControlCode(
     override val type: ControlType = ControlType("Code")
 }
 
-data class ControlInput(
+data class ControlInputFromPort(
     override val index: ControlIndex,
     override val nodeIndex: NodeIndex,
     override val port: PortInput,
     override val key: ControlKey = ControlKey.random(),
 ) : ControlWithPort {
-    override val type: ControlType = ControlType("Input")
+    override val type: ControlType = ControlType("Input_From_Port")
 }
 
 data class ControlInputBoolean(
@@ -106,8 +106,8 @@ interface Control {
 
             return when (type) {
                 ControlType("Code") -> context.deserialize(json, ControlCode::class.java)
-                ControlType("Input") -> context.deserialize(json, ControlInput::class.java)
                 ControlType("Input_Boolean") -> context.deserialize(json, ControlInputBoolean::class.java)
+                ControlType("Input_From_Port") -> context.deserialize(json, ControlInputFromPort::class.java)
                 ControlType("Input_Number") -> context.deserialize(json, ControlInputNumber::class.java)
                 ControlType("Input_String") -> context.deserialize(json, ControlInputString::class.java)
                 else -> TODO()
@@ -143,8 +143,8 @@ sealed interface TemplateControl {
             val type = ControlType(json.asJsonObject.get("type").asString)
 
             return when (type) {
-                ControlType("Input") -> context.deserialize(json, ControlInput::class.java)
                 ControlType("Input_Boolean") -> context.deserialize(json, ControlInputBoolean::class.java)
+                ControlType("Input_From_Port") -> context.deserialize(json, ControlInputFromPort::class.java)
                 ControlType("Input_Number") -> context.deserialize(json, ControlInputNumber::class.java)
                 ControlType("Input_String") -> context.deserialize(json, ControlInputString::class.java)
                 else -> TODO()

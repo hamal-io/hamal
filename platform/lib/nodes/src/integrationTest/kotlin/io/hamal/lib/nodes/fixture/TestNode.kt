@@ -19,12 +19,20 @@ sealed class Capture : AbstractNode() {
 
         override fun toCode(ctx: Context): ValueCode {
             val captureFunction = ctx.node.properties.value.findString("capture_fn")?.stringValue ?: "capture_one"
+
+            // FIXME only one control
+            val control = ctx.controlsOfNode(ctx.node.index).filterIsInstance<ControlWithPort>().first()
+            val connection = ctx.getConnection(control.port!!.index)
+
             return ValueCode(
                 """
-            test = require_plugin('test')
-            test.$captureFunction(arg_1)
-            return arg_1
-        """.trimIndent()
+              fn = __F__[${connection.outputNode.index}]
+              value = fn()['${connection.outputPort.key}']
+              print(value)
+              test = require_plugin('test')
+              test.$captureFunction(value)  
+              return { } 
+            """.trimIndent()
             )
         }
     }

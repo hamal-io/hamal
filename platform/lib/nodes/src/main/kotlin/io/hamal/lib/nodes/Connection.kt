@@ -36,5 +36,5 @@ data class Connection(
 
 
     data class Node(val index: NodeIndex)
-    data class Port(val index: PortIndex)
+    data class Port(val index: PortIndex, val key: PortKey)
 }

@@ -4,9 +4,9 @@ import io.hamal.lib.nodes.*
 
 data class ComputationGraph(
     val dependencies: Map<NodeIndex, List<NodeIndex>>,
-    val nodes: MutableMap<NodeIndex, Node>,
-    val controls: MutableMap<ControlIndex, Control>,
-    val connections: MutableMap<ConnectionIndex, Connection>
+    val nodes: Map<NodeIndex, Node>,
+    val controls: Map<ControlIndex, Control>,
+    val connections: Map<ConnectionIndex, Connection>
 ) {
 
     operator fun get(index: NodeIndex): List<NodeIndex>? = dependencies[index]

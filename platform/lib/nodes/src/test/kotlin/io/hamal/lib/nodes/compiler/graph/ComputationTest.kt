@@ -142,45 +142,45 @@ internal object BreadthFirstSearchTest {
     @Test
     @Disabled
     fun `Root node does not exist`() {
-        TODO()
-//        val testInstance = ComputationGraph(mapOf(NodeIndex(1) to listOf()))
-//        val result = breadthFirstSearch(testInstance, NodeIndex(111111))
-//        assertThat(result, equalTo(listOf()))
+        val testInstance = ComputationGraph(mapOf(NodeIndex(1) to listOf()), mapOf(), mapOf(), mapOf())
+        val result = breadthFirstSearch(testInstance, NodeIndex(111111))
+        assertThat(result, equalTo(listOf()))
     }
 
     @Test
     @Disabled
     fun `Single node`() {
-//        val testInstance = ComputationGraph(mapOf(NodeIndex(1) to listOf()))
-//        val result = breadthFirstSearch(testInstance, NodeIndex(1))
-//        assertThat(result, equalTo(listOf(NodeIndex(1))))
-        TODO()
+        val testInstance = ComputationGraph(mapOf(NodeIndex(1) to listOf()), mapOf(), mapOf(), mapOf())
+        val result = breadthFirstSearch(testInstance, NodeIndex(1))
+        assertThat(result, equalTo(listOf(NodeIndex(1))))
     }
 
     @Test
     @Disabled
     fun `Visit graph`() {
-//        val testInstance = ComputationGraph(
-//            mapOf(
-//                NodeIndex(1) to listOf(NodeIndex(2), NodeIndex(3), NodeIndex(4)),
-//                NodeIndex(2) to listOf(NodeIndex(5), NodeIndex(6)),
-//                NodeIndex(3) to listOf(NodeIndex(6), NodeIndex(7)),
-//                NodeIndex(4) to listOf(NodeIndex(7), NodeIndex(8)),
-//                NodeIndex(5) to listOf(),
-//                NodeIndex(6) to listOf(),
-//                NodeIndex(7) to listOf(),
-//                NodeIndex(8) to listOf()
-//            )
-//        )
-//        val result = breadthFirstSearch(testInstance, NodeIndex(1))
-//        assertThat(
-//            result, equalTo(
-//                listOf(
-//                    NodeIndex(1), NodeIndex(2), NodeIndex(3), NodeIndex(4),
-//                    NodeIndex(5), NodeIndex(6), NodeIndex(7), NodeIndex(8)
-//                )
-//            )
-//        )
-        TODO()
+        val testInstance = ComputationGraph(
+            mapOf(
+                NodeIndex(1) to listOf(NodeIndex(2), NodeIndex(3), NodeIndex(4)),
+                NodeIndex(2) to listOf(NodeIndex(5), NodeIndex(6)),
+                NodeIndex(3) to listOf(NodeIndex(6), NodeIndex(7)),
+                NodeIndex(4) to listOf(NodeIndex(7), NodeIndex(8)),
+                NodeIndex(5) to listOf(),
+                NodeIndex(6) to listOf(),
+                NodeIndex(7) to listOf(),
+                NodeIndex(8) to listOf()
+            ),
+            mapOf(),
+            mapOf(),
+            mapOf()
+        )
+        val result = breadthFirstSearch(testInstance, NodeIndex(1))
+        assertThat(
+            result, equalTo(
+                listOf(
+                    NodeIndex(1), NodeIndex(2), NodeIndex(3), NodeIndex(4),
+                    NodeIndex(5), NodeIndex(6), NodeIndex(7), NodeIndex(8)
+                )
+            )
+        )
     }
 }

@@ -22,6 +22,7 @@ import io.hamal.lib.nodes.NodeIndex.Companion.NodeIndex
 import io.hamal.lib.nodes.NodeTitle.Companion.NodeTitle
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
 import io.hamal.lib.nodes.PortIndex.Companion.PortIndex
+import io.hamal.lib.nodes.PortKey.Companion.PortKey
 import io.hamal.lib.nodes.compiler.node.NodeCompilerRegistry
 import io.hamal.lib.nodes.compiler.node.defaultNodeCompilerRegistry
 import io.hamal.lib.nodes.fixture.Capture
@@ -115,9 +116,9 @@ internal abstract class AbstractIntegrationTest {
         return Connection(
             index = ConnectionIndex(id),
             outputNode = Connection.Node(NodeIndex(outputNode)),
-            outputPort = Connection.Port(PortIndex(outputPort)),
+            outputPort = Connection.Port(PortIndex(outputPort), PortKey(outputPort.toString(16))),
             inputNode = Connection.Node(NodeIndex(inputNode)),
-            inputPort = Connection.Port(PortIndex(inputPort)),
+            inputPort = Connection.Port(PortIndex(inputPort), PortKey(inputPort.toString(16))),
             label = label?.let(::ConnectionLabel)
         )
     }

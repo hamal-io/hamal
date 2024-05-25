@@ -24,8 +24,8 @@ class GraphCompilerImpl(registry: NodeCompilerRegistry) : GraphCompiler {
             builder.append("\n")
         }
 
-        val startNode = graph.nodes.find { it.type == NodeType("Start") }
-            ?: throw IllegalArgumentException("No Init node found")
+        val startNode = graph.nodes.find { it.type == NodeType("Start") } ?: graph.nodes.minByOrNull { it.index }
+        ?: throw IllegalArgumentException("No start node found")
 
         builder.append("algo = require('std.algo').create()\n")
         builder.append("throw = require('std.throw').create()\n")

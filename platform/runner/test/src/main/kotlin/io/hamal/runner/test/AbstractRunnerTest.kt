@@ -1,5 +1,6 @@
 package io.hamal.runner.test
 
+import io.hamal.extension.std.algo.ExtensionStdAlgoFactory
 import io.hamal.extension.std.memoize.ExtensionStdMemoizeFactory
 import io.hamal.extension.std.once.ExtensionStdOnceFactory
 import io.hamal.extension.std.table.ExtensionStdTableFactory
@@ -99,6 +100,7 @@ object RunnerFixture {
                     ExtensionStdThrowFactory,
                     ExtensionStdMemoizeFactory,
                     ExtensionStdOnceFactory,
+                    ExtensionStdAlgoFactory
                 )
                 .registerPlugins(*pluginFactories.toTypedArray())
                 .registerExtensions(*extensionFactories.toTypedArray())
