@@ -1,25 +1,28 @@
 import {Handle, NodeProps, Position} from 'reactflow';
+import styles from "@/pages/app/nodes-editor/nodes/handle.module.css";
 
 
 export default function TelegramSenderNode(props: NodeProps) {
     return (
         <>
-            <Handle
-                type="target"
-                position={Position.Top}
-                onConnect={(params) => console.log('handle onConnect', params)}
-                isConnectable={true}
-            />
             <div className={"flex flex-col border-2 rounded-lg"}>
-                <div>Message:</div>
-                <input id="text" name="text" className="nodrag border"/>
-                <div>Number:</div>
-                <input id="text" name="text" className="nodrag border"/>
+                <div>Notify Telegram</div>
+                <div>
+                    <Handle type="target" position={Position.Left} id="false" className={`
+                    ${styles.text} 
+                    ${styles.left}`
+                    }/>
+                    <input placeholder={"Message"} id="text" name="text" className="nodrag border"/>
+                </div>
+                <div>
+                    <Handle type="target" position={Position.Left} id="false" className={`
+                    ${styles.number} 
+                    ${styles.left}`
+                    }/>
+                    <input placeholder={"Telegram Number"} id="text" name="text" className="nodrag border"/>
+                </div>
 
             </div>
-            <Handle type="source" position={Position.Bottom} id="a"/>
-            <Handle type="source" position={Position.Bottom} id="b"/>
         </>
     );
-
 }

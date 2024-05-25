@@ -1,5 +1,6 @@
 import {useCallback} from 'react';
 import {Handle, NodeProps, Position} from 'reactflow';
+import styles from "@/pages/app/nodes-editor/nodes/handle.module.css";
 
 function TextInputNode(props: NodeProps) {
     const onChange = useCallback((evt) => {
@@ -11,14 +12,8 @@ function TextInputNode(props: NodeProps) {
             <div className={"flex flex-col border-2 rounded-lg"}>
                 <div>Text Input:</div>
                 <input id="text" name="text" onChange={onChange} className="nodrag border"/>
-                <div className={"flex flex-row items-center justify-between p-2"}>
-                    <div>Check me:</div>
-                    <input type="checkbox"/>
-                </div>
-
             </div>
-            <Handle type="source" position={Position.Bottom} id="a"/>
-            <Handle type="source" position={Position.Bottom} id="b"/>
+            <Handle type="source" position={Position.Right} id="false" className={styles.text}/>
         </>
     );
 }

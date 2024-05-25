@@ -1,0 +1,35 @@
+.handle {
+    width: 16px;
+    height: 16px;
+    border-radius: 8px;
+
+}
+
+.left {
+    position: relative;
+    left: -12px;
+    top: 8px
+}
+
+.right {
+    position: relative;
+    right: -12px;
+    top: 8px
+}
+
+.boolean {
+    composes: handle;
+    background: green;
+}
+
+.text {
+    composes: handle;
+    background: black;
+}
+
+.number {
+    composes: handle;
+    background: blue;
+}
+
+

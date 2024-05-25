@@ -4,30 +4,30 @@ import {NodeLibraryEntry} from "@/pages/app/nodes-editor/types.ts";
 const NodesLibrary: Array<NodeLibraryEntry> = [
     {
         nodeId: "1",
-        name: "Node One",
+        name: "Filter",
         tags: "null",
-        description: "First awesome Node",
+        description: "Search something",
         icon: Waves
     },
     {
         nodeId: "2",
-        name: "Node Two",
+        name: "Boolean",
         tags: "null",
-        description: "Second awesome Node",
+        description: "Decide something",
         icon: Waves
     },
     {
         nodeId: "3",
         name: "Text Input",
         tags: "null",
-        description: "Does something custom",
+        description: "Supply text",
         icon: Waves
     },
     {
         nodeId: "4",
         name: "Telegram",
         tags: "null",
-        description: "Does something custom",
+        description: "Send a message via Telegram",
         icon: Waves
     }
 ]
