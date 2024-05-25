@@ -4,9 +4,9 @@ import {NodeLibraryEntry} from "@/pages/app/nodes-editor/types.ts";
 const NodesLibrary: Array<NodeLibraryEntry> = [
     {
         nodeId: "1",
-        name: "Filter",
+        name: "Number Input",
         tags: "null",
-        description: "Search something",
+        description: "Supplies Number",
         icon: Waves
     },
     {
@@ -20,7 +20,7 @@ const NodesLibrary: Array<NodeLibraryEntry> = [
         nodeId: "3",
         name: "Text Input",
         tags: "null",
-        description: "Supply text",
+        description: "Supplies Text",
         icon: Waves
     },
     {

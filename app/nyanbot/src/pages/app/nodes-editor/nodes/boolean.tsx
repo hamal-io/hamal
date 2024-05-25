@@ -12,12 +12,12 @@ export default function BooleanNode(props: NodeProps) {
             <div className={"flex flex-col p-4 border-2 rounded-lg"}>
                 <div className={"flex flex-row items-center justify-between"}>
                     <div>True</div>
-                    <Handle type="source" position={Position.Right} id="false"
+                    <Handle type="source" position={Position.Right} id="boolean"
                             className={`${styles.boolean} ${styles.right}`}/>
                 </div>
                 <div className={"flex flex-row items-center justify-between"}>
                     <div>False</div>
-                    <Handle type="source" position={Position.Right} id="false"
+                    <Handle type="source" position={Position.Right} id="boolean"
                             className={`${styles.boolean} ${styles.right}`}/>
 
                 </div>

@@ -2,10 +2,12 @@ import {Node} from 'reactflow';
 import TelegramSenderNode from "@/pages/app/nodes-editor/nodes/telegram-sender.tsx";
 import TextInputNode from "@/pages/app/nodes-editor/nodes/text-input.tsx";
 import BooleanNode from "@/pages/app/nodes-editor/nodes/boolean.tsx";
+import NumberInputNode from "@/pages/app/nodes-editor/nodes/number-input.tsx";
 
 export const NodesRegistry: Node[] = [
     {
         id: '1',
+        type: 'numberInput',
         position: {x: 0, y: 0},
         data: {label: 'Hello'},
     },
@@ -33,6 +35,7 @@ export const NodesRegistry: Node[] = [
 export const nodeTypes = {
     textInput: TextInputNode,
     telegramSender: TelegramSenderNode,
-    bool: BooleanNode
+    bool: BooleanNode,
+    numberInput: NumberInputNode
 };
 

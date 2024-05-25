@@ -9,17 +9,18 @@ export default function TelegramSenderNode(props: NodeProps) {
             <div className={"flex flex-col border-2 rounded-lg"}>
                 <div>Notify Telegram</div>
                 <div>
-                    <Handle type="target" position={Position.Left} id="false" className={`
+                    <Handle type="target" position={Position.Left} id="string" className={`
                     ${styles.text} 
-                    ${styles.left}`}
+                    ${styles.left}
+                    `}
                     />
                     <input placeholder={"Message"} id="text" name="text" className="nodrag border"/>
                 </div>
                 <div>
-                    <Handle type="target" position={Position.Left} id="false" className={`
+                    <Handle type="target" position={Position.Left} id="number" className={`
                     ${styles.number} 
-                    ${styles.left}`
-                    }/>
+                    ${styles.left}
+                    `}/>
                     <input placeholder={"Telegram Number"} id="text" name="text" className="nodrag border"/>
                 </div>
 

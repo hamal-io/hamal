@@ -19,12 +19,6 @@ const NodeEditor = forwardRef<Handles, Props>(({}, ref) => {
     const [nodes, setNodes] = useNodesState([]);
     const [edges, setEdges] = useState([]);
 
-    /* const nodeTypes = useMemo(() => ({
-             textUpdater: TextUpdaterNode,
-             counter: CounterNode
-         }
-     ), []);*/
-
     const onNodesChange = useCallback(
         (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
         [],
@@ -36,9 +30,9 @@ const NodeEditor = forwardRef<Handles, Props>(({}, ref) => {
 
     const onConnect = useCallback(
         (params) => {
-            const { sourceHandle, target } = params;
-            console.log('Source type:', sourceHandle);
-            setEdges((eds) => addEdge(params, eds))
+            if (params.sourceHandle == params.targetHandle) {
+                setEdges((eds) => addEdge(params, eds))
+            }
         },
         [],
     );
