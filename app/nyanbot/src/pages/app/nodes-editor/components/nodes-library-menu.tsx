@@ -14,7 +14,7 @@ type Props = {
 const NodesLibraryMenu: FC<Props> = ({onClose, onSelect}) => {
     return (
         <div
-            className={"absolute inset-x-2 inset-y-28 w-64 h-96  bg-white border-2 rounded-lg z-50"}>
+            className={"absolute inset-x-2 inset-y-28 w-64   bg-white border-2 rounded-lg z-50"}>
             <div className={"flex flex-col items-center justify-center"}>
                 <div className={"flex flex-row p-2 w-full justify-between"}>
                     <div className={"font-bold"}>

@@ -23,7 +23,6 @@ export default function TelegramSenderNode(props: NodeProps) {
                     `}/>
                     <input placeholder={"Telegram Number"} id="text" name="text" className="nodrag border"/>
                 </div>
-
             </div>
         </>
     );

@@ -32,4 +32,9 @@
     background: blue;
 }
 
+.union {
+    composes: handle;
+    background: conic-gradient( red, orange, yellow, green, blue, indigo, violet);
+}
+
 

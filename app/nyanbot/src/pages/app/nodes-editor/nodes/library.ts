@@ -29,6 +29,13 @@ const NodesLibrary: Array<NodeLibraryEntry> = [
         tags: "null",
         description: "Send a message via Telegram",
         icon: Waves
+    },
+    {
+        nodeId: "5",
+        name: "String Builder",
+        tags: "null",
+        description: "Takes anything and to build a string",
+        icon: Waves
     }
 ]
 

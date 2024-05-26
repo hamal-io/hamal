@@ -2,9 +2,10 @@ import ReactFlow, {
     addEdge,
     applyEdgeChanges,
     applyNodeChanges,
-    Background,
+    Background, Connection,
     Controls,
-    Node,
+    EdgeChange,
+    Node, NodeChange, useEdgesState,
     useNodesState
 } from "reactflow";
 import React, {forwardRef, useCallback, useImperativeHandle, useState} from "react";
@@ -17,21 +18,28 @@ interface Handles {
 type Props = {}
 const NodeEditor = forwardRef<Handles, Props>(({}, ref) => {
     const [nodes, setNodes] = useNodesState([]);
-    const [edges, setEdges] = useState([]);
+    const [edges, setEdges] = useEdgesState([]);
 
     const onNodesChange = useCallback(
-        (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
+        (changes: NodeChange[]) => setNodes((nds) => applyNodeChanges(changes, nds)),
         [],
     );
     const onEdgesChange = useCallback(
-        (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
+        (changes: EdgeChange[]) => {
+            console.log(changes);
+            setEdges((eds) => applyEdgeChanges(changes, eds))
+        },
         [],
     );
 
     const onConnect = useCallback(
-        (params) => {
-            if (params.sourceHandle == params.targetHandle) {
+        (params: Connection) => {
+            if (params.targetHandle == 'union') {
                 setEdges((eds) => addEdge(params, eds))
+            } else if (params.sourceHandle == params.targetHandle) {
+                setEdges((eds) => addEdge(params, eds))
+            } else {
+                //give some feedback
             }
         },
         [],
@@ -39,7 +47,11 @@ const NodeEditor = forwardRef<Handles, Props>(({}, ref) => {
 
     useImperativeHandle(ref, () => ({
         add(node: Node) {
-            setNodes(prevState => [...prevState, node]);
+            let editorNode = node
+            if (nodes.find((n) => n.id == node.id)) {
+                editorNode = {...node, id: `${node.id + Math.random()}`} //Fixme
+            }
+            setNodes(prevState => [...prevState, editorNode]);
         }
     }));
 
