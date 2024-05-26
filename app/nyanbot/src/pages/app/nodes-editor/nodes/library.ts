@@ -11,9 +11,9 @@ const NodesLibrary: Array<NodeLibraryEntry> = [
     },
     {
         nodeId: "2",
-        name: "Boolean",
+        name: "Filter",
         tags: "null",
-        description: "Decide something",
+        description: "Decide something very dynamic",
         icon: Waves
     },
     {

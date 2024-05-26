@@ -1,9 +1,9 @@
 import {Node} from 'reactflow';
 import TelegramSenderNode from "@/pages/app/nodes-editor/nodes/telegram-sender.tsx";
 import TextInputNode from "@/pages/app/nodes-editor/nodes/text-input.tsx";
-import BooleanNode from "@/pages/app/nodes-editor/nodes/boolean.tsx";
 import NumberInputNode from "@/pages/app/nodes-editor/nodes/number-input.tsx";
 import TextBuilderNode from "@/pages/app/nodes-editor/nodes/text-builder.tsx";
+import FilterNode from "@/pages/app/nodes-editor/nodes/filter-node.tsx";
 
 export const NodesRegistry: Node[] = [
     {
@@ -14,7 +14,7 @@ export const NodesRegistry: Node[] = [
     },
     {
         id: '2',
-        type: 'bool',
+        type: 'filter',
         position: {x: 0, y: 0},
         data: {},
     },
@@ -36,13 +36,12 @@ export const NodesRegistry: Node[] = [
         position: {x: 0, y: 0},
         data: {}
     }
-
 ];
 
 export const nodeTypes = {
     textInput: TextInputNode,
     telegramSender: TelegramSenderNode,
-    bool: BooleanNode,
+    filter: FilterNode,
     numberInput: NumberInputNode,
     textBuilder: TextBuilderNode
 };

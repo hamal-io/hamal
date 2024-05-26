@@ -16,7 +16,7 @@ function NumberInputNode(props: NodeProps) {
                     <input id="text" name="number" className="nodrag border"/>
                     <Handle type="source" position={Position.Right} id="number" className={`
                             ${handle.number}
-                            `}
+                    `}
                     />
                 </div>
             </div>

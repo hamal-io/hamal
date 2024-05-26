@@ -34,6 +34,7 @@ const NodeEditor = forwardRef<Handles, Props>(({}, ref) => {
 
     const onConnect = useCallback(
         (params: Connection) => {
+
             if (params.targetHandle == 'union') {
                 setEdges((eds) => addEdge(params, eds))
             } else if (params.sourceHandle == params.targetHandle) {

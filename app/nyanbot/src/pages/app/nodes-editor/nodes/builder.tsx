@@ -3,7 +3,6 @@ import Point from "@/pages/app/nodes-editor/point.ts";
 import {Node} from "reactflow";
 
 export function buildNode(id: string, pos?: Point): Node {
-    //FIXME can only add 1 node of each type
     let node = NodesRegistry.find(node => node.id == id)
     const pr = randomCoordinateInSquare(new Point(100, 100), 200)
     if (pos == null) {

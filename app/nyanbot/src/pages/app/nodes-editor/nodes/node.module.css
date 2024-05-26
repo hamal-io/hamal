@@ -6,3 +6,15 @@
     padding: 16px;
 
 }
+
+.header {
+    border-bottom: 2px solid darkgray;
+    width: 100%;
+}
+
+.filterNode {
+    composes: node;
+    width: 300px;
+    height: 400px;
+
+}

@@ -1,8 +1,13 @@
 .handle {
+    position: absolute;
+    pointer-events: none;
+    min-width: 5px;
+    min-height: 5px;
     width: 16px;
     height: 16px;
-    border-radius: 8px;
-
+    background: #1a192b;
+    border: 1px solid white;
+    border-radius: 100%;
 }
 
 .left {
@@ -13,8 +18,8 @@
 
 .right {
     position: relative;
-    right: -12px;
-    top: 8px
+    right: 0px;
+    top: 0;
 }
 
 .boolean {
