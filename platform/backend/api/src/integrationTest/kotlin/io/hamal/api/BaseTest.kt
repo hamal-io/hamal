@@ -209,7 +209,7 @@ internal abstract class BaseTest {
             NamespaceTreeCmdRepository.CreateCmd(
                 id = CmdId(6),
                 workspaceId = testWorkspace.id,
-                rootNodeId = testNamespace.id,
+                rootNodeIndex = testNamespace.id,
                 treeId = NamespaceTreeId.root
             )
         )

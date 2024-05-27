@@ -75,7 +75,7 @@ class AccountCreateMetaMaskHandler(
             NamespaceTreeCmdRepository.CreateCmd(
                 id = req.cmdId(),
                 treeId = NamespaceTreeId(req.namespaceId.value),
-                rootNodeId = req.namespaceId,
+                rootNodeIndex = req.namespaceId,
                 workspaceId = req.workspaceId,
             )
         )

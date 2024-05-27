@@ -6,6 +6,7 @@ import io.hamal.core.config.BackendBasePath
 import io.hamal.extension.net.http.ExtensionNetHttpFactory
 import io.hamal.extension.std.debug.ExtensionStdDebugFactory
 import io.hamal.extension.std.memoize.ExtensionStdMemoizeFactory
+import io.hamal.extension.std.once.ExtensionStdOnceFactory
 import io.hamal.extension.std.sys.ExtensionStdSysFactory
 import io.hamal.extension.std.table.ExtensionStdTableFactory
 import io.hamal.extension.std.`throw`.ExtensionStdThrowFactory
@@ -90,6 +91,7 @@ class TestRunnerSandboxFactory(
                 ExtensionStdTableFactory,
                 ExtensionStdThrowFactory,
                 ExtensionStdMemoizeFactory,
+                ExtensionStdOnceFactory
             )
             .registerPlugins(
                 PluginLogFactory(sdk.execLog),
@@ -177,7 +179,7 @@ class ClearController {
                 id = CmdId(6),
                 treeId = NamespaceTreeId.root,
                 workspaceId = WorkspaceId.root,
-                rootNodeId = NamespaceId.root
+                rootNodeIndex = NamespaceId.root
             )
         )
     }

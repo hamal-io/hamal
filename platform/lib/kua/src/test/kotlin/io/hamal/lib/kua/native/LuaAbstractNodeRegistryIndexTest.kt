@@ -4,7 +4,7 @@ import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.Matchers.equalTo
 import org.junit.jupiter.api.Test
 
-internal class LuaNodeCompilerRegistryIndexTest : NativeBaseTest() {
+internal class LuaAbstractNodeRegistryIndexTest : NativeBaseTest() {
     @Test
     fun `Loads integer width from lua`() {
         val result = testInstance.luaRegistryIndex()

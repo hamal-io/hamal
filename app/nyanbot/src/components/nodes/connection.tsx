@@ -24,9 +24,9 @@ export const ConnectionListWidget = ({}: ConnectionListWidgetProps) => {
                 key={"TRANSIENT_CONNECTION"}
                 id={"TRANSIENT_CONNECTION"}
                 // data-connection-id={id}
-                // data-output-node-id={outputNodeId}
+                // data-output-node-id={outputNodeIndex}
                 // data-output-port-name={outputPortName}
-                // data-inputs-node-id={inputNodeId}
+                // data-inputs-node-id={inputNodeIndex}
                 // data-inputs-port-name={inputPortName}
                 data-component="connection-path"
                 stroke="rgb(185, 186, 189)"
@@ -38,12 +38,11 @@ export const ConnectionListWidget = ({}: ConnectionListWidgetProps) => {
             />
 
 
-            {Object.keys(connections).map((connectionId) => {
-                    const connection = connections[connectionId];
-                    // console.log("Connection", connection);
+            {Object.keys(connections).map((connectionIndex) => {
+                    const connection = connections[connectionIndex];
 
-                    const outputPortRect = getPortRect(connection.outputPort.id);
-                    const inputPortRect = getPortRect(connection.inputPort.id);
+                    const outputPortRect = getPortRect(connection.outputPort.index);
+                    const inputPortRect = getPortRect(connection.inputPort.index);
 
 
                     const from = {
@@ -65,10 +64,10 @@ export const ConnectionListWidget = ({}: ConnectionListWidgetProps) => {
                     return (
                         <path
                             key={connection.id}
-                            data-connection-id={connection.id}
-                            // data-output-node-id={outputNodeId}
+                            data-connection-index={connection.index}
+                            // data-output-node-id={outputNodeIndex}
                             // data-output-port-name={outputPortName}
-                            // data-inputs-node-id={inputNodeId}
+                            // data-inputs-node-id={inputNodeIndex}
                             // data-inputs-port-name={inputPortName}
                             // data-component="connection-path"
                             stroke="rgb(185, 186, 189)"

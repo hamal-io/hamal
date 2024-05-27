@@ -2,12 +2,12 @@ import React, {FC, useContext} from "react";
 import {Node, Position} from './types.ts';
 import {Draggable} from './draggable.tsx';
 import styles from "@/components/nodes/node.module.css";
-import {PortOutputWidget} from "@/components/nodes/port.tsx";
+import {PortInputWidget, PortOutputWidget} from "@/components/nodes/port.tsx";
 import {ControlListWidget} from "@/components/nodes/control.tsx";
 import {ContextEditorState} from "@/components/nodes/editor.tsx";
 
 type NodeWidgetProps = {
-    // id: NodeId;
+    // id: NodeIndex;
     // position: Position;
     // size: Size;
     // type: NodeType;
@@ -20,9 +20,9 @@ export const NodeWidget: FC<NodeWidgetProps> = ({node}) => {
     const {dispatch} = useContext(ContextEditorState)
     const nodeWrapper = React.useRef<HTMLDivElement>(null);
 
-    const startDrag = (e: React.MouseEvent | React.TouchEvent) => {
+    const startDrag = () => {
         console.debug("Drag started")
-        dispatch({type: "NODE_SELECTED", id: node.id})
+        dispatch({type: "NODE_SELECTED", index: node.index})
         // onDragStart();
     };
 
@@ -40,11 +40,11 @@ export const NodeWidget: FC<NodeWidgetProps> = ({node}) => {
         dispatch({type: "NODE_UNSELECTED"})
     };
 
-    const isEditing = false
+    // const isEditing = false
     const width = node.size.width;
     const height = node.size.height;
 
-    const stateNode = useContext(ContextEditorState).state.nodes[node.id]
+    const stateNode = useContext(ContextEditorState).state.nodes[node.index]
 
     // FIXME
     return (
@@ -93,7 +93,7 @@ export const NodeWidget: FC<NodeWidgetProps> = ({node}) => {
             onDrag={handleDrag}
             onDragEnd={handleDragEnd}
             innerRef={nodeWrapper}
-            data-node-id={node.id}
+            data-node-index={node.index}
             data-component="node"
             // data-node-type={currentNodeType.type}
             // data-component-is-root={!!root}
@@ -103,20 +103,24 @@ export const NodeWidget: FC<NodeWidgetProps> = ({node}) => {
         >
 
             <span className='text-teal-200'>{node.title} </span>
+            {/*{stateNode.inputs.length === 1 && (*/}
+            {/*    <PortInputWidget port={stateNode.inputs[0]}/>*/}
+            {/*)}*/}
 
 
             <ControlListWidget node={node}/>
 
-            {stateNode.outputs.length === 1 && (
-                <PortOutputWidget
-                    port={stateNode.outputs[0]}
-                    // nodeId={id}
+            {stateNode.outputs.map(port =>
+                (<PortOutputWidget
+                    port={port}
+                    // NodeIndex={id}
                     // inputs={inputs}
                     // outputs={outputs}
                     // connections={connections}
                     // updateNodeConnections={updateNodeConnections}
                     // inputData={inputData}
                 />)
+            )
             }
 
 

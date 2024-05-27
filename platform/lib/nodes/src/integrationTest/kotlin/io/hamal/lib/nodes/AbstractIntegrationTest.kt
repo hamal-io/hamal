@@ -1,7 +1,8 @@
 package io.hamal.lib.nodes
 
-import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.common.value.*
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.common.value.ValueObject
+import io.hamal.lib.common.value.ValueString
 import io.hamal.lib.domain.State
 import io.hamal.lib.domain._enum.CodeTypes.Nodes
 import io.hamal.lib.domain.vo.CodeType.Companion.CodeType
@@ -14,13 +15,14 @@ import io.hamal.lib.domain.vo.TriggerId.Companion.TriggerId
 import io.hamal.lib.domain.vo.WorkspaceId.Companion.WorkspaceId
 import io.hamal.lib.kua.extend.plugin.RunnerPlugin
 import io.hamal.lib.kua.extend.plugin.RunnerPluginFactory
-import io.hamal.lib.nodes.ConnectionId.Companion.ConnectionId
+import io.hamal.lib.nodes.ConnectionIndex.Companion.ConnectionIndex
 import io.hamal.lib.nodes.ConnectionLabel.Companion.ConnectionLabel
-import io.hamal.lib.nodes.ControlId.Companion.ControlId
-import io.hamal.lib.nodes.NodeId.Companion.NodeId
+import io.hamal.lib.nodes.ControlIndex.Companion.ControlIndex
+import io.hamal.lib.nodes.NodeIndex.Companion.NodeIndex
 import io.hamal.lib.nodes.NodeTitle.Companion.NodeTitle
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
-import io.hamal.lib.nodes.PortId.Companion.PortId
+import io.hamal.lib.nodes.PortIndex.Companion.PortIndex
+import io.hamal.lib.nodes.PortKey.Companion.PortKey
 import io.hamal.lib.nodes.compiler.node.NodeCompilerRegistry
 import io.hamal.lib.nodes.compiler.node.defaultNodeCompilerRegistry
 import io.hamal.lib.nodes.fixture.Capture
@@ -74,13 +76,8 @@ internal abstract class AbstractIntegrationTest {
                 defaultNodeCompilerRegistry,
                 NodeCompilerRegistry(
                     listOf(
-                        Capture.Boolean,
-                        Capture.Decimal,
-                        Capture.Number,
-                        Capture.String,
-                        Invoked.Boolean,
-                        Invoked.Empty,
-                        Invoked.String,
+                        Capture.V_0_0_1,
+                        Invoked.V_0_0_1,
                     )
                 )
             )
@@ -97,8 +94,9 @@ internal abstract class AbstractIntegrationTest {
         size: Size = Size(200, 200)
     ): Node {
         return Node(
-            id = NodeId(SnowflakeId(id)),
+            index = NodeIndex(id),
             type = NodeType(type),
+            version = NodeVersion.v_0_0_1,
             title = title,
             position = position,
             size = size,
@@ -116,24 +114,24 @@ internal abstract class AbstractIntegrationTest {
         label: String? = null
     ): Connection {
         return Connection(
-            id = ConnectionId(SnowflakeId(id)),
-            outputNode = Connection.Node(NodeId(SnowflakeId(outputNode))),
-            outputPort = Connection.Port(id = PortId(SnowflakeId(outputPort))),
-            inputNode = Connection.Node(NodeId(SnowflakeId(inputNode))),
-            inputPort = Connection.Port(id = PortId(SnowflakeId(inputPort))),
+            index = ConnectionIndex(id),
+            outputNode = Connection.Node(NodeIndex(outputNode)),
+            outputPort = Connection.Port(PortIndex(outputPort), PortKey(outputPort.toString(16))),
+            inputNode = Connection.Node(NodeIndex(inputNode)),
+            inputPort = Connection.Port(PortIndex(inputPort), PortKey(inputPort.toString(16))),
             label = label?.let(::ConnectionLabel)
         )
     }
 
     fun portInput(
         id: Long,
-        type: ValueType
-    ): PortInput = PortInput(PortId(SnowflakeId(id)), type)
+        form: Form
+    ): PortInput = PortInput(PortIndex(id), form)
 
     fun portOutput(
         id: Long,
-        type: ValueType
-    ): PortOutput = PortOutput(PortId(SnowflakeId(id)), type)
+        form: Form
+    ): PortOutput = PortOutput(PortIndex(id), form)
 
     fun unitOfWork(
         graph: NodesGraph,
@@ -156,8 +154,8 @@ internal abstract class AbstractIntegrationTest {
 
     object NextControlId {
 
-        operator fun invoke(): ControlId {
-            return ControlId(counter++)
+        operator fun invoke(): ControlIndex {
+            return ControlIndex(counter++)
         }
 
         private var counter: Int = 0

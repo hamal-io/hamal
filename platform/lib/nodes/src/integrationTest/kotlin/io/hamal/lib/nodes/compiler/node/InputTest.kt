@@ -1,10 +1,12 @@
 package io.hamal.lib.nodes.compiler.node
 
-import io.hamal.lib.common.value.*
+import io.hamal.lib.common.value.ValueFalse
+import io.hamal.lib.common.value.ValueObject
+import io.hamal.lib.common.value.ValueString
+import io.hamal.lib.common.value.ValueTrue
 import io.hamal.lib.nodes.*
-import io.hamal.lib.nodes.AbstractIntegrationTest
-import io.hamal.lib.nodes.NodeId.Companion.NodeId
-import io.hamal.lib.nodes.PortId.Companion.PortId
+import io.hamal.lib.nodes.NodeIndex.Companion.NodeIndex
+import io.hamal.lib.nodes.PortIndex.Companion.PortIndex
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.jupiter.api.Test
@@ -17,18 +19,18 @@ internal object InputTest : AbstractIntegrationTest() {
             unitOfWork(
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "Input", listOf(PortOutput(PortId(20), TypeBoolean))),
+                        node(1, "Input", listOf(PortOutput(PortIndex(20), Form.Boolean))),
                         node(
                             2,
                             "Capture",
-                            listOf(portOutput(22, TypeBoolean)),
+                            listOf(),
                             ValueObject.builder().set("capture_fn", ValueString("capture_one")).build()
                         ),
                     ),
                     connections = listOf(connection(100, 1, 20, 2, 30)),
                     controls = listOf(
-                        ControlInputBoolean(nextControlId(), NodeId(1), portInput(23, TypeBoolean), ValueTrue),
-                        ControlCapture(nextControlId(), NodeId(2), portInput(31, TypeBoolean)),
+                        ControlInputBoolean(nextControlId(), NodeIndex(1), portInput(23, Form.Boolean), ValueTrue),
+                        ControlInputFromPort(nextControlId(), NodeIndex(2), portInput(30, Form.Boolean)),
                     )
                 )
             )
@@ -42,11 +44,11 @@ internal object InputTest : AbstractIntegrationTest() {
             unitOfWork(
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "Input", listOf(PortOutput(PortId(20), TypeBoolean))),
+                        node(1, "Input", listOf(PortOutput(PortIndex(20), Form.Boolean))),
                         node(
                             2,
                             "Capture",
-                            listOf(portOutput(22, TypeBoolean)),
+                            listOf(),
                             ValueObject.builder().set("capture_fn", ValueString("capture_one")).build()
                         ),
                     ),
@@ -54,8 +56,8 @@ internal object InputTest : AbstractIntegrationTest() {
                         connection(100, 1, 20, 2, 30),
                     ),
                     controls = listOf(
-                        ControlInputBoolean(nextControlId(), NodeId(1), portInput(23, TypeBoolean), ValueFalse),
-                        ControlCapture(nextControlId(), NodeId(2), portInput(31, TypeBoolean)),
+                        ControlInputBoolean(nextControlId(), NodeIndex(1), portInput(23, Form.Boolean), ValueFalse),
+                        ControlInputFromPort(nextControlId(), NodeIndex(2), portInput(30, Form.Boolean)),
                     )
                 )
             )
@@ -69,11 +71,11 @@ internal object InputTest : AbstractIntegrationTest() {
             unitOfWork(
                 graph = NodesGraph(
                     nodes = listOf(
-                        node(1, "Input", listOf(PortOutput(PortId(20), TypeString))),
+                        node(1, "Input", listOf(PortOutput(PortIndex(20), Form.String))),
                         node(
                             2,
                             "Capture",
-                            listOf(portOutput(22, TypeString)),
+                            listOf(portOutput(22, Form.String)),
                             ValueObject.builder().set("capture_fn", ValueString("capture_one")).build()
                         ),
                     ),
@@ -81,11 +83,11 @@ internal object InputTest : AbstractIntegrationTest() {
                     controls = listOf(
                         ControlInputString(
                             nextControlId(),
-                            NodeId(1),
-                            portInput(23, TypeString),
+                            NodeIndex(1),
+                            portInput(23, Form.String),
                             ValueString("Hamal Rocks")
                         ),
-                        ControlCapture(nextControlId(), NodeId(2), portInput(31, TypeString)),
+                        ControlInputFromPort(nextControlId(), NodeIndex(2), portInput(30, Form.Boolean)),
                     )
                 )
             )

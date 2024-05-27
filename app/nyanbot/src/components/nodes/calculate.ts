@@ -1,9 +1,9 @@
-import {PortId} from "@/components/nodes/types.ts";
+import {PortIndex} from "@/components/nodes/types.ts";
 
-export const getPort = (portId: PortId) => document.querySelector(`[data-port-id="${portId}"]`);
+export const getPort = (index: PortIndex) => document.querySelector(`[data-port-index="${index}"]`);
 
-export const getPortRect = (portId: PortId) => {
-    const port = getPort(portId);
+export const getPortRect = (index: PortIndex) => {
+    const port = getPort(index);
     return port && port.getBoundingClientRect() || {
         x: 0,
         y: 0,

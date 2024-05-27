@@ -1,19 +1,18 @@
 import {
     Connection,
-    ConnectionId,
+    ConnectionIndex,
     Control,
-    ControlId, ControlInputBoolean, ControlInvoke,
+    ControlIndex, ControlInputBoolean, ControlInputString,
     isControlInputString, isControlWithPort,
     Node,
-    NodeId,
-    NodeType,
-    PortId,
+    NodeIndex,
+    NodeType, NodeVersion,
+    PortIndex,
     Position,
     Rect,
     Size,
     Translate
 } from "@/components/nodes/types.ts";
-import {filter} from "lodash";
 
 export type CanvasState = {
     scale: number;
@@ -26,60 +25,68 @@ export type CanvasState = {
 
 export type EditorState = {
     current: {
-        id: string;
+        index: NodeIndex | ControlIndex | PortIndex;
         type: "Node" | "Connection";
     };
     connections: {
-        [id: ConnectionId]: {
-            id: ConnectionId;
+        [index: ConnectionIndex]: {
+            index: ConnectionIndex;
             outputPort: {
-                id: PortId
-            },
+                index: PortIndex;
+            };
+            outputNode: {
+                index: NodeIndex;
+            };
             inputPort: {
-                id: PortId
+                index: PortIndex;
+            };
+            inputNode: {
+                index: NodeIndex;
             }
         }
     };
     nodes: {
-        [id: NodeId]: {
-            id: NodeId;
+        [index: NodeIndex]: {
+            index: NodeIndex;
             type: NodeType,
+            version: NodeVersion;
             title: string;
             position: Position;
             size: Size;
             outputs: Array<{
-                id: PortId
+                index: PortIndex;
+                form: string;
             }>
         }
     };
     ports: {
-        [id: PortId]: {
-            id: PortId
-            nodeId: NodeId
+        [index: PortIndex]: {
+            index: PortIndex
+            nodeIndex: NodeIndex
         }
     }
     controls: {
-        [id: ControlId]: Control
+        [index: ControlIndex]: Control
     }
-    nodeControlIds: { [id: NodeId]: ControlId[] };
+    nodeControlIds: { [index: NodeIndex]: ControlIndex[] };
     canvas: CanvasState
 }
 
 export type EditorAction =
     | { type: "CANVAS_SET"; position: Position; size: Size; rect: Rect }
-    | { type: "CONNECTION_ADDED"; outputPortId: PortId, inputPortId: PortId }
-    | { type: "CONTROL_INPUT_STRING_UPDATED"; id: ControlId, value: string }
-    | { type: "CONTROL_INPUT_BOOLEAN_UPDATED"; id: ControlId, value: boolean }
+    | { type: "CONNECTION_ADDED"; outputPortIndex: PortIndex, inputPortIndex: PortIndex }
+    | { type: "CONTROL_INPUT_BOOLEAN_UPDATED"; index: ControlIndex, value: boolean }
+    | { type: "CONTROL_INPUT_STRING_UPDATED"; index: ControlIndex, value: string }
     | { type: "NODE_ADDED"; nodeType: NodeType; position: Position }
-    | { type: "NODE_SELECTED"; id: NodeId; }
+    | { type: "NODE_SELECTED"; index: NodeIndex; }
     | { type: "NODE_POSITION_UPDATED"; position: Position }
     | { type: "NODE_UNSELECTED"; }
 
 export const editorReducer = (state: EditorState, action: EditorAction): EditorState => {
-    const nextConnectionId = () => (Object.keys(state.connections).length + 1)
-    const nextControlId = () => (Object.keys(state.controls).length + 1)
-    const nextNodeId = () => (Object.keys(state.nodes).length + 1)
-    const nextPortId = () => (Object.keys(state.ports).length + 1)
+    const nextConnectionIndex = () => (Object.keys(state.connections).length + 1)
+    const nextControlIndex = () => (Object.keys(state.controls).length + 1)
+    const nextNodeIndex = () => (Object.keys(state.nodes).length + 1)
+    const nextPortIndex = () => (Object.keys(state.ports).length + 1)
 
     switch (action.type) {
         case "CANVAS_SET":
@@ -92,29 +99,29 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
                 }
             }
         case "CONNECTION_ADDED": {
-            const connectionId = nextConnectionId()
+            const ConnectionIndex = nextConnectionIndex()
             const copy = structuredClone(state)
 
-            copy.connections[connectionId] = {
-                id: connectionId.toString(),
+            copy.connections[ConnectionIndex] = {
+                index: ConnectionIndex,
                 outputPort: {
-                    id: action.outputPortId
+                    index: action.outputPortIndex
                 },
                 outputNode: {
-                    id: state.ports[action.outputPortId].nodeId
+                    index: state.ports[action.outputPortIndex].nodeIndex
                 },
                 inputPort: {
-                    id: action.inputPortId
+                    index: action.inputPortIndex
                 },
                 inputNode: {
-                    id: state.ports[action.inputPortId].nodeId
+                    index: state.ports[action.inputPortIndex].nodeIndex
                 }
             }
             return copy;
         }
         case 'CONTROL_INPUT_STRING_UPDATED': {
             // FIXME
-            const control = state.controls[action.id]
+            const control = state.controls[action.index]
             if (isControlInputString(control)) {
                 control.value = action.value;
             } else {
@@ -126,268 +133,373 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
         case "CONTROL_INPUT_BOOLEAN_UPDATED": {
             const copy = structuredClone(state)
 
-            copy.controls[action.id].value = action.value
+            copy.controls[action.index].value = action.value
 
             return copy
         }
         case "NODE_ADDED": {
             const copy = structuredClone(state)
 
-            if (action.nodeType == 'Input') {
+            if (action.nodeType == 'Start') {
 
-                const nodeId = nextNodeId().toString()
-                const portId = nextPortId().toString()
-                const controlId = nextControlId().toString()
-                const controlPortId = (nextPortId() + 1).toString()
+                const nodeIndex = nextNodeIndex()
+                const portIndex = nextPortIndex()
+                const controlId = nextControlIndex()
+                const controlPortIndex = (nextPortIndex() + 1)
 
-                copy.nodes[nodeId.toString()] = {
-                    id: nodeId.toString(),
+                copy.nodes[nodeIndex] = {
+                    index: nodeIndex,
+                    type: 'Start',
+                    version: '0.0.1',
+                    title: 'Start',
+                    position: action.position,
+                    size: {width: 100, height: 100},
+                    outputs: [{
+                        index: portIndex,
+                        form: 'Boolean',
+                        key: 'value'
+                    }]
+                }
+
+                copy.ports[portIndex] = {
+                    index: portIndex,
+                    nodeIndex: nodeIndex
+                }
+
+                copy.ports[controlPortIndex] = {
+                    index: controlPortIndex,
+                    nodeIndex: nodeIndex
+                }
+
+                copy.controls[controlId] = {
+                    index: controlId,
+                    type: 'Input_Boolean',
+                    nodeIndex: nodeIndex,
+                    // value: 'Meeooowww',
+                    value: false,
+                    port: {
+                        index: controlPortIndex,
+                        form: "String"
+                    }
+                } satisfies ControlInputBoolean
+
+                copy.nodeControlIds[nodeIndex] = [controlId]
+
+
+            } else if (action.nodeType == 'Input') {
+
+                const nodeIndex = nextNodeIndex()
+                const portIndex = nextPortIndex()
+                const controlId = nextControlIndex()
+                const controlPortIndex = (nextPortIndex() + 1)
+
+                copy.nodes[nodeIndex] = {
+                    index: nodeIndex,
                     type: 'Input',
+                    version: '0.0.1',
                     title: 'Input',
                     position: action.position,
                     size: {width: 100, height: 100},
                     outputs: [{
-                        id: portId.toString(),
-                        type: 'Boolean'
+                        index: portIndex,
+                        form: 'Boolean'
                     }]
                 }
 
-                copy.ports[portId.toString()] = {
-                    id: portId.toString(),
-                    nodeId: nodeId.toString()
+                copy.ports[portIndex] = {
+                    index: portIndex,
+                    nodeIndex: nodeIndex
                 }
 
-                copy.ports[controlPortId.toString()] = {
-                    id: controlPortId.toString(),
-                    nodeId: nodeId.toString()
+                copy.ports[controlPortIndex] = {
+                    index: controlPortIndex,
+                    nodeIndex: nodeIndex
                 }
 
-                copy.controls[controlId.toString()] = {
-                    id: controlId.toString(),
+                copy.controls[controlId] = {
+                    index: controlId,
                     type: 'Input_Boolean',
-                    nodeId: nodeId.toString(),
+                    nodeIndex: nodeIndex,
                     value: false,
                     port: {
-                        id: controlPortId,
-                        type: "Boolean"
+                        index: controlPortIndex,
+                        form: "Boolean"
                     }
                 } satisfies ControlInputBoolean
 
-                copy.nodeControlIds[nodeId] = [controlId.toString()]
+                copy.nodeControlIds[nodeIndex] = [controlId]
 
 
             } else if (action.nodeType == 'Input_String') {
 
-                const nodeId = nextNodeId().toString()
-                const portId = nextPortId().toString()
-                const controlId = nextControlId().toString()
-                const controlPortId = (nextPortId() + 1).toString()
+                const nodeIndex = nextNodeIndex()
+                const portIndex = nextPortIndex()
+                const controlId = nextControlIndex()
+                const controlPortIndex = (nextPortIndex() + 1)
 
-                copy.nodes[nodeId.toString()] = {
-                    id: nodeId.toString(),
+                copy.nodes[nodeIndex] = {
+                    index: nodeIndex,
                     type: 'Input',
+                    version: '0.0.1',
                     title: 'Input - String',
                     position: action.position,
                     size: {width: 100, height: 100},
                     outputs: [{
-                        id: portId.toString(),
-                        type: 'String'
+                        index: portIndex,
+                        form: 'String'
                     }]
                 }
 
-                copy.ports[portId.toString()] = {
-                    id: portId.toString(),
-                    nodeId: nodeId.toString()
+                copy.ports[portIndex] = {
+                    index: portIndex,
+                    nodeIndex: nodeIndex
                 }
 
-                copy.ports[controlPortId.toString()] = {
-                    id: controlPortId.toString(),
-                    nodeId: nodeId.toString()
+                copy.ports[controlPortIndex] = {
+                    index: controlPortIndex,
+                    nodeIndex: nodeIndex
                 }
 
-                copy.controls[controlId.toString()] = {
-                    id: controlId.toString(),
+                copy.controls[controlId] = {
+                    index: controlId,
                     type: 'Input_String',
-                    nodeId: nodeId.toString(),
+                    nodeIndex: nodeIndex,
                     value: 'Meeooowww',
                     port: {
-                        id: controlPortId,
-                        type: "String"
+                        index: controlPortIndex,
+                        form: "String"
+                    }
+                } satisfies ControlInputString
+
+                copy.nodeControlIds[nodeIndex] = [controlId]
+
+
+            } else if (action.nodeType === 'Decision') {
+                const nodeIndex = nextNodeIndex()
+                const outputPortIndex = nextPortIndex()
+                const outputPortTwoIndex = nextPortIndex() + 1
+                // const inputPortIndex = (nextPortIndex() + 1)
+                // const controlId = nextControlIndex()
+                const filterControlIndex = (nextControlIndex())
+                const filterPortIndex = (nextPortIndex() + 2)
+
+                copy.nodes[nodeIndex] = {
+                    index: nodeIndex,
+                    type: 'Decision',
+                    version: '0.0.1',
+                    title: 'Decision',
+                    position: action.position,
+                    size: {width: 100, height: 100},
+                    outputs: [
+                        {
+                            index: outputPortIndex,
+                            form: 'Boolean'
+                        },
+                        {
+                            index: outputPortTwoIndex,
+                            form: 'Boolean'
+                        }
+                    ]
+                }
+
+                copy.ports[outputPortIndex] = {
+                    index: outputPortIndex,
+                    nodeIndex: nodeIndex
+                }
+
+                copy.ports[outputPortTwoIndex] = {
+                    index: outputPortTwoIndex,
+                    nodeIndex: nodeIndex
+                }
+
+                copy.ports[filterPortIndex] = {
+                    index: filterPortIndex,
+                    nodeIndex: nodeIndex
+                }
+
+                copy.controls[filterControlIndex] = {
+                    index: filterControlIndex,
+                    type: "Input_Boolean",
+                    nodeIndex: nodeIndex,
+                    port: {
+                        index: filterPortIndex,
+                        form: "Boolean"
                     }
                 } satisfies ControlInputBoolean
 
-                copy.nodeControlIds[nodeId] = [controlId.toString()]
-
+                copy.nodeControlIds[nodeIndex] = [filterControlIndex]
 
             } else if (action.nodeType == 'Filter') {
 
-                const nodeId = nextNodeId().toString()
-                const portId = nextPortId().toString()
-                const invokePortId = (nextPortId() + 1).toString()
-                const controlId = nextControlId().toString()
-                const filterControlId = (nextControlId() + 1).toString()
-                const filterPortId = (nextPortId() + 1).toString()
+                const nodeIndex = nextNodeIndex()
+                const outputPortIndex = nextPortIndex()
+                const inputPortIndex = (nextPortIndex() + 1)
+                // const controlId = nextControlIndex()
+                const filterControlId = (nextControlIndex())
+                const filterPortIndex = (nextPortIndex() + 2)
 
-                copy.nodes[nodeId.toString()] = {
-                    id: nodeId.toString(),
+                copy.nodes[nodeIndex] = {
+                    index: nodeIndex,
                     type: 'Filter',
+                    version: '0.0.1',
                     title: 'Filter',
                     position: action.position,
                     size: {width: 100, height: 100},
                     outputs: [{
-                        id: portId.toString(),
-                        type: 'Boolean'
+                        index: outputPortIndex,
+                        form: 'Boolean'
                     }]
                 }
 
-                copy.ports[portId.toString()] = {
-                    id: portId.toString(),
-                    nodeId: nodeId.toString()
+                copy.ports[outputPortIndex] = {
+                    index: outputPortIndex,
+                    nodeIndex: nodeIndex
                 }
 
-                copy.ports[invokePortId.toString()] = {
-                    id: invokePortId.toString(),
-                    nodeId: nodeId.toString()
+                copy.ports[inputPortIndex] = {
+                    index: inputPortIndex,
+                    nodeIndex: nodeIndex
                 }
 
-                copy.ports[filterPortId.toString()] = {
-                    id: filterPortId.toString(),
-                    nodeId: nodeId.toString()
+                copy.ports[filterPortIndex] = {
+                    index: filterPortIndex,
+                    nodeIndex: nodeIndex
                 }
 
-                copy.controls[controlId.toString()] = {
-                    id: controlId.toString(),
-                    type: 'Invoke',
-                    nodeId: nodeId.toString(),
-                    port: {
-                        id: invokePortId.toString(),
-                        type: "Boolean"
-                    },
-                    value: false
-                } satisfies ControlInvoke
+                // copy.controls[controlId] = {
+                //     index: controlId,
+                //     type: 'Invoke',
+                //     nodeIndex: nodeIndex,
+                //     port: {
+                //         id: invokePortIndex,
+                //         type: "Boolean"
+                //     },
+                //     value: false
+                // } satisfies ControlInvoke
 
-                copy.controls[filterControlId.toString()] = {
-                    id: filterControlId.toString(),
+                copy.controls[filterControlId] = {
+                    index: filterControlId,
                     type: "Input_Boolean",
-                    nodeId: nodeId.toString(),
+                    nodeIndex: nodeIndex,
                     port: {
-                        id: filterPortId,
-                        type: "Boolean"
+                        index: filterPortIndex,
+                        form: "Boolean"
                     }
                 } satisfies ControlInputBoolean
 
-                copy.nodeControlIds[nodeId] = [controlId.toString(), filterControlId.toString()]
+                copy.nodeControlIds[nodeIndex] = [filterControlId]
 
             } else if (action.nodeType === 'Print') {
 
-                const nodeId = nextNodeId().toString()
-                const portId = nextPortId().toString()
-                const controlId = nextControlId().toString()
+                const nodeIndex = nextNodeIndex()
+                const portIndex = nextPortIndex()
+                const controlId = nextControlIndex()
 
-                copy.nodes[nodeId.toString()] = {
-                    id: nodeId.toString(),
+                copy.nodes[nodeIndex] = {
+                    index: nodeIndex,
                     type: 'Print',
+                    version: '0.0.1',
                     title: 'Print',
                     position: action.position,
                     size: {width: 100, height: 100},
                     outputs: []
                 }
 
-                copy.ports[portId.toString()] = {
-                    id: portId.toString(),
-                    nodeId: nodeId.toString()
+                copy.ports[portIndex] = {
+                    index: portIndex,
+                    nodeIndex: nodeIndex
                 }
 
-                copy.controls[controlId.toString()] = {
-                    id: controlId.toString(),
-                    type: 'Invoke',
-                    nodeId: nodeId.toString(),
+                copy.controls[controlId] = {
+                    index: controlId,
+                    type: 'Input_String',
+                    nodeIndex: nodeIndex,
                     port: {
-                        id: portId.toString(),
-                        type: "Boolean"
+                        index: portIndex,
+                        form: "String"
                     },
-                } satisfies ControlInvoke
+                } satisfies ControlInputString
 
 
-                copy.nodeControlIds[nodeId] = [controlId.toString()]
+                copy.nodeControlIds[nodeIndex] = [controlId]
 
             } else if (action.nodeType == "Telegram_Send_Message") {
 
-                const nodeId = nextNodeId().toString()
+                const nodeIndex = nextNodeIndex()
 
-                const invokePortId = nextPortId().toString()
-                const invokeControlId = nextControlId().toString()
+                const invokePortIndex = nextPortIndex()
 
-                copy.nodes[nodeId.toString()] = {
-                    id: nodeId.toString(),
+                copy.nodes[nodeIndex] = {
+                    index: nodeIndex,
                     type: "Telegram_Send_Message",
+                    version: '0.0.1',
                     title: 'Telegram - Send Message',
                     position: action.position,
                     size: {width: 250, height: 300},
                     outputs: []
                 }
 
-                copy.ports[invokePortId.toString()] = {
-                    id: invokePortId.toString(),
-                    nodeId: nodeId.toString()
+                copy.ports[invokePortIndex] = {
+                    index: invokePortIndex,
+                    nodeIndex: nodeIndex
                 }
 
-                copy.controls[invokeControlId.toString()] = {
-                    id: invokeControlId.toString(),
-                    type: 'Invoke',
-                    nodeId: nodeId.toString(),
-                    port: {
-                        id: invokePortId.toString(),
-                        type: "Unit"
-                    },
-                } satisfies ControlInvoke
+                // copy.controls[invokeControlId] = {
+                //     index: invokeControlId,
+                //     type: 'Invoke',
+                //     nodeIndex: nodeIndex,
+                //     port: {
+                //         index: invokePortIndex,
+                //         type: "Unit"
+                //     },
+                // } satisfies ControlInvoke
 
 
-                const chatIdPortId = (nextPortId() + 1).toString()
-                const chatIdControlId = (nextControlId() + 1).toString()
+                const chatIdPortIndex = (nextPortIndex())
+                const chatIdControlId = (nextControlIndex())
 
 
-                copy.ports[chatIdPortId.toString()] = {
-                    id: chatIdPortId.toString(),
-                    nodeId: nodeId.toString()
+                copy.ports[chatIdPortIndex] = {
+                    index: chatIdPortIndex,
+                    nodeIndex: nodeIndex
                 }
 
-                copy.controls[chatIdControlId.toString()] = {
-                    id: chatIdControlId.toString(),
-                    key: 'chat_id',
+                copy.controls[chatIdControlId] = {
+                    index: chatIdControlId,
+                    // key: 'chat_id',
                     type: 'Input_String',
-                    nodeId: nodeId.toString(),
+                    nodeIndex: nodeIndex,
                     port: {
-                        id: chatIdPortId.toString(),
-                        type: 'String'
+                        index: chatIdPortIndex,
+                        form: 'String'
                     },
                     value: '',
                     placeholder: 'chat_id'
-                } satisfies ControlInvoke
+                } satisfies ControlInputString
 
 
-                const messagePortId = (nextPortId() + 2).toString()
-                const messageControlId = (nextControlId() + 2).toString()
+                const messagePortIndex = (nextPortIndex() + 1)
+                const messageControlId = (nextControlIndex() + 1)
 
-                copy.ports[messagePortId] = {
-                    id: messagePortId.toString(),
-                    nodeId: nodeId.toString()
+                copy.ports[messagePortIndex] = {
+                    index: messagePortIndex,
+                    nodeIndex: nodeIndex
                 }
 
-                copy.controls[messageControlId.toString()] = {
-                    id: messageControlId.toString(),
-                    key: 'message',
+                copy.controls[messageControlId] = {
+                    index: messageControlId,
+                    // key: 'message',
                     type: 'Input_String',
-                    nodeId: nodeId.toString(),
+                    nodeIndex: nodeIndex,
                     port: {
-                        id: messagePortId.toString(),
-                        type: 'String'
+                        index: messagePortIndex,
+                        form: 'String'
                     },
                     value: '',
                     placeholder: 'message'
-                } satisfies ControlInvoke
+                } satisfies ControlInputString
 
-                copy.nodeControlIds[nodeId] = [invokeControlId.toString(), chatIdControlId.toString(), messageControlId.toString()]
+                copy.nodeControlIds[nodeIndex] = [chatIdControlId, messageControlId]
 
             } else {
                 throw Error(`${action.nodeType} is not supported yet`)
@@ -398,7 +510,7 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
         case "NODE_SELECTED": {
             const copy = structuredClone(state)
             copy.current = {
-                id: action.id,
+                index: action.index,
                 type: "Node"
             };
             return copy;
@@ -410,7 +522,7 @@ export const editorReducer = (state: EditorState, action: EditorAction): EditorS
         }
         case "NODE_POSITION_UPDATED": {
             const copy = structuredClone(state)
-            copy.nodes[state.current.id].position = action.position;
+            copy.nodes[state.current.index].position = action.position;
             return copy;
         }
         default:
@@ -437,22 +549,22 @@ export const editorInitialState = (
     return {
         current: null,
         connections: connections.reduce((acc, cur) => {
-            return {...acc, [cur.id]: cur}
+            return {...acc, [cur.index]: cur}
         }, {}),
         nodes: nodes.reduce((acc, cur) => {
-            return {...acc, [cur.id]: cur}
+            return {...acc, [cur.index]: cur}
         }, {}),
         controls: controls.reduce((acc, cur) => {
-            return {...acc, [cur.id]: cur};
+            return {...acc, [cur.index]: cur};
         }, {}),
         nodeControlIds: controls.reduce((acc, cur) => {
-            acc[cur.nodeId] = acc[cur.nodeId] || []
-            acc[cur.nodeId].push(cur.id)
+            acc[cur.nodeIndex] = acc[cur.nodeIndex] || []
+            acc[cur.nodeIndex].push(cur.index)
             return acc
         }, {}),
         ports: ports.reduce((acc, cur) => {
             if (!cur) return acc;
-            return {...acc, [cur.id]: cur}
+            return {...acc, [cur.index]: cur}
         }, {}),
         canvas: {
             scale: 1,

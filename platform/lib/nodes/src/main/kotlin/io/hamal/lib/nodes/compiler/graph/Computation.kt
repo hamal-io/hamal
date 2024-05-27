@@ -1,36 +1,45 @@
 package io.hamal.lib.nodes.compiler.graph
 
-import io.hamal.lib.nodes.NodeId
-import io.hamal.lib.nodes.NodesGraph
+import io.hamal.lib.nodes.*
 
-internal data class ComputationGraph(val data: Map<NodeId, List<NodeId>>) {
+data class ComputationGraph(
+    val dependencies: Map<NodeIndex, List<NodeIndex>>,
+    val nodes: Map<NodeIndex, Node>,
+    val controls: Map<ControlIndex, Control>,
+    val connections: Map<ConnectionIndex, Connection>
+) {
 
-    operator fun get(nodeId: NodeId): List<NodeId>? = data[nodeId]
+    operator fun get(index: NodeIndex): List<NodeIndex>? = dependencies[index]
 
     companion object {
         fun ComputationGraph(graph: NodesGraph): ComputationGraph {
-            val computationGraph = mutableMapOf<NodeId, MutableList<NodeId>>()
+            val computationGraph = mutableMapOf<NodeIndex, MutableList<NodeIndex>>()
 
             graph.connections.forEach { connection ->
-                val outputId = connection.outputNode.id
-                val inputId = connection.inputNode.id
+                val outputId = connection.outputNode.index
+                val inputId = connection.inputNode.index
                 computationGraph.putIfAbsent(outputId, mutableListOf())
                 computationGraph[outputId]!!.add(inputId)
             }
-            return ComputationGraph(computationGraph)
+            return ComputationGraph(
+                dependencies = computationGraph,
+                nodes = graph.nodes.associateBy { it.index }.toMutableMap(),
+                controls = graph.controls.associateBy { it.index }.toMutableMap(),
+                connections = graph.connections.associateBy { it.index }.toMutableMap()
+            )
         }
 
     }
 }
 
-internal fun breadthFirstSearch(graph: ComputationGraph, root: NodeId): List<NodeId> {
-    val result = mutableListOf<NodeId>()
+internal fun breadthFirstSearch(graph: ComputationGraph, root: NodeIndex): List<NodeIndex> {
+    val result = mutableListOf<NodeIndex>()
 
     if (graph[root] == null) {
         return listOf()
     }
 
-    val toVisit = ArrayDeque<NodeId>().also { it.add(root) }
+    val toVisit = ArrayDeque<NodeIndex>().also { it.add(root) }
 
     while (toVisit.isNotEmpty()) {
         val vertex = toVisit.removeFirst()

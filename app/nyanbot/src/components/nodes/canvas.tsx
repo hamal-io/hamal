@@ -69,7 +69,6 @@ export const Canvas: FC<CanvasProps> = ({
         <div className={`h-full`}>
 
             <Draggable
-                id="CANVAS_1"
                 data-component="canvas"
                 className={styles.wrapper}
                 innerRef={wrapper}
@@ -96,7 +95,7 @@ export const Canvas: FC<CanvasProps> = ({
                     >
 
                         {Object.values(state.nodes).map(node => (
-                            <NodeWidget key={node.id} node={node}/>
+                            <NodeWidget key={node.index} node={node}/>
                         ))}
 
                     </div>

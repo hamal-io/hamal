@@ -1,12 +1,13 @@
 package io.hamal.lib.nodes
 
-import io.hamal.lib.common.snowflake.SnowflakeId
-import io.hamal.lib.nodes.ConnectionId.Companion.ConnectionId
-import io.hamal.lib.nodes.ControlId.Companion.ControlId
-import io.hamal.lib.nodes.NodeId.Companion.NodeId
+import io.hamal.lib.nodes.ConnectionIndex.Companion.ConnectionIndex
+import io.hamal.lib.nodes.ControlIndex.Companion.ControlIndex
+import io.hamal.lib.nodes.NodeIndex.Companion.NodeIndex
 import io.hamal.lib.nodes.NodeTitle.Companion.NodeTitle
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
-import io.hamal.lib.nodes.PortId.Companion.PortId
+import io.hamal.lib.nodes.NodeVersion.Companion.NodeVersion
+import io.hamal.lib.nodes.PortIndex.Companion.PortIndex
+import io.hamal.lib.nodes.PortKey.Companion.PortKey
 
 
 internal abstract class AbstractUnitTest {
@@ -20,14 +21,21 @@ internal abstract class AbstractUnitTest {
         size: Size = Size(200, 200)
     ): Node {
         return Node(
-            id = NodeId(SnowflakeId(id)),
+            index = NodeIndex(id),
             type = NodeType(type),
+            version = NodeVersion("0.0.1"),
             title = title,
             position = position,
             size = size,
             outputs = outputs
         )
     }
+
+    fun graph(
+        nodes: List<Node> = listOf(),
+        connections: List<Connection> = listOf(),
+        controls: List<Control> = listOf(),
+    ) = NodesGraph(nodes, connections, controls)
 
     fun connection(
         id: Long,
@@ -37,20 +45,20 @@ internal abstract class AbstractUnitTest {
         inputPort: Long
     ): Connection {
         return Connection(
-            id = ConnectionId(SnowflakeId(id)),
-            outputNode = Connection.Node(NodeId(SnowflakeId(outputNode))),
-            outputPort = Connection.Port(id = PortId(SnowflakeId(outputPort))),
-            inputNode = Connection.Node(NodeId(SnowflakeId(inputNode))),
-            inputPort = Connection.Port(id = PortId(SnowflakeId(inputPort)))
+            index = ConnectionIndex(id),
+            outputNode = Connection.Node(NodeIndex(outputNode)),
+            outputPort = Connection.Port(PortIndex(outputPort), PortKey(outputPort.toString(16))),
+            inputNode = Connection.Node(NodeIndex(inputNode)),
+            inputPort = Connection.Port(PortIndex(inputPort), PortKey(inputPort.toString(16)))
         )
     }
 
-    protected val nextControlId = NextControlId
+    protected val nextControlIndex = NextControlIndex
 
-    object NextControlId {
+    object NextControlIndex {
 
-        operator fun invoke(): ControlId {
-            return ControlId(counter++)
+        operator fun invoke(): ControlIndex {
+            return ControlIndex(counter++)
         }
 
         private var counter: Int = 0

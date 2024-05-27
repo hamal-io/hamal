@@ -72,43 +72,6 @@ function extension_create()
             return err, resp.content.execs
         end
 
-        function instance.collection.list(query)
-            query = query or { }
-            namespace_id = query.namespace_id or exec_namespace_id
-
-            local err, resp = http.get({
-                url = '/v1/namespaces/' .. namespace_id .. '/collections',
-                headers = { ['x-exec-token'] = context.exec.token }
-            })
-
-            return err, resp.content
-        end
-
-        function instance.collection.insert_one(cmd)
-            cmd = cmd or { }
-            namespace_id = cmd.namespace_id or exec_namespace_id
-            local err, resp = http.post({
-                url = '/v1/namespaces/' .. namespace_id .. '/collections/' .. cmd.collection .. '/insert-one',
-                headers = { ['x-exec-token'] = context.exec.token },
-                json = { item = cmd.item }
-            })
-
-            return err, resp.content
-        end
-
-        function instance.collection.find(query)
-            query = query or { }
-            namespace_id = query.namespace_id or exec_namespace_id
-
-            local err, resp = http.post({
-                url = '/v1/namespaces/' .. namespace_id .. '/collections/' .. query.collection .. '/find',
-                headers = { ['x-exec-token'] = context.exec.token },
-                json = { query = query.query or { } }
-            })
-
-            return err, resp.content
-        end
-
         function instance.func.create(req)
             req = req or {}
             namespace_id = req.namespace_id or exec_namespace_id

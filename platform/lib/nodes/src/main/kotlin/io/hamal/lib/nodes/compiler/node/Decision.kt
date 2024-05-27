@@ -1,31 +1,42 @@
 package io.hamal.lib.nodes.compiler.node
 
-import io.hamal.lib.common.value.TypeBoolean
 import io.hamal.lib.common.value.ValueCode
 import io.hamal.lib.common.value.ValueTrue
-import io.hamal.lib.common.value.ValueType
 import io.hamal.lib.nodes.ControlInputBoolean
-import io.hamal.lib.nodes.NodeType
 import io.hamal.lib.nodes.NodeType.Companion.NodeType
+import io.hamal.lib.nodes.NodeVersion
 
-sealed class Decision : NodeCompiler() {
-    override val type: NodeType get() = NodeType("Decision")
+sealed class Decision : AbstractNode() {
+    override val type = NodeType("Decision")
 
-    data object Boolean : Decision() {
-        override val inputTypes: List<ValueType> get() = listOf(TypeBoolean)
-        override val outputTypes: List<ValueType> get() = listOf(TypeBoolean, TypeBoolean)
+    data object V_0_0_1 : Decision() {
+        override val version = NodeVersion.v_0_0_1
 
         override fun toCode(ctx: Context): ValueCode {
-            val checkbox = ctx.controls.filterIsInstance<ControlInputBoolean>().first()
-            val expectedValue = checkbox.value
+            val control = ctx.controlsOfNode(ctx.node.index).filterIsInstance<ControlInputBoolean>().first()
+            val expectedValue = control.value
+
+            val connection = ctx.getConnection(control.port!!.index)
+
             return ValueCode(
                 """
-                if arg_1 == ${if (expectedValue == ValueTrue) "true" else "false"} then
-                    return true, nil
-                else 
-                    return nil, false
-                end
-            """.trimIndent()
+                |fn = __F__[${connection.outputNode.index}]
+                |value = fn()['value']
+                |print(value)
+                |if value == ${if (expectedValue == ValueTrue) "true" else "false"} then
+                |prune_node(4)
+                |print('happy')
+                |return{
+                |   ['${ctx.node.outputs.first().key}'] = true
+                |}
+                |else
+                |prune_node(4)
+                |print('sad')
+                |return{
+                |   ['${ctx.node.outputs.last().key}'] = true
+                |}
+                |end
+                """.trimMargin()
             )
         }
     }

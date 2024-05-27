@@ -3,13 +3,9 @@ import {InputSelect, TextArea} from "./inputs";
 import styles from "@/components/nodes/port.module.css";
 import {PortInputWidget} from "@/components/nodes/port.tsx";
 import {
-    ControlId,
-    ControlInvoke,
+    ControlIndex, ControlInputBoolean,
     ControlInputString,
-    isControlCondition,
-    isControlInput,
     isControlInputBoolean,
-    isControlInvoke,
     isControlInputString,
     Node
 } from "@/components/nodes/types.ts";
@@ -23,48 +19,23 @@ type ControlsProps = {
 export const ControlListWidget: FC<ControlsProps> = ({node}) => {
     const {controls, nodeControlIds} = useContext(ContextEditorState).state;
     return (
-        <div key={node.id} className={styles.wrapper} data-component="ports">
+        <div key={node.index} className={styles.wrapper} data-component="ports">
             {
-                nodeControlIds[node.id].map(controlId => controls[controlId]).map((control) => {
+                nodeControlIds[node.index].map(controlId => controls[controlId]).map((control) => {
 
                     if (isControlInputBoolean(control)) {
-                        return <ControlInputBooleanWidget key={control.id} id={control.id}/>
-                    }
-
-                    if (isControlCondition(control)) {
-                        return <ControlConditionWidget key={control.id}/>
-                    }
-
-                    if (isControlInput(control)) {
-                        return <ControlInputWidget key={control.id}/>
-                    }
-
-                    if (isControlInvoke(control)) {
-                        return <ControlInvokeWidget key={control.id} control={control}/>
+                        return <ControlInputBooleanWidget key={control.index} control={control}/>
                     }
 
                     if (isControlInputString(control)) {
-                        return <ControlInputStringWidget key={control.id} control={control}/>
+                        return <ControlInputStringWidget key={control.index} control={control}/>
                     }
 
-                    throw `Not supported yet`
+                    // throw `Not supported yet`
                 })
             }
         </div>
     )
-}
-
-type ControlInvokeWidgetProps = {
-    control: ControlInvoke;
-}
-
-export const ControlInvokeWidget: FC<ControlInvokeWidgetProps> = ({control}) => {
-    return (
-        <div className="flex flex-row">
-            <PortInputWidget port={control.port}/>
-            <span> Invoke</span>
-        </div>
-    );
 }
 
 
@@ -79,7 +50,7 @@ export const ControlInputStringWidget: FC<ControlInputStringWidgetProps> = ({con
         <div className="flex flex-row">
             {control.port && <PortInputWidget port={control.port}/>}
             <TextArea value={control.value} placeholder={control.placeholder} onChange={(value) =>
-                dispatch({type: 'CONTROL_INPUT_STRING_UPDATED', id: control.id, value})
+                dispatch({type: 'CONTROL_INPUT_STRING_UPDATED', index: control.index, value})
             }/>
         </div>
     )
@@ -136,16 +107,17 @@ export const ControlInputWidget: FC<ControlInputWidgetProps> = ({}) => {
 
 
 type ControlInputBooleanWidgetProps = {
-    id: ControlId
+    control: ControlInputBoolean
 }
 
-export const ControlInputBooleanWidget: FC<ControlInputBooleanWidgetProps> = ({id}) => {
+export const ControlInputBooleanWidget: FC<ControlInputBooleanWidgetProps> = ({control}) => {
     const {dispatch} = useContext(ContextEditorState);
     return (
         <div className="flex flex-row">
+            <PortInputWidget port={control.port}/>
             <h1> Boolean </h1>
             <InputBoolean onChange={(value) => {
-                dispatch({type: "CONTROL_INPUT_BOOLEAN_UPDATED", id, value})
+                dispatch({type: "CONTROL_INPUT_BOOLEAN_UPDATED", index: control.index, value})
             }}/>
         </div>
     )

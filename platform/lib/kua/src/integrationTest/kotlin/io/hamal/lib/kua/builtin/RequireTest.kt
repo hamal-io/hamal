@@ -1,11 +1,11 @@
 package io.hamal.lib.kua.builtin
 
+import io.hamal.lib.common.value.ValueCode
+import io.hamal.lib.domain.vo.ExtensionName.Companion.ExtensionName
 import io.hamal.lib.kua.NativeLoader
 import io.hamal.lib.kua.Sandbox
 import io.hamal.lib.kua.SandboxContextNop
 import io.hamal.lib.kua.extend.extension.RunnerExtension
-import io.hamal.lib.common.value.ValueCode
-import io.hamal.lib.common.value.ValueString
 import org.junit.jupiter.api.Test
 
 
@@ -34,7 +34,7 @@ internal object ExtensionTest {
         Sandbox(SandboxContextNop).also { sb ->
             sb.register(
                 RunnerExtension(
-                    name = ValueString("test"),
+                    name = ExtensionName("test"),
                     factoryCode = ValueCode(
                         """
                             function extension_create()

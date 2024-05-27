@@ -1,15 +1,15 @@
 package io.hamal.lib.nodes
 
-import io.hamal.lib.common.snowflake.SnowflakeId
 import io.hamal.lib.common.value.*
 
 
-class NodeId(override val value: ValueSnowflakeId) : ValueVariableSnowflakeId() {
+class NodeIndex(override val value: ValueNumber) : ValueVariableNumber() {
     companion object {
-        fun NodeId(value: SnowflakeId) = NodeId(ValueSnowflakeId(value))
-        fun NodeId(value: Int) = NodeId(ValueSnowflakeId(SnowflakeId(value.toLong())))
-        fun NodeId(value: String) = NodeId(ValueSnowflakeId(SnowflakeId(value.toLong(16))))
+        fun NodeIndex(value: Int) = NodeIndex(ValueNumber(value))
+        fun NodeIndex(value: Long) = NodeIndex(ValueNumber(value))
     }
+
+    override fun toString(): String = value.longValue.toString()
 }
 
 class NodeTitle(override val value: ValueString) : ValueVariableString() {
@@ -24,11 +24,19 @@ class NodeType(override val value: ValueString) : ValueVariableString() {
     }
 }
 
+class NodeVersion(override val value: ValueString) : ValueVariableString() {
+    companion object {
+        fun NodeVersion(value: String) = NodeVersion(ValueString(value))
+        val v_0_0_1 = NodeVersion("0.0.1")
+    }
+}
+
 class NodeProperties(override val value: ValueObject = ValueObject.empty) : ValueVariableObject()
 
 data class Node(
-    val id: NodeId,
+    val index: NodeIndex,
     val type: NodeType,
+    val version: NodeVersion,
     val title: NodeTitle,
     val position: Position,
     val size: Size,
@@ -36,10 +44,3 @@ data class Node(
     val outputs: List<PortOutput> = listOf()
 )
 
-data class TemplateNode(
-    val type: NodeType,
-    val title: NodeTitle,
-    val size: Size,
-    val controls: List<TemplateControl>,
-    val outputs: List<TemplatePortOutput>
-)
