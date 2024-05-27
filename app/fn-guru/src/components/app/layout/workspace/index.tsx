@@ -10,9 +10,9 @@ type Props = {
 const WorkspaceLayout: FC<Props> = ({children}) => {
     return (
         <Authenticated>
-            <div className="flex flex-col">
+            <div className="flex flex-col min-h-screen">
                 <Header/>
-                <div className="flex flex-row min-h-screen ">
+                <div className="flex flex-row">
                     <Sidebar/>
                     <div className="border-l border-border w-full ml-48">
                         {children}
