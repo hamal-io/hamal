@@ -30,6 +30,14 @@ data class ApiNamespaceUpdateRequested(
     val id: NamespaceId,
 ) : ApiRequested()
 
+
+data class ApiNamespaceDeleteRequested(
+    override val requestId: RequestId,
+    override val requestStatus: RequestStatus,
+    val id: NamespaceId,
+) : ApiRequested()
+
+
 data class ApiNamespaceList(
     val namespaces: List<Namespace>
 ) : ApiObject() {

@@ -28,6 +28,8 @@ interface NamespaceCmdRepository : CmdRepository {
 
     fun update(namespaceId: NamespaceId, cmd: UpdateCmd): Namespace
 
+    fun delete(namespaceId: NamespaceId, cmd: DeleteCmd): Namespace
+
     data class CreateCmd(
         val id: CmdId,
         val namespaceId: NamespaceId,
@@ -40,6 +42,11 @@ interface NamespaceCmdRepository : CmdRepository {
         val id: CmdId,
         val name: NamespaceName? = null,
         val features: NamespaceFeatures? = null
+    )
+
+    data class DeleteCmd(
+        val id: CmdId,
+        val namespaceId: NamespaceId,
     )
 }
 

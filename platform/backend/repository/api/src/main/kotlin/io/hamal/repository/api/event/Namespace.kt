@@ -11,3 +11,6 @@ data class NamespaceUpdatedEvent(
     val namespace: Namespace,
 ) : InternalEvent()
 
+data class NamespaceDeletedEvent(
+    val namespace: Namespace,
+) : InternalEvent()

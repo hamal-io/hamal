@@ -32,3 +32,11 @@ data class NamespaceUpdateRequested(
     val name: NamespaceName?,
     val features: NamespaceFeatures?
 ) : Requested()
+
+
+data class NamespaceDeleteRequested(
+    override val requestId: RequestId,
+    override val requestedBy: AuthId,
+    override var requestStatus: RequestStatus,
+    val id: NamespaceId
+) : Requested()

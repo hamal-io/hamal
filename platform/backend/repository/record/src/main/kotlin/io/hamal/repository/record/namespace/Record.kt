@@ -19,7 +19,8 @@ sealed class NamespaceRecord(
     internal object Adapter : RecordAdapter<NamespaceRecord>(
         listOf(
             Created::class,
-            Updated::class
+            Updated::class,
+            Deleted::class
         )
     )
 
@@ -36,6 +37,11 @@ sealed class NamespaceRecord(
         override val cmdId: CmdId,
         val name: NamespaceName,
         val features: NamespaceFeatures
+    ) : NamespaceRecord()
+
+    data class Deleted(
+        override val entityId: NamespaceId,
+        override val cmdId: CmdId
     ) : NamespaceRecord()
 }
 

@@ -3,8 +3,7 @@ package io.hamal.repository.sqlite.record.namespace
 import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.repository.api.Namespace
-import io.hamal.repository.api.NamespaceCmdRepository
-import io.hamal.repository.api.NamespaceCmdRepository.CreateCmd
+import io.hamal.repository.api.NamespaceCmdRepository.*
 import io.hamal.repository.api.NamespaceQueryRepository.NamespaceQuery
 import io.hamal.repository.api.NamespaceRepository
 import io.hamal.repository.record.CreateDomainObject
@@ -67,7 +66,7 @@ class NamespaceSqliteRepository(
         }
     }
 
-    override fun update(namespaceId: NamespaceId, cmd: NamespaceCmdRepository.UpdateCmd): Namespace {
+    override fun update(namespaceId: NamespaceId, cmd: UpdateCmd): Namespace {
         val cmdId = cmd.id
         return tx {
             if (commandAlreadyApplied(cmdId, namespaceId)) {
@@ -83,6 +82,22 @@ class NamespaceSqliteRepository(
                     )
                 )
                 currentVersion(namespaceId).also { ProjectionCurrent.upsert(this, it) }
+            }
+        }
+    }
+
+    override fun delete(namespaceId: NamespaceId, cmd: DeleteCmd): Namespace {
+        return tx {
+            if (commandAlreadyApplied(cmd.id, namespaceId)) {
+                versionOf(namespaceId, cmd.id)
+            } else {
+                store(
+                    NamespaceRecord.Deleted(
+                        entityId = namespaceId,
+                        cmdId = cmd.id
+                    )
+                )
+                currentVersion(namespaceId).also { ProjectionCurrent.delete(this, it) }
             }
         }
     }

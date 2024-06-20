@@ -97,6 +97,19 @@ internal object ProjectionCurrent : ProjectionSqlite.CurrentImpl<NamespaceId, Na
         }
     }
 
+    fun delete(tx: RecordTransactionSqlite<NamespaceId, NamespaceRecord, Namespace>, obj: Namespace) {
+        tx.execute(
+            """
+                DELETE FROM 
+                    current
+                WHERE      
+                    id = :id
+            """.trimIndent()
+        ) {
+            set("id", obj.id)
+        }
+    }
+
     override fun setupSchema(connection: Connection) {
         connection.execute(
             """

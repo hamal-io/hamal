@@ -4,7 +4,7 @@ import io.hamal.lib.common.domain.Count
 import io.hamal.lib.domain.vo.NamespaceId
 import io.hamal.lib.domain.vo.NamespaceTreeId
 import io.hamal.repository.api.NamespaceTree
-import io.hamal.repository.api.NamespaceTreeCmdRepository
+import io.hamal.repository.api.NamespaceTreeCmdRepository.AppendCmd
 import io.hamal.repository.api.NamespaceTreeCmdRepository.CreateCmd
 import io.hamal.repository.api.NamespaceTreeQueryRepository.NamespaceTreeQuery
 import io.hamal.repository.api.NamespaceTreeRepository
@@ -68,7 +68,7 @@ class NamespaceTreeSqliteRepository(
         }
     }
 
-    override fun append(cmd: NamespaceTreeCmdRepository.AppendCmd): NamespaceTree {
+    override fun append(cmd: AppendCmd): NamespaceTree {
         return tx {
             val treeId = cmd.treeId
             if (commandAlreadyApplied(cmd.id, treeId)) {
@@ -93,7 +93,6 @@ class NamespaceTreeSqliteRepository(
 
     override fun list(query: NamespaceTreeQuery): List<NamespaceTree> =
         ProjectionCurrent.list(connection, query)
-
 
     override fun count(query: NamespaceTreeQuery): Count =
         ProjectionCurrent.count(connection, query)

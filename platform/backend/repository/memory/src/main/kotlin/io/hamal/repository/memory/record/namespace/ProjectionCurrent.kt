@@ -9,6 +9,10 @@ import io.hamal.repository.memory.record.ProjectionMemory
 
 internal class ProjectionCurrent : ProjectionMemory.BaseImpl<NamespaceId, Namespace>() {
 
+    fun delete(obj: Namespace) {
+        projection.remove(obj.id)
+    }
+
     fun find(namespaceId: NamespaceId): Namespace? = projection[namespaceId]
 
     fun find(namespaceName: NamespaceName): Namespace? = projection.values.find { it.name == namespaceName }

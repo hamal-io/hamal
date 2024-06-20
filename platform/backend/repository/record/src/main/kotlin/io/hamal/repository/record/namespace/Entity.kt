@@ -41,6 +41,13 @@ data class NamespaceEntity(
                 features = rec.features,
                 recordedAt = rec.recordedAt()
             )
+
+            is NamespaceRecord.Deleted -> copy(
+                id = rec.entityId,
+                cmdId = rec.cmdId,
+                sequence = rec.sequence(),
+                recordedAt = rec.recordedAt()
+            )
         }
     }
 

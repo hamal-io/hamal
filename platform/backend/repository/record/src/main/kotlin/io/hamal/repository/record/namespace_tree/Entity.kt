@@ -45,7 +45,6 @@ data class NamespaceTreeEntity(
                     },
                     recordedAt = rec.recordedAt()
                 )
-
         }
     }
 

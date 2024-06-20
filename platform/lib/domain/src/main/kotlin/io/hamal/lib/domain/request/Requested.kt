@@ -60,6 +60,7 @@ sealed class Requested {
             FuncUpdateRequested::class,
             NamespaceAppendRequested::class,
             NamespaceUpdateRequested::class,
+            NamespaceDeleteRequested::class,
             RecipeCreateRequested::class,
             RecipeUpdateRequested::class,
             StateSetRequested::class,
